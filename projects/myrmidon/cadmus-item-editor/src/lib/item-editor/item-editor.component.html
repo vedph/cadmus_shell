@@ -1,0 +1,420 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      {{ (item$ | async)?.title || 'Item' }}
+    </mat-card-title>
+    <mat-card-subtitle>
+      {{ (item$ | async)?.description }}
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content *ngIf="!id || (item$ | async) as item">
+    <p *ngIf="id">
+      ID:
+      <input
+        [cdkCopyToClipboard]="item.id"
+        type="text"
+        readonly="true"
+        spellcheck="false"
+        matTooltip="Click to copy"
+        [value]="item.id"
+        class="id"
+      />
+    </p>
+    <p *ngIf="id">
+      Last saved {{ item.timeModified | amLocal | amTimeAgo }} by
+      {{ item.userId }} on
+      {{ item.timeModified | date: 'yyyy-MM-dd HH:mm:ss' }}.<br />
+      Created {{ item.timeCreated | amLocal | amTimeAgo }} by
+      {{ item.creatorId }} on
+      {{ item.timeCreated | date: 'yyyy-MM-dd HH:mm:ss' }}.
+    </p>
+    <p *ngIf="error$ | async as error">
+      <mat-error>
+        {{ error }}
+      </mat-error>
+    </p>
+
+    <mat-progress-bar
+      mode="indeterminate"
+      *ngIf="(loading$ | async) || (saving$ | async)"
+    ></mat-progress-bar>
+
+    <!-- item content -->
+    <mat-tab-group [selectedIndex]="id ? 1 : 0">
+      <!-- metadata -->
+      <mat-tab label="Metadata">
+        <form [formGroup]="metadata" (ngSubmit)="save()">
+          <!-- title -->
+          <div>
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                id="title"
+                placeholder="title"
+                formControlName="title"
+              />
+              <mat-error
+                *ngIf="
+                  title.hasError('required') && (title.touched || title.dirty)
+                "
+                >enter title</mat-error
+              >
+              <mat-error
+                *ngIf="
+                  title.hasError('maxLength') && (title.touched || title.dirty)
+                "
+              >
+                title too long</mat-error
+              >
+            </mat-form-field>
+          </div>
+
+          <!-- sortKey -->
+          <div>
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                id="sortKey"
+                placeholder="sort key"
+                formControlName="sortKey"
+              />
+              <mat-error
+                *ngIf="
+                  sortKey.hasError('required') &&
+                  (sortKey.touched || sortKey.dirty)
+                "
+                >enter sort key</mat-error
+              >
+              <mat-error
+                *ngIf="
+                  sortKey.hasError('maxLength') &&
+                  (sortKey.touched || sortKey.dirty)
+                "
+                >sort key too long</mat-error
+              >
+            </mat-form-field>
+          </div>
+
+          <!-- description -->
+          <div>
+            <mat-form-field class="full-width">
+              <textarea
+                rows="2"
+                matInput
+                id="description"
+                placeholder="description"
+                formControlName="description"
+              ></textarea>
+              <mat-error
+                *ngIf="
+                  description.hasError('required') &&
+                  (description.touched || description.dirty)
+                "
+                >enter description</mat-error
+              >
+              <mat-error
+                *ngIf="
+                  description.hasError('maxLength') &&
+                  (description.touched || description.dirty)
+                "
+                >description too long</mat-error
+              >
+            </mat-form-field>
+          </div>
+
+          <!-- facet -->
+          <div>
+            <mat-form-field style="width: 400px;">
+              <mat-select
+                placeholder="facet"
+                formControlName="facet"
+                required="true"
+              >
+                <mat-option *ngFor="let f of facets$ | async" [value]="f.id">
+                  {{ f.label }}
+                </mat-option>
+              </mat-select>
+              <mat-error>please select a facet</mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- group -->
+          <div>
+            <mat-form-field>
+              <input matInput formControlName="group" placeholder="group ID" />
+              <mat-error
+                *ngIf="
+                  group.hasError('maxLength') && (group.dirty || group.touched)
+                "
+                >too long</mat-error
+              >
+            </mat-form-field>
+          </div>
+
+          <!-- flags -->
+          <div formArrayName="flagChecks" *ngIf="flagDefinitions">
+            <mat-checkbox
+              *ngFor="let c of flagChecks.controls; let i = index"
+              [formControlName]="i"
+            >
+              <span [style.color]="'#' + flagDefinitions[i].colorKey"
+                >&#x2b24;</span
+              >
+              &nbsp;
+              {{ flagDefinitions[i].label }}
+            </mat-checkbox>
+          </div>
+          <br />
+
+          <div>
+            <button
+              type="submit"
+              mat-raised-button
+              color="primary"
+              [disabled]="
+                userLevel < 2 || (saving$ | async) || (loading$ | async)
+              "
+              matTooltip="Save metadata"
+              *ngIf="
+                user.roles.includes('admin') ||
+                user.roles.includes('editor') ||
+                user.roles.includes('operator')
+              "
+            >
+              <mat-icon>save</mat-icon> save
+            </button>
+          </div>
+        </form>
+      </mat-tab>
+
+      <!-- parts -->
+      <mat-tab label="Parts" *ngIf="id">
+        <div class="new-part">
+          <form [formGroup]="newPart">
+            <mat-form-field>
+              <mat-select
+                placeholder="part"
+                formControlName="newPartType"
+                required
+              >
+                <mat-option *ngFor="let p of newPartDefinitions" [value]="p">
+                  <span class="new-part-name">{{ p.name }}</span>
+                  <span *ngIf="p.roleId" class="new-part-role">{{
+                    p.roleId
+                  }}</span>
+                </mat-option>
+              </mat-select>
+              <mat-error>part type required</mat-error>
+            </mat-form-field>
+            &nbsp;
+            <button
+              mat-raised-button
+              color="primary"
+              type="button"
+              [disabled]="userLevel < 2 || (loading$ | async) || !newPart.valid"
+              (click)="addPart()"
+              matTooltip="Add a new part of the selected type"
+            >
+              <mat-icon>add_circle</mat-icon>
+              new part
+            </button>
+          </form>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <mat-expansion-panel
+          *ngFor="let group of partGroups$ | async"
+          [expanded]="true"
+        >
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ group.label }}</mat-panel-title>
+            <mat-panel-description>{{
+              group.parts.length
+            }}</mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 124px;"></th>
+                <th>type</th>
+                <th>role</th>
+                <th fxHide.xs>modified</th>
+                <th fxHide.xs>user</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let part of group.parts">
+                <!-- edit -->
+                <td>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    color="primary"
+                    matTooltip="Edit this part"
+                    [disabled]="(loading$ | async) || (deletingPart$ | async)"
+                    (click)="editPart(part)"
+                  >
+                    <mat-icon>create</mat-icon>
+                  </button>
+                  <!-- delete -->
+                  <button
+                    mat-icon-button
+                    type="button"
+                    matTooltip="Delete this part"
+                    [disabled]="
+                      userLevel < 2 ||
+                      (loading$ | async) ||
+                      (deletingPart$ | async)
+                    "
+                    (click)="deletePart(part)"
+                    *ngIf="
+                      user.roles.includes('admin') ||
+                      user.roles.includes('editor') ||
+                      user.roles.includes('operator')
+                    "
+                  >
+                    <mat-icon color="warn">delete</mat-icon>
+                  </button>
+                  <!-- copy -->
+                  <button
+                    mat-icon-button
+                    type="button"
+                    matTooltip="Copy this part ID"
+                    [cdkCopyToClipboard]="part.id"
+                  >
+                    <mat-icon>assignment</mat-icon>
+                  </button>
+                </td>
+                <td>
+                  <cadmus-part-badge
+                    [partTypeIds]="part"
+                    [facetDefinition]="facet$ | async"
+                    [badgeType]="1"
+                    [typeThesaurus]="typeThesaurus$ | async"
+                  ></cadmus-part-badge>
+                </td>
+                <td>
+                  <cadmus-part-badge
+                    [partTypeIds]="part"
+                    [facetDefinition]="facet$ | async"
+                    [badgeType]="2"
+                    [typeThesaurus]="typeThesaurus$ | async"
+                  ></cadmus-part-badge>
+                </td>
+                <td fxHide.xs>{{ part.timeModified | amLocal | amTimeAgo }}</td>
+                <td fxHide.xs>{{ part.userId }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-expansion-panel>
+
+        <cadmus-missing-parts
+          [partDefinitions]="(facet$ | async)?.partDefinitions"
+          [parts]="parts$ | async"
+          [typeThesaurus]="typeThesaurus$ | async"
+          (addRequest)="addPart($event)"
+        ></cadmus-missing-parts>
+      </mat-tab>
+
+      <mat-tab label="Layers" *ngIf="id">
+        <table *ngIf="layerPartInfos$ | async as parts">
+          <thead>
+            <th></th>
+            <th>type</th>
+            <th>role</th>
+            <th>frr.</th>
+            <th>last modified</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let part of parts">
+              <td>
+                <button
+                  *ngIf="!part.isAbsent"
+                  type="button"
+                  color="primary"
+                  mat-icon-button
+                  matTooltip="Edit this layer part"
+                  (click)="editPart(part)"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                  *ngIf="part.isAbsent"
+                  type="button"
+                  mat-icon-button
+                  color="primary"
+                  matTooltip="Add this layer part"
+                  [disabled]="userLevel < 2"
+                  (click)="addLayerPart(part)"
+                >
+                  <mat-icon>add_circle</mat-icon>
+                </button>
+                <button
+                  *ngIf="!part.isAbsent"
+                  type="button"
+                  mat-icon-button
+                  color="warn"
+                  matTooltip="Delete this layer part"
+                  [disabled]="userLevel < 2"
+                  (click)="deletePart(part)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+                <button
+                  *ngIf="!part.isAbsent"
+                  mat-icon-button
+                  type="button"
+                  matTooltip="Copy this part ID"
+                  [cdkCopyToClipboard]="part.id"
+                >
+                  <mat-icon>assignment</mat-icon>
+                </button>
+              </td>
+              <td>
+                <cadmus-part-badge
+                  [partTypeIds]="part"
+                  [facetDefinition]="facet$ | async"
+                  [badgeType]="1"
+                  [typeThesaurus]="typeThesaurus$ | async"
+                ></cadmus-part-badge>
+              </td>
+              <td>
+                <cadmus-part-badge
+                  [partTypeIds]="part"
+                  [facetDefinition]="facet$ | async"
+                  [badgeType]="2"
+                  [typeThesaurus]="typeThesaurus$ | async"
+                ></cadmus-part-badge>
+              </td>
+              <td
+                [ngClass]="{
+                  'count-n': part.fragmentCount,
+                  'count-z': !part.fragmentCount
+                }"
+              >
+                {{ part.fragmentCount }}
+              </td>
+              <td>
+                <span *ngIf="!part.isAbsent">
+                  {{ part.timeModified | amLocal | amTimeAgo }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </mat-tab>
+
+      <mat-tab label="Th-Scopes" *ngIf="parts$ | async as parts">
+        <cadmus-parts-scope-editor
+          [parts]="parts"
+          [readonly]="userLevel < 2 || (saving$ | async) || (loading$ | async)"
+          (setScopeRequest)="setPartsScope($event)"
+        ></cadmus-parts-scope-editor>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>

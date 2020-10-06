@@ -1,0 +1,24 @@
+{
+  "name": "@myrmidon/cadmus-api",
+  "version": "0.0.3",
+  "description": "Cadmus - API services.",
+  "keywords": [
+    "Cadmus"
+  ],
+  "homepage": "https://github.com/vedph/cadmus_shell",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vedph/cadmus_shell"
+  },
+  "author": {
+    "name": "Daniele Fusi"
+  },
+  "peerDependencies": {
+    "@angular/common": "^10.1.4",
+    "@angular/core": "^10.1.4",
+    "@myrmidon/cadmus-core": "^0.0.1"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  }
+}

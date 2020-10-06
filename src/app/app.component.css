@@ -1,0 +1,19 @@
+footer {
+  background-color: #f0f0f0;
+  color: #808080;
+  padding: 4px;
+  text-align: center;
+}
+
+.active {
+  font-size: 100% !important;
+}
+
+mat-icon.small-icon {
+  font-size:85% !important;
+  margin-left: 8px;
+}
+
+.tb-fill-remaining-space {
+  flex: 1 1 auto;
+}

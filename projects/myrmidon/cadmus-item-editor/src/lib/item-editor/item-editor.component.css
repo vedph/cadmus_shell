@@ -1,0 +1,25 @@
+.full-width {
+  width: 100%;
+}
+div.new-part {
+  margin-left: 32px;
+}
+span.new-part-name {
+  font-weight: bold;
+}
+span.new-part-role {
+  color: #808080;
+}
+td.count-n {
+  text-align: center;
+  color: #03c03c;
+}
+td.count-z {
+  text-align: center;
+  color: #f34f41;
+}
+input.id {
+  font-family: 'Courier New', Courier, monospace;
+  color: gray;
+  min-width: 22em;
+}

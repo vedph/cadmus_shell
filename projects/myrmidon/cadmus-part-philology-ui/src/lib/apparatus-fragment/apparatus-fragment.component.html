@@ -1,0 +1,153 @@
+<form [formGroup]="form" (submit)="save()">
+  <mat-card>
+    <mat-card-header>
+      <div mat-card-avatar>
+        <mat-icon>textsms</mat-icon>
+      </div>
+      <mat-card-title
+        >Apparatus Fragment {{ fragment?.location }}</mat-card-title
+      >
+      <mat-card-subtitle>
+        {{ fragment?.baseText }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-tab-group [(selectedIndex)]="currentTabIndex">
+        <!-- fragment editor -->
+        <mat-tab label="Fragment">
+          <!-- tag -->
+          <div *ngIf="tagThesaurus">
+            <mat-form-field>
+              <mat-select formControlName="tag" placeholder="tag">
+                <mat-option [value]="null">(none)</mat-option>
+                <mat-option
+                  *ngFor="let e of tagThesaurus.entries"
+                  [value]="e.id"
+                  >{{ e.value }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div *ngIf="!tagThesaurus">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                placeholder="tag"
+                formControlName="tag"
+              />
+              <mat-error
+                *ngIf="tag.hasError('maxLength') && (tag.dirty || tag.touched)"
+                >too long</mat-error
+              >
+            </mat-form-field>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>type</th>
+                <th>value/note</th>
+                <th>group</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="
+                  let entry of fragment?.entries;
+                  let i = index;
+                  let first = first;
+                  let last = last
+                "
+              >
+                <td>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    matTooltip="Edit entry"
+                    color="primary"
+                    (click)="editEntry(entry)"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    matTooltip="Move entry up"
+                    [disabled]="first"
+                    (click)="moveEntryUp(i)"
+                  >
+                    <mat-icon>arrow_upward</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    matTooltip="Move entry down"
+                    [disabled]="last"
+                    (click)="moveEntryDown(i)"
+                  >
+                    <mat-icon>arrow_downward</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    matTooltip="Remove this entry"
+                    color="warn"
+                    (click)="removeEntry(i)"
+                  >
+                    <mat-icon>remove_circle</mat-icon>
+                  </button>
+                </td>
+                <td>
+                  {{ getEntryTypeDsc(entry.type) }}
+                </td>
+                <td>
+                  <span *ngIf="entry.type === 3">{{ entry.note }}</span>
+                  <span
+                    *ngIf="entry.type !== 3"
+                    [class.lem]="entry.isAccepted"
+                    >{{ entry.value }}</span
+                  >
+                </td>
+                <td>{{ entry.groupId }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div>
+            <button
+              type="button"
+              color="primary"
+              (click)="addEntry()"
+              mat-icon-button
+              matTooltip="Add a new entry"
+            >
+              <mat-icon>add_circle</mat-icon> add
+            </button>
+          </div>
+        </mat-tab>
+
+        <!-- entry editor -->
+        <mat-tab label="Entry" *ngIf="editedEntry">
+          <cadmus-apparatus-entry
+            [entry]="editedEntry"
+            [tagThesaurus]="tagThesaurus"
+            [witnessThesaurus]="witnessThesaurus"
+            [authorThesaurus]="authorThesaurus"
+            (save)="onEntrySave($event)"
+            (editorClose)="onEntryClose()"
+          ></cadmus-apparatus-entry>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <cadmus-close-save-buttons
+        [form]="form"
+        [noSave]="userLevel < 2"
+        (closeRequest)="close()"
+      ></cadmus-close-save-buttons>
+    </mat-card-actions>
+  </mat-card>
+</form>

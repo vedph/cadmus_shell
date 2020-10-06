@@ -1,0 +1,129 @@
+<form
+  role="form"
+  [formGroup]="form"
+  (submit)="apply()"
+  gdAreas="title | description | facet | flags | user | min-date | max-date | actions"
+>
+  <!-- title -->
+  <div gdArea="title">
+    <mat-form-field>
+      <input
+        matInput
+        formControlName="title"
+        maxlength="500"
+        placeholder="title"
+      />
+    </mat-form-field>
+  </div>
+
+  <!-- description -->
+  <div gdArea="description">
+    <mat-form-field>
+      <input
+        matInput
+        formControlName="description"
+        maxlength="500"
+        placeholder="description"
+      />
+    </mat-form-field>
+  </div>
+
+  <!-- facet -->
+  <div *ngIf="lookup$ | async as lookup" gdArea="facet">
+    <div>
+      <mat-form-field>
+        <mat-select placeholder="facet" formControlName="facet">
+          <mat-option [value]="null">(any)</mat-option>
+          <mat-option *ngFor="let f of lookup.facets" [value]="f.id">
+            {{ f.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field>
+        <input
+          type="text"
+          matInput
+          placeholder="group ID"
+          formControlName="group"
+        />
+      </mat-form-field>
+    </div>
+
+    <!-- flags -->
+    <div *ngIf="lookup.flags && lookup.flags.length > 0" gdArea="flags">
+      <mat-form-field>
+        <mat-select multiple="true" placeholder="flags" formControlName="flags">
+          <mat-option *ngFor="let f of lookup.flags" [value]="f.id">
+            {{ f.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- user -->
+    <div gdArea="user">
+      <mat-form-field>
+        <mat-select placeholder="user" formControlName="user">
+          <mat-option [value]="null">(any)</mat-option>
+          <mat-option *ngFor="let u of lookup.users">
+            {{ u.id }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- min date -->
+  <div gdArea="min-date">
+    <mat-form-field>
+      <input
+        matInput
+        [matDatepicker]="minPicker"
+        placeholder="choose min date"
+        formControlName="minModified"
+      />
+      <mat-datepicker-toggle mdSuffix [for]="minPicker"></mat-datepicker-toggle>
+    </mat-form-field>
+    <mat-datepicker #minPicker></mat-datepicker>
+  </div>
+
+  <!-- max date -->
+  <div gdArea="max-date">
+    <mat-form-field>
+      <input
+        matInput
+        [matDatepicker]="maxPicker"
+        placeholder="choose max date"
+        formControlName="maxModified"
+      />
+      <mat-datepicker-toggle mdSuffix [for]="maxPicker"></mat-datepicker-toggle>
+    </mat-form-field>
+    <mat-datepicker #maxPicker></mat-datepicker>
+  </div>
+
+  <div gdArea="actions" gdAlignRows="center">
+    <div>
+      <button
+        type="button"
+        mat-icon-button
+        (click)="reset()"
+        color="warn"
+        matTooltip="Reset all the filters"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
+      <button
+        type="submit"
+        mat-icon-button
+        color="primary"
+        [disabled]="form.invalid"
+        matTooltip="Apply filters"
+      >
+        <mat-icon>check_circle</mat-icon>
+      </button>
+    </div>
+  </div>
+</form>

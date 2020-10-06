@@ -1,0 +1,25 @@
+<h2>Cadmus - {{ title }}</h2>
+<div
+  gdAreas="image text"
+  gdGap="16px"
+  gdRows="auto"
+  gdAreas.lt-md="image | text"
+  gdRows.lt-md="auto auto"
+  gdAlignColumns="center"
+>
+  <div gdArea="image">
+    <img src="./assets/img/cadmus-300.png" alt="Cadmus" />
+  </div>
+  <div gdArea="text">
+    <p>
+      Welcome to the Cadmus playground. This web UI supports the development of
+      the Cadmus editing system. It will grow together with the system itself,
+      and serve as a prototype.
+    </p>
+    <p>
+      You can find the full source code at
+      <a href="https://github.com/vedph" target="_blank">github.com/vedph</a>.
+    </p>
+    <p *ngIf="!logged">Please <a routerLink="/login">login</a> to start.</p>
+  </div>
+</div>

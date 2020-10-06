@@ -1,0 +1,414 @@
+<form [formGroup]="form" (submit)="save()">
+  <mat-tab-group>
+    <!-- general -->
+    <mat-tab label="General">
+      <!-- typeId -->
+      <mat-form-field *ngIf="typeThesaurus">
+        <mat-select formControlName="type" placeholder="type">
+          <mat-option
+            *ngFor="let e of typeThesaurus?.entries || []"
+            [value]="e.id"
+            >{{ e.value }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field *ngIf="!typeThesaurus">
+        <input
+          matInput
+          type="text"
+          spellcheck="false"
+          placeholder="type"
+          formControlName="type"
+        />
+        <mat-error
+          *ngIf="type.hasError('required') && (type.dirty || type.touched)"
+          >entry type required</mat-error
+        >
+        <mat-error
+          *ngIf="type.hasError('maxLength') && (type.dirty || type.touched)"
+          >too long</mat-error
+        >
+      </mat-form-field>
+
+      <!-- language -->
+      <div>
+        <mat-form-field *ngIf="langThesaurus">
+          <mat-select formControlName="language" placeholder="language">
+            <mat-option
+              *ngFor="let e of langThesaurus?.entries || []"
+              [value]="e.id"
+              >{{ e.value }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- authors -->
+      <cadmus-bib-authors-editor
+        [parentForm]="form"
+        [controlName]="'authors'"
+        [roleThesaurus]="roleThesaurus"
+      ></cadmus-bib-authors-editor>
+
+      <!-- title -->
+      <div>
+        <mat-form-field class="full-width">
+          <input
+            matInput
+            type="text"
+            formControlName="title"
+            placeholder="title"
+          />
+          <mat-error
+            *ngIf="title.hasError('required') && (title.dirty || title.touched)"
+            >title required</mat-error
+          >
+          <mat-error
+            *ngIf="
+              title.hasError('maxLength') && (title.dirty || title.touched)
+            "
+            >too long</mat-error
+          >
+        </mat-form-field>
+      </div>
+
+      <!-- note -->
+      <div>
+        <mat-form-field class="full-width">
+          <textarea
+            matInput
+            formControlName="note"
+            placeholder="note"
+            rows="2"
+          ></textarea>
+          <mat-error
+            *ngIf="note.hasError('maxLength') && (note.dirty || note.touched)"
+            >too long</mat-error
+          >
+        </mat-form-field>
+      </div>
+    </mat-tab>
+
+    <!-- container -->
+    <mat-tab label="Container">
+      <!-- contributors -->
+      <cadmus-bib-authors-editor
+        [parentForm]="form"
+        [controlName]="'contributors'"
+        [roleThesaurus]="roleThesaurus"
+      ></cadmus-bib-authors-editor>
+
+      <!-- container -->
+      <div>
+        <mat-form-field class="full-width">
+          <input
+            matInput
+            type="text"
+            formControlName="container"
+            placeholder="container"
+          />
+          <mat-error
+            *ngIf="
+              container.hasError('maxLength') &&
+              (container.dirty || container.touched)
+            "
+            >too long</mat-error
+          >
+        </mat-form-field>
+      </div>
+
+      <!-- number -->
+      <div>
+        <mat-form-field>
+          <input
+            matInput
+            type="text"
+            spellcheck="false"
+            formControlName="number"
+            placeholder="number"
+          />
+          <mat-error
+            *ngIf="
+              number.hasError('maxLength') && (number.dirty || number.touched)
+            "
+            >too long</mat-error
+          >
+        </mat-form-field>
+      </div>
+
+      <!-- placePub -->
+      <div>
+        <mat-form-field>
+          <input
+            matInput
+            type="text"
+            formControlName="placePub"
+            placeholder="place"
+          />
+          <mat-error
+            *ngIf="
+              placePub.hasError('maxLength') &&
+              (placePub.dirty || placePub.touched)
+            "
+            >too long</mat-error
+          >
+        </mat-form-field>
+      </div>
+
+      <!-- yearPub -->
+      <div>
+        <mat-form-field [style.width.em]="5">
+          <input
+            matInput
+            type="number"
+            formControlName="yearPub"
+            placeholder="year"
+          />
+          <mat-error
+            *ngIf="
+              yearPub.hasError('min') && (yearPub.dirty || yearPub.touched)
+            "
+            >year less than 0</mat-error
+          >
+          <mat-error
+            *ngIf="
+              yearPub.hasError('max') && (yearPub.dirty || yearPub.touched)
+            "
+            >year past the current one</mat-error
+          >
+        </mat-form-field>
+        &nbsp;
+        <!-- edition -->
+        <mat-form-field [style.width.em]="5">
+          <input
+            matInput
+            type="number"
+            formControlName="edition"
+            placeholder="ed."
+          />
+          <mat-error
+            *ngIf="
+              edition.hasError('min') && (edition.dirty || edition.touched)
+            "
+            >edition less than 0</mat-error
+          >
+          <mat-error
+            *ngIf="
+              edition.hasError('max') && (edition.dirty || edition.touched)
+            "
+            >edition greater than 100</mat-error
+          >
+        </mat-form-field>
+      </div>
+
+      <!-- location -->
+      <div>
+        <mat-form-field>
+          <input
+            matInput
+            type="text"
+            formControlName="location"
+            placeholder="location"
+            spellcheck="false"
+          />
+          <mat-error
+            *ngIf="
+              location.hasError('maxLength') &&
+              (location.dirty || location.touched)
+            "
+            >too long</mat-error
+          >
+        </mat-form-field>
+      </div>
+
+      <!-- accessDate -->
+      <div>
+        <mat-form-field>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="accessDate"
+            placeholder="access date"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <!-- firstPage -->
+        <mat-form-field [style.width.em]="5">
+          <input
+            matInput
+            type="number"
+            formControlName="firstPage"
+            placeholder="from"
+          />
+          <mat-error
+            *ngIf="
+              firstPage.hasError('min') &&
+              (firstPage.dirty || firstPage.touched)
+            "
+            >page less than 0</mat-error
+          >
+          <mat-error
+            *ngIf="
+              firstPage.hasError('max') &&
+              (firstPage.dirty || firstPage.touched)
+            "
+            >page number too big</mat-error
+          >
+        </mat-form-field>
+        -
+        <!-- lastPage -->
+        <mat-form-field [style.width.em]="5">
+          <input
+            matInput
+            type="number"
+            formControlName="lastPage"
+            placeholder="to"
+          />
+          <mat-error
+            *ngIf="
+              lastPage.hasError('min') && (lastPage.dirty || lastPage.touched)
+            "
+            >page less than 0</mat-error
+          >
+          <mat-error
+            *ngIf="
+              lastPage.hasError('max') && (lastPage.dirty || lastPage.touched)
+            "
+            >page number too big</mat-error
+          >
+        </mat-form-field>
+      </div>
+    </mat-tab>
+
+    <!-- keywords -->
+    <mat-tab label="Keywords">
+      <form [formGroup]="keyForm" (submit)="addKeyword()">
+        <div>
+          <mat-form-field>
+            <mat-select formControlName="keyLanguage" placeholder="language">
+              <mat-option
+                *ngFor="let e of langThesaurus?.entries || []"
+                [value]="e.id"
+                >{{ e.value }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          &nbsp;
+          <mat-form-field>
+            <input
+              matInput
+              type="text"
+              placeholder="value"
+              formControlName="keyValue"
+            />
+            <mat-error
+              *ngIf="
+                keyValue.hasError('required') &&
+                (keyValue.dirty || keyValue.touched)
+              "
+              >value required</mat-error
+            >
+            <mat-error
+              *ngIf="
+                keyValue.hasError('maxLength') &&
+                (keyValue.dirty || keyValue.touched)
+              "
+              >too long</mat-error
+            >
+          </mat-form-field>
+          <button
+            mat-icon-button
+            type="submit"
+            color="primary"
+            [disabled]="keyForm.invalid"
+            matTooltip="Add new keyword"
+          >
+            <mat-icon>add_circle</mat-icon>
+          </button>
+        </div>
+      </form>
+      <!-- list -->
+      <table *ngIf="keywords?.length">
+        <thead>
+          <tr>
+            <th></th>
+            <th>language</th>
+            <th>value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let k of keywords;
+              let i = index;
+              let first = first;
+              let last = last
+            "
+          >
+            <td>
+              <button
+                mat-icon-button
+                type="button"
+                matTooltip="Remove this keyword"
+                color="warn"
+                (click)="deleteKeyword(i)"
+              >
+                <mat-icon>remove_circle</mat-icon>
+              </button>
+              <button
+                [disabled]="first"
+                mat-icon-button
+                type="button"
+                matTooltip="Move keyword up"
+                (click)="moveKeywordUp(i)"
+              >
+                <mat-icon>arrow_upward</mat-icon>
+              </button>
+              <button
+                [disabled]="last"
+                mat-icon-button
+                type="button"
+                matTooltip="Move keyword down"
+                (click)="moveKeywordDown(i)"
+              >
+                <mat-icon>arrow_downward</mat-icon>
+              </button>
+            </td>
+            <td>{{ k.language }}</td>
+            <td>{{ k.value }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </mat-tab>
+  </mat-tab-group>
+
+  <!-- buttons -->
+  <hr />
+  <div>
+    <button
+      type="button"
+      mat-icon-button
+      color="warn"
+      matTooltip="Cancel edit"
+      (click)="cancel()"
+    >
+      <mat-icon>cancel</mat-icon>
+    </button>
+    <button
+      type="submit"
+      [disabled]="form.invalid || form.pristine"
+      mat-icon-button
+      color="primary"
+      matTooltip="Save entry"
+    >
+      <mat-icon>check_circle</mat-icon>
+    </button>
+  </div>
+</form>

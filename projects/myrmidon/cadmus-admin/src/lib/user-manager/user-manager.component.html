@@ -1,0 +1,91 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      Users
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p *ngIf="paginator.isLoading$ | async">Loading...</p>
+
+    <div>
+      <!-- filters -->
+      <div>
+        <cadmus-user-filter [filter$]="filter$"></cadmus-user-filter>
+      </div>
+
+      <!-- list -->
+      <div fxFill fxLayout="column" *ngIf="pagination$ | async as pagination">
+        <table>
+          <thead>
+            <td></td>
+            <td></td>
+            <td></td>
+            <th>name</th>
+            <th>first</th>
+            <th>last</th>
+            <th>email</th>
+            <th>roles</th>
+            <th>lock end</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of pagination.data">
+              <td class="command">
+                <button
+                  mat-icon-button
+                  type="button"
+                  matTooltip="Edit {{ user.userName }}"
+                  color="primary"
+                  (click)="setActiveUser(user)"
+                >
+                  <mat-icon>mode_edit</mat-icon>
+                </button>
+              </td>
+              <td class="command">
+                <button
+                  mat-icon-button
+                  type="button"
+                  matTooltip="Delete {{ user.userName }}"
+                  color="warn"
+                  (click)="deleteUser(user)"
+                >
+                  <mat-icon>remove_circle</mat-icon>
+                </button>
+              </td>
+              <td>
+                <img
+                  [src]="getGravatarUrl(user.email, 32)"
+                  [alt]="user.userName"
+                />
+              </td>
+              <td>{{ user.userName }}</td>
+              <td>{{ user.firstName }}</td>
+              <td>{{ user.lastName }}</td>
+              <td>
+                <a [href]="'mailto:' + user.email">{{ user.email }}</a>
+              </td>
+              <td>{{ user.roles?.join(' ') }}</td>
+              <td>{{ user.lockoutEnd }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <mat-paginator
+          fxFlex="0 0 auto"
+          fxFlexAlign="start"
+          [length]="pagination.total"
+          [pageSize]="pageSize?.value"
+          [pageSizeOptions]="[20, 50, 75, 100]"
+          [pageIndex]="pagination.currentPage - 1"
+          [showFirstLastButtons]="true"
+          (page)="pageChanged($event)"
+        ></mat-paginator>
+      </div>
+    </div>
+    <div *ngIf="active$ | async as active">
+      <cadmus-user-editor
+        [user]="active"
+        (userChange)="saveActiveUser($event)"
+        (editorClose)="resetActiveUser()"
+      ></cadmus-user-editor>
+    </div>
+  </mat-card-content>
+</mat-card>

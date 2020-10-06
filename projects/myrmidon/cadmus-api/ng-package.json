@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../../dist/myrmidon/cadmus-api",
+  "lib": {
+    "entryFile": "src/public-api.ts",
+    "umdModuleIds": {
+      "@auth0/angular-jwt": "@auth0/angular-jwt",
+      "cadmus-core": "cadmus-core",
+      "@myrmidon/cadmus-core": "@myrmidon/cadmus-core"
+    }
+  }
+}

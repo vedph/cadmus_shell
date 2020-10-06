@@ -1,0 +1,112 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      Items Hierarchy
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <!-- tag filter -->
+    <form [formGroup]="filters">
+      <div *ngIf="tags$ | async as tags">
+        <mat-select formControlName="tag" placeholder="tag">
+          <mat-option *ngFor="let e of tags.entries" [value]="e.id">{{
+            e.value
+          }}</mat-option>
+        </mat-select>
+      </div>
+      <div *ngIf="!(tags$ | async)">
+        <input
+          matInput
+          formControlName="tag"
+          type="text"
+          spellcheck="false"
+          placeholder="tag"
+        />
+      </div>
+    </form>
+
+    <!-- tree -->
+    <!-- <div *ngIf="loading" fxFlex fxLayoutAlign="center center">
+      <mat-spinner [diameter]="48" [strokeWidth]="4"></mat-spinner>
+    </div> -->
+
+    <div>
+      <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl">
+        <!-- leaf nodes -->
+        <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+          <!-- use a disabled button to provide padding for tree leaf -->
+          <button mat-icon-button disabled></button>
+          <a
+            mat-button
+            (click)="onTreeNodeClick(node)"
+            matTooltip="{{ node.description }}"
+          >
+            {{ node.label }}
+          </a>
+        </mat-tree-node>
+
+        <!-- pager nodes -->
+        <mat-tree-node
+          *matTreeNodeDef="let node; when: isPrevPager"
+          matTreeNodePadding
+        >
+          <!-- use a disabled button to provide padding for tree leaf -->
+          <button mat-icon-button disabled></button>
+          <a
+            mat-icon-button
+            (click)="onPagerNodeClick(node)"
+            [disabled]="node.pageNumber > 1"
+            matTooltip="Previous page"
+          >
+            <mat-icon>expand-less</mat-icon>
+          </a>
+        </mat-tree-node>
+        <mat-tree-node
+          *matTreeNodeDef="let node; when: isNextPager"
+          matTreeNodePadding
+        >
+          <!-- use a disabled button to provide padding for tree leaf -->
+          <button mat-icon-button disabled></button>
+          <a
+            mat-icon-button
+            (click)="onPagerNodeClick(node)"
+            [disabled]="node.pageNumber < node.pageCount"
+            matTooltip="Next page"
+          >
+            <mat-icon>expand-more</mat-icon>
+          </a>
+        </mat-tree-node>
+
+        <!-- expandable nodes -->
+        <mat-tree-node
+          *matTreeNodeDef="let node; when: hasChildren"
+          matTreeNodePadding
+        >
+          <button
+            mat-icon-button
+            [attr.aria-label]="'Toggle ' + node.label"
+            matTreeNodeToggle
+          >
+            <mat-icon class="mat-icon-rtl-mirror">
+              {{
+                treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'
+              }}
+            </mat-icon>
+          </button>
+          <a
+            mat-button
+            (click)="onTreeNodeClick(node)"
+            matTooltip="{{ node.description }}"
+          >
+            {{ node.label }}
+          </a>
+          <mat-progress-bar
+            *ngIf="node.isLoading"
+            mode="indeterminate"
+            class="tree-progress-bar"
+          ></mat-progress-bar>
+        </mat-tree-node>
+      </mat-tree>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,38 @@
+<form [formGroup]="form" (submit)="save()">
+  <mat-card>
+    <mat-card-header>
+      <div mat-card-avatar>
+        <mat-icon>picture_in_picture</mat-icon>
+      </div>
+      <mat-card-title>Token Text Part</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- citation -->
+      <div>
+        <mat-form-field>
+          <input matInput formControlName="citation" placeholder="citation" />
+        </mat-form-field>
+      </div>
+      <!-- text -->
+      <div>
+        <ngx-monaco-editor
+          [options]="editorOptions"
+          formControlName="text"
+        ></ngx-monaco-editor>
+        <mat-error
+          *ngIf="text.hasError('required') && (text.touched || text.dirty)"
+          >please enter some text</mat-error
+        >
+      </div>
+
+      <mat-card-actions>
+        <cadmus-close-save-buttons
+          [form]="form"
+          [noSave]="userLevel < 2"
+          (closeRequest)="close()"
+        ></cadmus-close-save-buttons>
+      </mat-card-actions>
+    </mat-card-content>
+  </mat-card>
+</form>

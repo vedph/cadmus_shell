@@ -1,0 +1,27 @@
+{
+  "name": "@myrmidon/cadmus-item-search",
+  "version": "0.0.3",
+  "description": "Cadmus - items search component.",
+  "keywords": [
+    "Cadmus"
+  ],
+  "homepage": "https://github.com/vedph/cadmus_shell",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vedph/cadmus_shell"
+  },
+  "author": {
+    "name": "Daniele Fusi"
+  },
+  "peerDependencies": {
+    "@angular/common": "^10.1.4",
+    "@angular/core": "^10.1.4",
+    "@myrmidon/cadmus-api": "^0.0.1",
+    "@myrmidon/cadmus-material": "^0.0.1",
+    "@myrmidon/cadmus-ui": "^0.0.1",
+    "@myrmidon/cadmus-state": "^0.0.1"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  }
+}

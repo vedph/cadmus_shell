@@ -1,0 +1,86 @@
+<div
+  *ngIf="tile"
+  class="tile"
+  [class.checked]="checked"
+  [class.selected]="selected"
+  [style.background-color]="color || 'transparent'"
+  tabindex="1"
+  (keydown.F2)="edit()"
+  (keydown.F3)="requestEditData()"
+  (keydown.space)="toggleCheckedNonEdit()"
+>
+  <ng-container *ngIf="editing">
+    <form [formGroup]="form" (submit)="save()">
+      <mat-form-field>
+        <input
+          #textInput
+          matInput
+          type="text"
+          placeholder="text [{{ tile.x }}]"
+          spellcheck="false"
+          formControlName="editedText"
+          (keydown.esc)="cancel()"
+        />
+        <mat-error
+          *ngIf="
+            editedText.hasError('required') &&
+            (editedText.dirty || editedText.touched)
+          "
+          >enter a text</mat-error
+        >
+        <mat-error
+          *ngIf="
+            editedText.hasError('maxLength') &&
+            (editedText.dirty || editedText.touched)
+          "
+          >text too long</mat-error
+        >
+        <mat-error
+          *ngIf="
+            editedText.hasError('pattern') &&
+            (editedText.dirty || editedText.touched)
+          "
+          >no whitespaces allowed</mat-error
+        >
+      </mat-form-field>
+
+      <button
+        type="button"
+        mat-icon-button
+        matTooltip="Discard text"
+        color="warn"
+        (click)="cancel()"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
+      <button
+        type="submit"
+        [disabled]="form.invalid"
+        mat-icon-button
+        matTooltip="Save text"
+        color="primary"
+      >
+        <mat-icon>check_circle</mat-icon>
+      </button>
+    </form>
+  </ng-container>
+
+  <ng-container *ngIf="!editing">
+    <span class="text">{{ text }}</span>
+    <button
+      *ngIf="!readonly"
+      type="button"
+      mat-icon-button
+      matTooltip="Edit text (F2)"
+      color="primary"
+      (click)="edit()"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
+    <mat-checkbox
+      *ngIf="checkable"
+      [formControl]="checker"
+      matTooltip="Toggle check"
+    ></mat-checkbox>
+  </ng-container>
+</div>

@@ -1,4 +1,3 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "compileOnSave": false,
   "compilerOptions": {
@@ -15,6 +14,105 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@myrmidon/cadmus-admin": [
+        "dist/myrmidon/cadmus-admin/myrmidon-cadmus-admin",
+        "dist/myrmidon/cadmus-admin"
+      ],
+      "@myrmidon/cadmus-browser-hierarchy": [
+        "dist/myrmidon/cadmus-browser-hierarchy/myrmidon-cadmus-browser-hierarchy",
+        "dist/myrmidon/cadmus-browser-hierarchy"
+      ],
+      "@myrmidon/cadmus-core": [
+        "dist/myrmidon/cadmus-core/myrmidon-cadmus-core",
+        "dist/myrmidon/cadmus-core"
+      ],
+      "@myrmidon/cadmus-item-editor": [
+        "dist/myrmidon/cadmus-item-editor/myrmidon-cadmus-item-editor",
+        "dist/myrmidon/cadmus-item-editor"
+      ],
+      "@myrmidon/cadmus-item-list": [
+        "dist/myrmidon/cadmus-item-list/myrmidon-cadmus-item-list",
+        "dist/myrmidon/cadmus-item-list"
+      ],
+      "@myrmidon/cadmus-item-search": [
+        "dist/myrmidon/cadmus-item-search/myrmidon-cadmus-item-search",
+        "dist/myrmidon/cadmus-item-search"
+      ],
+      "@myrmidon/cadmus-layer-demo": [
+        "dist/myrmidon/cadmus-layer-demo/myrmidon-cadmus-layer-demo",
+        "dist/myrmidon/cadmus-layer-demo"
+      ],
+      "@myrmidon/cadmus-login": [
+        "dist/myrmidon/cadmus-login/myrmidon-cadmus-login",
+        "dist/myrmidon/cadmus-login"
+      ],
+      "@myrmidon/cadmus-material": [
+        "dist/myrmidon/cadmus-material/myrmidon-cadmus-material",
+        "dist/myrmidon/cadmus-material"
+      ],
+      "@myrmidon/cadmus-part-general-pg": [
+        "dist/myrmidon/cadmus-part-general-pg/myrmidon-cadmus-part-general-pg",
+        "dist/myrmidon/cadmus-part-general-pg"
+      ],
+      "@myrmidon/cadmus-part-general-ui": [
+        "dist/myrmidon/cadmus-part-general-ui/myrmidon-cadmus-part-general-ui",
+        "dist/myrmidon/cadmus-part-general-ui"
+      ],
+      "@myrmidon/cadmus-part-philology-pg": [
+        "dist/myrmidon/cadmus-part-philology-pg/myrmidon-cadmus-part-philology-pg",
+        "dist/myrmidon/cadmus-part-philology-pg"
+      ],
+      "@myrmidon/cadmus-part-philology-ui": [
+        "dist/myrmidon/cadmus-part-philology-ui/myrmidon-cadmus-part-philology-ui",
+        "dist/myrmidon/cadmus-part-philology-ui"
+      ],
+      "@myrmidon/cadmus-reset-password": [
+        "dist/myrmidon/cadmus-reset-password/myrmidon-cadmus-reset-password",
+        "dist/myrmidon/cadmus-reset-password"
+      ],
+      "@myrmidon/cadmus-state": [
+        "dist/myrmidon/cadmus-state/myrmidon-cadmus-state",
+        "dist/myrmidon/cadmus-state"
+      ],
+      "@myrmidon/cadmus-thesaurus-editor": [
+        "dist/myrmidon/cadmus-thesaurus-editor/myrmidon-cadmus-thesaurus-editor",
+        "dist/myrmidon/cadmus-thesaurus-editor"
+      ],
+      "@myrmidon/cadmus-thesaurus-list": [
+        "dist/myrmidon/cadmus-thesaurus-list/myrmidon-cadmus-thesaurus-list",
+        "dist/myrmidon/cadmus-thesaurus-list"
+      ],
+      "@myrmidon/cadmus-cadmus-ui": [
+        "dist/myrmidon/cadmus-cadmus-ui/myrmidon-cadmus-cadmus-ui",
+        "dist/myrmidon/cadmus-cadmus-ui"
+      ],
+      "@myrmidon/cadmus-cadmus-ui-pg": [
+        "dist/myrmidon/cadmus-cadmus-ui-pg/myrmidon-cadmus-cadmus-ui-pg",
+        "dist/myrmidon/cadmus-cadmus-ui-pg"
+      ],
+      "@myrmidon/cadmus-cadmus-user": [
+        "dist/myrmidon/cadmus-cadmus-user/myrmidon-cadmus-cadmus-user",
+        "dist/myrmidon/cadmus-cadmus-user"
+      ],
+      "@myrmidon/cadmus-api": [
+        "dist/myrmidon/cadmus-api/myrmidon-cadmus-api",
+        "dist/myrmidon/cadmus-api"
+      ],
+      "@myrmidon/cadmus-ui": [
+        "dist/myrmidon/cadmus-ui/myrmidon-cadmus-ui",
+        "dist/myrmidon/cadmus-ui"
+      ],
+      "@myrmidon/cadmus-ui-pg": [
+        "dist/myrmidon/cadmus-ui-pg/myrmidon-cadmus-ui-pg",
+        "dist/myrmidon/cadmus-ui-pg"
+      ],
+      "@myrmidon/cadmus-user": [
+        "dist/myrmidon/cadmus-user/myrmidon-cadmus-user",
+        "dist/myrmidon/cadmus-user"
+      ]
+    }
   }
 }

@@ -1,0 +1,67 @@
+<form *ngIf="hints" [formGroup]="form" (submit)="emitRequestPatch()">
+  <table class="patches">
+    <thead>
+      <tr>
+        <th></th>
+        <th>location</th>
+        <th>description</th>
+        <th>patch</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let hint of hints; let i = index">
+        <td *ngIf="!readonly">
+          <button
+            type="button"
+            mat-icon-button
+            matTooltip="Edit this fragment"
+            [disabled]="disabled"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            type="button"
+            mat-icon-button
+            matTooltip="Move this fragment to {{ targetLocation }}"
+            [disabled]="
+              disabled || !targetLocation || targetLocation === hint.location
+            "
+            (click)="emitRequestMove(hint)"
+          >
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+          <button
+            type="button"
+            mat-icon-button
+            matTooltip="Delete this fragment"
+            color="warn"
+            [disabled]="disabled"
+            (click)="emitRequestDelete(hint)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+        <td>{{ hint.location }}</td>
+        <td>{{ hint.description }}</td>
+        <td>
+          <mat-checkbox
+            *ngIf="hint.patchOperation"
+            matTooltip="Apply this patch"
+            [disabled]="disabled"
+            [value]="i + 1"
+          >
+            {{ hint.patchOperation }}
+          </mat-checkbox>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="targetLocation">move target: {{ targetLocation }}</div>
+  <button
+    type="submit"
+    mat-raised-button
+    [disabled]="readonly || disabled || form.invalid"
+  >
+    apply patches
+  </button>
+</form>
