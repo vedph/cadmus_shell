@@ -45,12 +45,13 @@
           <br />
           <button
             type="button"
-            mat-raised-button
+            mat-stroked-button
             color="primary"
             (click)="addEntry()"
           >
-            add item
+            add entry
           </button>
+          <br>
         </div>
         <div
           *ngFor="
@@ -111,15 +112,15 @@
                 autofocus
               />
               <mat-error
-                *ngIf="entries.controls[i].get('id').hasError('required')"
+                *ngIf="item.get('id').hasError('required')"
                 >enter an entry ID</mat-error
               >
               <mat-error
-                *ngIf="entries.controls[i].get('id').hasError('max-length')"
+                *ngIf="item.get('id').hasError('max-length')"
                 >too long</mat-error
               >
               <mat-error
-                *ngIf="entries.controls[i].get('id').hasError('pattern')"
+                *ngIf="item.get('id').hasError('pattern')"
                 >invalid entry ID</mat-error
               >
             </mat-form-field>
@@ -132,11 +133,11 @@
                 placeholder="value"
               />
               <mat-error
-                *ngIf="entries.controls[i].get('value').hasError('required')"
+                *ngIf="item.get('value').hasError('required')"
                 >enter an entry value</mat-error
               >
               <mat-error
-                *ngIf="entries.controls[i].get('value').hasError('max-length')"
+                *ngIf="item.get('value').hasError('max-length')"
                 >too long</mat-error
               >
             </mat-form-field>

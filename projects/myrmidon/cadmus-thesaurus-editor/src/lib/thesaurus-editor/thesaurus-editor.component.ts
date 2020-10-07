@@ -79,7 +79,7 @@ export class ThesaurusEditorComponent implements OnInit {
       id: this._formBuilder.control(entry ? entry.id : null, [
         Validators.required,
         Validators.maxLength(100),
-        Validators.pattern(/^[a-zA-Z0-9_\-\.]+$/g),
+        Validators.pattern('^[a-zA-Z0-9_\\-\\.]+$'),
       ]),
       value: this._formBuilder.control(entry ? entry.value : null, [
         Validators.required,
