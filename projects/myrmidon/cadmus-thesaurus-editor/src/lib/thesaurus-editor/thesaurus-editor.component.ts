@@ -9,7 +9,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { EditThesaurusService, EditThesaurusQuery } from '@myrmidon/cadmus-state';
+import {
+  EditThesaurusService,
+  EditThesaurusQuery,
+} from '@myrmidon/cadmus-state';
 import { AuthService } from '@myrmidon/cadmus-api';
 import { DialogService } from '@myrmidon/cadmus-ui';
 
@@ -186,6 +189,13 @@ export class ThesaurusEditorComponent implements OnInit {
       return;
     }
     const thesaurus = this.getThesaurus();
-    this._editService.save(thesaurus);
+    // save and reload as edited if was new
+    this._editService.save(thesaurus).then((saved) => {
+      this.form.markAsPristine();
+      if (!this.id) {
+        this.id = saved.id;
+        this._router.navigate(['/thesauri', saved.id]);
+      }
+    });
   }
 }

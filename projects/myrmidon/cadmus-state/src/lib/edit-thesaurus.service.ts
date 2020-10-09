@@ -42,18 +42,23 @@ export class EditThesaurusService {
     this._store.reset();
   }
 
-  public save(thesaurus: Thesaurus): void {
+  public save(thesaurus: Thesaurus): Promise<Thesaurus> {
     this._store.setSaving(true);
-    this._thesaurusService.addThesaurus(thesaurus).subscribe(
-      (_) => {
-        this._store.setSaving(false);
-        this.load(this._store.getValue().thesaurus.id);
-      },
-      (error) => {
-        console.error(error);
-        this._store.setSaving(false);
-        this._store.setError('Error saving thesaurus');
-      }
-    );
+
+    return new Promise((resolve, reject) => {
+      this._thesaurusService.addThesaurus(thesaurus).subscribe(
+        (saved) => {
+          this._store.setSaving(false);
+          this.load(this._store.getValue().thesaurus.id);
+          resolve(saved);
+        },
+        (error) => {
+          console.error(error);
+          this._store.setSaving(false);
+          this._store.setError('Error saving thesaurus');
+          reject(error);
+        }
+      );
+    });
   }
 }

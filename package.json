@@ -8,11 +8,11 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build-lib-core": "ng build @myrmidon/cadmus-core --prod && ng build @myrmidon/cadmus-material --prod && ng build @myrmidon/cadmus-api --prod && ng build @myrmidon/cadmus-ui --prod && ng build @myrmidon/cadmus-state --prod && ng build @myrmidon/cadmus-ui-pg --prod",
-    "build-lib-p-general": "ng build @myrmidon/cadmus-part-general-ui --prod && ng build @myrmidon/cadmus-part-general-pg --prod",
-    "build-lib-p-philology": "ng build @myrmidon/cadmus-part-philology-ui --prod && ng build @myrmidon/cadmus-part-philology-pg --prod",
-    "build-app-pg": "ng build @myrmidon/cadmus-admin --prod && ng build @myrmidon/cadmus-browser-hierarchy --prod && ng build @myrmidon/cadmus-item-editor --prod && ng build @myrmidon/cadmus-item-list --prod && ng build @myrmidon/cadmus-item-search --prod && ng build @myrmidon/cadmus-layer-demo --prod && ng build @myrmidon/cadmus-login --prod && ng build @myrmidon/cadmus-reset-password --prod && ng build @myrmidon/cadmus-thesaurus-editor --prod && ng build @myrmidon/cadmus-thesaurus-list --prod && ng build @myrmidon/cadmus-user --prod",
-    "build-all": "npm run-script build-lib-core && npm run-script build-lib-p-general && npm run-script build-lib-p-philology && npm run-script build-app-pg"
+    "build-core": "ng build @myrmidon/cadmus-core --prod && ng build @myrmidon/cadmus-material --prod && ng build @myrmidon/cadmus-api --prod && ng build @myrmidon/cadmus-ui --prod && ng build @myrmidon/cadmus-state --prod && ng build @myrmidon/cadmus-ui-pg --prod",
+    "build-p-general": "ng build @myrmidon/cadmus-part-general-ui --prod && ng build @myrmidon/cadmus-part-general-pg --prod",
+    "build-p-philology": "ng build @myrmidon/cadmus-part-philology-ui --prod && ng build @myrmidon/cadmus-part-philology-pg --prod",
+    "build-pg": "ng build @myrmidon/cadmus-admin --prod && ng build @myrmidon/cadmus-browser-hierarchy --prod && ng build @myrmidon/cadmus-item-editor --prod && ng build @myrmidon/cadmus-item-list --prod && ng build @myrmidon/cadmus-item-search --prod && ng build @myrmidon/cadmus-layer-demo --prod && ng build @myrmidon/cadmus-login --prod && ng build @myrmidon/cadmus-reset-password --prod && ng build @myrmidon/cadmus-thesaurus-editor --prod && ng build @myrmidon/cadmus-thesaurus-list --prod && ng build @myrmidon/cadmus-user --prod",
+    "build-all": "npm run-script build-core && npm run-script build-p-general && npm run-script build-p-philology && npm run-script build-pg"
   },
   "private": true,
   "dependencies": {
