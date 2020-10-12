@@ -5,7 +5,6 @@
     "entryFile": "src/public-api.ts",
     "umdModuleIds": {
       "ngx-moment": "ngx-moment",
-      "@myrmidon/cadmus-api": "@myrmidon/cadmus-api",
       "@myrmidon/cadmus-core": "@myrmidon/cadmus-core",
       "@myrmidon/cadmus-material": "@myrmidon/cadmus-material",
       "@myrmidon/cadmus-state": "@myrmidon/cadmus-state"

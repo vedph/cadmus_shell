@@ -1,12 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Datation } from '@myrmidon/cadmus-core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Datation, DatationModel } from '@myrmidon/cadmus-core';
 import {
-  FormGroup,
   FormControl,
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { debounceTime } from 'rxjs/operators';
+import { InplaceEditorComponentBase } from '../inplace-editor-component-base';
 
 /**
  * Editor for a single point in a historical date.
@@ -16,8 +15,9 @@ import { debounceTime } from 'rxjs/operators';
   templateUrl: './datation-editor.component.html',
   styleUrls: ['./datation-editor.component.css'],
 })
-export class DatationEditorComponent {
-  private _datation: Datation;
+export class DatationEditorComponent
+  extends InplaceEditorComponentBase<DatationModel>
+  implements OnInit {
 
   public value: FormControl;
   public century: FormControl;
@@ -27,33 +27,40 @@ export class DatationEditorComponent {
   public about: FormControl;
   public dubious: FormControl;
   public hint: FormControl;
-  public form: FormGroup;
 
-  @Input() public set datation(value: Datation) {
-    this._datation = new Datation(value);
-    this.updateForm();
-  }
+  /**
+   * The optional label to display for this datation.
+   */
   @Input() public label: string;
 
-  @Output() datationChange: EventEmitter<Datation>;
+  /**
+   * The optional custom ID to be assigned to this component's
+   * form as a child of the parentForm. The default is "datation".
+   */
+  @Input() public idInParentForm: string;
 
   constructor(formBuilder: FormBuilder) {
-    this._datation = new Datation();
-    this.datationChange = new EventEmitter<Datation>();
+    super(formBuilder);
+    this.idInParentForm = 'datation';
+  }
 
-    this.value = formBuilder.control(0, Validators.required);
-    this.century = formBuilder.control(false);
-    this.span = formBuilder.control(false);
-    this.month = formBuilder.control(0, [
+  public ngOnInit(): void {
+    this.value = this.formBuilder.control(0, Validators.required);
+    this.century = this.formBuilder.control(false);
+    this.span = this.formBuilder.control(false);
+    this.month = this.formBuilder.control(0, [
       Validators.min(0),
       Validators.max(12),
     ]);
-    this.day = formBuilder.control(0, [Validators.min(0), Validators.max(31)]);
-    this.about = formBuilder.control(false);
-    this.dubious = formBuilder.control(false);
-    this.hint = formBuilder.control(null, Validators.maxLength(500));
+    this.day = this.formBuilder.control(0, [
+      Validators.min(0),
+      Validators.max(31),
+    ]);
+    this.about = this.formBuilder.control(false);
+    this.dubious = this.formBuilder.control(false);
+    this.hint = this.formBuilder.control(null, Validators.maxLength(500));
 
-    this.form = formBuilder.group({
+    this.initEditor(this.idInParentForm, {
       value: this.value,
       century: this.century,
       span: this.span,
@@ -63,46 +70,34 @@ export class DatationEditorComponent {
       dubious: this.dubious,
       hint: this.hint,
     });
-
-    this.form.valueChanges.pipe(debounceTime(1000)).subscribe(_ => {
-      this.updateData();
-    });
   }
 
-  private updateForm(): void {
-    this.value.setValue(this._datation.value);
-    this.century.setValue(this._datation.isCentury);
-    this.span.setValue(this._datation.isSpan);
-    this.month.setValue(this._datation.month);
-    this.day.setValue(this._datation.day);
-    this.about.setValue(this._datation.isApproximate);
-    this.dubious.setValue(this._datation.isDubious);
-    this.hint.setValue(this._datation.hint);
-  }
-
-  private updateData(): void {
-    this._datation.value = this.value.value ? +this.value.value : 0;
-    this._datation.isCentury = this.century.value || false;
-    this._datation.isSpan = this.span.value || false;
-    this._datation.month = this.month.value ? +this.month.value : 0;
-    this._datation.day = this.day.value ? +this.day.value : 0;
-    this._datation.isApproximate = this.about.value || false;
-    this._datation.isDubious = this.dubious.value || false;
-    this._datation.hint = Datation.sanitizeHint(this.hint.value);
-  }
-
-  public reset(): void {
-    this._datation.reset();
-    this.updateForm();
-    this.form.markAsPristine();
-  }
-
-  public save(): void {
-    if (this.form.invalid) {
-      return;
+  protected setModel(model: DatationModel): void {
+    if (!model) {
+      this.form.reset();
+    } else {
+      this.value.setValue(model.value);
+      this.century.setValue(model.isCentury);
+      this.span.setValue(model.isSpan);
+      this.month.setValue(model.month);
+      this.day.setValue(model.day);
+      this.about.setValue(model.isApproximate);
+      this.dubious.setValue(model.isDubious);
+      this.hint.setValue(model.hint);
+      this.form.markAsPristine();
     }
-    this.updateData();
-    this.form.markAsPristine();
-    this.datationChange.emit(this._datation);
+  }
+
+  protected getModel(): DatationModel {
+    return {
+      value: this.value.value ? +this.value.value : 0,
+      isCentury: this.century.value || false,
+      isSpan: this.span.value || false,
+      month: this.month.value ? +this.month.value : 0,
+      day: this.day.value ? +this.day.value : 0,
+      isApproximate: this.about.value || false,
+      isDubious: this.dubious.value || false,
+      hint: Datation.sanitizeHint(this.hint.value)
+    };
   }
 }
