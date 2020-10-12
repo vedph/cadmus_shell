@@ -6,13 +6,13 @@ import { RomanNumber } from './roman-number';
  */
 export interface DatationModel {
   value: number;
-  isCentury: boolean;
-  isSpan: boolean;
-  isApproximate: boolean;
-  isDubious: boolean;
-  day: number;
-  month: number;
-  hint: string;
+  isCentury?: boolean;
+  isSpan?: boolean;
+  isApproximate?: boolean;
+  isDubious?: boolean;
+  day?: number;
+  month?: number;
+  hint?: string;
 }
 
 /**
@@ -57,13 +57,13 @@ export const DATATION_FORMAT_OPTIONS: DatationFormatOptions = {
 // @dynamic
 export class Datation implements DatationModel {
   public value: number;
-  public isCentury: boolean;
-  public isSpan: boolean;
-  public isApproximate: boolean;
-  public isDubious: boolean;
-  public day: number;
-  public month: number;
-  public hint: string;
+  public isCentury?: boolean;
+  public isSpan?: boolean;
+  public isApproximate?: boolean;
+  public isDubious?: boolean;
+  public day?: number;
+  public month?: number;
+  public hint?: string;
 
   /**
    * Create a new datation, optionally setting its data.

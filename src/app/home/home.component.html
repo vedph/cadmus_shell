@@ -1,29 +1,32 @@
-<h2>Cadmus - {{ title }}</h2>
-<div
-  gdRows="auto 1fr"
-  gdColumns="auto 1fr"
-  gdAreas="image text | content content"
-  gdAlignColumns="center"
-  gdGap="16px"
-  gdRows.lt-md="auto auto 1fr"
-  gdColumns.lt-md="100%"
-  gdAreas.lt-md="image | text | content"
->
-  <div gdArea="image">
-    <img src="./assets/img/cadmus-300.png" alt="Cadmus" />
-  </div>
-  <div gdArea="text">
-    <p>
-      Welcome to the Cadmus editor.
-    </p>
-    <p>
-      You can find the full source code at
-      <a href="https://github.com/vedph" target="_blank">github.com/vedph</a>.
-    </p>
-    <p *ngIf="!logged">Please <a routerLink="/login">login</a> to start.</p>
-  </div>
+<div style="margin: 0 16px">
+  <h2>Cadmus - {{ title }}</h2>
+  <div
+    gdRows="auto 1fr"
+    gdColumns="auto 1fr"
+    gdAreas="image text | content content"
+    gdAlignColumns="center"
+    gdGap="16px"
+    gdRows.lt-md="auto auto 1fr"
+    gdColumns.lt-md="100%"
+    gdAreas.lt-md="image | text | content"
+  >
+    <div gdArea="image">
+      <img src="./assets/img/cadmus-300.png" alt="Cadmus" />
+    </div>
+    <div gdArea="text">
+      <p>Welcome to the Cadmus editor.</p>
+      <p>
+        You can find the full source code at
+        <a href="https://github.com/vedph" target="_blank">github.com/vedph</a>.
+      </p>
+      <p *ngIf="!logged">Please <a routerLink="/login">login</a> to start.</p>
+    </div>
 
-  <div gdArea="content">
-    <cadmus-historical-date-editor></cadmus-historical-date-editor>
+    <div gdArea="content">
+      <cadmus-historical-date-editor [(date)]="date"></cadmus-historical-date-editor>
+      <div *ngIf="date">
+        <pre>{{date | json}}</pre>
+      </div>
+    </div>
   </div>
 </div>

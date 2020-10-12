@@ -9,6 +9,7 @@ import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { CurrentItemBarComponent } from './components/current-item-bar/current-item-bar.component';
 import { CurrentLayerPartBarComponent } from './components/current-layer-part-bar/current-layer-part-bar.component';
+import { CadmusApiModule } from '@myrmidon/cadmus-api';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { CurrentLayerPartBarComponent } from './components/current-layer-part-ba
     FormsModule,
     MomentModule,
     // cadmus
+    CadmusApiModule,
     CadmusCoreModule,
     CadmusMaterialModule,
     CadmusStateModule,

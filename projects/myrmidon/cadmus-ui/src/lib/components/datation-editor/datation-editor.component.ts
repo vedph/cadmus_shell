@@ -60,7 +60,7 @@ export class DatationEditorComponent
     this.dubious = this.formBuilder.control(false);
     this.hint = this.formBuilder.control(null, Validators.maxLength(500));
 
-    this.initEditor(this.idInParentForm, {
+    this.initEditor(this.idInParentForm || 'datation', {
       value: this.value,
       century: this.century,
       span: this.span,
@@ -73,6 +73,9 @@ export class DatationEditorComponent
   }
 
   protected setModel(model: DatationModel): void {
+    if (!this.form) {
+      return;
+    }
     if (!model) {
       this.form.reset();
     } else {

@@ -21,9 +21,7 @@ import {
   PendingChangesGuard,
   EnvServiceProvider,
 } from '@myrmidon/cadmus-core';
-// import { CadmusUiModule } from '@myrmidon/cadmus-ui';
-// TEMP
-import { CadmusUiModule } from 'dist/myrmidon/cadmus-ui/public-api';
+import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusPartGeneralUiModule } from '@myrmidon/cadmus-part-general-ui';
 import { CadmusPartPhilologyUiModule } from '@myrmidon/cadmus-part-philology-ui';
 import { HomeComponent } from './home/home.component';

@@ -4,6 +4,7 @@ import {
   Datation,
   HistoricalDateModel,
   DatationModel,
+  HistoricalDateType,
 } from '@myrmidon/cadmus-core';
 import {
   FormGroup,
@@ -31,7 +32,8 @@ export class HistoricalDateEditorComponent implements OnInit {
     if (!value) {
       this.form.reset();
     } else {
-      this.dateText.setValue(value.toString());
+      const hd = new HistoricalDate(value);
+      this.dateText.setValue(hd.toString());
       this.form.markAsPristine();
     }
   }
@@ -44,6 +46,7 @@ export class HistoricalDateEditorComponent implements OnInit {
   public b$: BehaviorSubject<DatationModel>;
   public invalidDateText: boolean;
   public dateValue: number;
+  public visualExpanded: boolean;
   // set by events:
   public a: DatationModel;
   public b: DatationModel;
@@ -51,14 +54,24 @@ export class HistoricalDateEditorComponent implements OnInit {
   // form
   public form: FormGroup;
   public dateText: FormControl;
+  public range: FormControl;
 
   constructor(formBuilder: FormBuilder) {
     // events
     this.dateChange = new EventEmitter<HistoricalDateModel>();
+    // data
+    this.a$ = new BehaviorSubject<DatationModel>({
+      value: 0,
+    });
+    this.b$ = new BehaviorSubject<DatationModel>({
+      value: 0,
+    });
     // form
     this.dateText = formBuilder.control(null, Validators.required);
+    this.range = formBuilder.control(false);
     this.form = formBuilder.group({
       dateText: this.dateText,
+      range: this.range,
     });
   }
 
@@ -71,6 +84,7 @@ export class HistoricalDateEditorComponent implements OnInit {
         if (hd) {
           this.invalidDateText = false;
           this.dateValue = hd.getSortValue();
+          this.range.setValue(hd.getDateType() === HistoricalDateType.range);
           this.a$.next(hd.a);
           this.b$.next(hd.b);
           this.dateChange.emit(hd);
@@ -81,6 +95,13 @@ export class HistoricalDateEditorComponent implements OnInit {
       });
   }
 
+  public stopPropagation(event: KeyboardEvent): void {
+    // this is to avoid space propagating to the expander,
+    // which would toggle it
+    // https://stackoverflow.com/questions/53543824/input-not-working-inside-angular-material-expansion-panel-cant-add-space
+    event.stopPropagation();
+  }
+
   public onDatationAChange(model: DatationModel): void {
     this.a = model;
   }
@@ -89,14 +110,23 @@ export class HistoricalDateEditorComponent implements OnInit {
     this.b = model;
   }
 
+  public resetDatations(): void {
+    this.range.setValue(false);
+    this.a$.next({ value: 0 });
+    this.b$.next({ value: 0 });
+  }
+
   public setDatations(): void {
     if (!this.a?.value) {
       return;
     }
     const hd = new HistoricalDate();
     hd.a = new Datation(this.a);
-    hd.b = new Datation(this.b);
+    if (this.range.value) {
+      hd.b = new Datation(this.b);
+    }
 
     this.dateText.setValue(hd.toString());
+    this.visualExpanded = false;
   }
 }

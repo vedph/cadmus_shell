@@ -1,18 +1,30 @@
 <form role="form" [formGroup]="form">
-  <mat-expansion-panel>
+  <mat-expansion-panel [(expanded)]="visualExpanded" style="max-width: 500px">
     <mat-expansion-panel-header>
-      <mat-panel-title>
-        <mat-form-field>
-          <input matInput [formControl]="dateText" placeholder="datation" />
+      <mat-panel-description
+        fxLayout="row"
+        fxLayoutAlign="start center"
+        fxLayoutGap="10px"
+      >
+        <mat-form-field fxFlex floatLabel="never">
+          <input
+            matInput
+            [formControl]="dateText"
+            placeholder="datation"
+            (keydown.space)="stopPropagation($event)"
+          />
         </mat-form-field>
-      </mat-panel-title>
-      <mat-panel-description>
-        <mat-icon *ngIf="invalidDateText" color="warn">alarm_off</mat-icon>
-        <mat-icon
-          *ngIf="!invalidDateText"
-          [matBadge]="dateValue | number: '1.2-2'"
-          >alarm_on</mat-icon
-        >
+        <span fxFlex>
+          <mat-icon *ngIf="invalidDateText" color="warn">error</mat-icon>
+        </span>
+        <span fxFlex>
+          <mat-icon *ngIf="!invalidDateText">done</mat-icon>
+        </span>
+        <span fxFlex>
+          <span *ngIf="!invalidDateText" class="date-sort-value">
+            {{ dateValue | number: "1.2-2" }}</span
+          >
+        </span>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -23,19 +35,34 @@
     ></cadmus-datation-editor>
 
     <cadmus-datation-editor
+      *ngIf="range?.value"
       [model$]="b$"
       (modelChange)="onDatationBChange($event)"
       [label]="'B'"
     ></cadmus-datation-editor>
 
-    <button
-      type="button"
-      mat-icon-button
-      color="primary"
-      matTooltip="Set date from visuals"
-      (click)="setDatations()"
-    >
-      <mat-icon>check_circle</mat-icon>
-    </button>
+    <div>
+      <mat-slide-toggle [formControl]="range" matTooltip="Toggle range"
+        >A-B</mat-slide-toggle
+      >
+      <button
+        type="button"
+        mat-icon-button
+        color="warn"
+        matTooltip="Reset date visuals"
+        (click)="resetDatations()"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
+      <button
+        type="button"
+        mat-icon-button
+        color="primary"
+        matTooltip="Set date from visuals"
+        (click)="setDatations()"
+      >
+        <mat-icon>check_circle</mat-icon>
+      </button>
+    </div>
   </mat-expansion-panel>
 </form>

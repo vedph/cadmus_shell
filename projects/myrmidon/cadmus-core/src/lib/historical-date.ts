@@ -21,7 +21,7 @@ export enum HistoricalDateType {
  */
 export interface HistoricalDateModel {
   a: DatationModel;
-  b: DatationModel;
+  b?: DatationModel;
 }
 
 /**

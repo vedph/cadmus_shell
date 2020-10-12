@@ -4,7 +4,7 @@
   <!-- value -->
   <div>
     <mat-form-field style="width: 4em">
-      <input matInput formControlName="value" placeholder="value" />
+      <input matInput [formControl]="value" placeholder="value" type="number" />
       <mat-error
         *ngIf="value.hasError('required') && (value.touched || value.dirty)"
         >year or century value required</mat-error
@@ -15,7 +15,7 @@
     <mat-form-field style="width: 3em">
       <input
         matInput
-        formControlName="month"
+        [formControl]="month"
         placeholder="month"
         type="number"
         min="0"
@@ -33,7 +33,7 @@
     <mat-form-field style="width: 3em">
       <input
         matInput
-        formControlName="day"
+        [formControl]="day"
         placeholder="day"
         type="number"
         min="0"
@@ -51,20 +51,20 @@
   <!-- row 2 -->
   <!-- century, span, about, dubious -->
   <div>
-    <mat-checkbox formControlName="century">century</mat-checkbox>
+    <mat-checkbox [formControl]="century">century</mat-checkbox>
     &nbsp;&nbsp;
-    <mat-checkbox formControlName="span">span</mat-checkbox>
+    <mat-checkbox [formControl]="span">span</mat-checkbox>
     &nbsp;&nbsp;
-    <mat-checkbox formControlName="about">about</mat-checkbox>
+    <mat-checkbox [formControl]="about">about</mat-checkbox>
     &nbsp;&nbsp;
-    <mat-checkbox formControlName="dubious">dubious</mat-checkbox>
+    <mat-checkbox [formControl]="dubious">dubious</mat-checkbox>
   </div>
 
   <!-- row 3 -->
   <!-- hint -->
   <div>
     <mat-form-field style="width: 95%">
-      <input matInput formControlName="hint" placeholder="hint" />
+      <input matInput [formControl]="hint" placeholder="hint" />
       <mat-error
         *ngIf="hint.hasError('maxLength') && (hint.touched || hint.dirty)"
         >hint too long</mat-error
