@@ -21,6 +21,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
   styleUrls: ['./historical-date-editor.component.css'],
 })
 export class HistoricalDateEditorComponent implements OnInit {
+  private _disabled: boolean;
   private _date: HistoricalDateModel;
 
   @Input()
@@ -35,6 +36,20 @@ export class HistoricalDateEditorComponent implements OnInit {
       const hd = new HistoricalDate(value);
       this.dateText.setValue(hd.toString());
       this.form.markAsPristine();
+    }
+  }
+
+  @Input()
+  public get disabled(): boolean {
+    return this._disabled;
+  }
+  public set disabled(value: boolean) {
+    this._disabled = value;
+    if (value) {
+      this.visualExpanded = false;
+      this.form.disable();
+    } else {
+      this.form.enable();
     }
   }
 
