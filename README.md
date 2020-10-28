@@ -465,7 +465,7 @@ Ensure that the root component there is named after app.component's selector (e.
    as right clicking on the file name and selecting Download link as won't
    work as expected, producing corrupt files).
  */
-@import "assets/icons/material-icons.css";
+/* @import "assets/icons/material-icons.css"; */
 ```
 
 10. create your additional libraries or import existing ones. To create a library: `ng generate library cadmus-NAME`. For instance, in Cadmus shell these libraries were generated:
