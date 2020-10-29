@@ -30,14 +30,11 @@ export class HistoricalDateEditorComponent implements OnInit {
   }
   public set date(value: HistoricalDateModel) {
     this._date = value;
-    if (!value) {
-      this.form.reset();
-    } else {
-      const hd = new HistoricalDate(value);
-      this.dateText.setValue(hd.toString());
-      this.form.markAsPristine();
-    }
+    this.updateForm(value);
   }
+
+  @Input()
+  public label: string;
 
   @Input()
   public get disabled(): boolean {
@@ -96,18 +93,29 @@ export class HistoricalDateEditorComponent implements OnInit {
       .pipe(debounceTime(400), distinctUntilChanged())
       .subscribe((text) => {
         const hd = HistoricalDate.parse(text);
-        if (hd) {
+        if (hd?.a) {
           this.invalidDateText = false;
           this.dateValue = hd.getSortValue();
           this.range.setValue(hd.getDateType() === HistoricalDateType.range);
           this.a$.next(hd.a);
           this.b$.next(hd.b);
-          this.dateChange.emit(hd);
+          // this.dateChange.emit(hd);
         } else {
           this.invalidDateText = true;
           this.dateValue = 0;
         }
       });
+    this.updateForm(this._date);
+  }
+
+  private updateForm(date: HistoricalDateModel): void {
+    if (!date) {
+      this.form.reset();
+    } else {
+      const hd = new HistoricalDate(date);
+      this.dateText.setValue(hd.toString());
+      this.form.markAsPristine();
+    }
   }
 
   public stopPropagation(event: KeyboardEvent): void {
@@ -143,5 +151,26 @@ export class HistoricalDateEditorComponent implements OnInit {
 
     this.dateText.setValue(hd.toString());
     this.visualExpanded = false;
+  }
+
+  public save(): void {
+    try {
+      const hd = HistoricalDate.parse(this.dateText.value);
+      if (hd) {
+        this.invalidDateText = false;
+        this.dateValue = hd.getSortValue();
+        this.range.setValue(hd.getDateType() === HistoricalDateType.range);
+        this.a$.next(hd.a);
+        this.b$.next(hd.b);
+        this.dateChange.emit(hd);
+      } else {
+        this.invalidDateText = true;
+        this.dateValue = 0;
+      }
+    } catch (error) {
+      console.log(error);
+      this.invalidDateText = true;
+      this.dateValue = 0;
+    }
   }
 }

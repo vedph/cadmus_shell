@@ -23,9 +23,15 @@
     </div>
 
     <div gdArea="content">
-      <cadmus-historical-date-editor [(date)]="date"></cadmus-historical-date-editor>
+      <form [formGroup]="form">
+        <mat-checkbox [formControl]="hasDate">has date</mat-checkbox>
+        <cadmus-historical-date-editor
+          [(date)]="date"
+          [disabled]="!hasDate?.value"
+        ></cadmus-historical-date-editor>
+      </form>
       <div *ngIf="date">
-        <pre>{{date | json}}</pre>
+        <pre>{{ date | json }}</pre>
       </div>
     </div>
   </div>
