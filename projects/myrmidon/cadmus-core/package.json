@@ -1,6 +1,6 @@
 {
   "name": "@myrmidon/cadmus-core",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Cadmus - core app components: guards, services, validators, and utility classes.",
   "keywords": [
     "Cadmus"
@@ -14,8 +14,8 @@
     "name": "Daniele Fusi"
   },
   "peerDependencies": {
-    "@angular/common": "^10.1.4",
-    "@angular/core": "^10.1.4"
+    "@angular/common": "^11.0.0",
+    "@angular/core": "^11.0.0"
   },
   "dependencies": {
     "tslib": "^2.0.0"

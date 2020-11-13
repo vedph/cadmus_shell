@@ -1,6 +1,6 @@
 {
   "name": "@myrmidon/cadmus-ui",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Cadmus - shared UI components.",
   "keywords": [
     "Cadmus"
@@ -14,9 +14,9 @@
     "name": "Daniele Fusi"
   },
   "peerDependencies": {
-    "@angular/common": "^10.1.4",
-    "@angular/core": "^10.1.4",
-    "ngx-monaco-editor": "^8.1.1",
+    "@angular/common": "^11.0.0",
+    "@angular/core": "^11.0.0",
+    "ngx-monaco-editor": "^10.0.0-beta.1",
     "@myrmidon/cadmus-core": "^0.0.1",
     "@myrmidon/cadmus-api": "^0.0.1",
     "@myrmidon/cadmus-material": "^0.0.1"

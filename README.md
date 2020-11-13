@@ -1,12 +1,16 @@
 # Cadmus Shell
 
-Quick Docker image build: `docker build . -t vedph2020/cadmus-shell:1.0.3 -t vedph2020/cadmus-shell:latest` (replace with the current version).
+Quick Docker image build:
+
+1. `npm run build-all`
+2. `ng build --prod`
+3. `docker build . -t vedph2020/cadmus-shell:1.0.4 -t vedph2020/cadmus-shell:latest` (replace with the current version).
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.4.
 
-Cadmus shell project: this is a shell for the core Cadmus web app libraries. It is derived from the original `cadmus_web`, by refactoring its workspace into a pure Angular workspace, removing Nrwl dependencies. Each feature is a separate library as before; but here you can compile, pack and publish each library separately, using the "standard" Angular workspace. This should allow building new Cadmus clients by simply composing these feature libraries, and eventually adding new, specialized parts or fragments.
+Cadmus shell project: this is a shell for the core Cadmus web app libraries. It is derived from the original `cadmus_web`, by refactoring its workspace into a pure Angular workspace, removing Nrwl dependencies. Each feature is a separate library as before; but here you can compile, pack and publish each library separately, using the "standard" Angular workspace. This allows building new Cadmus clients by simply composing these feature libraries, and eventually adding new, specialized parts or fragments.
 
-In the process of refactoring, the libraries were renamed from their original counterparts in `cadmus_web`. Apart from this, the code is the same, maybe with a slightly more polished TS syntax, with no effect on the compiled JS. This should allow mantaining these two codebases in parallel, until we can be reasonably sure that no issue related to Angular workspaces and this modular approach can be blocking.
+In the process of refactoring, the libraries were renamed from their original counterparts in `cadmus_web`.
 
 The shell application is used as a development playground, where you can easily test and debug the libraries, without having to repack them each time. To this end, the shell only includes:
 
@@ -386,7 +390,7 @@ and then just add `RouterModuleForChild` to your library module `imports`.
 3. add these packages (to `package.json`) and `npm i`:
 
 ```json
-"@angular/flex-layout": "^10.0.0-beta.32",
+"@angular/flex-layout": "^11.0.0-beta.33",
 "@auth0/angular-jwt": "^5.0.1",
 "@datorama/akita": "^5.2.3",
 "@datorama/akita-ngdevtools": "^5.0.3",
@@ -396,7 +400,7 @@ and then just add `RouterModuleForChild` to your library module `imports`.
 "moment": "^2.28.0",
 "ngx-markdown": "^10.1.1",
 "ngx-moment": "^5.0.0",
-"ngx-monaco-editor": "^8.1.1",
+"ngx-monaco-editor": "^9.0.0",
 "rangy": "^1.3.0",
 ```
 
@@ -442,7 +446,7 @@ Also, the `vendorSourceMap` option suggested in the above link no more belongs t
 
 8. `index.html`:
 
-- add this script before `</head>`:
+- add this script before `</head>` (remember to check that you have included it in `angular.json`!):
 
 ```html
 <!-- Load environment variables -->

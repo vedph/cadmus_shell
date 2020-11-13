@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TiledDataComponent } from './tiled-data.component';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
@@ -11,7 +11,7 @@ describe('TiledDataComponent', () => {
   let component: TiledDataComponent;
   let fixture: ComponentFixture<TiledDataComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         FormsModule,

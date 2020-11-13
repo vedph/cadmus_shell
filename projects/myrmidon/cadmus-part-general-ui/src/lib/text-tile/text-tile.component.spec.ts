@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TextTileComponent } from './text-tile.component';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
@@ -11,7 +11,7 @@ describe('TextTileComponent', () => {
   let component: TextTileComponent;
   let fixture: ComponentFixture<TextTileComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         FormsModule,

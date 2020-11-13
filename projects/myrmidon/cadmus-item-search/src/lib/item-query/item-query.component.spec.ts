@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ItemQueryComponent } from './item-query.component';
 
@@ -6,7 +6,7 @@ describe('ItemQueryComponent', () => {
   let component: ItemQueryComponent;
   let fixture: ComponentFixture<ItemQueryComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ItemQueryComponent],
     }).compileComponents();

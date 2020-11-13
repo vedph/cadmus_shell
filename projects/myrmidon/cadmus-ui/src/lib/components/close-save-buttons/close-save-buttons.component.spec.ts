@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CloseSaveButtonsComponent } from './close-save-buttons.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -8,7 +8,7 @@ describe('CloseSaveButtonsComponent', () => {
   let component: CloseSaveButtonsComponent;
   let fixture: ComponentFixture<CloseSaveButtonsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [FormsModule, ReactiveFormsModule, CadmusMaterialModule],
       declarations: [CloseSaveButtonsComponent],

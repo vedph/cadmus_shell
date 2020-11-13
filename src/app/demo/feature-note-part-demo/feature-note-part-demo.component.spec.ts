@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FeatureNotePartDemoComponent } from './feature-note-part-demo.component';
 
@@ -6,7 +6,7 @@ describe('FeatureNotePartDemoComponent', () => {
   let component: FeatureNotePartDemoComponent;
   let fixture: ComponentFixture<FeatureNotePartDemoComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ FeatureNotePartDemoComponent ]
     })

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HAMMER_LOADER } from '@angular/platform-browser';
@@ -14,13 +14,13 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { MarkdownModule } from 'ngx-markdown';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CadmusCoreModule, PartEditorKeys } from '@myrmidon/cadmus-core';
+import { CadmusCoreModule } from '@myrmidon/cadmus-core';
 
 describe('NotePartFeatureComponent', () => {
   let component: NotePartFeatureComponent;
   let fixture: ComponentFixture<NotePartFeatureComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         CommonModule,

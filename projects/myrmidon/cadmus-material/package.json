@@ -1,6 +1,6 @@
 {
   "name": "@myrmidon/cadmus-material",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Cadmus - Angular Material package.",
   "keywords": [
     "Cadmus"
@@ -14,8 +14,11 @@
     "name": "Daniele Fusi"
   },
   "peerDependencies": {
-    "@angular/common": "^10.1.4",
-    "@angular/core": "^10.1.4"
+    "@angular/common": "^11.0.0",
+    "@angular/core": "^11.0.0",
+    "@angular/cdk": "^11.0.0",
+    "@angular/material": "^11.0.0",
+    "@angular/flex-layout": "^11.0.0-beta.33"
   },
   "dependencies": {
     "tslib": "^2.0.0"

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FeatureIndexKeywordsPartDemoComponent } from './feature-index-keywords-part-demo.component';
 
@@ -6,7 +6,7 @@ describe('FeatureIndexKeywordsPartDemoComponent', () => {
   let component: FeatureIndexKeywordsPartDemoComponent;
   let fixture: ComponentFixture<FeatureIndexKeywordsPartDemoComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ FeatureIndexKeywordsPartDemoComponent ]
     })

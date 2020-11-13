@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CategoriesPartDemoComponent } from './categories-part-demo.component';
 import { CommonModule } from '@angular/common';
@@ -15,7 +15,7 @@ describe('CategoriesPartDemoComponent', () => {
   let component: CategoriesPartDemoComponent;
   let fixture: ComponentFixture<CategoriesPartDemoComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         CommonModule,

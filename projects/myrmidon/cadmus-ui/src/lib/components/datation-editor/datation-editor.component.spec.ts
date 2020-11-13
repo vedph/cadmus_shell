@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { DatationEditorComponent } from './datation-editor.component';
@@ -12,7 +12,7 @@ describe('DatationEditorComponent', () => {
   let component: DatationEditorComponent;
   let fixture: ComponentFixture<DatationEditorComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         CommonModule,

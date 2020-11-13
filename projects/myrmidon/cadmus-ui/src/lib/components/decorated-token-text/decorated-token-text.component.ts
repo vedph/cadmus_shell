@@ -56,9 +56,11 @@ export class DecoratedTokenTextComponent implements OnInit {
 
   constructor(private _textLayerService: TextLayerService) {}
 
-  ngOnInit() {}
+  public ngOnInit(): void {
+    this.decorate();
+  }
 
-  private decorate() {
+  private decorate(): void {
     this.text = this._textLayerService.render(
       this._baseText,
       this._locations,

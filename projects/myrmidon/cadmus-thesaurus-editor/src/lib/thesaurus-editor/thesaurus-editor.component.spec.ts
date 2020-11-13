@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ThesaurusEditorComponent } from './thesaurus-editor.component';
 
@@ -6,7 +6,7 @@ describe('ThesaurusEditorComponent', () => {
   let component: ThesaurusEditorComponent;
   let fixture: ComponentFixture<ThesaurusEditorComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ThesaurusEditorComponent],
     }).compileComponents();

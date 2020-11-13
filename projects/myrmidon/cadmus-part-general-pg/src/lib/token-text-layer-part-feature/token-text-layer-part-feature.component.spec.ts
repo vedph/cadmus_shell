@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TokenTextLayerPartFeatureComponent } from './token-text-layer-part-feature.component';
 import { CommonModule } from '@angular/common';
@@ -21,7 +21,7 @@ describe('TokenTextLayerPartFeatureComponent', () => {
   let component: TokenTextLayerPartFeatureComponent;
   let fixture: ComponentFixture<TokenTextLayerPartFeatureComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         CommonModule,

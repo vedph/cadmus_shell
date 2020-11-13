@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TiledTextLayerPartFeatureComponent } from './tiled-text-layer-part-feature.component';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
@@ -21,7 +21,7 @@ describe('TiledTextLayerPartFeatureComponent', () => {
   let component: TiledTextLayerPartFeatureComponent;
   let fixture: ComponentFixture<TiledTextLayerPartFeatureComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         CommonModule,

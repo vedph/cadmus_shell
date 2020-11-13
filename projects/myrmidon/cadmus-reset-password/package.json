@@ -1,6 +1,6 @@
 {
   "name": "@myrmidon/cadmus-reset-password",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Cadmus - reset password page.",
   "keywords": [
     "Cadmus"
@@ -14,8 +14,8 @@
     "name": "Daniele Fusi"
   },
   "peerDependencies": {
-    "@angular/common": "^10.1.4",
-    "@angular/core": "^10.1.4",
+    "@angular/common": "^11.0.0",
+    "@angular/core": "^11.0.0",
     "@myrmidon/cadmus-core": "^0.0.1",
     "@myrmidon/cadmus-material": "^0.0.1",
     "@myrmidon/cadmus-api": "^0.0.1",

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BibliographyPartDemoComponent } from './bibliography-part-demo.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CadmusCoreModule } from '@myrmidon/cadmus-core';
@@ -14,7 +14,7 @@ describe('BibliographyPartDemoComponent', () => {
   let component: BibliographyPartDemoComponent;
   let fixture: ComponentFixture<BibliographyPartDemoComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         FormsModule,

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HierarchyItemBrowserComponent } from './hierarchy-item-browser.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -15,7 +15,7 @@ describe('HierarchyItemBrowserComponent', () => {
   let component: HierarchyItemBrowserComponent;
   let fixture: ComponentFixture<HierarchyItemBrowserComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         FormsModule,

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DecoratedTokenTextComponent } from './decorated-token-text.component';
 import { CommonModule } from '@angular/common';
@@ -12,7 +12,7 @@ describe('DecoratedTokenTextComponent', () => {
   let component: DecoratedTokenTextComponent;
   let fixture: ComponentFixture<DecoratedTokenTextComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         CommonModule,
