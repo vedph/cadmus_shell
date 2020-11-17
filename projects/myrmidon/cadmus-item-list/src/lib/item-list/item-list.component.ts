@@ -67,7 +67,7 @@ export class ItemListComponent implements OnInit {
       );
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this._authService.currentUser$.subscribe((user: User) => {
       this.user = user;
       this.userLevel = this._authService.getCurrentUserLevel();
@@ -128,7 +128,7 @@ export class ItemListComponent implements OnInit {
     );
   }
 
-  public pageChanged(event: PageEvent) {
+  public pageChanged(event: PageEvent): void {
     // https://material.angular.io/components/paginator/api
     this.paginator.setPage(event.pageIndex + 1);
     if (event.pageSize !== this.pageSize.value) {
@@ -136,15 +136,15 @@ export class ItemListComponent implements OnInit {
     }
   }
 
-  public addItem() {
+  public addItem(): void {
     this._router.navigate(['/items', 'new']);
   }
 
-  public editItem(item: ItemInfo) {
+  public editItem(item: ItemInfo): void {
     this._router.navigate(['/items', item.id]);
   }
 
-  public deleteItem(item: ItemInfo) {
+  public deleteItem(item: ItemInfo): void {
     if (this.user.roles.every((r) => r !== 'admin' && r !== 'editor')) {
       return;
     }

@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { EditItemQuery, EditLayerPartQuery, AppQuery } from '@myrmidon/cadmus-state';
+import {
+  EditItemQuery,
+  EditLayerPartQuery,
+  AppQuery,
+} from '@myrmidon/cadmus-state';
 import { TextLayerPart } from '@myrmidon/cadmus-core';
 import { FacetService } from '@myrmidon/cadmus-api';
 

@@ -4,12 +4,13 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { MomentModule } from 'ngx-moment';
 
+import { CadmusApiModule } from '@myrmidon/cadmus-api';
 import { CadmusCoreModule } from '@myrmidon/cadmus-core';
 import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
+
 import { CurrentItemBarComponent } from './components/current-item-bar/current-item-bar.component';
 import { CurrentLayerPartBarComponent } from './components/current-layer-part-bar/current-layer-part-bar.component';
-import { CadmusApiModule } from '@myrmidon/cadmus-api';
 
 @NgModule({
   imports: [

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UtilService {
   constructor() {}
@@ -14,7 +14,9 @@ export class UtilService {
     let copy: any;
 
     // handle the 3 simple types, and null or undefined
-    if (null == obj || 'object' !== typeof obj) return obj;
+    if (null == obj || 'object' !== typeof obj) {
+      return obj;
+    }
 
     // handle date
     if (obj instanceof Date) {
@@ -36,11 +38,13 @@ export class UtilService {
     if (obj instanceof Object) {
       copy = {};
       for (const attr in obj) {
-        if (obj.hasOwnProperty(attr)) copy[attr] = this.deepCopy(obj[attr]);
+        if (obj.hasOwnProperty(attr)) {
+          copy[attr] = this.deepCopy(obj[attr]);
+        }
       }
       return copy;
     }
 
-    throw new Error("Unable to copy obj! Its type isn't supported.");
+    throw new Error('Unable to copy obj! Its type isn\'t supported.');
   }
 }

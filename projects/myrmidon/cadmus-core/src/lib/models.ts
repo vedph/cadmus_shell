@@ -84,6 +84,26 @@ export interface DataPinInfo {
 }
 
 /**
+ * Data pin value type in a DataPinDefinition.
+ */
+export enum DataPinValueType {
+  string = 0,
+  boolean,
+  integer,
+  decimal
+}
+
+/**
+ * Definition of a data pin.
+ */
+export interface DataPinDefinition {
+  name: string;
+  type: DataPinValueType;
+  tip?: string;
+  attributes?: string;
+}
+
+/**
  * Part type and role IDs.
  */
 export interface PartTypeIds {

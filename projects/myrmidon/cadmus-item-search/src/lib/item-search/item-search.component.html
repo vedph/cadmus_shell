@@ -33,7 +33,7 @@
             <th></th>
             <th
               *ngIf="
-                user.roles.includes('admin') || user.roles.includes('editor')
+                user?.roles?.includes('admin') || user?.roles?.includes('editor')
               "
             ></th>
             <th>facet</th>
@@ -61,7 +61,7 @@
               <td
                 class="command"
                 *ngIf="
-                  user.roles.includes('admin') || user.roles.includes('editor')
+                  user?.roles?.includes('admin') || user?.roles?.includes('editor')
                 "
               >
                 <button

@@ -2,6 +2,7 @@
   <mat-card-content>
     <form [formGroup]="form" (submit)="submitQuery()">
       <div>
+        <!-- query -->
         <mat-form-field appearance="fill" class="full-width">
           <textarea
             #queryctl
@@ -41,6 +42,7 @@
         </button>
       </div>
       <br />
+      <!-- history -->
       <div *ngIf="lastQueries?.length">
         <mat-form-field class="full-width">
           <mat-select formControlName="history" placeholder="history">
@@ -61,9 +63,69 @@
         </mat-form-field>
       </div>
       <br />
+
+      <!-- parts/frr list -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Pins Reference</mat-panel-title>
+        </mat-expansion-panel-header>
+        <div *ngIf="partDefs?.length">
+          <mat-form-field>
+            <mat-select [formControl]="partDef" placeholder="part or fr.">
+              <mat-option
+                *ngFor="let def of partDefs"
+                [value]="def.typeId"
+                [matTooltip]="def.description"
+              >
+                {{ def.name }} ({{ def.typeId?.startsWith("fr.") ? "F" : "P" }})
+              </mat-option>
+            </mat-select>
+            &nbsp;
+            <mat-spinner
+              [diameter]="16"
+              [strokeWidth]="2"
+              *ngIf="loadingPinDefs"
+            ></mat-spinner>
+          </mat-form-field>
+          <!-- selected part's pins -->
+          <table class="pins" *ngIf="pinDefs?.length">
+            <thead>
+              <tr>
+                <th></th>
+                <th>name</th>
+                <th>type</th>
+                <th>tip</th>
+                <th>attrs</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let pd of pinDefs">
+                <td>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    color="primary"
+                    matTooltip="Copy name"
+                    (click)="copyToClipboard(pd.name)"
+                  >
+                    <mat-icon>content_copy</mat-icon>
+                  </button>
+                </td>
+                <td>{{ pd.name }}</td>
+                <td>{{ pinTypeIdToString(pd.type) }}</td>
+                <td style="max-width: 20em">{{ pd.tip }}</td>
+                <td>{{ pd.attributes }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </mat-expansion-panel>
+
+      <!-- help -->
+      <br>
       <mat-expansion-panel [expanded]="false">
         <mat-expansion-panel-header>
-          <mat-panel-title>Quick Reference</mat-panel-title>
+          <mat-panel-title>Quick Help</mat-panel-title>
         </mat-expansion-panel-header>
         <div class="query-help">
           <p>

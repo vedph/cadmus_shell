@@ -13,3 +13,11 @@
 .full-width {
   width: 100%;
 }
+table.pins tbody tr:nth-child(odd) {
+  background-color: #fafafa;
+}
+table.pins th {
+  text-align: left;
+  font-weight: normal;
+  color: silver;
+}

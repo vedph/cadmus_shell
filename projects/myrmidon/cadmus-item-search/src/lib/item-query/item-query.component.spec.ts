@@ -6,11 +6,13 @@ describe('ItemQueryComponent', () => {
   let component: ItemQueryComponent;
   let fixture: ComponentFixture<ItemQueryComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ItemQueryComponent],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ItemQueryComponent],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ItemQueryComponent);

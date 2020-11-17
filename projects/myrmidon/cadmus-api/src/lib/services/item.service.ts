@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import {
   ErrorService,
@@ -14,6 +14,7 @@ import {
   EnvService,
   ErrorWrapper,
   DataPinInfo,
+  DataPinDefinition,
 } from '@myrmidon/cadmus-core';
 import { Observable, of } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
@@ -284,6 +285,23 @@ export class ItemService {
       `${this._env.apiUrl}${this._env.databaseId}/` + `part/${id}/pins`;
     return this._http
       .get<RolePartId[]>(url)
+      .pipe(retry(3), catchError(this._error.handleError));
+  }
+
+  /**
+   * Get the data pin definitions for the part or fragment
+   * with the specified type ID.
+   * @param typeId The type ID (e.g. "it.vedph.token-text" or
+   * "fr.it.vedph.comment").
+   * @returns Observable with array of definitions.
+   */
+  public getDataPinDefinitions(
+    typeId: string
+  ): Observable<DataPinDefinition[]> {
+    const url =
+      `${this._env.apiUrl}${this._env.databaseId}/` + `pin-defs/${typeId}`;
+    return this._http
+      .get<DataPinDefinition[]>(url)
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
