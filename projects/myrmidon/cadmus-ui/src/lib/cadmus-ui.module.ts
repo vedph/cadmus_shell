@@ -24,6 +24,7 @@ import { CommonModule } from '@angular/common';
 import { CadmusCoreModule } from '@myrmidon/cadmus-core';
 import { CadmusApiModule } from '@myrmidon/cadmus-api';
 import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
+import { ThesaurusTreeComponent } from './components/thesaurus-tree/thesaurus-tree.component';
 
 @NgModule({
   imports: [
@@ -52,6 +53,7 @@ import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
     PartBadgeComponent,
     PasswordStrengthBarComponent,
     SafeHtmlPipe,
+    ThesaurusTreeComponent,
   ],
   exports: [
     ConfirmDialogComponent,
@@ -68,6 +70,7 @@ import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
     PartBadgeComponent,
     PasswordStrengthBarComponent,
     SafeHtmlPipe,
+    ThesaurusTreeComponent,
   ],
   // entryComponents: [
   //   ConfirmDialogComponent

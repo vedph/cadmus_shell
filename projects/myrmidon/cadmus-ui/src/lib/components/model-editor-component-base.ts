@@ -1,5 +1,5 @@
 import { ThesauriSet, User } from '@myrmidon/cadmus-core';
-import { Input, Output, EventEmitter, Directive } from '@angular/core';
+import { Input, Output, EventEmitter, Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { AuthService } from '@myrmidon/cadmus-api';
 import { extractPristineChanges } from '../utils';
@@ -18,13 +18,12 @@ import { extractPristineChanges } from '../utils';
  * - override onModelSet, and eventually OnThesauriSet;
  * - override getModelFromForm.
  */
-@Directive()
+@Component({
+  template: '',
+})
 export abstract class ModelEditorComponentBase<T> {
-  private _json: string;
-  private _ignoreJsonChange: boolean;
-
-  // thesaurus
   private _thesauri: ThesauriSet | null;
+  private _json: string;
 
   /**
    * The part's item ID.
@@ -47,10 +46,9 @@ export abstract class ModelEditorComponentBase<T> {
   }
   public set json(value: string) {
     this._json = value;
-    if (!this._ignoreJsonChange) {
-      this.onModelSet(this.getModelFromJson(value));
-    }
+    this.onModelSet(this.getModelFromJson(value));
   }
+
   /**
    * Event emitted when the edited part's JSON is saved.
    */
@@ -117,33 +115,25 @@ export abstract class ModelEditorComponentBase<T> {
     this.editorClose = new EventEmitter<any>();
     this.dirtyChange = new EventEmitter<boolean>();
 
-    // this.updateUserProperties(_authService.currentUserValue);
     _authService.currentUser$.subscribe((user: User) => {
       this.updateUserProperties(user);
     });
   }
 
-  private updateUserProperties(user: User) {
+  private updateUserProperties(user: User): void {
     this.user = user;
     this.userLevel = this._authService.getCurrentUserLevel();
   }
 
   /**
-   * Initialize the editor. You MUST call this at the end of your OnInit.
+   * Initialize the editor. You MUST call this in your OnInit.
+   * This initializes the thesauri and sets the data model.
    */
-  protected initEditor() {
-    // this.form.valueChanges
-    //   .pipe(
-    //     map((_) => {
-    //       return this.form.dirty;
-    //     }),
-    //     distinctUntilChanged()
-    //   )
-    //   .subscribe((dirty: boolean) => {
-    //     this.dirtyChange.emit(dirty);
-    //   });
+  protected initEditor(): void {
+    this.onThesauriSet();
+    this.onModelSet(this.getModelFromJson(this.json));
 
-    extractPristineChanges(this.form).subscribe(p => {
+    extractPristineChanges(this.form).subscribe((p) => {
       this.dirtyChange.emit(!p);
     });
   }
@@ -158,37 +148,32 @@ export abstract class ModelEditorComponentBase<T> {
    */
   protected getModelFromJson(json: string = null): T {
     if (!json) {
-      json = this._json;
+      json = this.json;
     }
     const model: T = json ? JSON.parse(json) : null;
     if (!model) {
       return null;
     }
     // an empty object ({}) must be treated as null
-    return Object.keys(model).length? model : null;
+    return Object.keys(model).length ? model : null;
   }
 
   /**
    * Update the json property from the specified JSON code, and emit the
-   * corresponding jsonChange event, without triggering a call to
-   * onModelSet.
+   * corresponding jsonChange event.
    *
-   * @param json The JSON core representing the part.
+   * @param json The JSON code representing the part.
    */
-  protected updateJson(json: string) {
-    this._ignoreJsonChange = true;
-    try {
-      this.json = json;
-      this.jsonChange.emit(json);
-    } finally {
-      this._ignoreJsonChange = false;
-    }
+  protected updateJson(json: string): void {
+    this.json = json;
+    this.jsonChange.emit(json);
   }
 
   /**
    * Invoked whenever the json property is set (=data comes from input json
    * property), unless setting it via updateJson. Implement to update the form
    * controls to reflect the new model data.
+   *
    * @param model The model set, or null.
    */
   protected abstract onModelSet(model: T): void;
@@ -228,7 +213,7 @@ export abstract class ModelEditorComponentBase<T> {
   /**
    * Emit a request to close the editor.
    */
-  public close() {
+  public close(): void {
     this.editorClose.emit();
   }
 
@@ -237,7 +222,7 @@ export abstract class ModelEditorComponentBase<T> {
    * the model from the form's controls, serializes it into JSON,
    * updates the json property, and marks the root form as pristine.
    */
-  public save() {
+  public save(): void {
     if (this.form.invalid) {
       return;
     }

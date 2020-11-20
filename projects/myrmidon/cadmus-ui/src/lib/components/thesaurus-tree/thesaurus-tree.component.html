@@ -1,0 +1,106 @@
+<form [formGroup]="form" (submit)="find()">
+  <button
+    type="button"
+    mat-icon-button
+    matTooltip="Expand all"
+    (click)="expandAll()"
+  >
+    <mat-icon>unfold_more</mat-icon>
+  </button>
+  <button
+    type="button"
+    mat-icon-button
+    matTooltip="Collapse all"
+    (click)="collapseAll()"
+  >
+    <mat-icon>unfold_less</mat-icon>
+  </button>
+  <mat-form-field>
+    <input matInput [formControl]="filter" placeholder="find" />
+    <button
+      type="button"
+      matSuffix
+      mat-icon-button
+      color="warn"
+      (click)="resetFilter()"
+    >
+      <mat-icon>clear</mat-icon>
+    </button>
+  </mat-form-field>
+  <span
+    *ngIf="foundNodes"
+    [ngClass]="{
+      'found-count': foundNodes?.length,
+      'not-found-count': foundNodes?.length === 0
+    }"
+    >{{ foundNodes?.length }}</span
+  >
+</form>
+<mat-tree
+  [dataSource]="treeDataSource"
+  [treeControl]="treeControl"
+  class="th-tree"
+>
+  <!-- leaf node -->
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+    <li>
+      <div class="mat-tree-node">
+        <a
+          mat-button
+          (click)="onTreeNodeClick(node)"
+          [class.hilite]="isFoundNode(node)"
+        >
+          {{ node.label }}
+        </a>
+      </div>
+    </li>
+  </mat-tree-node>
+
+  <!-- root node -->
+  <mat-nested-tree-node *matTreeNodeDef="let node; when: isRoot">
+    <div class="mat-tree-node">
+      <button
+        type="button"
+        mat-icon-button
+        matTreeNodeToggle
+        [attr.aria-label]="'Toggle ' + node.label"
+      >
+        <mat-icon>
+          {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
+        </mat-icon>
+      </button>
+      {{ node.label }}
+    </div>
+    <ul class="tree-nested-node">
+      <div *ngIf="treeControl.isExpanded(node)">
+        <ng-container matTreeNodeOutlet></ng-container>
+      </div>
+    </ul>
+  </mat-nested-tree-node>
+
+  <!-- parent node -->
+  <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChildren">
+    <li class="tree-container">
+      <div class="mat-tree-node">
+        <button
+          type="button"
+          mat-icon-button
+          matTreeNodeToggle
+          [attr.aria-label]="'Toggle ' + node.label"
+        >
+          <mat-icon>
+            {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
+          </mat-icon>
+        </button>
+        <a mat-button (click)="onTreeNodeClick(node)">
+          {{ node.label }}
+        </a>
+      </div>
+      <ul class="tree-nested-node">
+        <div *ngIf="treeControl.isExpanded(node)">
+          <ng-container matTreeNodeOutlet></ng-container>
+        </div>
+      </ul>
+    </li>
+  </mat-nested-tree-node>
+</mat-tree>

@@ -15,6 +15,7 @@ export * from './lib/components/layer-hints/layer-hints.component';
 export * from './lib/components/login/login.component';
 export * from './lib/components/part-badge/part-badge.component';
 export * from './lib/components/password-strength-bar/password-strength-bar.component';
+export * from './lib/components/thesaurus-tree/thesaurus-tree.component';
 export * from './lib/components/inplace-editor-component-base';
 export * from './lib/components/model-editor-component-base';
 export * from './lib/pipes/safe-html.pipe';

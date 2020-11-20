@@ -14,49 +14,12 @@
       <!-- available categories (from thesaurus) -->
       <div>
         <h3>Available Categories</h3>
-        <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl">
-          <!-- node without children (default) -->
-          <mat-tree-node *matTreeNodeDef="let node">
-            <li>
-              <div class="mat-tree-node">
-                <!-- <button type="button" mat-icon-button disabled></button> -->
-                <a mat-button (click)="onTreeNodeClick(node)">
-                  {{ node.label }}
-                </a>
-              </div>
-            </li>
-          </mat-tree-node>
-
-          <!-- node with children -->
-          <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChildren">
-            <li class="tree-container">
-              <div class="mat-tree-node">
-                <button
-                  type="button"
-                  mat-icon-button
-                  matTreeNodeToggle
-                  [attr.aria-label]="'toggle ' + node.label"
-                >
-                  <mat-icon>
-                    {{
-                      treeControl.isExpanded(node)
-                        ? 'expand_more'
-                        : 'chevron_right'
-                    }}
-                  </mat-icon>
-                </button>
-                <a mat-button (click)="onTreeNodeClick(node)">
-                  {{ node.label }}
-                </a>
-              </div>
-              <ul class="tree-nested-node">
-                <div *ngIf="treeControl.isExpanded(node)">
-                  <ng-container matTreeNodeOutlet></ng-container>
-                </div>
-              </ul>
-            </li>
-          </mat-nested-tree-node>
-        </mat-tree>
+        <cadmus-thesaurus-tree
+          [entries]="entries$ | async"
+          rootLabel="categories"
+          [renderLabel]="renderLabel"
+          (entryChange)="onEntryChange($event)"
+        ></cadmus-thesaurus-tree>
       </div>
 
       <!-- categories -->
@@ -64,7 +27,7 @@
         <h3>Assigned Categories</h3>
         <table>
           <tbody>
-            <tr *ngFor="let c of categories.value">
+            <tr *ngFor="let entry of categories.value; let i = index">
               <td>
                 <button
                   type="button"
@@ -72,12 +35,12 @@
                   color="warn"
                   type="button"
                   matTooltip="Remove this category"
-                  (click)="removeCategory(c)"
+                  (click)="removeCategory(i)"
                 >
                   <mat-icon>remove_circle</mat-icon>
                 </button>
               </td>
-              <td>{{ c }}</td>
+              <td [matTooltip]="entry.id">{{ entry.value }}</td>
             </tr>
           </tbody>
         </table>
