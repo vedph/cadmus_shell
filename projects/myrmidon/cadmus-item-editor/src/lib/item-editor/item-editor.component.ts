@@ -11,7 +11,7 @@ import {
   User,
   LayerPartInfo,
   Thesaurus,
-  ComponentCanDeactivate
+  ComponentCanDeactivate,
 } from '@myrmidon/cadmus-core';
 import {
   FormControl,
@@ -84,7 +84,7 @@ export class ItemEditorComponent implements OnInit, ComponentCanDeactivate {
     private _authService: AuthService,
     private _formBuilder: FormBuilder
   ) {
-    this.id = this._route.snapshot.params['id'];
+    this.id = this._route.snapshot.params.id;
     if (this.id === 'new') {
       this.id = null;
     }
@@ -174,9 +174,8 @@ export class ItemEditorComponent implements OnInit, ComponentCanDeactivate {
       return [];
     }
     const results = [];
-    for (let i = 0; i < groups.length; i++) {
-      for (let j = 0; j < groups[i].parts.length; j++) {
-        const part = groups[i].parts[j];
+    for (const group of groups) {
+      for (const part of group.parts) {
         results.push({
           typeId: part.typeId,
           roleId: part.roleId,
@@ -196,8 +195,7 @@ export class ItemEditorComponent implements OnInit, ComponentCanDeactivate {
     const existingTypeRoleIds = this.getExistingPartTypeAndRoleIds();
 
     const defs: PartDefinition[] = [];
-    for (let i = 0; i < facet.partDefinitions.length; i++) {
-      const def = facet.partDefinitions[i];
+    for (const def of facet.partDefinitions) {
       // exclude layer parts, as these are in the layers tab
       if (def.roleId?.startsWith('fr.')) {
         continue;
@@ -205,7 +203,10 @@ export class ItemEditorComponent implements OnInit, ComponentCanDeactivate {
       // exclude parts present in the item
       if (
         existingTypeRoleIds.find((tr) => {
-          return tr.typeId === def.typeId && tr.roleId === def.roleId;
+          return (
+            tr.typeId === def.typeId &&
+            ((!tr.roleId && !def.roleId) || tr.roleId === def.roleId)
+          );
         })
       ) {
         continue;
@@ -222,8 +223,8 @@ export class ItemEditorComponent implements OnInit, ComponentCanDeactivate {
   private buildFlagsControls(): void {
     this.flagChecks.clear();
 
-    for (let i = 0; i < this.flagDefinitions.length; i++) {
-      const flagValue = this.flagDefinitions[i].id;
+    for (const def of this.flagDefinitions) {
+      const flagValue = def.id;
       // tslint:disable-next-line: no-bitwise
       const checked = (this.flags.value & flagValue) !== 0;
       this.flagChecks.push(this._formBuilder.control(checked));
@@ -320,6 +321,16 @@ export class ItemEditorComponent implements OnInit, ComponentCanDeactivate {
     });
   }
 
+  private partExists(typeId: string, roleId?: string): boolean {
+    const groups = this._query.getValue().partGroups;
+    return groups.some((g) => {
+      return g.parts.some(
+        (p) =>
+          p.typeId === typeId && ((!p.roleId && !roleId) || p.roleId === roleId)
+      );
+    });
+  }
+
   public addPart(def?: PartDefinition): void {
     if (!def && !this.newPartType.valid) {
       return;
@@ -332,6 +343,10 @@ export class ItemEditorComponent implements OnInit, ComponentCanDeactivate {
     }
     const typeId = def ? def.typeId : this.newPartType.value.typeId;
     const roleId = def ? def.roleId : this.newPartType.value.roleId;
+
+    if (this.partExists(typeId, roleId)) {
+      return;
+    }
 
     const route = this._libraryRouteService.buildPartEditorRoute(
       this.id,

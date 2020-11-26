@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>
-      {{ (item$ | async)?.title || 'Item' }}
+      {{ (item$ | async)?.title || "Item" }}
     </mat-card-title>
     <mat-card-subtitle>
       {{ (item$ | async)?.description }}
@@ -23,10 +23,10 @@
     <p *ngIf="id">
       Last saved {{ item.timeModified | amLocal | amTimeAgo }} by
       {{ item.userId }} on
-      {{ item.timeModified | date: 'yyyy-MM-dd HH:mm:ss' }}.<br />
+      {{ item.timeModified | date: "yyyy-MM-dd HH:mm:ss" }}.<br />
       Created {{ item.timeCreated | amLocal | amTimeAgo }} by
       {{ item.creatorId }} on
-      {{ item.timeCreated | date: 'yyyy-MM-dd HH:mm:ss' }}.
+      {{ item.timeCreated | date: "yyyy-MM-dd HH:mm:ss" }}.
     </p>
     <p *ngIf="error$ | async as error">
       <mat-error>
@@ -126,7 +126,7 @@
 
           <!-- facet -->
           <div>
-            <mat-form-field style="width: 400px;">
+            <mat-form-field style="width: 400px">
               <mat-select
                 placeholder="facet"
                 formControlName="facet"
@@ -200,7 +200,7 @@
                 required
               >
                 <mat-option *ngFor="let p of newPartDefinitions" [value]="p">
-                  <span class="new-part-name">{{ p.name }}</span>
+                  {{ p.name }}
                   <span *ngIf="p.roleId" class="new-part-role">{{
                     p.roleId
                   }}</span>
@@ -239,7 +239,7 @@
           <table>
             <thead>
               <tr>
-                <th style="width: 124px;"></th>
+                <th style="width: 124px"></th>
                 <th>type</th>
                 <th>role</th>
                 <th fxHide.xs>modified</th>

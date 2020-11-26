@@ -4,11 +4,9 @@
 div.new-part {
   margin-left: 32px;
 }
-span.new-part-name {
-  font-weight: bold;
-}
 span.new-part-role {
   color: #808080;
+  margin-left: 8px;
 }
 td.count-n {
   text-align: center;
