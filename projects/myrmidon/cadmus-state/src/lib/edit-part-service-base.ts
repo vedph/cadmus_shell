@@ -1,4 +1,5 @@
 import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
+import { Part } from '@myrmidon/cadmus-core';
 import { forkJoin } from 'rxjs';
 
 export interface EditPartStoreApi {
@@ -81,17 +82,25 @@ export abstract class EditPartServiceBase {
     }
   }
 
-  public save(json: string): Promise<boolean> {
+  /**
+   * Save the JSON code representing a part.
+   *
+   * @param json The JSON code representing the part.
+   * @returns Promise which when successful returns the
+   * saved part.
+   */
+  public save(json: string): Promise<Part> {
     this.store.setSaving(true);
     this.store.setDirty(true);
 
     return new Promise((resolve, reject) => {
       this.itemService.addPartJson(json).subscribe(
-        (_) => {
+        (part: Part) => {
+          this.store.update({ part });
           this.store.setSaving(false);
           this.store.setDirty(false);
           this.store.setError(null);
-          resolve(true);
+          resolve(part);
         },
         (error) => {
           console.error(error);

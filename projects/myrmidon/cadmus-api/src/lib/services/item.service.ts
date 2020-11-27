@@ -376,7 +376,7 @@ export class ItemService {
    * @param item Part The part.
    * @returns Observable with result.
    */
-  public addPartJson(json: string): Observable<Object> {
+  public addPartJson(json: string): Observable<any> {
     const url = `${this._env.apiUrl}${this._env.databaseId}/parts`;
     return this._http
       .post(url, { raw: json })

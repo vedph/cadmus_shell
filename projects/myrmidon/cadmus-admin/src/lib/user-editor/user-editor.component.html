@@ -27,7 +27,7 @@
     >
     &nbsp;
     <button
-      mat-button
+      mat-stroked-button
       (click)="endLockout()"
       [disabled]="unlocked"
       matTooltip="Unlock this user if locked"
@@ -94,7 +94,7 @@
         type="text"
         matInput
         formControlName="roles"
-        placeholder="ruoli (separated by space)"
+        placeholder="roles (separated by space)"
       />
       <mat-error
         *ngIf="roles.hasError('maxlength') && (roles.dirty || roles.touched)"

@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { ThesauriSet, ComponentCanDeactivate } from '@myrmidon/cadmus-core';
+import { ThesauriSet, ComponentCanDeactivate, Part } from '@myrmidon/cadmus-core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EditPartQueryBase } from './edit-part-query-base';
@@ -52,6 +52,7 @@ export abstract class EditPartFeatureBase implements ComponentCanDeactivate {
 
     // connect _stateDirty to the value of the edit state
     this._editPartQuery.selectDirty().subscribe((d: boolean) => {
+      console.log('part-state dirty change: ' + d);
       this._stateDirty = d;
     });
   }
@@ -98,6 +99,7 @@ export abstract class EditPartFeatureBase implements ComponentCanDeactivate {
    * @param value The value of the dirty state.
    */
   public onDirtyChange(value: boolean): void {
+    console.log('part dirty change: ' + value);
     this._formDirty = value;
   }
 
@@ -107,7 +109,12 @@ export abstract class EditPartFeatureBase implements ComponentCanDeactivate {
    */
   public save(json: string): void {
     this._editPartService.save(json).then(
-      (_) => {
+      (part: Part) => {
+        // update part ID if it was null (new part)
+        if (!this.partId) {
+          this.partId = part.id;
+        }
+        console.log('Part saved: ' + part.id);
         this.snackbar.open('Part saved', 'OK', {
           duration: 3000,
         });

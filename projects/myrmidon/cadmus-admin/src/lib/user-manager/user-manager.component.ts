@@ -1,7 +1,12 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
-import { User, UserFilter, DataPage, GravatarService } from '@myrmidon/cadmus-core';
+import {
+  User,
+  UserFilter,
+  DataPage,
+  GravatarService,
+} from '@myrmidon/cadmus-core';
 import { FormControl, FormBuilder } from '@angular/forms';
 import { USERS_PAGINATOR } from './users.paginator';
 import { UsersState } from './users.store';
@@ -29,10 +34,8 @@ export class UserManagerComponent implements OnInit {
     private _userService: UserService,
     private _usersService: UsersService,
     private _usersQuery: UsersQuery,
-    private _accountService: AccountService,
     private _dialogService: DialogService,
     private _gravatarService: GravatarService,
-    private _snackbar: MatSnackBar,
     formBuilder: FormBuilder
   ) {
     this.pageSize = formBuilder.control(20);

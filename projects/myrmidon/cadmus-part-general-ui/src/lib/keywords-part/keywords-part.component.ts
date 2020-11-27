@@ -124,7 +124,7 @@ export class KeywordsPartComponent
       value: this.newValue.value
     };
     let i = 0;
-    while (i < this.keywords.value.length) {
+    while (i < this.keywords.value?.length || 0) {
       const n = this.compareKeywords(keyword, this.keywords.value[i]);
       if (n === 0) {
         return;

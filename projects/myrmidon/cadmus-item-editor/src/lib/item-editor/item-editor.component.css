@@ -1,6 +1,9 @@
 .full-width {
   width: 100%;
 }
+th {
+  font-weight: normal;
+}
 div.new-part {
   margin-left: 32px;
 }
@@ -20,4 +23,7 @@ input.id {
   font-family: 'Courier New', Courier, monospace;
   color: gray;
   min-width: 22em;
+}
+.flag {
+  margin: 0 4px;
 }

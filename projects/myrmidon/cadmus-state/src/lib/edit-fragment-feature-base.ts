@@ -5,6 +5,7 @@ import {
   ComponentCanDeactivate,
   LibraryRouteService,
   Fragment,
+  Part,
 } from '@myrmidon/cadmus-core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -52,6 +53,7 @@ export abstract class EditFragmentFeatureBase
 
     // connect _stateDirty to the value of the edit state
     this._editFrQuery.selectDirty().subscribe((d: boolean) => {
+      console.log('fr-state dirty change: ' + d);
       this._stateDirty = d;
     });
   }
@@ -100,6 +102,7 @@ export abstract class EditFragmentFeatureBase
    * @param value The value of the dirty state.
    */
   public onDirtyChange(value: boolean): void {
+    console.log('fr dirty change: ' + value);
     this._formDirty = value;
   }
 
@@ -108,14 +111,17 @@ export abstract class EditFragmentFeatureBase
       JSON.stringify(this._editLayersQuery.getValue().part)
     );
     const fr = JSON.parse(json) as Fragment;
-    const frIndex = part.fragments.findIndex((f) => f.location === this.loc);
+    const frIndex = part.fragments.findIndex(
+      (f: { location: string }) => f.location === this.loc
+    );
     if (frIndex > -1) {
       part.fragments.splice(frIndex, 1, fr);
     } else {
       part.fragments.push(fr);
     }
     this._editFrService.save(JSON.stringify(part)).then(
-      (_) => {
+      (p: Part) => {
+        console.log(p.id);
         this.snackbar.open('Fragment saved', 'OK', {
           duration: 3000,
         });

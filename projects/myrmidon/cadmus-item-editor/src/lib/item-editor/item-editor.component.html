@@ -159,7 +159,9 @@
               *ngFor="let c of flagChecks.controls; let i = index"
               [formControlName]="i"
             >
-              <span [style.color]="'#' + flagDefinitions[i].colorKey"
+              <span
+                class="flag"
+                [style.color]="'#' + flagDefinitions[i].colorKey"
                 >&#x2b24;</span
               >
               &nbsp;
@@ -210,7 +212,7 @@
             </mat-form-field>
             &nbsp;
             <button
-              mat-raised-button
+              mat-stroked-button
               color="primary"
               type="button"
               [disabled]="userLevel < 2 || (loading$ | async) || !newPart.valid"
@@ -230,7 +232,9 @@
           [expanded]="true"
         >
           <mat-expansion-panel-header>
-            <mat-panel-title>{{ group.label }}</mat-panel-title>
+            <mat-panel-title
+              ><strong>{{ group.label }}</strong></mat-panel-title
+            >
             <mat-panel-description>{{
               group.parts.length
             }}</mat-panel-description>

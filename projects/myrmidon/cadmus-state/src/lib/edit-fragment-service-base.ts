@@ -1,6 +1,6 @@
 import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
 import { forkJoin } from 'rxjs';
-import { TextLayerPart } from '@myrmidon/cadmus-core';
+import { Part, TextLayerPart } from '@myrmidon/cadmus-core';
 
 export interface EditFragmentStoreApi {
   update(value: any): void;
@@ -124,18 +124,21 @@ export abstract class EditFragmentServiceBase {
    * representing their part.
    *
    * @param json The JSON code representing the fragment.
+   * @returns Promise which when successful returns the
+   * saved part (which contains the fragment being saved).
    */
-  public save(json: string): Promise<boolean> {
+  public save(json: string): Promise<Part> {
     this.store.setSaving(true);
     this.store.setDirty(true);
 
     return new Promise((resolve, reject) => {
       this._itemService.addPartJson(json).subscribe(
-        (_) => {
+        (part: Part) => {
+          this.store.update({ part });
           this.store.setSaving(false);
           this.store.setDirty(false);
           this.store.setError(null);
-          resolve(true);
+          resolve(part);
         },
         (error) => {
           console.error(error);

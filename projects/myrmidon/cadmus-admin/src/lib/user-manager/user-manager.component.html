@@ -1,8 +1,6 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title>
-      Users
-    </mat-card-title>
+    <mat-card-title> Users </mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <p *ngIf="paginator.isLoading$ | async">Loading...</p>
@@ -63,7 +61,7 @@
               <td>
                 <a [href]="'mailto:' + user.email">{{ user.email }}</a>
               </td>
-              <td>{{ user.roles?.join(' ') }}</td>
+              <td>{{ user.roles?.join(" ") }}</td>
               <td>{{ user.lockoutEnd }}</td>
             </tr>
           </tbody>
