@@ -164,7 +164,7 @@ export class ItemService {
    * @param id The item's ID.
    * @returns Observable with result.
    */
-  public deleteItem(id: string): Observable<Object> {
+  public deleteItem(id: string): Observable<any> {
     const url = `${this._env.apiUrl}${this._env.databaseId}/item/${id}`;
     return this._http.delete(url).pipe(catchError(this._error.handleError));
   }
@@ -184,7 +184,8 @@ export class ItemService {
   /**
    * Get the item's part with the specified ID.
    * @param id The part ID.
-   * @returns Observable with result.
+   * @returns Observable with result. If the part ID is null,
+   * a null part will be returned.
    */
   public getPart(id: string): Observable<Part> {
     if (!id) {
@@ -354,32 +355,20 @@ export class ItemService {
    * @param id The part's ID.
    * @returns Observable with result.
    */
-  public deletePart(id: string): Observable<Object> {
+  public deletePart(id: string): Observable<any> {
     const url = `${this._env.apiUrl}${this._env.databaseId}/part/${id}`;
     return this._http.delete(url).pipe(catchError(this._error.handleError));
   }
 
   /**
    * Add or update the specified part.
-   * @param item Part The part.
-   * @returns The part observable.
+   * @param part The part.
+   * @returns Observable with result.
    */
   public addPart(part: Part): Observable<Part> {
     const url = `${this._env.apiUrl}${this._env.databaseId}/parts`;
     return this._http
       .post<Part>(url, { raw: JSON.stringify(part) })
-      .pipe(catchError(this._error.handleError));
-  }
-
-  /**
-   * Add or update the specified part.
-   * @param item Part The part.
-   * @returns Observable with result.
-   */
-  public addPartJson(json: string): Observable<any> {
-    const url = `${this._env.apiUrl}${this._env.databaseId}/parts`;
-    return this._http
-      .post(url, { raw: json })
       .pipe(catchError(this._error.handleError));
   }
 

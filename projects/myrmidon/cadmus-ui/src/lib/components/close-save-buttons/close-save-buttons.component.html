@@ -12,7 +12,7 @@
   <button
     *ngIf="!noSave"
     type="submit"
-    [disabled]="form.invalid || form.pristine"
+    [disabled]="form.invalid"
     mat-raised-button
     color="primary"
     matTooltip="Save data"

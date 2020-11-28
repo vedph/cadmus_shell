@@ -145,28 +145,33 @@ export class EditItemService {
    * Delete the part with the specified ID from the edited item.
    * @param id The ID of the part to be deleted.
    */
-  public deletePart(id: string): void {
+  public deletePart(id: string): Promise<string> {
     this._store.setDeletingPart();
-    // delete from server
-    this._itemService.deletePart(id).subscribe(
-      (_) => {
-        this._store.setDeletingPart(false);
-        // reload the store
-        this.load(this._store.getValue().item.id);
-      },
-      (error) => {
-        console.log(error);
-        this._store.setDeletingPart(false);
-        this._store.setError('Error deleting part ' + id);
-      }
-    );
+
+    return new Promise((resolve, reject) => {
+      // delete from server
+      this._itemService.deletePart(id).subscribe(
+        (_) => {
+          this._store.setDeletingPart(false);
+          // reload the store
+          this.load(this._store.getValue().item.id);
+          resolve(id);
+        },
+        (error) => {
+          console.log(error);
+          this._store.setDeletingPart(false);
+          this._store.setError('Error deleting part ' + id);
+          reject(error);
+        }
+      );
+    });
   }
 
   public addNewLayerPart(itemId: string, typeId: string, roleId: string): void {
     const part: Part = {
-      itemId: itemId,
-      typeId: typeId,
-      roleId: roleId,
+      itemId,
+      typeId,
+      roleId,
       id: null,
       creatorId: null,
       userId: null,

@@ -31,14 +31,14 @@ export const extractTouchedChanges = (
 
   function nextMarkAsTouched(
     ...args: ArgumentsType<AbstractControl['markAsTouched']>
-  ) {
+  ): void {
     touchedChanges$.next(true);
     prevMarkAsTouched.bind(control)(...args);
   }
 
   function nextMarkAsUntouched(
     ...args: ArgumentsType<AbstractControl['markAsUntouched']>
-  ) {
+  ): void {
     touchedChanges$.next(false);
     prevMarkAsUntouched.bind(control)(...args);
   }
@@ -67,14 +67,14 @@ export const extractPristineChanges = (
 
   function nextMarkAsPristine(
     ...args: ArgumentsType<AbstractControl['markAsPristine']>
-  ) {
+  ): void {
     pristineChanges$.next(true);
     prevMarkAsPristine.bind(control)(...args);
   }
 
   function nextMarkAsDirty(
     ...args: ArgumentsType<AbstractControl['markAsDirty']>
-  ) {
+  ): void {
     pristineChanges$.next(false);
     prevMarkAsDirty.bind(control)(...args);
   }

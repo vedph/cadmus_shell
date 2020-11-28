@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import {
   TokenTextPart,
   TOKEN_TEXT_PART_TYPEID,
-  TokenTextLine
+  TokenTextLine,
 } from '../token-text-part';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { AuthService } from '@myrmidon/cadmus-api';
+import { deepCopy } from '@myrmidon/cadmus-core';
 
 /**
  * Editor component for base text, as referenced by token-based layers.
@@ -15,7 +16,7 @@ import { AuthService } from '@myrmidon/cadmus-api';
 @Component({
   selector: 'cadmus-token-text-part',
   templateUrl: './token-text-part.component.html',
-  styleUrls: ['./token-text-part.component.css']
+  styleUrls: ['./token-text-part.component.css'],
 })
 export class TokenTextPartComponent
   extends ModelEditorComponentBase<TokenTextPart>
@@ -27,7 +28,7 @@ export class TokenTextPartComponent
     theme: 'vs-light',
     wordWrap: 'on',
     // https://github.com/atularen/ngx-monaco-editor/issues/19
-    automaticLayout: true
+    automaticLayout: true,
   };
 
   constructor(authService: AuthService, formBuilder: FormBuilder) {
@@ -37,7 +38,7 @@ export class TokenTextPartComponent
     this.text = formBuilder.control(null, Validators.required);
     this.form = formBuilder.group({
       citation: this.citation,
-      text: this.text
+      text: this.text,
     });
   }
 
@@ -49,7 +50,7 @@ export class TokenTextPartComponent
     if (!model || !model.lines) {
       return null;
     }
-    return model.lines.map(l => l.text).join('\n');
+    return model.lines.map((l) => l.text).join('\n');
   }
 
   private getLinesFromText(text: string): TokenTextLine[] {
@@ -59,10 +60,10 @@ export class TokenTextPartComponent
     const lines: TokenTextLine[] = [];
     const textLines = text.split('\n');
     let y = 1;
-    for (let i = 0; i < textLines.length; i++) {
+    for (const line of textLines) {
       lines.push({
-        y: y,
-        text: textLines[i]
+        y,
+        text: line,
       });
       y++;
     }
@@ -80,11 +81,11 @@ export class TokenTextPartComponent
   }
 
   protected onModelSet(model: TokenTextPart): void {
-    this.updateForm(model);
+    this.updateForm(deepCopy(model));
   }
 
   protected getModelFromForm(): TokenTextPart {
-    let part = this.getModelFromJson();
+    let part = this.model;
     if (!part) {
       part = {
         itemId: this.itemId,
@@ -95,7 +96,7 @@ export class TokenTextPartComponent
         timeCreated: new Date(),
         creatorId: null,
         timeModified: new Date(),
-        userId: null
+        userId: null,
       };
     }
     part.citation = this.citation.value ? this.citation.value.trim() : null;

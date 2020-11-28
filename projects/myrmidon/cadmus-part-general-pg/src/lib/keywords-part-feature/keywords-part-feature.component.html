@@ -2,8 +2,8 @@
 <cadmus-keywords-part
   [itemId]="itemId"
   [roleId]="roleId"
-  [json]="json$ | async"
-  (jsonChange)="save($event)"
+  [model]="part$ | async"
+  (modelChange)="save($event)"
   [thesauri]="thesauri$ | async"
   (editorClose)="close()"
   (dirtyChange)="onDirtyChange($event)"

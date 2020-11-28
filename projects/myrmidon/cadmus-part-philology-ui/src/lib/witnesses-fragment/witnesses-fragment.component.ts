@@ -15,6 +15,7 @@ import {
   transition,
   animate
 } from '@angular/animations';
+import { deepCopy } from '@myrmidon/cadmus-core';
 
 @Component({
   selector: 'cadmus-witnesses-fragment',
@@ -170,12 +171,12 @@ export class WitnessesFragmentComponent
   }
 
   protected onModelSet(model: WitnessesFragment): void {
-    this.fragment = model;
+    this.fragment = deepCopy(model);
     this.updateForm(model);
   }
 
   protected getModelFromForm(): WitnessesFragment {
-    let fr = this.getModelFromJson();
+    let fr = this.model;
     if (!fr) {
       fr = {
         location: this.fragment ? this.fragment.location : null,

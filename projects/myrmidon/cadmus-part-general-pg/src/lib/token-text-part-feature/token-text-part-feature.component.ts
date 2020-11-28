@@ -19,13 +19,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class TokenTextPartFeatureComponent
   extends EditPartFeatureBase
   implements OnInit {
-  public json$: Observable<string>;
-  public thesauri$: Observable<ThesauriSet>;
-
-  public itemId: string;
-  public partId: string;
-  public roleId: string;
-
   constructor(
     router: Router,
     route: ActivatedRoute,

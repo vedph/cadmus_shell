@@ -109,7 +109,7 @@ export class ChronologyFragmentComponent
   }
 
   protected getModelFromForm(): ChronologyFragment {
-    let fr = this.getModelFromJson();
+    let fr = this.model;
     if (!fr) {
       fr = {
         location: null,

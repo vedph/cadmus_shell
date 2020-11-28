@@ -15,6 +15,7 @@ import {
 } from '../tiled-text-part';
 import { AuthService } from '@myrmidon/cadmus-api';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { deepCopy } from '@myrmidon/cadmus-core';
 
 interface Data {
   [key: string]: any;
@@ -69,7 +70,7 @@ export class TiledTextPartComponent
   }
 
   protected onModelSet(model: TiledTextPart): void {
-    this.updateForm(model);
+    this.updateForm(deepCopy(model));
   }
 
   /**
@@ -89,7 +90,7 @@ export class TiledTextPartComponent
   }
 
   protected getModelFromForm(): TiledTextPart {
-    let part = this.getModelFromJson();
+    let part = this.model;
     if (!part) {
       part = {
         itemId: this.itemId,

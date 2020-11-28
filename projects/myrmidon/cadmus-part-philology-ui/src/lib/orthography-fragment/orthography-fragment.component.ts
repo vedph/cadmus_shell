@@ -21,6 +21,7 @@ import {
 import { MspOperation } from '../msp-operation';
 import { DifferResultToMspAdapter } from '../differ-result-to-msp-adapter';
 import { AuthService } from '@myrmidon/cadmus-api';
+import { deepCopy } from '@myrmidon/cadmus-core';
 
 @Component({
   selector: 'cadmus-orthography-fragment',
@@ -85,8 +86,8 @@ export class OrthographyFragmentComponent
     } else {
       this.standard.setValue(model.standard);
       if (model.operations) {
-        for (let i = 0; i < model.operations.length; i++) {
-          this.addOperation(model.operations[i]);
+        for (const op of model.operations) {
+          this.addOperation(op);
         }
       }
       this.form.markAsPristine();
@@ -94,7 +95,7 @@ export class OrthographyFragmentComponent
   }
 
   protected onModelSet(model: OrthographyFragment): void {
-    this.fragment = model;
+    this.fragment = deepCopy(model);
     this.updateForm(model);
   }
 
@@ -158,12 +159,12 @@ export class OrthographyFragmentComponent
   public editOperation(index: number): void {
     const form = this.operations.at(index) as FormGroup;
     this._currentOperationIndex = index;
-    this.currentOperation = MspOperation.parse(form.controls['text'].value);
+    this.currentOperation = MspOperation.parse(form.controls.text.value);
   }
 
   public currentOperationSaved(operation: MspOperation): void {
     const form = this.operations.at(this._currentOperationIndex) as FormGroup;
-    form.controls['text'].setValue(operation.toString());
+    form.controls.text.setValue(operation.toString());
     this._currentOperationIndex = null;
     this.currentOperation = null;
   }
@@ -178,7 +179,7 @@ export class OrthographyFragmentComponent
 
     for (let i = 0; i < this.operations.controls.length; i++) {
       const form = this.operations.at(i) as FormGroup;
-      const op = MspOperation.parse(form.controls['text'].value);
+      const op = MspOperation.parse(form.controls.text.value);
       if (op) {
         ops.push(op.toString());
       }
@@ -188,7 +189,7 @@ export class OrthographyFragmentComponent
   }
 
   protected getModelFromForm(): OrthographyFragment {
-    let fr: OrthographyFragment = this.getModelFromJson();
+    let fr: OrthographyFragment = this.model;
     if (!fr) {
       fr = {
         location: null,
@@ -223,8 +224,8 @@ export class OrthographyFragmentComponent
 
     this.operations.markAsDirty();
     this.operations.clear();
-    for (let i = 0; i < ops.length; i++) {
-      this.addOperation(ops[i].toString());
+    for (const op of ops) {
+      this.addOperation(op.toString());
     }
   }
 }

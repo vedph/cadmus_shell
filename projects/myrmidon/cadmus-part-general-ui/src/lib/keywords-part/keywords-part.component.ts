@@ -7,7 +7,7 @@ import {
   Validators,
   FormGroup
 } from '@angular/forms';
-import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { ThesaurusEntry, deepCopy } from '@myrmidon/cadmus-core';
 import { AuthService } from '@myrmidon/cadmus-api';
 
 /**
@@ -93,11 +93,11 @@ export class KeywordsPartComponent
   }
 
   protected onModelSet(model: KeywordsPart): void {
-    this.updateForm(model);
+    this.updateForm(deepCopy(model));
   }
 
   protected getModelFromForm(): KeywordsPart {
-    let part = this.getModelFromJson();
+    let part = this.model;
     if (!part) {
       part = {
         itemId: this.itemId,

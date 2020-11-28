@@ -7,7 +7,7 @@ import {
   IndexKeyword,
   INDEX_KEYWORDS_PART_TYPEID
 } from '../index-keywords-part';
-import { Thesaurus } from '@myrmidon/cadmus-core';
+import { Thesaurus, deepCopy } from '@myrmidon/cadmus-core';
 
 /**
  * Index keywords part editor.
@@ -105,11 +105,11 @@ export class IndexKeywordsPartComponent
   }
 
   protected onModelSet(model: IndexKeywordsPart): void {
-    this.updateForm(model);
+    this.updateForm(deepCopy(model));
   }
 
   protected getModelFromForm(): IndexKeywordsPart {
-    let part = this.getModelFromJson();
+    let part = this.model;
     if (!part) {
       part = {
         itemId: this.itemId,

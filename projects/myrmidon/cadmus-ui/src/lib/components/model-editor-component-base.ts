@@ -7,11 +7,11 @@ import { extractPristineChanges } from '../utils';
 /**
  * Base class for part/fragment editors dumb components.
  * The model type is the templated argument T.
- * A dumb component gets as input the JSON representing the model,
- * and optionally the JSON representing a set of thesauri.
- * It outputs the JSON representing the model (when saved),
- * a request to close the editor, and a notification about the dirty
- * state of the editor itself.
+ * A dumb component gets as input the part/fragment model,
+ * and optionally a set of thesauri.
+ * It outputs the model (when saved), a request to close the
+ * editor, and a notification about the dirty state of the editor
+ * itself.
  * When implementing your model editor extending this class:
  * - set the form property to your "root" form;
  * - call initEditor in your OnInit;
@@ -23,7 +23,7 @@ import { extractPristineChanges } from '../utils';
 })
 export abstract class ModelEditorComponentBase<T> {
   private _thesauri: ThesauriSet | null;
-  private _json: string;
+  private _model: T | null;
 
   /**
    * The part's item ID.
@@ -38,22 +38,22 @@ export abstract class ModelEditorComponentBase<T> {
   public roleId: string;
 
   /**
-   * The JSON code representing the part being edited.
+   * The model being edited.
    */
   @Input()
-  public get json(): string {
-    return this._json;
+  public get model(): T | null {
+    return this._model;
   }
-  public set json(value: string) {
-    this._json = value;
-    this.onModelSet(this.getModelFromJson(value));
+  public set model(value: T | null) {
+    this._model = value;
+    this.onModelSet(value);
   }
 
   /**
-   * Event emitted when the edited part's JSON is saved.
+   * Event emitted when the edited model is saved.
    */
   @Output()
-  public jsonChange: EventEmitter<string>;
+  public modelChange: EventEmitter<T>;
 
   /**
    * The optional thesauri to be used within this editor.
@@ -111,7 +111,7 @@ export abstract class ModelEditorComponentBase<T> {
   public userLevel: number;
 
   constructor(private _authService: AuthService) {
-    this.jsonChange = new EventEmitter<string>();
+    this.modelChange = new EventEmitter<T>();
     this.editorClose = new EventEmitter<any>();
     this.dirtyChange = new EventEmitter<boolean>();
 
@@ -131,7 +131,7 @@ export abstract class ModelEditorComponentBase<T> {
    */
   protected initEditor(): void {
     this.onThesauriSet();
-    this.onModelSet(this.getModelFromJson(this.json));
+    this.onModelSet(this.model);
 
     extractPristineChanges(this.form).subscribe((p) => {
       this.dirtyChange.emit(!p);
@@ -139,39 +139,19 @@ export abstract class ModelEditorComponentBase<T> {
   }
 
   /**
-   * Get the part from the specified JSON code, or from the current
-   * json property if no JSON code is specified. This is just a helper
-   * method for parsing JSON and casting it to the template argument type.
+   * Update the model property and emit the corresponding
+   * modelChange event.
    *
-   * @param json The optional JSON code representing the part.
-   * @returns The part, or null.
+   * @param model The model.
    */
-  protected getModelFromJson(json: string = null): T {
-    if (!json) {
-      json = this.json;
-    }
-    const model: T = json ? JSON.parse(json) : null;
-    if (!model) {
-      return null;
-    }
-    // an empty object ({}) must be treated as null
-    return Object.keys(model).length ? model : null;
+  protected updateModel(model: T): void {
+    this.model = model;
+    this.modelChange.emit(model);
   }
 
   /**
-   * Update the json property from the specified JSON code, and emit the
-   * corresponding jsonChange event.
-   *
-   * @param json The JSON code representing the part.
-   */
-  protected updateJson(json: string): void {
-    this.json = json;
-    this.jsonChange.emit(json);
-  }
-
-  /**
-   * Invoked whenever the json property is set (=data comes from input json
-   * property), unless setting it via updateJson. Implement to update the form
+   * Invoked whenever the model property is set (=data comes from input model
+   * property), unless setting it via updateModel. Implement to update the form
    * controls to reflect the new model data.
    *
    * @param model The model set, or null.
@@ -186,7 +166,7 @@ export abstract class ModelEditorComponentBase<T> {
 
   /**
    * Implement in derived classes to get the model from form's controls.
-   * This is used when saving (=data goes to the output jsonChange event).
+   * This is used when saving (=data goes to the output modelChange event).
    */
   protected abstract getModelFromForm(): T;
 
@@ -227,7 +207,7 @@ export abstract class ModelEditorComponentBase<T> {
       return;
     }
     const part = this.getModelFromForm();
-    this.updateJson(JSON.stringify(part));
+    this.updateModel(part);
     // the form is no more dirty
     this.form.markAsPristine();
     this.dirtyChange.emit(false);

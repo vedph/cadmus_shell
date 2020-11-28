@@ -6,8 +6,8 @@
   ></cadmus-decorated-token-text>
 </div>
 <cadmus-apparatus-fragment
-  [json]="json$ | async"
-  (jsonChange)="save($event)"
+  [model]="fragment$ | async"
+  (modelChange)="save($event)"
   [thesauri]="thesauri$ | async"
   (editorClose)="close()"
   (dirtyChange)="onDirtyChange($event)"

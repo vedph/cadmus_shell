@@ -9,7 +9,7 @@ import {
   Validators,
   FormGroup,
 } from '@angular/forms';
-import { Thesaurus } from '@myrmidon/cadmus-core';
+import { Thesaurus, deepCopy } from '@myrmidon/cadmus-core';
 
 /**
  * Critical apparatus fragment.
@@ -81,12 +81,12 @@ export class ApparatusFragmentComponent
   }
 
   protected onModelSet(model: ApparatusFragment): void {
-    this.fragment = model;
+    this.fragment = deepCopy(model);
     this.updateForm(model);
   }
 
   protected getModelFromForm(): ApparatusFragment {
-    let fr = this.getModelFromJson();
+    let fr = this.model;
     if (!fr) {
       fr = {
         location: this.fragment ? this.fragment.location : null,

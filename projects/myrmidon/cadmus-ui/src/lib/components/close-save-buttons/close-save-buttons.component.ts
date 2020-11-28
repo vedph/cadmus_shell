@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -6,7 +6,7 @@ import { FormGroup } from '@angular/forms';
   templateUrl: './close-save-buttons.component.html',
   styleUrls: ['./close-save-buttons.component.css']
 })
-export class CloseSaveButtonsComponent implements OnInit {
+export class CloseSaveButtonsComponent {
   @Input()
   public form: FormGroup;
   @Input()
@@ -19,9 +19,7 @@ export class CloseSaveButtonsComponent implements OnInit {
     this.closeRequest = new EventEmitter();
   }
 
-  ngOnInit() {}
-
-  public close() {
+  public close(): void {
     this.closeRequest.emit();
   }
 }

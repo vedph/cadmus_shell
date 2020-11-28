@@ -16,21 +16,51 @@ import { EditItemService } from './edit-item.service';
 import { EditLayerPartQuery } from './edit-layer-part.query';
 import { EditLayerPartService } from './edit-layer-part.service';
 
+/**
+ * Base class for fragment feature editors.
+ * This is similar to the EditPartFeatureBase class.
+ */
 export abstract class EditFragmentFeatureBase
   implements ComponentCanDeactivate {
   private _formDirty: boolean;
   private _stateDirty: boolean;
 
-  public json$: Observable<string>;
+  /**
+   * The fragment being edited (from the local store).
+   */
+  public fragment$: Observable<Fragment>;
+  /**
+   * The thesauri requested for editing this part.
+   */
   public thesauri$: Observable<ThesauriSet>;
-
+  /**
+   * The base text the fragment refers to.
+   */
   public baseText$: Observable<string>;
+  /**
+   * The location of the fragment being edited.
+   */
   public frLoc: TokenLocation;
 
+  /**
+   * The item ID of the edited part, as got from the route.
+   */
   public readonly itemId: string;
+  /**
+   * The part ID of the edited part, as got from the route.
+   */
   public readonly partId: string;
+  /**
+   * The fragment's type ID, as got from the route.
+   */
   public readonly frTypeId: string;
+  /**
+   * The fragment's location, as got from the route.
+   */
   public readonly loc: string;
+  /**
+   * The fragment's location, as got from the route query params.
+   */
   public readonly frRoleId: string;
 
   constructor(
@@ -53,7 +83,7 @@ export abstract class EditFragmentFeatureBase
 
     // connect _stateDirty to the value of the edit state
     this._editFrQuery.selectDirty().subscribe((d: boolean) => {
-      console.log('fr-state dirty change: ' + d);
+      console.log('fr dirty change (from state): ' + d);
       this._stateDirty = d;
     });
   }
@@ -81,8 +111,14 @@ export abstract class EditFragmentFeatureBase
     }
   }
 
+  /**
+   * Initialize the editor. You MUST call this in your OnInit.
+   *
+   * @param thesauriIds The optional ID(s) of the thesauri sets you want
+   * to use in your editor.
+   */
   protected initEditor(thesauriIds: string[]): void {
-    this.json$ = this._editFrQuery.selectJson();
+    this.fragment$ = this._editFrQuery.selectFragment();
     this.thesauri$ = this._editFrQuery.selectThesauri();
     this.baseText$ = this._editLayersQuery.select((state) => state.baseText);
     this.frLoc = TokenLocation.parse(this.loc);
@@ -102,24 +138,32 @@ export abstract class EditFragmentFeatureBase
    * @param value The value of the dirty state.
    */
   public onDirtyChange(value: boolean): void {
-    console.log('fr dirty change: ' + value);
+    console.log('fr dirty change (from editor): ' + value);
     this._formDirty = value;
   }
 
-  public save(json: string): void {
+  /**
+   * Save the fragment.
+   *
+   * @param fragment The fragment to be saved.
+   */
+  public save(fragment: Fragment): void {
+    // get a copy of the container part
     const part = JSON.parse(
       JSON.stringify(this._editLayersQuery.getValue().part)
     );
-    const fr = JSON.parse(json) as Fragment;
+    // replace the fragment edited in it
     const frIndex = part.fragments.findIndex(
       (f: { location: string }) => f.location === this.loc
     );
     if (frIndex > -1) {
-      part.fragments.splice(frIndex, 1, fr);
+      part.fragments.splice(frIndex, 1, fragment);
     } else {
-      part.fragments.push(fr);
+      part.fragments.push(fragment);
     }
-    this._editFrService.save(JSON.stringify(part)).then(
+
+    // save the new layer part with the replaced fragment
+    this._editFrService.save(part).then(
       (p: Part) => {
         console.log(p.id);
         this.snackbar.open('Fragment saved', 'OK', {
@@ -136,13 +180,6 @@ export abstract class EditFragmentFeatureBase
   public close(): void {
     // /items/<id>/<part-group>/<part-typeid>/<part-id>?rid=<role-id>
     const part = this._editLayersQuery.getValue().part;
-    // const item = this._editItemQuery.getValue().item;
-    // const facet: FacetDefinition = this._appQuery.getValue().facets.find(f => {
-    //   return f.id === item.facetId;
-    // });
-    // const partDef = facet.partDefinitions.find(d => {
-    //   return d.typeId === part.typeId && d.roleId === d.roleId;
-    // });
 
     const editorKey = this._libraryRouteService.getEditorKeyFromPartType(
       part.typeId,

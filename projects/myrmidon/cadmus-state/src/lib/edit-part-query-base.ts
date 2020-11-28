@@ -1,7 +1,6 @@
-import { UtilService, Part, ThesauriSet } from '@myrmidon/cadmus-core';
+import { Part, ThesauriSet } from '@myrmidon/cadmus-core';
 import { Observable } from 'rxjs';
 import { Query } from '@datorama/akita';
-import { map } from 'rxjs/operators';
 import { EditPartState } from './edit-part.store';
 
 /**
@@ -10,7 +9,7 @@ import { EditPartState } from './edit-part.store';
  * part's store to the constructor.
  */
 export abstract class EditPartQueryBase extends Query<EditPartState> {
-  constructor(protected store: any, private _utilService: UtilService) {
+  constructor(protected store: any) {
     super(store);
   }
 
@@ -22,25 +21,8 @@ export abstract class EditPartQueryBase extends Query<EditPartState> {
     return this.select((state) => state.saving);
   }
 
-  public selectJson(
-    itemId: string,
-    partId: string,
-    roleId: string | null
-  ): Observable<string> {
-    return this.select((state) => state.part).pipe(
-      map((part: Part) => {
-        // supply IDs
-        if (part) {
-          const clone: Part = this._utilService.deepCopy(part) as Part;
-          clone.itemId = itemId;
-          clone.id = partId;
-          clone.roleId = roleId;
-          return JSON.stringify(clone);
-        } else {
-          return '{}';
-        }
-      })
-    );
+  public selectPart(): Observable<Part> {
+    return this.select((state) => state.part);
   }
 
   public selectThesauri(): Observable<ThesauriSet> {

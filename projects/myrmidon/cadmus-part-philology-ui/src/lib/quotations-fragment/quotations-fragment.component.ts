@@ -3,7 +3,7 @@ import { QuotationsFragment, QuotationEntry } from '../quotations-fragment';
 import { ModelEditorComponentBase, DialogService } from '@myrmidon/cadmus-ui';
 import { AuthService } from '@myrmidon/cadmus-api';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { Thesaurus, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { Thesaurus, ThesaurusEntry, deepCopy } from '@myrmidon/cadmus-core';
 import { QuotationWorksService } from './quotation-works.service';
 
 /**
@@ -80,12 +80,12 @@ export class QuotationsFragmentComponent
   }
 
   protected onModelSet(model: QuotationsFragment): void {
-    this.fragment = model;
+    this.fragment = deepCopy(model);
     this.updateForm(model);
   }
 
   protected getModelFromForm(): QuotationsFragment {
-    let fr = this.getModelFromJson();
+    let fr = this.model;
     if (!fr) {
       fr = {
         location: this.fragment ? this.fragment.location : null,

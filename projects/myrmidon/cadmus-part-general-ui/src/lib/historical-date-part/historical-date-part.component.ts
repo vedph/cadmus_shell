@@ -120,7 +120,7 @@ export class HistoricalDatePartComponent
   }
 
   protected getModelFromForm(): HistoricalDatePart {
-    let part = this.getModelFromJson();
+    let part = this.model;
     if (!part) {
       part = {
         itemId: this.itemId,

@@ -397,7 +397,17 @@ export class ItemEditorComponent implements OnInit, ComponentCanDeactivate {
         if (!result) {
           return;
         }
-        this._editItemService.deletePart(part.id);
+        // delete
+        this._editItemService.deletePart(part.id).then(
+          (_) => {
+            // once deleted, refresh new-part definitions
+            this.newPartDefinitions = this.getNewPartDefinitions();
+          },
+          (error) => {
+            console.error(error);
+            this._snackbar.open('Error deleting part', 'OK');
+          }
+        );
       });
   }
 

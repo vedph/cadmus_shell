@@ -2,6 +2,9 @@ import { ItemService, ThesaurusService } from '@myrmidon/cadmus-api';
 import { forkJoin } from 'rxjs';
 import { Part, TextLayerPart } from '@myrmidon/cadmus-core';
 
+/**
+ * API provided by any Akita-based fragment store.
+ */
 export interface EditFragmentStoreApi {
   update(value: any): void;
   setLoading(value: boolean): void;
@@ -11,7 +14,7 @@ export interface EditFragmentStoreApi {
 }
 
 /**
- * Base class for fragment editing services.
+ * Base class for fragment editor services.
  */
 export abstract class EditFragmentServiceBase {
   protected store: EditFragmentStoreApi;
@@ -22,30 +25,37 @@ export abstract class EditFragmentServiceBase {
   ) {}
 
   /**
-   * Load the specified fragment and thesauri.
+   * Load into the state the fragment with the specified ID
+   * and its thesauri.
    *
    * @param partId The ID of the part the fragment belongs to.
    * @param loc The fragment's location.
-   * @param thesauriIds The optional requested thesauri IDs.
+   * @param thesauriIds The thesauri IDs array, or null.
    */
   public load(
     partId: string,
     loc: string,
     thesauriIds: string[] | null = null
   ): void {
+    // signal that we're loading
     this.store.setLoading(true);
 
+    // if thesauri are required:
     if (thesauriIds) {
       // remove trailing ! from IDs if any
       const unscopedIds = thesauriIds.map((id) => {
         return this._thesaurusService.getScopedId(id, null);
       });
 
-      forkJoin([
-        this._itemService.getPart(partId),
-        this._thesaurusService.getThesauriSet(unscopedIds),
-      ]).subscribe(([part, thesauri]) => {
-        const layerPart = part as TextLayerPart;
+      // fetch fragment and thesauri
+      forkJoin({
+        part: this._itemService.getPart(partId),
+        thesauri: this._thesaurusService.getThesauriSet(unscopedIds),
+      }).subscribe((result) => {
+        // loading has ended
+        this.store.setLoading(false);
+
+        const layerPart = result.part as TextLayerPart;
         const fr = layerPart.fragments.find((f) => f.location === loc);
         if (!fr) {
           // not found: new fragment
@@ -53,7 +63,7 @@ export abstract class EditFragmentServiceBase {
             fragment: {
               location: loc,
             },
-            thesauri,
+            thesauri: result.thesauri,
             loading: false,
             error: null,
           });
@@ -61,21 +71,27 @@ export abstract class EditFragmentServiceBase {
           // found: existing fragment
           this.store.update({
             fragment: fr,
-            thesauri,
+            thesauri: result.thesauri,
             loading: false,
             error: null,
           });
         }
         // if the loaded layer part has a thesaurus scope, reload the thesauri
-        if (part.thesaurusScope) {
+        if (result.part.thesaurusScope) {
           const scopedIds = thesauriIds.map((id) => {
-            return this._thesaurusService.getScopedId(id, part.thesaurusScope);
+            return this._thesaurusService.getScopedId(
+              id,
+              result.part.thesaurusScope
+            );
           });
+          // loading again
           this.store.setLoading(true);
           this._thesaurusService.getThesauriSet(scopedIds).subscribe(
-            (scopedThesauri) => {
+            (thesauri) => {
+              // completed, replace the thesauri
               this.store.update({
-                thesauri: scopedThesauri,
+                thesauri,
+                loading: false
               });
             },
             (error) => {
@@ -89,6 +105,7 @@ export abstract class EditFragmentServiceBase {
         } // scoped
       });
     } else {
+      // without thesauri to be fetched, just fetch the part
       this._itemService.getPart(partId).subscribe(
         (part) => {
           const layerPart = part as TextLayerPart;
@@ -113,37 +130,38 @@ export abstract class EditFragmentServiceBase {
         (error) => {
           console.error(error);
           this.store.setLoading(false);
-          this.store.setError('Error loading part ' + partId);
+          this.store.setError('Error loading fragment\'s part ' + partId);
         }
       );
     }
   }
 
   /**
-   * Save the fragments serialized into the specified JSON code
-   * representing their part.
+   * Save the fragments in their layer part.
    *
-   * @param json The JSON code representing the fragment.
+   * @param part The part.
    * @returns Promise which when successful returns the
    * saved part (which contains the fragment being saved).
    */
-  public save(json: string): Promise<Part> {
+  public save(part: Part): Promise<Part> {
     this.store.setSaving(true);
     this.store.setDirty(true);
 
     return new Promise((resolve, reject) => {
-      this._itemService.addPartJson(json).subscribe(
-        (part: Part) => {
-          this.store.update({ part });
-          this.store.setSaving(false);
-          this.store.setDirty(false);
-          this.store.setError(null);
+      this._itemService.addPart(part).subscribe(
+        (saved: Part) => {
+          this.store.update({
+            part: saved,
+            saving: false,
+            dirty: false,
+            error: null,
+          });
           resolve(part);
         },
         (error) => {
           console.error(error);
           this.store.setSaving(false);
-          this.store.setError('Error saving fragment');
+          this.store.setError('Error saving fragment\'s part');
           reject(error);
         }
       );

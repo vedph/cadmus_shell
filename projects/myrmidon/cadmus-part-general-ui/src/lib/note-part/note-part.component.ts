@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
-import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { deepCopy, ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { AuthService } from '@myrmidon/cadmus-api';
 import { NotePart, NOTE_PART_TYPEID } from '../note-part';
 
@@ -59,7 +59,7 @@ export class NotePartComponent extends ModelEditorComponentBase<NotePart>
   }
 
   protected onModelSet(model: NotePart): void {
-    this.updateForm(model);
+    this.updateForm(deepCopy(model));
   }
 
   protected onThesauriSet(): void {
@@ -72,7 +72,7 @@ export class NotePartComponent extends ModelEditorComponentBase<NotePart>
   }
 
   protected getModelFromForm(): NotePart {
-    let part = this.getModelFromJson();
+    let part = this.model;
     if (!part) {
       part = {
         itemId: this.itemId,

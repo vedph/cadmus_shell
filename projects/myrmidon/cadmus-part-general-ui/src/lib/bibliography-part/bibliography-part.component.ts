@@ -6,7 +6,7 @@ import {
   BibAuthor
 } from '../bibliography-part';
 import { ModelEditorComponentBase, DialogService } from '@myrmidon/cadmus-ui';
-import { Thesaurus } from '@myrmidon/cadmus-core';
+import { deepCopy, Thesaurus } from '@myrmidon/cadmus-core';
 import { AuthService } from '@myrmidon/cadmus-api';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
@@ -87,11 +87,11 @@ export class BibliographyPartComponent
   }
 
   protected onModelSet(model: BibliographyPart): void {
-    this.updateForm(model);
+    this.updateForm(deepCopy(model));
   }
 
   protected getModelFromForm(): BibliographyPart {
-    let part = this.getModelFromJson();
+    let part = this.model;
     if (!part) {
       part = {
         itemId: this.itemId,

@@ -3,7 +3,7 @@ import { CategoriesPart, CATEGORIES_PART_TYPEID } from '../categories-part';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { AuthService } from '@myrmidon/cadmus-api';
-import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { deepCopy, ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { renderLabelFromLastColon } from '@myrmidon/cadmus-ui';
 import { BehaviorSubject } from 'rxjs';
 
@@ -65,11 +65,11 @@ export class CategoriesPartComponent
   }
 
   protected onModelSet(model: CategoriesPart): void {
-    this.updateForm(model);
+    this.updateForm(deepCopy(model));
   }
 
   protected getModelFromForm(): CategoriesPart {
-    let part = this.getModelFromJson();
+    let part = this.model;
     if (!part) {
       part = {
         itemId: this.itemId,
@@ -94,7 +94,7 @@ export class CategoriesPartComponent
     if (this.thesauri && this.thesauri[key]) {
       this.entries$.next(this.thesauri[key].entries || []);
       // update the model, as here it depends on the thesaurus
-      this.onModelSet(this.getModelFromJson());
+      this.onModelSet(this.model);
     }
   }
 

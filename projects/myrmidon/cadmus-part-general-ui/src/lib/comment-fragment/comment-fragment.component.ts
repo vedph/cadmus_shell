@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommentFragment } from '../comment-fragment';
 import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { ThesaurusEntry, deepCopy } from '@myrmidon/cadmus-core';
 import { AuthService } from '@myrmidon/cadmus-api';
 
 /**
@@ -62,7 +62,7 @@ export class CommentFragmentComponent
   }
 
   protected onModelSet(model: CommentFragment): void {
-    this.fragment = model;
+    this.fragment = deepCopy(model);
     this.updateForm(model);
   }
 
@@ -76,7 +76,7 @@ export class CommentFragmentComponent
   }
 
   protected getModelFromForm(): CommentFragment {
-    let fr = this.getModelFromJson();
+    let fr = this.model;
     if (!fr) {
       fr = {
         location: this.fragment ? this.fragment.location : null,

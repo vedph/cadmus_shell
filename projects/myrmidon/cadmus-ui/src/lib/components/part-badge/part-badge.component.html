@@ -1,10 +1,10 @@
-<span id="part-badge"
+<span class="part-badge"
   [style.background-color]="color"
   [style.color]="contrastColor"
   *ngIf="badgeType !== 2"
 >
   {{ typeName }}
 </span>
-<span id="role-badge" *ngIf="badgeType !== 1">
+<span class="role-badge" *ngIf="badgeType !== 1 && roleName">
   {{ roleName }}
 </span>

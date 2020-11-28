@@ -19,8 +19,8 @@ export class PartBadgeComponent {
   private _facetDefinition: FacetDefinition;
   private _partTypeIds: PartTypeIds;
 
-  public typeName: string;
-  public roleName: string;
+  public typeName: string | undefined;
+  public roleName: string | undefined;
   public color: string;
   public contrastColor: string;
 
@@ -101,7 +101,7 @@ export class PartBadgeComponent {
     return this.getTypeIdName(roleId);
   }
 
-  private updateBadge() {
+  private updateBadge(): void {
     if (this._partTypeIds) {
       this.color = this.getPartColor(
         this._partTypeIds.typeId,
@@ -111,8 +111,8 @@ export class PartBadgeComponent {
       this.roleName = this.getRoleIdName(this._partTypeIds.roleId);
     } else {
       this.color = 'transparent';
-      this.typeName = null;
-      this.roleName = null;
+      this.typeName = undefined;
+      this.roleName = undefined;
     }
     this.contrastColor = this._colorService.getContrastColor(this.color);
   }

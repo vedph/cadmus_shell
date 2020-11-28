@@ -5,8 +5,8 @@ import { forkJoin } from 'rxjs';
 import {
   TextLayerPart,
   TokenLocation,
-  UtilService,
   Fragment,
+  deepCopy
 } from '@myrmidon/cadmus-core';
 
 @Injectable({ providedIn: 'root' })
@@ -15,7 +15,6 @@ export class EditLayerPartService {
     private _store: EditLayerPartStore,
     private _itemService: ItemService,
     private _facetService: FacetService,
-    private _utilService: UtilService,
     private _thesaurusService: ThesaurusService
   ) {}
 
@@ -199,7 +198,7 @@ export class EditLayerPartService {
 
     // remove it from the part
     // work on a copy, as store objects are immutable
-    part = this._utilService.deepCopy(part);
+    part = deepCopy(part);
     part.fragments.splice(i, 1);
 
     // update the part and reload state once done
@@ -239,7 +238,7 @@ export class EditLayerPartService {
 
     // add or replace it
     // work on a copy, as store objects are immutable
-    part = this._utilService.deepCopy(part);
+    part = deepCopy(part);
 
     // replace all the overlapping fragments with the new one
     const newLoc = TokenLocation.parse(fragment.location);
