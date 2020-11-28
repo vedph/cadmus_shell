@@ -26,50 +26,18 @@ import { CadmusPartGeneralUiModule } from '@myrmidon/cadmus-part-general-ui';
 import { CadmusPartPhilologyUiModule } from '@myrmidon/cadmus-part-philology-ui';
 import { HomeComponent } from './home/home.component';
 import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
-import { FeatureNotePartDemoComponent } from './demo/feature-note-part-demo/feature-note-part-demo.component';
-import { FeatureOrthographyFragmentDemoComponent } from './demo/feature-orthography-fragment-demo/feature-orthography-fragment-demo.component';
 import {
   AuthInterceptor,
   AdminGuardService,
   AuthGuardService,
   EditorGuardService,
 } from '@myrmidon/cadmus-api';
-import { FeatureApparatusFragmentDemoComponent } from './demo/feature-apparatus-fragment-demo/feature-apparatus-fragment-demo.component';
-import { FeatureCategoriesPartDemoComponent } from './demo/feature-categories-part-demo/feature-categories-part-demo.component';
-import { FeatureCommentFragmentDemoComponent } from './demo/feature-comment-fragment-demo/feature-comment-fragment-demo.component';
-import { FeatureChronologyFragmentDemoComponent } from './demo/feature-chronology-fragment-demo/feature-chronology-fragment-demo.component';
-import { FeatureHistoricalDatePartDemoComponent } from './demo/feature-historical-date-part-demo/feature-historical-date-part-demo.component';
-import { FeatureIndexKeywordsPartDemoComponent } from './demo/feature-index-keywords-part-demo/feature-index-keywords-part-demo.component';
-import { FeatureKeywordsPartDemoComponent } from './demo/feature-keywords-part-demo/feature-keywords-part-demo.component';
-import { FeatureTiledTextPartDemoComponent } from './demo/feature-tiled-text-part-demo/feature-tiled-text-part-demo.component';
-import { FeatureTokenTextPartDemoComponent } from './demo/feature-token-text-part-demo/feature-token-text-part-demo.component';
-import { FeatureWitnessesFragmentDemoComponent } from './demo/feature-witnesses-fragment-demo/feature-witnesses-fragment-demo.component';
 import { PART_EDITOR_KEYS } from './part-editor-keys';
 import { ITEM_BROWSER_KEYS } from './item-browser-keys';
-import { FeatureBibliographyPartDemoComponent } from './demo/feature-bibliography-part-demo/feature-bibliography-part-demo.component';
-import { FeatureQuotationsFragmentDemoComponent } from './demo/feature-quotations-fragment-demo/feature-quotations-fragment-demo.component';
 import { INDEX_LOOKUP_DEFINITIONS } from './index-lookup-definitions';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    FeatureApparatusFragmentDemoComponent,
-    FeatureCategoriesPartDemoComponent,
-    FeatureChronologyFragmentDemoComponent,
-    FeatureCommentFragmentDemoComponent,
-    FeatureHistoricalDatePartDemoComponent,
-    FeatureIndexKeywordsPartDemoComponent,
-    FeatureKeywordsPartDemoComponent,
-    FeatureNotePartDemoComponent,
-    FeatureOrthographyFragmentDemoComponent,
-    FeatureTokenTextPartDemoComponent,
-    FeatureWitnessesFragmentDemoComponent,
-    FeatureTiledTextPartDemoComponent,
-    FeatureIndexKeywordsPartDemoComponent,
-    FeatureBibliographyPartDemoComponent,
-    FeatureQuotationsFragmentDemoComponent,
-  ],
+  declarations: [AppComponent, HomeComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -83,77 +51,9 @@ import { INDEX_LOOKUP_DEFINITIONS } from './index-lookup-definitions';
         {
           path: 'login',
           loadChildren: () =>
-            import('@myrmidon/cadmus-login').then((module) => module.CadmusLoginModule),
-        },
-        {
-          path: 'demo/categories-part',
-          component: FeatureCategoriesPartDemoComponent,
-          pathMatch: 'full',
-        },
-        {
-          path: 'demo/keywords-part',
-          component: FeatureKeywordsPartDemoComponent,
-          pathMatch: 'full',
-        },
-        {
-          path: 'demo/index-keywords-part',
-          component: FeatureIndexKeywordsPartDemoComponent,
-          pathMatch: 'full',
-        },
-        {
-          path: 'demo/note-part',
-          component: FeatureNotePartDemoComponent,
-          pathMatch: 'full',
-        },
-        {
-          path: 'demo/historical-date-part',
-          component: FeatureHistoricalDatePartDemoComponent,
-          pathMatch: 'full',
-        },
-        {
-          path: 'demo/bibliography-part',
-          component: FeatureBibliographyPartDemoComponent,
-          pathMatch: 'full',
-        },
-        {
-          path: 'demo/token-text-part',
-          component: FeatureTokenTextPartDemoComponent,
-          pathMatch: 'full',
-        },
-        {
-          path: 'demo/tiled-text-part',
-          component: FeatureTiledTextPartDemoComponent,
-          pathMatch: 'full',
-        },
-        {
-          path: 'demo/apparatus-fragment',
-          component: FeatureApparatusFragmentDemoComponent,
-          pathMatch: 'full',
-        },
-        {
-          path: 'demo/chronology-fragment',
-          component: FeatureChronologyFragmentDemoComponent,
-          pathMatch: 'full',
-        },
-        {
-          path: 'demo/comment-fragment',
-          component: FeatureCommentFragmentDemoComponent,
-          pathMatch: 'full',
-        },
-        {
-          path: 'demo/orthography-fragment',
-          component: FeatureOrthographyFragmentDemoComponent,
-          pathMatch: 'full',
-        },
-        {
-          path: 'demo/quotations-fragment',
-          component: FeatureQuotationsFragmentDemoComponent,
-          pathMatch: 'full',
-        },
-        {
-          path: 'demo/witnesses-fragment',
-          component: FeatureWitnessesFragmentDemoComponent,
-          pathMatch: 'full',
+            import('@myrmidon/cadmus-login').then(
+              (module) => module.CadmusLoginModule
+            ),
         },
         {
           path: 'demo/layers',
@@ -214,13 +114,17 @@ import { INDEX_LOOKUP_DEFINITIONS } from './index-lookup-definitions';
         {
           path: 'admin',
           loadChildren: () =>
-            import('@myrmidon/cadmus-admin').then((module) => module.CadmusAdminModule),
+            import('@myrmidon/cadmus-admin').then(
+              (module) => module.CadmusAdminModule
+            ),
           canActivate: [AdminGuardService],
         },
         {
           path: 'user',
           loadChildren: () =>
-            import('@myrmidon/cadmus-user').then((module) => module.CadmusUserModule),
+            import('@myrmidon/cadmus-user').then(
+              (module) => module.CadmusUserModule
+            ),
           canActivate: [AuthGuardService],
         },
         {

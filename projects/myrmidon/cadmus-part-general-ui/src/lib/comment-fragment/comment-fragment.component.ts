@@ -17,8 +17,6 @@ import { AuthService } from '@myrmidon/cadmus-api';
 export class CommentFragmentComponent
   extends ModelEditorComponentBase<CommentFragment>
   implements OnInit {
-  public fragment: CommentFragment;
-
   public tag: FormControl;
   public tags: FormControl;
   public text: FormControl;
@@ -62,8 +60,7 @@ export class CommentFragmentComponent
   }
 
   protected onModelSet(model: CommentFragment): void {
-    this.fragment = deepCopy(model);
-    this.updateForm(model);
+    this.updateForm(deepCopy(model));
   }
 
   protected onThesauriSet(): void {
@@ -79,7 +76,7 @@ export class CommentFragmentComponent
     let fr = this.model;
     if (!fr) {
       fr = {
-        location: this.fragment ? this.fragment.location : null,
+        location: this.model?.location ?? '',
         tag: null,
         text: null,
       };

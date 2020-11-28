@@ -5,10 +5,10 @@
         <mat-icon>textsms</mat-icon>
       </div>
       <mat-card-title
-        >Quotations Fragment {{ fragment?.location }}</mat-card-title
+        >Quotations Fragment {{ model?.location }}</mat-card-title
       >
       <mat-card-subtitle>
-        {{ fragment?.baseText }}
+        {{ model?.baseText }}
       </mat-card-subtitle>
     </mat-card-header>
 
@@ -16,7 +16,7 @@
       <mat-tab-group [(selectedIndex)]="currentTabIndex">
         <!-- quotations editor -->
         <mat-tab label="Quotations">
-          <table *ngIf="fragment?.entries?.length">
+          <table *ngIf="entries?.length">
             <thead>
               <tr>
                 <th></th>
@@ -29,7 +29,7 @@
             <tbody>
               <tr
                 *ngFor="
-                  let entry of fragment.entries;
+                  let entry of entries;
                   let i = index;
                   let first = first;
                   let last = last

@@ -52,7 +52,6 @@ export class OrthographyFragmentComponent
   private _differ: diff_match_patch;
   private _adapter: DifferResultToMspAdapter;
 
-  public fragment: OrthographyFragment;
   public standard: FormControl;
   public operations: FormArray;
   public currentOperation: MspOperation;
@@ -95,8 +94,7 @@ export class OrthographyFragmentComponent
   }
 
   protected onModelSet(model: OrthographyFragment): void {
-    this.fragment = deepCopy(model);
-    this.updateForm(model);
+    this.updateForm(deepCopy(model));
   }
 
   public addOperation(operation: string = null): void {
@@ -189,23 +187,16 @@ export class OrthographyFragmentComponent
   }
 
   protected getModelFromForm(): OrthographyFragment {
-    let fr: OrthographyFragment = this.model;
-    if (!fr) {
-      fr = {
-        location: null,
-        standard: null,
-      };
-    }
-    fr.location = this.fragment ? this.fragment.location : null;
-    fr.standard = this.standard.value;
-    fr.operations = this.getOperations();
-
-    return fr;
+    return {
+      location: this.model?.location ?? '',
+      standard: this.standard.value?.trim(),
+      operations: this.getOperations(),
+    };
   }
 
   public autoAddOperations(): void {
     // we must have both A and B text
-    if (!this.fragment.baseText || !this.standard.value) {
+    if (!this.model.baseText || !this.standard.value) {
       return;
     }
 
@@ -217,7 +208,7 @@ export class OrthographyFragmentComponent
 
     // set operations
     const result = this._differ.diff_main(
-      this.fragment.baseText,
+      this.model.baseText,
       this.standard.value
     );
     const ops = this._adapter.adapt(result);

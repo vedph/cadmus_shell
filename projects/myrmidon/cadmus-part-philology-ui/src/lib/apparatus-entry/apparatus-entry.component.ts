@@ -5,7 +5,7 @@ import {
   FormControl,
   FormArray,
   FormBuilder,
-  Validators
+  Validators,
 } from '@angular/forms';
 import { Thesaurus } from '@myrmidon/cadmus-core';
 
@@ -15,7 +15,7 @@ import { Thesaurus } from '@myrmidon/cadmus-core';
 @Component({
   selector: 'cadmus-apparatus-entry',
   templateUrl: './apparatus-entry.component.html',
-  styleUrls: ['./apparatus-entry.component.css']
+  styleUrls: ['./apparatus-entry.component.css'],
 })
 export class ApparatusEntryComponent implements OnInit {
   private _entry: ApparatusEntry;
@@ -79,7 +79,7 @@ export class ApparatusEntryComponent implements OnInit {
       groupId: this.groupId,
       note: this.note,
       witnesses: this.witnesses,
-      authors: this.authors
+      authors: this.authors,
     });
   }
 
@@ -100,15 +100,15 @@ export class ApparatusEntryComponent implements OnInit {
 
     this.witnesses.clear();
     if (this._entry.witnesses) {
-      for (let i = 0; i < this._entry.witnesses.length; i++) {
-        this.addWitness(this._entry.witnesses[i]);
+      for (const wit of this._entry.witnesses) {
+        this.addWitness(wit);
       }
     }
 
     this.authors.clear();
     if (this._entry.authors) {
-      for (let i = 0; i < this._entry.authors.length; i++) {
-        this.addAuthor(this._entry.authors[i]);
+      for (const auth of this._entry.authors) {
+        this.addAuthor(auth);
       }
     }
     this.form.markAsPristine();
@@ -127,7 +127,7 @@ export class ApparatusEntryComponent implements OnInit {
     for (let i = 0; i < this.witnesses.length; i++) {
       this._entry.witnesses.push({
         value: this.witnesses.value[i].value?.trim(),
-        note: this.witnesses.value[i].note
+        note: this.witnesses.value[i].note,
       });
     }
 
@@ -135,7 +135,7 @@ export class ApparatusEntryComponent implements OnInit {
     for (let i = 0; i < this.authors.length; i++) {
       this._entry.authors.push({
         value: this.authors.value[i].value?.trim(),
-        note: this.authors.value[i].note
+        note: this.authors.value[i].note,
       });
     }
   }
@@ -144,8 +144,9 @@ export class ApparatusEntryComponent implements OnInit {
     return this._formBuilder.group({
       value: this._formBuilder.control(preset?.value, [
         Validators.required,
-        Validators.maxLength(50)]),
-      note: this._formBuilder.control(preset?.note, Validators.maxLength(100))
+        Validators.maxLength(50),
+      ]),
+      note: this._formBuilder.control(preset?.note, Validators.maxLength(100)),
     });
   }
 

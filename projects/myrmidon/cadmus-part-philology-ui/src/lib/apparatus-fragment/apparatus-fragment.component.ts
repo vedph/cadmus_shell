@@ -25,7 +25,6 @@ export class ApparatusFragmentComponent
   implements OnInit {
   private _newEditedEntry: boolean;
 
-  public fragment: ApparatusFragment;
   public editedEntry: ApparatusEntry;
   public currentTabIndex: number;
 
@@ -37,12 +36,15 @@ export class ApparatusFragmentComponent
   public witnessThesaurus: Thesaurus;
   public authorThesaurus: Thesaurus;
 
+  public entries: ApparatusEntry[];
+
   constructor(
     authService: AuthService,
     formBuilder: FormBuilder,
     private _dialogService: DialogService
   ) {
     super(authService);
+    this.entries = [];
     // form
     this.tag = formBuilder.control(null, Validators.maxLength(50));
     this.entryCount = formBuilder.control(0, Validators.min(1));
@@ -76,48 +78,56 @@ export class ApparatusFragmentComponent
       return;
     }
     this.tag.setValue(model.tag);
+    this.entries = model.entries || [];
     this.entryCount.setValue(model.entries?.length || 0);
     this.form.markAsPristine();
   }
 
   protected onModelSet(model: ApparatusFragment): void {
-    this.fragment = deepCopy(model);
-    this.updateForm(model);
+    this.updateForm(deepCopy(model));
   }
 
   protected getModelFromForm(): ApparatusFragment {
-    let fr = this.model;
-    if (!fr) {
-      fr = {
-        location: this.fragment ? this.fragment.location : null,
-        entries: [],
-      };
-    }
-    fr.tag = this.tag.value;
-    fr.entries = this.fragment.entries;
-    return fr;
+    return {
+      location: this.model?.location ?? '',
+      tag: this.tag.value?.trim(),
+      entries: this.entries,
+    };
   }
 
   public getEntryTypeDsc(type: number): string {
     switch (type) {
       case 1:
-        return 'add-b';
+        return 'Addition before';
       case 2:
-        return 'add-a';
+        return 'Addition after';
       case 3:
-        return 'note';
+        return 'Note';
       default:
-        return 'rep';
+        return 'Replacement';
+    }
+  }
+
+  public getEntryTypeIcon(type: number): string {
+    switch (type) {
+      case 1:
+        return 'skip_next';
+      case 2:
+        return 'skip_previous';
+      case 3:
+        return 'chat';
+      default:
+        return 'content_copy';
     }
   }
 
   public addEntry(): void {
     const entry = { type: ApparatusEntryType.replacement };
-    if (!this.fragment.entries) {
-      this.fragment.entries = [];
+    if (!this.entries) {
+      this.entries = [];
     }
-    this.fragment.entries.push(entry);
-    this.entryCount.setValue(this.fragment.entries.length);
+    this.entries.push(entry);
+    this.entryCount.setValue(this.entries.length);
     this._newEditedEntry = true;
     this.editEntry(entry);
   }
@@ -129,8 +139,8 @@ export class ApparatusFragmentComponent
 
   public onEntrySave(entry: ApparatusEntry): void {
     this._newEditedEntry = false;
-    const i = this.fragment.entries.indexOf(this.editedEntry);
-    this.fragment.entries.splice(i, 1, entry);
+    const i = this.entries.indexOf(this.editedEntry);
+    this.entries.splice(i, 1, entry);
     this.currentTabIndex = 0;
     this.editedEntry = null;
     this.form.markAsDirty();
@@ -138,9 +148,9 @@ export class ApparatusFragmentComponent
 
   public onEntryClose(): void {
     if (this._newEditedEntry) {
-      const index = this.fragment.entries.indexOf(this.editedEntry);
-      this.fragment.entries.splice(index, 1);
-      this.entryCount.setValue(this.fragment.entries.length);
+      const index = this.entries.indexOf(this.editedEntry);
+      this.entries.splice(index, 1);
+      this.entryCount.setValue(this.entries.length);
     }
     this.currentTabIndex = 0;
     this.editedEntry = null;
@@ -153,8 +163,8 @@ export class ApparatusFragmentComponent
         if (!result) {
           return;
         }
-        this.fragment.entries.splice(index, 1);
-        this.entryCount.setValue(this.fragment.entries.length);
+        this.entries.splice(index, 1);
+        this.entryCount.setValue(this.entries.length);
         this.form.markAsDirty();
       });
   }
@@ -163,19 +173,19 @@ export class ApparatusFragmentComponent
     if (index < 1) {
       return;
     }
-    const entry = this.fragment.entries[index];
-    this.fragment.entries.splice(index, 1);
-    this.fragment.entries.splice(index - 1, 0, entry);
+    const entry = this.entries[index];
+    this.entries.splice(index, 1);
+    this.entries.splice(index - 1, 0, entry);
     this.form.markAsDirty();
   }
 
   public moveEntryDown(index: number): void {
-    if (index + 1 >= this.fragment.entries.length) {
+    if (index + 1 >= this.entries.length) {
       return;
     }
-    const item = this.fragment.entries[index];
-    this.fragment.entries.splice(index, 1);
-    this.fragment.entries.splice(index + 1, 0, item);
+    const item = this.entries[index];
+    this.entries.splice(index, 1);
+    this.entries.splice(index + 1, 0, item);
     this.form.markAsDirty();
   }
 }

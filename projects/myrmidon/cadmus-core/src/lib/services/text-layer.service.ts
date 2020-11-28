@@ -8,6 +8,11 @@ import * as rangy from 'rangy';
 // npm install --save rangy
 // npm install --save @types/rangy
 
+interface TextRange {
+  start: number;
+  end: number;
+}
+
 /**
  * The selected range of text. This reflects rangy's Range useful properties;
  * in fact, you can just pass a Range to any method requiring this parameter type,
@@ -23,7 +28,7 @@ export interface SelectedRange {
 
 @Injectable({ providedIn: 'root' })
 export class TextLayerService {
-  private readonly _wsRegex : RegExp;
+  private readonly _wsRegex: RegExp;
 
   constructor() {
     this._wsRegex = new RegExp('^\\s$', 'g');
@@ -55,10 +60,10 @@ export class TextLayerService {
       const line = lines[y].trim();
       const l: TokenTextLayerLine = {
         y: y + 1,
-        tokens: []
+        tokens: [],
       };
-      let x = 0,
-        xBeg = 0;
+      let x = 0;
+      let xBeg = 0;
 
       while (x < line.length) {
         if (this.isWhitespace(line.charAt(x))) {
@@ -107,7 +112,7 @@ export class TextLayerService {
     locPortion: number,
     sb: string[],
     isSelected: boolean
-  ) {
+  ): void {
     sb.push(
       `<span id="f${loc.toString()}_${locPortion}" class="fr${
         isSelected ? 'fr-sel' : ''
@@ -150,7 +155,7 @@ export class TextLayerService {
     token: string,
     sb: string[],
     isSelected: boolean
-  ) {
+  ): void {
     // 1.token's left-part
     if (loc.primary.at > 0) {
       // to...
@@ -179,7 +184,7 @@ export class TextLayerService {
     token: string,
     sb: string[],
     isSelected: boolean
-  ) {
+  ): void {
     // 1.token's left-part (=before at)
     if (loc.primary.at > 0) {
       // to...
@@ -274,7 +279,7 @@ export class TextLayerService {
           }
         } else {
           // else, check if this token starts a fragment
-          loc = locations.find(l => {
+          loc = locations.find((l) => {
             return l.primary.y === y + 1 && l.primary.x === x + 1;
           });
           if (loc) {
@@ -312,9 +317,12 @@ export class TextLayerService {
    * Get the Y bounds from the specified selection.
    * @param range The selection range.
    * @param forNew True if getting bounds for a new fragment.
-   * @returns Array where [0]=min and [1]=max.
+   * @returns Range, inclusive.
    */
-  private getYBoundsFromRange(range: SelectedRange, forNew: boolean): number[] {
+  private getYBoundsFromRange(
+    range: SelectedRange,
+    forNew: boolean
+  ): TextRange {
     let p: Element = null;
 
     switch (range.commonAncestorContainer.nodeType) {
@@ -328,15 +336,16 @@ export class TextLayerService {
           p = p.parentElement;
         }
         const y = parseInt(p.getAttribute('id').substr(1), 10);
-        return [y, y];
+        // return [y, y];
+        return { start: y, end: y };
 
       case Node.ELEMENT_NODE:
         // div only is allowed; in this case, it's a multi-p range
         if (range.commonAncestorContainer.nodeName !== 'DIV') {
           return null;
         }
-        let yMin = 0,
-          yMax = 0;
+        let yMin = 0;
+        let yMax = 0;
         let inside = false;
         for (
           let i = 0;
@@ -352,13 +361,13 @@ export class TextLayerService {
             inside = true;
           }
           // no (span) child is allowed in p for new fragments
-          if (inside && forNew && (<Element>child).firstElementChild) {
+          if (inside && forNew && (child as Element).firstElementChild) {
             return null;
           }
           // collect y if inside
           if (inside) {
             const iy = parseInt(
-              (<Element>child).getAttribute('id').substr(1),
+              (child as Element).getAttribute('id').substr(1),
               10
             );
             if (!yMin || iy < yMin) {
@@ -373,7 +382,11 @@ export class TextLayerService {
             }
           }
         }
-        return [yMin, yMax];
+        // return [yMin, yMax];
+        return {
+          start: yMin,
+          end: yMax,
+        };
     }
   }
 
@@ -396,11 +409,11 @@ export class TextLayerService {
    * by index.
    * @param line The text line.
    * @param index The index to the text line to start from.
-   * @returns Bounds where [0]=index of the first character of the token,
-   * and [1]=index of the character past the token's last character;
+   * @returns Bounds where start=index of the first character of the token,
+   * and end=index of the character past the token's last character;
    * or null if index was not valid.
    */
-  private getTokenBounds(line: string, index: number): number[] {
+  private getTokenBounds(line: string, index: number): TextRange {
     if (line.charAt(index) === ' ') {
       return null;
     }
@@ -414,14 +427,21 @@ export class TextLayerService {
     if (end === -1) {
       end = line.length;
     }
-    return [start, end];
+    // return [start, end];
+    return {
+      start,
+      end,
+    };
   }
 
+  /**
+   * Return the received selection bounds, adjusted to exclude spaces.
+   */
   private getAdjustedSelectionBounds(
     selStart: number,
     selEnd: number,
     line: string
-  ): number[] {
+  ): TextRange {
     // corner case: if on space, move to right
     if (line.charAt(selStart) === ' ') {
       selStart++;
@@ -430,7 +450,11 @@ export class TextLayerService {
     if (selEnd > 0 && line.charAt(selEnd - 1) === ' ') {
       selEnd--;
     }
-    return [selStart, selEnd];
+    // return [selStart, selEnd];
+    return {
+      start: selStart,
+      end: selEnd,
+    };
   }
 
   /**
@@ -445,12 +469,13 @@ export class TextLayerService {
   ): TextCoords {
     // get adjusted selection bounds
     const selBounds = this.getAdjustedSelectionBounds(selStart, selEnd, line);
+
     // get the bounds of the first selected token
-    const tokBounds = this.getTokenBounds(line, selBounds[0]);
+    const tokBounds = this.getTokenBounds(line, selBounds.start);
 
     // calculate x by counting the tokens before the target token
     let x = 1;
-    let j = tokBounds[0] - 1;
+    let j = tokBounds.start - 1;
     while (j > -1) {
       if (line.charAt(j) === ' ') {
         x++;
@@ -462,21 +487,22 @@ export class TextLayerService {
     // (a) selection starts past the 1st char of the token (al[pha);
     // (b) selection ends before the last char of the token (al]pha);
     // run is calculated only if (b) is true.
-    let at = 0,
-      run = 0;
-    if (selBounds[0] > tokBounds[0] || selBounds[1] < tokBounds[1]) {
-      at = 1 + selBounds[0] - tokBounds[0];
+    let at = 0;
+    let run = 0;
+    if (selBounds.start > tokBounds.start || selBounds.end < tokBounds.end) {
+      at = 1 + selBounds.start - tokBounds.start;
       run =
-        selBounds[1] < tokBounds[1]
-          ? selBounds[1] - tokBounds[0] // al]pha
-          : tokBounds[1] - selBounds[0]; // alpha]
+        (selBounds.end < tokBounds.end
+          ? selBounds.end // al]pha
+          : tokBounds.end) - // alpha]
+        Math.max(tokBounds.start, selBounds.start);
     }
 
     return {
       y: 0,
-      x: x,
-      at: at,
-      run: run
+      x,
+      at,
+      run,
     };
   }
 
@@ -488,11 +514,11 @@ export class TextLayerService {
     // get adjusted selection bounds
     const selBounds = this.getAdjustedSelectionBounds(selStart, selEnd, line);
     // get the bounds of the last selected token
-    const tokBounds = this.getTokenBounds(line, selBounds[1] - 1);
+    const tokBounds = this.getTokenBounds(line, selBounds.end - 1);
 
     // calculate x by counting the tokens before the target token
     let x = 1;
-    let j = selBounds[1] - 1;
+    let j = selBounds.end - 1;
     while (j > -1) {
       if (line.charAt(j) === ' ') {
         x++;
@@ -502,17 +528,21 @@ export class TextLayerService {
 
     // calculate at,run only when selection ends before the 1st char of the token
     // (al]pha); run is calculated only if at is calculated.
-    let at = 0, run = 0;
-    if (selBounds[1] < tokBounds[1]) {
-      at = selBounds[0] > tokBounds[0] ? 1 + selBounds[0] - tokBounds[0] : 1;
-      run = selBounds[1] - tokBounds[0];
+    let at = 0;
+    let run = 0;
+    if (selBounds.end < tokBounds.end) {
+      at =
+        selBounds.start > tokBounds.start
+          ? 1 + selBounds.start - tokBounds.start
+          : 1;
+      run = selBounds.end - tokBounds.start;
     }
 
     return {
       y: 0,
-      x: x,
-      at: at,
-      run: run
+      x,
+      at,
+      run,
     };
   }
 
@@ -528,7 +558,7 @@ export class TextLayerService {
     return TokenLocation.parse(m[1]);
   }
 
-  private visitNodes(node: Node, visitor: (current: Node) => boolean) {
+  private visitNodes(node: Node, visitor: (current: Node) => boolean): void {
     if (!visitor(node)) {
       return;
     }
@@ -544,7 +574,7 @@ export class TextLayerService {
     let inside = false;
     let span = null;
 
-    this.visitNodes(range.commonAncestorContainer, current => {
+    this.visitNodes(range.commonAncestorContainer, (current) => {
       if (current === range.startContainer) {
         inside = true;
       }
@@ -579,7 +609,7 @@ export class TextLayerService {
     let span: Element = null;
     switch (range.commonAncestorContainer.nodeType) {
       case Node.ELEMENT_NODE:
-        span = <Element>range.commonAncestorContainer;
+        span = range.commonAncestorContainer as Element;
         if (span.nodeName !== 'SPAN') {
           span = this.findFirstDescendantSpan(range);
         }
@@ -598,7 +628,7 @@ export class TextLayerService {
     return span ? this.getSpanLocFromId(span.getAttribute('id')) : null;
   }
 
-  private textLineToString(line: TokenTextLayerLine) {
+  private textLineToString(line: TokenTextLayerLine): string {
     if (!line || !line.tokens) {
       return '';
     }
@@ -628,23 +658,27 @@ export class TextLayerService {
 
     // get lines and calculate start/end coords
     const lines = this.getLines(text);
-    const startLine = this.textLineToString(lines[yBounds[0] - 1]);
-    const endLine = this.textLineToString(lines[yBounds[1] - 1]);
+    const startLine = this.textLineToString(lines[yBounds.start - 1]);
+    const endLine = this.textLineToString(lines[yBounds.end - 1]);
+
     const startLineEndOffset =
-      yBounds[0] !== yBounds[1] ? endLine.length : range.endOffset;
+      yBounds.start !== yBounds.end ? startLine.length : range.endOffset;
     const start = this.getStartCoordsFromRange(
       range.startOffset,
       startLineEndOffset,
       startLine
     );
-    start.y = yBounds[0];
+    start.y = yBounds.start;
 
-    const end = this.getEndCoordsFromRange(
-      range.startOffset,
-      range.endOffset,
-      endLine
-    );
-    end.y = yBounds[1];
+    const end =
+      yBounds.start !== yBounds.end
+        ? this.getEndCoordsFromRange(0, range.endOffset, endLine)
+        : this.getEndCoordsFromRange(
+            range.startOffset,
+            range.endOffset,
+            endLine
+          );
+    end.y = yBounds.end;
     const singleLine = start.y === end.y;
     const singleToken = singleLine && start.x === end.x;
 

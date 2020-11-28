@@ -4,11 +4,9 @@
       <div mat-card-avatar>
         <mat-icon>textsms</mat-icon>
       </div>
-      <mat-card-title
-        >Apparatus Fragment {{ fragment?.location }}</mat-card-title
-      >
+      <mat-card-title>Apparatus Fragment {{ model?.location }}</mat-card-title>
       <mat-card-subtitle>
-        {{ fragment?.baseText }}
+        {{ model?.baseText }}
       </mat-card-subtitle>
     </mat-card-header>
 
@@ -56,7 +54,7 @@
             <tbody>
               <tr
                 *ngFor="
-                  let entry of fragment?.entries;
+                  let entry of entries;
                   let i = index;
                   let first = first;
                   let last = last
@@ -100,8 +98,8 @@
                     <mat-icon>remove_circle</mat-icon>
                   </button>
                 </td>
-                <td>
-                  {{ getEntryTypeDsc(entry.type) }}
+                <td [matTooltip]="getEntryTypeDsc(entry.type)">
+                  <mat-icon>{{ getEntryTypeIcon(entry.type) }}</mat-icon>
                 </td>
                 <td>
                   <span *ngIf="entry.type === 3">{{ entry.note }}</span>
@@ -123,7 +121,7 @@
               mat-icon-button
               matTooltip="Add a new entry"
             >
-              <mat-icon>add_circle</mat-icon> add
+              <mat-icon>add_circle</mat-icon> add entry
             </button>
           </div>
         </mat-tab>

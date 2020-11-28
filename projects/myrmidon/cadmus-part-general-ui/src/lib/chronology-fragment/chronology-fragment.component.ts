@@ -2,7 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { ChronologyFragment } from '../chronology-fragment';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
-import { Datation, HistoricalDate, HistoricalDateType, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import {
+  Datation,
+  deepCopy,
+  HistoricalDate,
+  HistoricalDateType,
+  ThesaurusEntry,
+} from '@myrmidon/cadmus-core';
 import { AuthService } from '@myrmidon/cadmus-api';
 
 /**
@@ -12,12 +18,11 @@ import { AuthService } from '@myrmidon/cadmus-api';
 @Component({
   selector: 'cadmus-chronology-fragment',
   templateUrl: './chronology-fragment.component.html',
-  styleUrls: ['./chronology-fragment.component.css']
+  styleUrls: ['./chronology-fragment.component.css'],
 })
 export class ChronologyFragmentComponent
   extends ModelEditorComponentBase<ChronologyFragment>
   implements OnInit {
-  public fragment: ChronologyFragment;
   public tagEntries: ThesaurusEntry[];
 
   // the date being edited in its text form
@@ -50,7 +55,7 @@ export class ChronologyFragmentComponent
       tag: this.tag,
       tags: this.tags,
       label: this.label,
-      eventId: this.eventId
+      eventId: this.eventId,
     });
   }
 
@@ -83,7 +88,7 @@ export class ChronologyFragmentComponent
     this.txtDate.setValue(model.date.toString());
   }
 
-  protected onModelSet(model: ChronologyFragment): void {
+  private updateForm(model: ChronologyFragment): void {
     if (!model || !model.date) {
       this.form.reset();
     } else {
@@ -108,12 +113,16 @@ export class ChronologyFragmentComponent
     }
   }
 
+  protected onModelSet(model: ChronologyFragment): void {
+    this.updateForm(deepCopy(model));
+  }
+
   protected getModelFromForm(): ChronologyFragment {
     let fr = this.model;
     if (!fr) {
       fr = {
-        location: null,
-        date: null
+        location: this.model?.location ?? '',
+        date: null,
       };
     }
     fr.date = new HistoricalDate();

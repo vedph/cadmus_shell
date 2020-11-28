@@ -20,7 +20,6 @@ export class QuotationsFragmentComponent
   implements OnInit {
   private _newEditedEntry: boolean;
 
-  public fragment: QuotationsFragment;
   public editedEntry: QuotationEntry;
   public currentTabIndex: number;
 
@@ -29,6 +28,7 @@ export class QuotationsFragmentComponent
   public workDictionary: Record<string, ThesaurusEntry[]>;
 
   public entryCount: FormControl;
+  public entries: QuotationEntry[];
 
   constructor(
     authService: AuthService,
@@ -37,6 +37,7 @@ export class QuotationsFragmentComponent
     private _worksService: QuotationWorksService
   ) {
     super(authService);
+    this.entries = [];
     // form
     this.entryCount = formBuilder.control(0, Validators.min(1));
 
@@ -74,26 +75,19 @@ export class QuotationsFragmentComponent
       this.form.reset();
       return;
     }
-    this.fragment = model;
     this.entryCount.setValue(model.entries?.length || 0);
     this.form.markAsPristine();
   }
 
   protected onModelSet(model: QuotationsFragment): void {
-    this.fragment = deepCopy(model);
-    this.updateForm(model);
+    this.updateForm(deepCopy(model));
   }
 
   protected getModelFromForm(): QuotationsFragment {
-    let fr = this.model;
-    if (!fr) {
-      fr = {
-        location: this.fragment ? this.fragment.location : null,
-        entries: [],
-      };
-    }
-    fr.entries = this.fragment.entries;
-    return fr;
+    return {
+      location: this.model?.location ?? '',
+      entries: this.entries,
+    };
   }
 
   public getNameFromId(id: string): string {
@@ -106,8 +100,8 @@ export class QuotationsFragmentComponent
       work: null,
       citation: null,
     };
-    this.fragment.entries.push(entry);
-    this.entryCount.setValue(this.fragment.entries.length);
+    this.entries.push(entry);
+    this.entryCount.setValue(this.entries.length);
     this._newEditedEntry = true;
     this.editEntry(entry);
   }
@@ -119,8 +113,8 @@ export class QuotationsFragmentComponent
 
   public onEntrySave(entry: QuotationEntry): void {
     this._newEditedEntry = false;
-    const i = this.fragment.entries.indexOf(this.editedEntry);
-    this.fragment.entries.splice(i, 1, entry);
+    const i = this.entries.indexOf(this.editedEntry);
+    this.entries.splice(i, 1, entry);
     this.currentTabIndex = 0;
     this.editedEntry = null;
     this.form.markAsDirty();
@@ -128,9 +122,9 @@ export class QuotationsFragmentComponent
 
   public onEntryClose(entry: QuotationEntry): void {
     if (this._newEditedEntry) {
-      const index = this.fragment.entries.indexOf(this.editedEntry);
-      this.fragment.entries.splice(index, 1);
-      this.entryCount.setValue(this.fragment.entries.length);
+      const index = this.entries.indexOf(this.editedEntry);
+      this.entries.splice(index, 1);
+      this.entryCount.setValue(this.entries.length);
     }
     this.currentTabIndex = 0;
     this.editedEntry = null;
@@ -143,8 +137,8 @@ export class QuotationsFragmentComponent
         if (!result) {
           return;
         }
-        this.fragment.entries.splice(index, 1);
-        this.entryCount.setValue(this.fragment.entries.length);
+        this.entries.splice(index, 1);
+        this.entryCount.setValue(this.entries.length);
         this.form.markAsDirty();
       });
   }
@@ -153,19 +147,19 @@ export class QuotationsFragmentComponent
     if (index < 1) {
       return;
     }
-    const entry = this.fragment.entries[index];
-    this.fragment.entries.splice(index, 1);
-    this.fragment.entries.splice(index - 1, 0, entry);
+    const entry = this.entries[index];
+    this.entries.splice(index, 1);
+    this.entries.splice(index - 1, 0, entry);
     this.form.markAsDirty();
   }
 
   public moveEntryDown(index: number): void {
-    if (index + 1 >= this.fragment.entries.length) {
+    if (index + 1 >= this.entries.length) {
       return;
     }
-    const item = this.fragment.entries[index];
-    this.fragment.entries.splice(index, 1);
-    this.fragment.entries.splice(index + 1, 0, item);
+    const item = this.entries[index];
+    this.entries.splice(index, 1);
+    this.entries.splice(index + 1, 0, item);
     this.form.markAsDirty();
   }
 }

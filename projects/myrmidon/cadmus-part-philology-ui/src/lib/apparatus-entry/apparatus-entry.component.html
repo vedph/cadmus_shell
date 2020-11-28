@@ -14,8 +14,8 @@
     </mat-form-field>
   </div>
 
-  <!-- value -->
   <div>
+    <!-- value -->
     <mat-form-field>
       <input matInput type="text" formControlName="value" placeholder="value" />
       <mat-error
@@ -23,10 +23,9 @@
         >too long</mat-error
       >
     </mat-form-field>
-  </div>
 
-  <!-- normValue -->
-  <div>
+    <!-- normValue -->
+    &nbsp;
     <mat-form-field>
       <input
         matInput
@@ -42,10 +41,9 @@
         >too long</mat-error
       >
     </mat-form-field>
-  </div>
 
-  <!-- accepted -->
-  <div>
+    <!-- accepted -->
+    &nbsp;
     <mat-checkbox formControlName="accepted">accepted</mat-checkbox>
   </div>
 
@@ -67,10 +65,9 @@
         >too long</mat-error
       >
     </mat-form-field>
-  </div>
 
-  <!-- groupId -->
-  <div>
+    <!-- groupId -->
+    &nbsp;
     <mat-form-field>
       <input
         matInput
@@ -89,16 +86,18 @@
 
   <!-- note -->
   <div>
-    <textarea
-      matInput
-      formControlName="note"
-      placeholder="note"
-      spellcheck="false"
-    ></textarea>
-    <mat-error
-      *ngIf="note.hasError('maxLength') && (note.dirty || note.touched)"
-      >too long</mat-error
-    >
+    <mat-form-field>
+      <textarea
+        matInput
+        formControlName="note"
+        placeholder="note"
+        spellcheck="false"
+      ></textarea>
+      <mat-error
+        *ngIf="note.hasError('maxLength') && (note.dirty || note.touched)"
+        >too long</mat-error
+      >
+    </mat-form-field>
   </div>
 
   <!-- witnesses -->
@@ -191,10 +190,9 @@
       type="button"
       mat-icon-button
       color="primary"
-      matTooltip="Add a new witness"
       (click)="addWitness()"
     >
-      <mat-icon>add_circle</mat-icon>
+      <mat-icon>add_circle</mat-icon> add witness
     </button>
   </mat-expansion-panel>
 
@@ -202,7 +200,9 @@
   <mat-expansion-panel>
     <mat-expansion-panel-header>
       <mat-panel-title>authors</mat-panel-title>
-      <mat-panel-description>{{ entry?.authors?.length }}</mat-panel-description>
+      <mat-panel-description>{{
+        entry?.authors?.length
+      }}</mat-panel-description>
     </mat-expansion-panel-header>
 
     <div formArrayName="authors">
@@ -272,7 +272,7 @@
           </mat-form-field>
           &nbsp;
           <!-- note -->
-          <mat-form-field>
+          <mat-form-field class="long-text">
             <input matInput formControlName="note" placeholder="note" />
             <mat-error
               *ngIf="note.hasError('maxLength') && (note.dirty || note.touched)"
@@ -286,10 +286,9 @@
       type="button"
       mat-icon-button
       color="primary"
-      matTooltip="Add a new author"
       (click)="addAuthor()"
     >
-      <mat-icon>add_circle</mat-icon>
+      <mat-icon>add_circle</mat-icon> add author
     </button>
   </mat-expansion-panel>
 

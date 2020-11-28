@@ -9,30 +9,20 @@ import { CadmusCoreModule } from '@myrmidon/cadmus-core';
 import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { NotePartComponent } from './note-part/note-part.component';
-import { NotePartDemoComponent } from './note-part-demo/note-part-demo.component';
 import { TokenTextPartComponent } from './token-text-part/token-text-part.component';
-import { TokenTextPartDemoComponent } from './token-text-part-demo/token-text-part-demo.component';
 import { BibAuthorsEditorComponent } from './bib-authors-editor/bib-authors-editor.component';
 import { BibliographyEntryComponent } from './bibliography-entry/bibliography-entry.component';
 import { BibliographyPartComponent } from './bibliography-part/bibliography-part.component';
-import { BibliographyPartDemoComponent } from './bibliography-part-demo/bibliography-part-demo.component';
 import { CommentFragmentComponent } from './comment-fragment/comment-fragment.component';
-import { CommentFragmentDemoComponent } from './comment-fragment-demo/comment-fragment-demo.component';
 import { CategoriesPartComponent } from './categories-part/categories-part.component';
-import { CategoriesPartDemoComponent } from './categories-part-demo/categories-part-demo.component';
 import { KeywordsPartComponent } from './keywords-part/keywords-part.component';
-import { KeywordsPartDemoComponent } from './keywords-part-demo/keywords-part-demo.component';
 import { HistoricalDatePartComponent } from './historical-date-part/historical-date-part.component';
-import { HistoricalDatePartDemoComponent } from './historical-date-part-demo/historical-date-part-demo.component';
 import { IndexKeywordComponent } from './index-keyword/index-keyword.component';
 import { IndexKeywordsPartComponent } from './index-keywords-part/index-keywords-part.component';
 import { ChronologyFragmentComponent } from './chronology-fragment/chronology-fragment.component';
-import { ChronologyFragmentDemoComponent } from './chronology-fragment-demo/chronology-fragment-demo.component';
 import { TiledTextPartComponent } from './tiled-text-part/tiled-text-part.component';
 import { TextTileComponent } from './text-tile/text-tile.component';
-import { TiledTextPartDemoComponent } from './tiled-text-part-demo/tiled-text-part-demo.component';
 import { TiledDataComponent } from './tiled-data/tiled-data.component';
-import { IndexKeywordsPartDemoComponent } from './index-keywords-part-demo/index-keywords-part-demo.component';
 
 @NgModule({
   imports: [
@@ -51,54 +41,34 @@ import { IndexKeywordsPartDemoComponent } from './index-keywords-part-demo/index
     BibliographyEntryComponent,
     BibliographyPartComponent,
     BibliographyPartComponent,
-    BibliographyPartDemoComponent,
     CategoriesPartComponent,
-    CategoriesPartDemoComponent,
     ChronologyFragmentComponent,
-    ChronologyFragmentDemoComponent,
     CommentFragmentComponent,
-    CommentFragmentDemoComponent,
     HistoricalDatePartComponent,
-    HistoricalDatePartDemoComponent,
     IndexKeywordComponent,
     IndexKeywordsPartComponent,
-    IndexKeywordsPartDemoComponent,
     KeywordsPartComponent,
-    KeywordsPartDemoComponent,
     NotePartComponent,
-    NotePartDemoComponent,
     TextTileComponent,
     TiledTextPartComponent,
-    TiledTextPartDemoComponent,
     TokenTextPartComponent,
-    TokenTextPartDemoComponent,
     TiledDataComponent,
     IndexKeywordComponent,
   ],
   exports: [
     BibliographyPartComponent,
-    BibliographyPartDemoComponent,
     CategoriesPartComponent,
-    CategoriesPartDemoComponent,
     ChronologyFragmentComponent,
-    ChronologyFragmentDemoComponent,
     CommentFragmentComponent,
-    CommentFragmentDemoComponent,
     HistoricalDatePartComponent,
-    HistoricalDatePartDemoComponent,
     IndexKeywordComponent,
     IndexKeywordsPartComponent,
-    IndexKeywordsPartDemoComponent,
     KeywordsPartComponent,
-    KeywordsPartDemoComponent,
     NotePartComponent,
-    NotePartDemoComponent,
     TiledDataComponent,
     TextTileComponent,
     TiledTextPartComponent,
-    TiledTextPartDemoComponent,
     TokenTextPartComponent,
-    TokenTextPartDemoComponent,
   ],
 })
 export class CadmusPartGeneralUiModule {}
