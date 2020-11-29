@@ -48,6 +48,8 @@ export class TokenTextLayerPartFeatureComponent
   public pickedLocation: string;
   public userLevel: number;
 
+  public textSize: number;
+
   constructor(
     route: ActivatedRoute,
     private _router: Router,
@@ -60,12 +62,13 @@ export class TokenTextLayerPartFeatureComponent
     private _dialogService: DialogService,
     authService: AuthService
   ) {
-    this.itemId = route.snapshot.params['iid'];
-    this.partId = route.snapshot.params['pid'];
+    this.textSize = 14;
+    this.itemId = route.snapshot.params.iid;
+    this.partId = route.snapshot.params.pid;
     if (this.partId === 'new') {
       this.partId = null;
     }
-    this.roleId = route.snapshot.queryParams['rid'];
+    this.roleId = route.snapshot.queryParams.rid;
     if (this.roleId === 'default') {
       this.roleId = null;
     }
@@ -80,6 +83,22 @@ export class TokenTextLayerPartFeatureComponent
     if (!this._editItemQuery.hasItem(id)) {
       this._editItemService.load(id);
     }
+  }
+
+  public makeLarger(): void {
+    const size = this.textSize + 2;
+    if (size > 24) {
+      return;
+    }
+    this.textSize = size;
+  }
+
+  public makeSmaller(): void {
+    const size = this.textSize - 2;
+    if (size < 12) {
+      return;
+    }
+    this.textSize = size;
   }
 
   ngOnInit(): void {

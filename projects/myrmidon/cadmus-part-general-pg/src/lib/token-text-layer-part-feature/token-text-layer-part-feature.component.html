@@ -46,6 +46,24 @@
       <button
         mat-icon-button
         type="button"
+        matTooltip="Larger text"
+        (click)="makeLarger()"
+        [disabled]="textSize >= 24"
+      >
+        <mat-icon>format_size</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        type="button"
+        matTooltip="Smaller text"
+        (click)="makeSmaller()"
+        [disabled]="textSize <= 12"
+      >
+        <mat-icon>text_fields</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        type="button"
         (click)="pickLocation()"
         matTooltip="Pick the selection location for a new fragment"
       >
@@ -69,11 +87,13 @@
     </div>
     <div *ngIf="error$ | async as error" class="error-message">{{ error }}</div>
 
-    <cadmus-decorated-token-text
-      *ngIf="baseText$ | async as baseText"
-      [baseText]="baseText"
-      [locations]="locations$ | async"
-    ></cadmus-decorated-token-text>
+    <div [style.font-size]="textSize + 'px'">
+      <cadmus-decorated-token-text
+        *ngIf="baseText$ | async as baseText"
+        [baseText]="baseText"
+        [locations]="locations$ | async"
+      ></cadmus-decorated-token-text>
+    </div>
   </mat-card-content>
   <div>
     <button
