@@ -5,7 +5,7 @@ import { TextLayerService, TokenLocation } from '@myrmidon/cadmus-core';
 @Component({
   selector: 'cadmus-layer-demo',
   templateUrl: './layer-demo.component.html',
-  styleUrls: ['./layer-demo.component.css']
+  styleUrls: ['./layer-demo.component.css'],
 })
 export class LayerDemoComponent {
   @ViewChild('resultElem') _resultElement: ElementRef;
@@ -18,16 +18,39 @@ export class LayerDemoComponent {
   public text: FormControl;
   public location: FormControl;
 
-  constructor(formBuilder: FormBuilder,
-    private _textLayerService: TextLayerService) {
+  public textSize: number;
+
+  constructor(
+    formBuilder: FormBuilder,
+    private _textLayerService: TextLayerService
+  ) {
+    this.textSize = 14;
     this.locations = [];
-    this.text = formBuilder.control('alpha beta\ngamma\ndelta epsilon waw\nzeta');
+    this.text = formBuilder.control(
+      'alpha beta\ngamma\ndelta epsilon waw\nzeta'
+    );
     this.location = formBuilder.control('1.2@2x2');
     this.rendition = formBuilder.group({
-      'text': this.text,
-      'location': this.location
+      text: this.text,
+      location: this.location,
     });
     this.result = '';
+  }
+
+  public makeLarger(): void {
+    const size = this.textSize + 2;
+    if (size > 24) {
+      return;
+    }
+    this.textSize = size;
+  }
+
+  public makeSmaller(): void {
+    const size = this.textSize - 2;
+    if (size < 12) {
+      return;
+    }
+    this.textSize = size;
   }
 
   private removeOverlaps(loc: TokenLocation): void {
@@ -84,16 +107,22 @@ export class LayerDemoComponent {
   }
 
   public render(): void {
-    this.result = this._textLayerService.render(this.text.value, this.locations);
+    this.result = this._textLayerService.render(
+      this.text.value,
+      this.locations
+    );
   }
 
   public getLocationForNew(): void {
     this.userLocation = this._textLayerService.getSelectedLocationForNew(
-      this._textLayerService.getSelectedRange(), this.text.value);
+      this._textLayerService.getSelectedRange(),
+      this.text.value
+    );
   }
 
   public getLocationForEdit(): void {
     this.userLocation = this._textLayerService.getSelectedLocationForEdit(
-      this._textLayerService.getSelectedRange());
+      this._textLayerService.getSelectedRange()
+    );
   }
 }

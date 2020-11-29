@@ -67,7 +67,7 @@
               type="button"
               matTooltip="Add the specified location"
             >
-              <mat-icon style="color:#66CC75">add_circle</mat-icon>
+              <mat-icon style="color: #66cc75">add_circle</mat-icon>
             </button>
             <button
               mat-icon-button
@@ -102,6 +102,24 @@
             >
               <mat-icon>playlist_add_check</mat-icon>
             </button>
+            <button
+              mat-icon-button
+              type="button"
+              matTooltip="Larger text"
+              (click)="makeLarger()"
+              [disabled]="textSize >= 24"
+            >
+              <mat-icon>format_size</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              type="button"
+              matTooltip="Smaller text"
+              (click)="makeSmaller()"
+              [disabled]="textSize <= 12"
+            >
+              <mat-icon>text_fields</mat-icon>
+            </button>
           </span>
           <span class="tb-fill-remaining-space"></span>
           <span>{{ userLocation }}</span>
@@ -133,7 +151,12 @@
     <h3>Rendition</h3>
   </mat-card-header>
   <mat-card-content>
-    <div [innerHtml]="result | safeHtml: 'html'" id="result" #resultElem></div>
+    <div
+      [style.font-size]="textSize + 'px'"
+      [innerHtml]="result | safeHtml: 'html'"
+      id="result"
+      #resultElem
+    ></div>
     <hr />
     <div>
       <code>{{ result }}</code>
