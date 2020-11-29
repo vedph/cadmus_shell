@@ -344,6 +344,7 @@ export class TextLayerService {
         if (range.commonAncestorContainer.nodeName !== 'DIV') {
           return null;
         }
+        // for each div's child p element:
         let yMin = 0;
         let yMax = 0;
         let inside = false;
@@ -359,10 +360,6 @@ export class TextLayerService {
           // check if we're entering the start-p
           if (!inside && child.contains(range.startContainer)) {
             inside = true;
-          }
-          // no (span) child is allowed in p for new fragments
-          if (inside && forNew && (child as Element).firstElementChild) {
-            return null;
           }
           // collect y if inside
           if (inside) {
@@ -382,7 +379,6 @@ export class TextLayerService {
             }
           }
         }
-        // return [yMin, yMax];
         return {
           start: yMin,
           end: yMax,
@@ -786,17 +782,18 @@ export class TextLayerService {
     const startLine = this.textLineToString(lines[yBounds.start - 1]);
     const endLine = this.textLineToString(lines[yBounds.end - 1]);
 
-    // get the base offset
-    const baseOffset = this.getNodeBaseOffset(range.startContainer);
+    // get the base offsets
+    const startBaseOffset = this.getNodeBaseOffset(range.startContainer);
+    const endBaseOffset = this.getNodeBaseOffset(range.endContainer);
 
     // get the start (including the base offset)
     const startLineEndOffset =
       yBounds.start !== yBounds.end
         ? startLine.length
-        : range.endOffset + baseOffset;
+        : range.endOffset + startBaseOffset;
 
     const start = this.getStartCoordsFromRange(
-      range.startOffset + baseOffset,
+      range.startOffset + startBaseOffset,
       startLineEndOffset,
       startLine
     );
@@ -805,10 +802,10 @@ export class TextLayerService {
     // get the end (including the base offset)
     const end =
       yBounds.start !== yBounds.end
-        ? this.getEndCoordsFromRange(0, range.endOffset + baseOffset, endLine)
+        ? this.getEndCoordsFromRange(0, range.endOffset + endBaseOffset, endLine)
         : this.getEndCoordsFromRange(
-            range.startOffset + baseOffset,
-            range.endOffset + baseOffset,
+            range.startOffset + endBaseOffset,
+            range.endOffset + endBaseOffset,
             endLine
           );
     end.y = yBounds.end;
