@@ -595,6 +595,30 @@ export class TextLayerService {
   }
 
   /**
+   * Get the base offset for the specified node. This is used
+   * when the start container of the selected range has any
+   * preceding sibling node, which happens only when you have
+   * any spans in the p element (=the line). In this case,
+   * the selection offset starts from the start container node,
+   * which is preceded by other nodes including other text.
+   * As we must get the line-based offset, we have to start
+   * from a base offset equal to the sum of the lengths of
+   * all the preceding siblings.
+   */
+  private getNodeBaseOffset(node: Node): number {
+    let offset = 0;
+    node = node.previousSibling;
+    while (node) {
+      offset +=
+        node.nodeType === 1
+          ? (node as any).innerText?.length || 0
+          : node.textContent?.length || 0;
+      node = node.previousSibling;
+    }
+    return offset;
+  }
+
+  /**
    * Get the location corresponding to the user selection,
    * for editing the first fragment included in it.
    * @param range The selected range. You can get it from the
@@ -635,6 +659,38 @@ export class TextLayerService {
     return line.tokens.join(' ');
   }
 
+  private buildCoords(
+    start: TextCoords,
+    end: TextCoords,
+    singleToken: boolean
+  ): string {
+    const sb = [];
+    // start: y.x
+    sb.push(`${start.y}.${start.x}`);
+
+    if (singleToken) {
+      // single token: check for at,run
+      if (start.at) {
+        sb.push(`@${start.at}`);
+        if (start.run > 1) {
+          sb.push(`x${start.run}`);
+        }
+      }
+    } else {
+      // not a single token
+      // first token
+      if (start.at) {
+        sb.push(`@${start.at}x${start.run}`);
+      }
+      // last token
+      sb.push(`-${end.y}.${end.x}`);
+      if (end.at) {
+        sb.push(`@1x${end.run}`);
+      }
+    }
+    return sb.join('');
+  }
+
   /**
    * Get the location corresponding to the user selection,
    * for adding a new fragment with the same extension.
@@ -661,52 +717,37 @@ export class TextLayerService {
     const startLine = this.textLineToString(lines[yBounds.start - 1]);
     const endLine = this.textLineToString(lines[yBounds.end - 1]);
 
+    // get the base offset
+    const baseOffset = this.getNodeBaseOffset(range.startContainer);
+
+    // get the start (including the base offset)
     const startLineEndOffset =
-      yBounds.start !== yBounds.end ? startLine.length : range.endOffset;
+      yBounds.start !== yBounds.end
+        ? startLine.length
+        : range.endOffset + baseOffset;
+
     const start = this.getStartCoordsFromRange(
-      range.startOffset,
+      range.startOffset + baseOffset,
       startLineEndOffset,
       startLine
     );
     start.y = yBounds.start;
 
+    // get the end (including the base offset)
     const end =
       yBounds.start !== yBounds.end
-        ? this.getEndCoordsFromRange(0, range.endOffset, endLine)
+        ? this.getEndCoordsFromRange(0, range.endOffset + baseOffset, endLine)
         : this.getEndCoordsFromRange(
-            range.startOffset,
-            range.endOffset,
+            range.startOffset + baseOffset,
+            range.endOffset + baseOffset,
             endLine
           );
     end.y = yBounds.end;
     const singleLine = start.y === end.y;
     const singleToken = singleLine && start.x === end.x;
 
-    const sb = [];
-    // start: y.x
-    sb.push(`${start.y}.${start.x}`);
-
-    if (singleToken) {
-      // single token: check for at,run
-      if (start.at) {
-        sb.push(`@${start.at}`);
-        if (start.run > 1) {
-          sb.push(`x${start.run}`);
-        }
-      }
-    } else {
-      // not a single token
-      // first token
-      if (start.at) {
-        sb.push(`@${start.at}x${start.run}`);
-      }
-      // last token
-      sb.push(`-${end.y}.${end.x}`);
-      if (end.at) {
-        sb.push(`@1x${end.run}`);
-      }
-    }
-    return TokenLocation.parse(sb.join(''));
+    const coords = this.buildCoords(start, end, singleToken);
+    return TokenLocation.parse(coords);
   }
 
   /**
