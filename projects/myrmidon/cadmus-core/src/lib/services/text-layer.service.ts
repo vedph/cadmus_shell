@@ -610,7 +610,7 @@ export class TextLayerService {
     node = node.previousSibling;
     while (node) {
       offset +=
-        node.nodeType === 1
+        node.nodeType === Node.ELEMENT_NODE
           ? (node as any).innerText?.length || 0
           : node.textContent?.length || 0;
       node = node.previousSibling;
@@ -692,6 +692,74 @@ export class TextLayerService {
   }
 
   /**
+   * Recursively find the node matching the specified matcher
+   * function, starting from the specified node (included).
+   *
+   * @param node The node to start from.
+   * @param matcher The matcher function, which receives a node
+   * to match, and returns 1=match, 0=no match, -1=stop the
+   * find operation with a no match.
+   */
+  private findNode(node: Node, matcher: (n: Node) => number): Node | null {
+    // self
+    const n = matcher(node);
+    if (n === 1) {
+      return node;
+    }
+    if (n === -1) {
+      return null;
+    }
+
+    // children
+    if (node.hasChildNodes()) {
+      for (let i = 0; i < node.childNodes.length; i++) {
+        const child = node.childNodes[i];
+        const found = this.findNode(child, matcher);
+        if (found) {
+          return found;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  private selHasAnySpan(range: SelectedRange): boolean {
+    let inside = false;
+    if (
+      // the selected text node must not be child of a span
+      range.startContainer.parentElement.tagName === 'SPAN' ||
+      range.startContainer.parentElement.tagName === 'SPAN' ||
+      // the nodes tree from the common ancestor, from the start node
+      // up to the end node, must not include any span
+      this.findNode(range.commonAncestorContainer, (node: Node) => {
+        // start checking only when start node reached
+        if (node === range.startContainer) {
+          inside = true;
+        }
+        if (!inside) {
+          return 0;
+        }
+        // stop checking when end node reached
+        if (node === range.endContainer) {
+          return -1;
+        }
+        // node cannot be a span
+        if (
+          node.nodeType === Node.ELEMENT_NODE &&
+          (node as Element).tagName === 'SPAN'
+        ) {
+          return 1;
+        }
+        return 0;
+      })
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * Get the location corresponding to the user selection,
    * for adding a new fragment with the same extension.
    * @param range The selected range. You can get it from the
@@ -703,9 +771,10 @@ export class TextLayerService {
     range: SelectedRange,
     text: string
   ): TokenLocation {
-    if (!range) {
+    if (!range || this.selHasAnySpan(range)) {
       return null;
     }
+
     // get y bounds (min, max; equal if single-line)
     const yBounds = this.getYBoundsFromRange(range, true);
     if (!yBounds) {
