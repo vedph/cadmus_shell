@@ -3,7 +3,7 @@
   [itemId]="itemId"
   [roleId]="roleId"
   [model]="part$ | async"
-  (jsonChange)="save($event)"
+  (modelChange)="save($event)"
   [thesauri]="thesauri$ | async"
   (editorClose)="close()"
   (dirtyChange)="onDirtyChange($event)"

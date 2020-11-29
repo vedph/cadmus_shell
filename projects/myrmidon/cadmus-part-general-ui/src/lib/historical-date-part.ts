@@ -1,10 +1,10 @@
-import { Part, HistoricalDate } from '@myrmidon/cadmus-core';
+import { Part, HistoricalDateModel } from '@myrmidon/cadmus-core';
 
 /**
  * The HistoricalDate part model.
  */
 export interface HistoricalDatePart extends Part {
-  date: HistoricalDate;
+  date: HistoricalDateModel;
 }
 
 /**
@@ -32,38 +32,38 @@ export const HISTORICAL_DATE_PART_SCHEMA = {
     'creatorId',
     'timeModified',
     'userId',
-    'date'
+    'date',
   ],
   properties: {
     timeCreated: {
       type: 'string',
-      pattern: '^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d+Z$'
+      pattern: '^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d+Z$',
     },
     creatorId: {
-      type: 'string'
+      type: 'string',
     },
     timeModified: {
       type: 'string',
-      pattern: '^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d+Z$'
+      pattern: '^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d+Z$',
     },
     userId: {
-      type: 'string'
+      type: 'string',
     },
     id: {
       type: 'string',
-      pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
+      pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
     },
     itemId: {
       type: 'string',
-      pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
+      pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
     },
     typeId: {
       type: 'string',
-      pattern: '^[a-z][-0-9a-z._]*$'
+      pattern: '^[a-z][-0-9a-z._]*$',
     },
     roleId: {
       type: ['string', 'null'],
-      pattern: '^([a-z][-0-9a-z._]*)?$'
+      pattern: '^([a-z][-0-9a-z._]*)?$',
     },
     date: {
       type: 'object',
@@ -74,62 +74,62 @@ export const HISTORICAL_DATE_PART_SCHEMA = {
           required: ['value'],
           properties: {
             value: {
-              type: 'integer'
+              type: 'integer',
             },
             isCentury: {
-              type: 'boolean'
+              type: 'boolean',
             },
             isSpan: {
-              type: 'boolean'
+              type: 'boolean',
             },
             isApproximate: {
-              type: 'boolean'
+              type: 'boolean',
             },
             isDubious: {
-              type: 'boolean'
+              type: 'boolean',
             },
             day: {
-              type: 'integer'
+              type: 'integer',
             },
             month: {
-              type: 'integer'
+              type: 'integer',
             },
             hint: {
-              type: ['string', 'null']
-            }
-          }
+              type: ['string', 'null'],
+            },
+          },
         },
         b: {
           type: 'object',
           required: ['value'],
           properties: {
             value: {
-              type: 'integer'
+              type: 'integer',
             },
             isCentury: {
-              type: 'boolean'
+              type: 'boolean',
             },
             isSpan: {
-              type: 'boolean'
+              type: 'boolean',
             },
             isApproximate: {
-              type: 'boolean'
+              type: 'boolean',
             },
             isDubious: {
-              type: 'boolean'
+              type: 'boolean',
             },
             day: {
-              type: 'integer'
+              type: 'integer',
             },
             month: {
-              type: 'integer'
+              type: 'integer',
             },
             hint: {
-              type: ['string', 'null']
-            }
-          }
-        }
-      }
-    }
-  }
+              type: ['string', 'null'],
+            },
+          },
+        },
+      },
+    },
+  },
 };

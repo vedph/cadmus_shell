@@ -12,8 +12,9 @@
 
 :host >>> span.fr {
   background-color: yellow;
-  font-weight: bold;
-  border: 1px solid #404040;
+  border: 1px solid silver;
+  border-radius: 6px;
+  padding: 0 4px;
 }
 
 :host >>> span.fr-sel {
