@@ -25,6 +25,7 @@ import { CadmusCoreModule } from '@myrmidon/cadmus-core';
 import { CadmusApiModule } from '@myrmidon/cadmus-api';
 import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
 import { ThesaurusTreeComponent } from './components/thesaurus-tree/thesaurus-tree.component';
+import { DocReferencesComponent } from './components/doc-references/doc-references.component';
 
 @NgModule({
   imports: [
@@ -43,6 +44,7 @@ import { ThesaurusTreeComponent } from './components/thesaurus-tree/thesaurus-tr
     CloseSaveButtonsComponent,
     DatationEditorComponent,
     DecoratedTokenTextComponent,
+    DocReferencesComponent,
     ErrorListComponent,
     FacetBadgeComponent,
     FlagsBadgeComponent,
@@ -60,6 +62,7 @@ import { ThesaurusTreeComponent } from './components/thesaurus-tree/thesaurus-tr
     CloseSaveButtonsComponent,
     DatationEditorComponent,
     DecoratedTokenTextComponent,
+    DocReferencesComponent,
     ErrorListComponent,
     FacetBadgeComponent,
     FlagsBadgeComponent,

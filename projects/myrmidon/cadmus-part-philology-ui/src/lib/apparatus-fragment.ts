@@ -14,15 +14,23 @@ export enum ApparatusEntryType {
   additionAfter,
 
   // any note to the text
-  note
+  note,
 }
 
 /**
  * An optionally annotated value used in an apparatus entry.
  */
-export interface ApparatusAnnotatedValue {
+export interface AnnotatedValue {
   value: string;
   note?: string;
+}
+
+/**
+ * An annotated value plus a tag and a location.
+ */
+export interface LocAnnotatedValue extends AnnotatedValue {
+  tag?: string;
+  location?: string;
 }
 
 /**
@@ -35,8 +43,8 @@ export interface ApparatusEntry {
   normValue?: string;
   isAccepted?: boolean;
   groupId?: string;
-  witnesses?: ApparatusAnnotatedValue[];
-  authors?: ApparatusAnnotatedValue[];
+  witnesses?: AnnotatedValue[];
+  authors?: LocAnnotatedValue[];
   note?: string;
 }
 
@@ -54,104 +62,86 @@ export const APPARATUS_FRAGMENT_SCHEMA = {
   definitions: {},
   $schema: 'http://json-schema.org/draft-07/schema#',
   $id:
-    'www.fusisoft.net/cadmus/fragments/philology/' +
+    'www.vedph.it/cadmus/fragments/philology/' +
     APPARATUS_FRAGMENT_TYPEID +
     '.json',
   type: 'object',
   required: ['location', 'entries'],
   properties: {
     location: {
-      $id: '#/properties/location',
-      type: 'string'
+      type: 'string',
     },
     baseText: {
-      $id: '#/properties/baseText',
-      type: 'string'
+      type: 'string',
     },
     tag: {
-      $id: '#/properties/tag',
-      type: 'string'
+      type: 'string',
     },
     entries: {
-      $id: '#/properties/entries',
       type: 'array',
       items: {
-        $id: '#/properties/entries/items',
         type: 'object',
         required: ['type'],
         properties: {
           type: {
-            $id: '#/properties/entries/items/properties/type',
-            type: 'integer'
+            type: 'integer',
           },
           tag: {
-            $id: '#/properties/entries/items/properties/tag',
-            type: ['string', 'null']
+            type: ['string', 'null'],
           },
           value: {
-            $id: '#/properties/entries/items/properties/value',
-            type: ['string', 'null']
+            type: ['string', 'null'],
           },
           normValue: {
-            $id: '#/properties/entries/items/properties/normValue',
-            type: ['string', 'null']
+            type: ['string', 'null'],
           },
           isAccepted: {
-            $id: '#/properties/entries/items/properties/isAccepted',
-            type: 'boolean'
+            type: 'boolean',
           },
           groupId: {
-            $id: '#/properties/entries/items/properties/groupId',
-            type: ['string', 'null']
+            type: ['string', 'null'],
           },
           witnesses: {
-            $id: '#/properties/entries/items/properties/witnesses',
             type: 'array',
             items: {
-              $id: '#/properties/entries/items/properties/witnesses/items',
               type: 'object',
               required: ['value'],
               properties: {
                 value: {
-                  $id:
-                    '#/properties/entries/items/properties/witnesses/items/properties/value',
-                  type: 'string'
+                  type: 'string',
                 },
                 note: {
-                  $id:
-                    '#/properties/entries/items/properties/witnesses/items/properties/note',
-                  type: ['string', 'null']
-                }
-              }
-            }
+                  type: ['string', 'null'],
+                },
+              },
+            },
           },
           authors: {
-            $id: '#/properties/entries/items/properties/authors',
             type: 'array',
             items: {
-              $id: '#/properties/entries/items/properties/authors/items',
               type: 'object',
               required: ['value'],
               properties: {
+                tag: {
+                  type: ['string', 'null'],
+                },
                 value: {
-                  $id:
-                    '#/properties/entries/items/properties/authors/items/properties/value',
-                  type: 'string'
+                  type: 'string',
+                },
+                location: {
+                  type: ['string', 'null'],
                 },
                 note: {
-                  $id:
-                    '#/properties/entries/items/properties/authors/items/properties/note',
-                  type: ['string', 'null']
-                }
-              }
-            }
+                  type: ['string', 'null'],
+                },
+              },
+            },
           },
           note: {
-            $id: '#/properties/entries/items/properties/note',
-            type: ['string', 'null']
-          }
-        }
-      }
-    }
-  }
+            type: ['string', 'null'],
+          },
+        },
+      },
+    },
+  },
 };

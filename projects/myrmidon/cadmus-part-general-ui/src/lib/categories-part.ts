@@ -18,7 +18,7 @@ export const CATEGORIES_PART_TYPEID = 'it.vedph.categories';
  */
 export const CATEGORIES_PART_SCHEMA = {
   $schema: 'http://json-schema.org/draft-07/schema#',
-  $id: 'www.fusisoft.net/cadmus/parts/general/' + CATEGORIES_PART_TYPEID + '.json',
+  $id: 'www.vedph.it/cadmus/parts/general/' + CATEGORIES_PART_TYPEID + '.json',
   type: 'object',
   title: 'CategoriesPart',
   required: [

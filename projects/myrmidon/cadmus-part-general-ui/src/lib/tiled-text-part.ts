@@ -42,7 +42,7 @@ export const TILED_TEXT_PART_TYPEID = 'it.vedph.tiled-text';
 export const TILEDTEXTPART_SCHEMA = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   $id:
-    'www.fusisoft.net/cadmus/parts/general/' + TILED_TEXT_PART_TYPEID + '.json',
+    'www.vedph.it/cadmus/parts/general/' + TILED_TEXT_PART_TYPEID + '.json',
   type: 'object',
   title: 'TiledTextPart',
   required: [

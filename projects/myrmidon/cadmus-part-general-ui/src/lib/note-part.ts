@@ -19,7 +19,7 @@ export const NOTE_PART_TYPEID = 'it.vedph.note';
  */
 export const NOTE_PART_SCHEMA = {
   $schema: 'http://json-schema.org/draft-07/schema#',
-  $id: 'www.fusisoft.net/cadmus/parts/general/' + NOTE_PART_TYPEID + '.json',
+  $id: 'www.vedph.it/cadmus/parts/general/' + NOTE_PART_TYPEID + '.json',
   type: 'object',
   title: 'NotePart',
   required: [

@@ -6,6 +6,7 @@ export * from './lib/components/close-save-buttons/close-save-buttons.component'
 export * from './lib/components/confirm-dialog/confirm-dialog.component';
 export * from './lib/components/datation-editor/datation-editor.component';
 export * from './lib/components/decorated-token-text/decorated-token-text.component';
+export * from './lib/components/doc-references/doc-references.component';
 export * from './lib/components/error-list/error-list.component';
 export * from './lib/components/facet-badge/facet-badge.component';
 export * from './lib/components/flags-badge/flags-badge.component';

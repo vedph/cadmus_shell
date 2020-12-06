@@ -130,9 +130,10 @@
         <mat-tab label="Entry" *ngIf="editedEntry">
           <cadmus-apparatus-entry
             [entry]="editedEntry"
-            [tagThesaurus]="tagThesaurus"
-            [witnessThesaurus]="witnessThesaurus"
-            [authorThesaurus]="authorThesaurus"
+            [tagEntries]="tagThesaurus?.entries"
+            [witEntries]="witnessThesaurus?.entries"
+            [authEntries]="authorThesaurus?.entries"
+            [authTagEntries]="authorTagThesaurus?.entries"
             (save)="onEntrySave($event)"
             (editorClose)="onEntryClose()"
           ></cadmus-apparatus-entry>

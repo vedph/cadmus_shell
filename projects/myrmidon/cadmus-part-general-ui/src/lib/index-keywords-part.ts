@@ -30,7 +30,7 @@ export const INDEX_KEYWORDS_PART_TYPEID = 'it.vedph.index-keywords';
 export const INDEX_KEYWORDS_PART_SCHEMA = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   $id:
-    'www.fusisoft.net/cadmus/parts/general/' +
+    'www.vedph.it/cadmus/parts/general/' +
     INDEX_KEYWORDS_PART_TYPEID +
     '.json',
   type: 'object',

@@ -14,7 +14,7 @@ export const COMMENT_FRAGMENT_SCHEMA = {
   definitions: {},
   $schema: 'http://json-schema.org/draft-07/schema#',
   $id:
-    'www.fusisoft.net/cadmus/fragments/general/' +
+    'www.vedph.it/cadmus/fragments/general/' +
     COMMENT_FRAGMENT_TYPEID +
     '.json',
   type: 'object',

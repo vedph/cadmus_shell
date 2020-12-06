@@ -46,7 +46,7 @@ export const BIBLIOGRAPHY_PART_TYPEID = 'it.vedph.bibliography';
 export const BIBLIOGRAPHY_PART_SCHEMA = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   $id:
-    'www.fusisoft.net/cadmus/parts/general/' +
+    'www.vedph.it/cadmus/parts/general/' +
     BIBLIOGRAPHY_PART_TYPEID +
     '.json',
   type: 'object',

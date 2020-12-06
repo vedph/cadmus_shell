@@ -11,6 +11,19 @@
         [date]="date"
         (dateChange)="onDateChange($event)"
       ></cadmus-historical-date-editor>
+      <!-- references -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>references</mat-panel-title>
+          <mat-panel-description>{{
+            references?.length || 0
+          }}</mat-panel-description>
+        </mat-expansion-panel-header>
+        <cadmus-doc-references
+          [model$]="references$"
+          (modelChange)="onReferencesChange($event)"
+        ></cadmus-doc-references>
+      </mat-expansion-panel>
     </mat-card-content>
     <mat-card-actions>
       <cadmus-close-save-buttons

@@ -28,7 +28,7 @@ export const TOKEN_TEXT_PART_TYPEID = 'it.vedph.token-text';
 export const TOKEN_TEXT_PART_SCHEMA = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   $id:
-    'www.fusisoft.net/cadmus/parts/general/' + TOKEN_TEXT_PART_TYPEID + '.json',
+    'www.vedph.it/cadmus/parts/general/' + TOKEN_TEXT_PART_TYPEID + '.json',
   type: 'object',
   title: 'TokenTextPart',
   required: [

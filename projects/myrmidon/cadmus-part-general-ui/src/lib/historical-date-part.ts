@@ -1,10 +1,11 @@
-import { Part, HistoricalDateModel } from '@myrmidon/cadmus-core';
+import { Part, HistoricalDateModel, DocReference } from '@myrmidon/cadmus-core';
 
 /**
  * The HistoricalDate part model.
  */
 export interface HistoricalDatePart extends Part {
   date: HistoricalDateModel;
+  references?: DocReference[];
 }
 
 /**
@@ -19,7 +20,7 @@ export const HISTORICAL_DATE_PART_TYPEID = 'it.vedph.historical-date';
 export const HISTORICAL_DATE_PART_SCHEMA = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   $id:
-    'www.fusisoft.net/cadmus/parts/general/' +
+    'www.vedph.it/cadmus/parts/general/' +
     HISTORICAL_DATE_PART_TYPEID +
     '.json',
   type: 'object',
@@ -131,5 +132,33 @@ export const HISTORICAL_DATE_PART_SCHEMA = {
         },
       },
     },
-  },
+    references: {
+      type: 'array',
+      items: {
+        anyOf: [
+          {
+            type: 'object',
+            required: ['author', 'work'],
+            properties: {
+              tag: {
+                type: 'string',
+              },
+              author: {
+                type: 'string',
+              },
+              work: {
+                type: 'string',
+              },
+              location: {
+                type: 'string',
+              },
+              note: {
+                type: 'string',
+              },
+            },
+          },
+        ],
+      },
+    },
+},
 };

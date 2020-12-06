@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ApparatusEntry, ApparatusAnnotatedValue } from '../apparatus-fragment';
+import { ApparatusEntry, AnnotatedValue, LocAnnotatedValue } from '../apparatus-fragment';
 import {
   FormGroup,
   FormControl,
@@ -7,7 +7,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { Thesaurus } from '@myrmidon/cadmus-core';
+import { Thesaurus, ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 /**
  * Single apparatus entry editor dumb component.
@@ -32,12 +32,26 @@ export class ApparatusEntryComponent implements OnInit {
     this.updateForm();
   }
 
+  /**
+   * Tags for apparatus entries.
+   */
   @Input()
-  public tagThesaurus: Thesaurus | null;
+  public tagEntries: ThesaurusEntry[] | null;
+  /**
+   * Witnesses.
+   */
   @Input()
-  public witnessThesaurus: Thesaurus | null;
+  public witEntries: ThesaurusEntry[] | null;
+  /**
+   * Authors.
+   */
   @Input()
-  public authorThesaurus: Thesaurus | null;
+  public authEntries: ThesaurusEntry[] | null;
+  /**
+   * Author's tags.
+   */
+  @Input()
+  public authTagEntries: ThesaurusEntry[] | null;
 
   @Output()
   public editorClose: EventEmitter<any>;
@@ -127,36 +141,46 @@ export class ApparatusEntryComponent implements OnInit {
     for (let i = 0; i < this.witnesses.length; i++) {
       this._entry.witnesses.push({
         value: this.witnesses.value[i].value?.trim(),
-        note: this.witnesses.value[i].note,
+        note: this.witnesses.value[i].note?.trim(),
       });
     }
 
     this._entry.authors = [];
     for (let i = 0; i < this.authors.length; i++) {
       this._entry.authors.push({
+        tag: this.authors.value[i].tag?.trim(),
         value: this.authors.value[i].value?.trim(),
-        note: this.authors.value[i].note,
+        location: this.authors.value[i].location?.trim(),
+        note: this.authors.value[i].note?.trim(),
       });
     }
   }
 
-  private getAnnotatedValueGroup(preset?: ApparatusAnnotatedValue): FormGroup {
-    return this._formBuilder.group({
-      value: this._formBuilder.control(preset?.value, [
+  public addWitness(witness?: AnnotatedValue): void {
+    this.witnesses.push(this._formBuilder.group({
+      value: this._formBuilder.control(witness?.value, [
         Validators.required,
         Validators.maxLength(50),
       ]),
-      note: this._formBuilder.control(preset?.note, Validators.maxLength(100)),
-    });
-  }
-
-  public addWitness(witness?: ApparatusAnnotatedValue): void {
-    this.witnesses.push(this.getAnnotatedValueGroup(witness));
+      note: this._formBuilder.control(witness?.note, Validators.maxLength(100)),
+    }));
     this.form.markAsDirty();
   }
 
-  public addAuthor(author?: ApparatusAnnotatedValue): void {
-    this.authors.push(this.getAnnotatedValueGroup(author));
+  public addAuthor(author?: LocAnnotatedValue): void {
+    this.authors.push(this._formBuilder.group({
+      tag: this._formBuilder.control(author?.tag, [
+        Validators.maxLength(50)
+      ]),
+      value: this._formBuilder.control(author?.value, [
+        Validators.required,
+        Validators.maxLength(50),
+      ]),
+      location: this._formBuilder.control(author?.location, [
+        Validators.maxLength(50)
+      ]),
+      note: this._formBuilder.control(author?.note, Validators.maxLength(100)),
+    }));
     this.form.markAsDirty();
   }
 

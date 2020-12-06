@@ -13,7 +13,7 @@ import { Thesaurus, deepCopy } from '@myrmidon/cadmus-core';
 
 /**
  * Critical apparatus fragment.
- * Thesauri: apparatus-tags, apparatus-witnesses, apparatus-authors.
+ * Thesauri: apparatus-tags, apparatus-witnesses, apparatus-authors, apparatus-author-tags.
  */
 @Component({
   selector: 'cadmus-apparatus-fragment',
@@ -32,9 +32,10 @@ export class ApparatusFragmentComponent
   public entryCount: FormControl;
   public form: FormGroup;
 
-  public tagThesaurus: Thesaurus;
-  public witnessThesaurus: Thesaurus;
-  public authorThesaurus: Thesaurus;
+  public tagThesaurus: Thesaurus | undefined;
+  public witnessThesaurus: Thesaurus | undefined;
+  public authorThesaurus: Thesaurus | undefined;
+  public authorTagThesaurus: Thesaurus | undefined;
 
   public entries: ApparatusEntry[];
 
@@ -70,6 +71,7 @@ export class ApparatusFragmentComponent
     this.tagThesaurus = this.getThesaurus('apparatus-tags');
     this.witnessThesaurus = this.getThesaurus('apparatus-witnesses');
     this.authorThesaurus = this.getThesaurus('apparatus-authors');
+    this.authorTagThesaurus = this.getThesaurus('apparatus-author-tags');
   }
 
   private updateForm(model: ApparatusFragment): void {

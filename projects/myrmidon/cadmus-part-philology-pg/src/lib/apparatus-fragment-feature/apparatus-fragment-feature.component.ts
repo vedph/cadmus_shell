@@ -49,7 +49,8 @@ export class ApparatusFragmentFeatureComponent extends EditFragmentFeatureBase
     this.initEditor([
       '!apparatus-tags',
       'apparatus-witnesses',
-      'apparatus-authors'
+      'apparatus-authors',
+      'apparatus-author-tags'
     ]);
   }
 }

@@ -303,6 +303,17 @@ export interface PartGroup {
 }
 
 /**
+ * A document reference, usually including an author and a work.
+ */
+export interface DocReference {
+  tag?: string;
+  author: string;
+  work: string;
+  location?: string;
+  note?: string;
+}
+
+/**
  * Essential information about a user.
  */
 export interface UserInfo {
