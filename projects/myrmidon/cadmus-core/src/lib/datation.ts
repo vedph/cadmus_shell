@@ -127,7 +127,7 @@ export class Datation implements DatationModel {
       // about (1)
       '(c\\.)?\\s*' +
         // day (2)
-        '(?:([0123]\\d?)\\s+)?' +
+        '(?:([0123]?\\d)\\s+)?' +
         // month (3)
         '(?:([a-zA-Z]{3,})\\s+)?' +
         // year/span (4,5)

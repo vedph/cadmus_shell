@@ -147,6 +147,14 @@ describe('Class: HistoricalDate', () => {
     expect(d.isCentury).toBeFalsy();
     expect(d.month).toBe(5);
   });
+  it('parse "3 may 45" should be day, month and year', () => {
+    const d = Datation.parse('3 may 45');
+    expect(d).toBeTruthy();
+    expect(d.value).toBe(45);
+    expect(d.isCentury).toBeFalsy();
+    expect(d.month).toBe(5);
+    expect(d.day).toBe(3);
+  });
   it('parse "30 may 45" should be day, month and year', () => {
     const d = Datation.parse('30 may 45');
     expect(d).toBeTruthy();
