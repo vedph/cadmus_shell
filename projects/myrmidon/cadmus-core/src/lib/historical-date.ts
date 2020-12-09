@@ -59,9 +59,6 @@ export class HistoricalDate implements HistoricalDateModel {
     const dates = text.split('--');
     let s1 = dates[0].trim();
     const s2 = dates.length > 1 ? dates[1].trim() : null;
-    if (!s1) {
-      return null;
-    }
 
     const date = new HistoricalDate();
     if (dates.length > 1) {

@@ -162,7 +162,7 @@ export class Datation implements DatationModel {
   public static parse(
     text: string,
     options: DatationFormatOptions = DATATION_FORMAT_OPTIONS
-  ): Datation {
+  ): Datation | undefined {
     if (!text) {
       return undefined;
     }

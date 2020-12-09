@@ -140,9 +140,6 @@ export class HistoricalDateEditorComponent implements OnInit {
   }
 
   public setDatations(): void {
-    if (!this.a?.value) {
-      return;
-    }
     const hd = new HistoricalDate();
     hd.a = new Datation(this.a);
     if (this.range.value) {
