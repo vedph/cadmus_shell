@@ -26,6 +26,8 @@ import { CadmusApiModule } from '@myrmidon/cadmus-api';
 import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
 import { ThesaurusTreeComponent } from './components/thesaurus-tree/thesaurus-tree.component';
 import { DocReferencesComponent } from './components/doc-references/doc-references.component';
+import { PhysicalDimensionComponent } from './components/physical-dimension/physical-dimension.component';
+import { PhysicalSizeComponent } from './components/physical-size/physical-size.component';
 
 @NgModule({
   imports: [
@@ -54,6 +56,8 @@ import { DocReferencesComponent } from './components/doc-references/doc-referenc
     LoginComponent,
     PartBadgeComponent,
     PasswordStrengthBarComponent,
+    PhysicalDimensionComponent,
+    PhysicalSizeComponent,
     SafeHtmlPipe,
     ThesaurusTreeComponent,
   ],
@@ -72,6 +76,8 @@ import { DocReferencesComponent } from './components/doc-references/doc-referenc
     LoginComponent,
     PartBadgeComponent,
     PasswordStrengthBarComponent,
+    PhysicalDimensionComponent,
+    PhysicalSizeComponent,
     SafeHtmlPipe,
     ThesaurusTreeComponent,
   ],

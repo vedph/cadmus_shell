@@ -19,6 +19,8 @@ export * from './lib/components/password-strength-bar/password-strength-bar.comp
 export * from './lib/components/thesaurus-tree/thesaurus-tree.component';
 export * from './lib/components/inplace-editor-component-base';
 export * from './lib/components/model-editor-component-base';
+export * from './lib/components/physical-dimension/physical-dimension.component';
+export * from './lib/components/physical-size/physical-size.component';
 export * from './lib/pipes/safe-html.pipe';
 export * from './lib/services/color.service';
 export * from './lib/services/dialog.service';

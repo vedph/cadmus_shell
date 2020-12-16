@@ -314,6 +314,26 @@ export interface DocReference {
 }
 
 /**
+ * A physical dimension value.
+ */
+export interface PhysicalDimension {
+  tag?: string;
+  value: number;
+  unit: string;
+}
+
+/**
+ * A physical 1D, 2D or 3D size.
+ */
+export interface PhysicalSize {
+  tag?: string;
+  w?: PhysicalDimension;
+  h?: PhysicalDimension;
+  d?: PhysicalDimension;
+  note?: string;
+}
+
+/**
  * Essential information about a user.
  */
 export interface UserInfo {
