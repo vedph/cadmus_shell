@@ -17,6 +17,7 @@ import { debounceTime } from 'rxjs/operators';
 export class PhysicalDimensionComponent implements OnInit {
   private _disabled: boolean;
   private _changeFrozen: boolean;
+  private _dimension: PhysicalDimension;
 
   @Input()
   public parentForm: FormGroup;
@@ -31,7 +32,13 @@ export class PhysicalDimensionComponent implements OnInit {
   public tagEntries: ThesaurusEntry[];
 
   @Input()
-  public dimension: PhysicalDimension;
+  public get dimension(): PhysicalDimension {
+    return this._dimension;
+  }
+  public set dimension(value: PhysicalDimension) {
+    this._dimension = value;
+    this.updateForm(value);
+  }
 
   @Input()
   public get disabled(): boolean {

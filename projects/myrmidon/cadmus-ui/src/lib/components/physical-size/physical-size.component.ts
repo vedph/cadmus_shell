@@ -15,11 +15,19 @@ import { debounceTime } from 'rxjs/operators';
   styleUrls: ['./physical-size.component.css'],
 })
 export class PhysicalSizeComponent implements OnInit {
+  private _size: PhysicalSize | undefined;
+
   @Input()
   public parentForm: FormGroup;
 
   @Input()
-  public size: PhysicalSize;
+  public get size(): PhysicalSize {
+    return this._size;
+  }
+  public set size(value: PhysicalSize) {
+    this._size = value;
+    this.updateForm(value);
+  }
 
   @Input()
   public unitEntries: ThesaurusEntry[];
