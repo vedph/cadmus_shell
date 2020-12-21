@@ -39,6 +39,7 @@ export interface LocAnnotatedValue extends AnnotatedValue {
 export interface ApparatusEntry {
   type: ApparatusEntryType;
   tag?: string;
+  subrange?: string;
   value?: string;
   normValue?: string;
   isAccepted?: boolean;
@@ -85,6 +86,9 @@ export const APPARATUS_FRAGMENT_SCHEMA = {
         properties: {
           type: {
             type: 'integer',
+          },
+          subrange: {
+            type: ['string', 'null'],
           },
           tag: {
             type: ['string', 'null'],

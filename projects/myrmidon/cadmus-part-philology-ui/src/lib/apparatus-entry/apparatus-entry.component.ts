@@ -1,5 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ApparatusEntry, AnnotatedValue, LocAnnotatedValue } from '../apparatus-fragment';
+import {
+  ApparatusEntry,
+  AnnotatedValue,
+  LocAnnotatedValue,
+} from '../apparatus-fragment';
 import {
   FormGroup,
   FormControl,
@@ -62,6 +66,7 @@ export class ApparatusEntryComponent implements OnInit {
   public value: FormControl;
   public normValue: FormControl;
   public accepted: FormControl;
+  public subrange: FormControl;
   public tag: FormControl;
   public groupId: FormControl;
   public note: FormControl;
@@ -79,6 +84,10 @@ export class ApparatusEntryComponent implements OnInit {
     this.value = _formBuilder.control(null, Validators.maxLength(300));
     this.normValue = _formBuilder.control(null, Validators.maxLength(300));
     this.accepted = _formBuilder.control(false);
+    this.subrange = _formBuilder.control(
+      null,
+      Validators.pattern('^[0-9]+(?:-[0-9]+)?$')
+    );
     this.tag = _formBuilder.control(null, Validators.maxLength(50));
     this.groupId = _formBuilder.control(null, Validators.maxLength(50));
     this.note = _formBuilder.control(null, Validators.maxLength(1000));
@@ -89,6 +98,7 @@ export class ApparatusEntryComponent implements OnInit {
       value: this.value,
       normValue: this.normValue,
       accepted: this.accepted,
+      subrange: this.subrange,
       tag: this.tag,
       groupId: this.groupId,
       note: this.note,
@@ -108,6 +118,7 @@ export class ApparatusEntryComponent implements OnInit {
     this.value.setValue(this._entry.value);
     this.normValue.setValue(this._entry.normValue);
     this.accepted.setValue(this._entry.isAccepted === true);
+    this.subrange.setValue(this._entry.subrange);
     this.tag.setValue(this._entry.tag);
     this.groupId.setValue(this._entry.groupId);
     this.note.setValue(this._entry.note);
@@ -133,6 +144,7 @@ export class ApparatusEntryComponent implements OnInit {
     this._entry.value = this.value.value?.trim();
     this._entry.normValue = this.normValue.value?.trim();
     this._entry.isAccepted = this.accepted.value === true;
+    this._entry.subrange = this.subrange.value?.trim();
     this._entry.tag = this.tag.value?.trim();
     this._entry.groupId = this.groupId.value?.trim();
     this._entry.note = this.note.value?.trim();
@@ -157,30 +169,38 @@ export class ApparatusEntryComponent implements OnInit {
   }
 
   public addWitness(witness?: AnnotatedValue): void {
-    this.witnesses.push(this._formBuilder.group({
-      value: this._formBuilder.control(witness?.value, [
-        Validators.required,
-        Validators.maxLength(50),
-      ]),
-      note: this._formBuilder.control(witness?.note, Validators.maxLength(100)),
-    }));
+    this.witnesses.push(
+      this._formBuilder.group({
+        value: this._formBuilder.control(witness?.value, [
+          Validators.required,
+          Validators.maxLength(50),
+        ]),
+        note: this._formBuilder.control(
+          witness?.note,
+          Validators.maxLength(100)
+        ),
+      })
+    );
     this.form.markAsDirty();
   }
 
   public addAuthor(author?: LocAnnotatedValue): void {
-    this.authors.push(this._formBuilder.group({
-      tag: this._formBuilder.control(author?.tag, [
-        Validators.maxLength(50)
-      ]),
-      value: this._formBuilder.control(author?.value, [
-        Validators.required,
-        Validators.maxLength(50),
-      ]),
-      location: this._formBuilder.control(author?.location, [
-        Validators.maxLength(50)
-      ]),
-      note: this._formBuilder.control(author?.note, Validators.maxLength(100)),
-    }));
+    this.authors.push(
+      this._formBuilder.group({
+        tag: this._formBuilder.control(author?.tag, [Validators.maxLength(50)]),
+        value: this._formBuilder.control(author?.value, [
+          Validators.required,
+          Validators.maxLength(50),
+        ]),
+        location: this._formBuilder.control(author?.location, [
+          Validators.maxLength(50),
+        ]),
+        note: this._formBuilder.control(
+          author?.note,
+          Validators.maxLength(100)
+        ),
+      })
+    );
     this.form.markAsDirty();
   }
 

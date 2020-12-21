@@ -45,6 +45,18 @@
     <!-- accepted -->
     &nbsp;
     <mat-checkbox formControlName="accepted">accepted</mat-checkbox>
+
+    <!-- subrange -->
+    &nbsp;
+    <mat-form-field style="width: 8em;">
+      <input matInput [formControl]="subrange" placeholder="subrange" />
+      <mat-error
+        *ngIf="
+          subrange.errors?.pattern && (subrange.dirty || subrange.touched)
+        "
+        >invalid</mat-error
+      >
+    </mat-form-field>
   </div>
 
   <!-- tag -->
