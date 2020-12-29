@@ -29,6 +29,11 @@ export class CurrentLayerPartBarComponent implements OnInit {
     if (!state || !state.typeThesaurus) {
       return typeId;
     }
+    // strip :suffix if any
+    const i = typeId.lastIndexOf(':');
+    if (i > -1) {
+      typeId = typeId.substr(0, i);
+    }
     const entry = state.typeThesaurus.entries.find((e) => e.id === typeId);
     return entry ? entry.value : typeId;
   }
