@@ -43,6 +43,21 @@
         </mat-form-field>
       </div>
 
+      <!-- key -->
+      <div>
+        <mat-form-field>
+          <input
+            class="full-width"
+            matInput
+            [formControl]="key"
+            placeholder="key"
+          />
+          <mat-error *ngIf="key.errors?.maxLength && (key.dirty || key.touched)"
+            >key too long</mat-error
+          >
+        </mat-form-field>
+      </div>
+
       <!-- authors -->
       <cadmus-bib-authors-editor
         [parentForm]="form"

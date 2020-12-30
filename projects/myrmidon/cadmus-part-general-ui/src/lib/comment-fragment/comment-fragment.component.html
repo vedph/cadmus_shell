@@ -12,7 +12,7 @@
 
     <mat-card-content>
       <!-- free tag -->
-      <div *ngIf="!tagEntries">
+      <div *ngIf="!tagEntries?.length">
         <mat-form-field>
           <input type="text" matInput formControlName="tag" placeholder="tag" />
           <mat-error
@@ -22,7 +22,7 @@
         </mat-form-field>
       </div>
       <!-- bound tag -->
-      <div *ngIf="tagEntries">
+      <div *ngIf="tagEntries?.length">
         <mat-form-field>
           <mat-label>tag</mat-label>
           <mat-select formControlName="tags" placeholder="tag">
@@ -41,7 +41,7 @@
         ></ngx-monaco-editor>
         <mat-error
           *ngIf="text.hasError('required') && (text.touched || text.dirty)"
-          >please enter some text</mat-error
+          >text required</mat-error
         >
       </div>
 

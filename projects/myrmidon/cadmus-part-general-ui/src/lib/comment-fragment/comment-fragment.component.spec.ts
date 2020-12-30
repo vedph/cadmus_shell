@@ -24,10 +24,10 @@ describe('CommentFragmentComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
-        MaterialModule,
+        CadmusMaterialModule,
         MonacoEditorModule.forRoot(),
         MarkdownModule.forRoot(),
-        UiModule,
+        CadmusUiModule,
       ],
       // https://github.com/angular/components/issues/14668
       providers: [

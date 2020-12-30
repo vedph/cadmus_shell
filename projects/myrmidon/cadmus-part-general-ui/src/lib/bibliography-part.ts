@@ -8,6 +8,7 @@ export interface BibAuthor {
 }
 
 export interface BibEntry {
+  key?: string;
   typeId: string;
   authors?: BibAuthor[];
   title: string;
@@ -83,6 +84,9 @@ export const BIBLIOGRAPHY_PART_SCHEMA = {
     itemId: {
       type: 'string',
       pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
+    },
+    key: {
+      type: 'string'
     },
     typeId: {
       type: 'string',

@@ -49,6 +49,7 @@ export class BibliographyEntryComponent implements OnInit {
   public entryChange: EventEmitter<BibEntry>;
 
   // form - general
+  public key: FormControl;
   public type: FormControl;
   public language: FormControl;
   public authors: FormArray;
@@ -81,6 +82,7 @@ export class BibliographyEntryComponent implements OnInit {
     this.editorClose = new EventEmitter<any>();
     this.entryChange = new EventEmitter<BibEntry>();
     // form - general
+    this.key = _formBuilder.control(null, Validators.maxLength(300));
     this.type = _formBuilder.control(null, [
       Validators.required,
       Validators.maxLength(50),
@@ -130,6 +132,7 @@ export class BibliographyEntryComponent implements OnInit {
     });
 
     this.form = _formBuilder.group({
+      key: this.key,
       type: this.type,
       language: this.language,
       authors: this.authors,
@@ -197,6 +200,7 @@ export class BibliographyEntryComponent implements OnInit {
       return;
     }
 
+    this.key.setValue(entry.key);
     this.type.setValue(entry.typeId);
     this.language.setValue(entry.language);
     this.setAuthors(entry.authors, this.authors);
@@ -237,6 +241,7 @@ export class BibliographyEntryComponent implements OnInit {
 
   private getEntry(): BibEntry {
     return {
+      key: this.key.value?.trim(),
       typeId: this.type.value?.trim(),
       language: this.language.value,
       authors: this.getAuthors(this.authors),
