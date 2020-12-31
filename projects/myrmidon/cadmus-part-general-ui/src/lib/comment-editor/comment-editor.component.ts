@@ -18,6 +18,11 @@ import { Comment, CommentPart, COMMENT_PART_TYPEID } from '../comment-part';
 import { CommentFragment } from '../comment-fragment';
 import { IndexKeyword } from '../index-keywords-part';
 
+/**
+ * Comment part/fragment editor component.
+ * Thesauri: comment-tags, doc-reference-tags, categories, languages,
+ * keyword-indexes, keyword-tags (all optional).
+ */
 @Component({
   selector: 'cadmus-comment-editor',
   templateUrl: './comment-editor.component.html',
@@ -155,6 +160,13 @@ export class CommentEditorComponent
       this.idxEntries = this.thesauri[key].entries;
     } else {
       this.idxEntries = null;
+    }
+
+    key = 'keyword-tags';
+    if (this.thesauri && this.thesauri[key]) {
+      this.keyTagEntries = this.thesauri[key].entries;
+    } else {
+      this.keyTagEntries = null;
     }
   }
 

@@ -13,7 +13,6 @@ import { TokenTextPartComponent } from './token-text-part/token-text-part.compon
 import { BibAuthorsEditorComponent } from './bib-authors-editor/bib-authors-editor.component';
 import { BibliographyEntryComponent } from './bibliography-entry/bibliography-entry.component';
 import { BibliographyPartComponent } from './bibliography-part/bibliography-part.component';
-import { CommentFragmentComponent } from './comment-fragment/comment-fragment.component';
 import { CategoriesPartComponent } from './categories-part/categories-part.component';
 import { KeywordsPartComponent } from './keywords-part/keywords-part.component';
 import { HistoricalDatePartComponent } from './historical-date-part/historical-date-part.component';
@@ -45,7 +44,6 @@ import { CommentEditorComponent } from './comment-editor/comment-editor.componen
     CategoriesPartComponent,
     ChronologyFragmentComponent,
     CommentEditorComponent,
-    CommentFragmentComponent,
     HistoricalDatePartComponent,
     IndexKeywordComponent,
     IndexKeywordsPartComponent,
@@ -62,7 +60,7 @@ import { CommentEditorComponent } from './comment-editor/comment-editor.componen
     BibliographyPartComponent,
     CategoriesPartComponent,
     ChronologyFragmentComponent,
-    CommentFragmentComponent,
+    CommentEditorComponent,
     HistoricalDatePartComponent,
     IndexKeywordComponent,
     IndexKeywordsPartComponent,

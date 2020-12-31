@@ -67,7 +67,7 @@
         </mat-tab>
 
         <!-- categories -->
-        <mat-tab label="categories">
+        <mat-tab label="categories" *ngIf="catEntries?.length">
           <cadmus-thesaurus-tree
             [entries]="catEntries"
             rootLabel="categories"

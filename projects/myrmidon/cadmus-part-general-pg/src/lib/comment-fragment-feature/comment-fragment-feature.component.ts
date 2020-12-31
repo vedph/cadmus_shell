@@ -47,6 +47,13 @@ export class CommentFragmentFeatureComponent
   }
 
   ngOnInit(): void {
-    this.initEditor(['comment-tags']);
+    this.initEditor([
+      'comment-tags',
+      'doc-reference-tags',
+      'categories',
+      'languages',
+      'keyword-indexes',
+      'keyword-tags'
+    ]);
   }
 }

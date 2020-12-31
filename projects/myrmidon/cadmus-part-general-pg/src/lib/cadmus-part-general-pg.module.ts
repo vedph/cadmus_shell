@@ -10,6 +10,7 @@ import {
   CadmusPartGeneralUiModule,
   NOTE_PART_TYPEID,
   COMMENT_FRAGMENT_TYPEID,
+  COMMENT_PART_TYPEID,
   KEYWORDS_PART_TYPEID,
   TOKEN_TEXT_PART_TYPEID,
   HISTORICAL_DATE_PART_TYPEID,
@@ -36,13 +37,26 @@ import { TiledTextPartFeatureComponent } from './tiled-text-part-feature/tiled-t
 import { TiledTextLayerPartFeatureComponent } from './tiled-text-layer-part-feature/tiled-text-layer-part-feature.component';
 import { BibliographyPartFeatureComponent } from './bibliography-part-feature/bibliography-part-feature.component';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
+import { CommentPartFeatureComponent } from './comment-part-feature/comment-part-feature.component';
 
 // https://github.com/ng-packagr/ng-packagr/issues/778
 export const RouterModuleForChild = RouterModule.forChild([
   {
+    path: `${BIBLIOGRAPHY_PART_TYPEID}/:pid`,
+    pathMatch: 'full',
+    component: BibliographyPartFeatureComponent,
+    canDeactivate: [PendingChangesGuard],
+  },
+  {
     path: `${CATEGORIES_PART_TYPEID}/:pid`,
     pathMatch: 'full',
     component: CategoriesPartFeatureComponent,
+    canDeactivate: [PendingChangesGuard],
+  },
+  {
+    path: `${COMMENT_PART_TYPEID}/:pid`,
+    pathMatch: 'full',
+    component: CommentPartFeatureComponent,
     canDeactivate: [PendingChangesGuard],
   },
   {
@@ -105,12 +119,6 @@ export const RouterModuleForChild = RouterModule.forChild([
     component: ChronologyFragmentFeatureComponent,
     canDeactivate: [PendingChangesGuard],
   },
-  {
-    path: `${BIBLIOGRAPHY_PART_TYPEID}/:pid`,
-    pathMatch: 'full',
-    component: BibliographyPartFeatureComponent,
-    canDeactivate: [PendingChangesGuard],
-  },
 ]);
 
 @NgModule({
@@ -132,6 +140,7 @@ export const RouterModuleForChild = RouterModule.forChild([
     CategoriesPartFeatureComponent,
     ChronologyFragmentFeatureComponent,
     CommentFragmentFeatureComponent,
+    CommentPartFeatureComponent,
     HistoricalDatePartFeatureComponent,
     IndexKeywordsPartFeatureComponent,
     KeywordsPartFeatureComponent,
@@ -140,13 +149,13 @@ export const RouterModuleForChild = RouterModule.forChild([
     TiledTextPartFeatureComponent,
     TokenTextLayerPartFeatureComponent,
     TokenTextPartFeatureComponent,
-    BibliographyPartFeatureComponent,
   ],
   exports: [
     BibliographyPartFeatureComponent,
     CategoriesPartFeatureComponent,
     ChronologyFragmentFeatureComponent,
     CommentFragmentFeatureComponent,
+    CommentPartFeatureComponent,
     HistoricalDatePartFeatureComponent,
     IndexKeywordsPartFeatureComponent,
     KeywordsPartFeatureComponent,
