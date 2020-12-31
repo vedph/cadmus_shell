@@ -1,0 +1,322 @@
+<form [formGroup]="form" (submit)="save()">
+  <mat-card>
+    <mat-card-header>
+      <div mat-card-avatar>
+        <mat-icon>picture_in_picture</mat-icon>
+      </div>
+      <mat-card-title>Comment</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-tab-group>
+        <mat-tab label="comment">
+          <!-- tag (bound) -->
+          <div>
+            <mat-form-field *ngIf="comTagEntries?.length" style="width: 8em">
+              <mat-select [formControl]="tag" placeholder="tag">
+                <mat-option *ngFor="let e of comTagEntries" [value]="e.id">{{
+                  e.value
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <!-- tag (free) -->
+            <mat-form-field *ngIf="!comTagEntries?.length" style="width: 8em">
+              <input matInput [formControl]="tag" placeholder="tag" />
+              <mat-error
+                *ngIf="tag.errors?.maxLength && (tag.dirty || tag.touched)"
+                >tag too long</mat-error
+              >
+            </mat-form-field>
+          </div>
+          <!-- text -->
+          <div>
+            <ngx-monaco-editor
+              [options]="editorOptions"
+              formControlName="text"
+            ></ngx-monaco-editor>
+            <mat-error
+              *ngIf="text.hasError('required') && (text.touched || text.dirty)"
+              >text required</mat-error
+            >
+          </div>
+          <hr />
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>preview</mat-expansion-panel-header>
+            <markdown [data]="text?.value"></markdown>
+          </mat-expansion-panel>
+        </mat-tab>
+
+        <mat-tab label="references">
+          <!-- references -->
+          <div>
+            <cadmus-doc-references
+              [model$]="references$"
+              [tagEntries]="docTagEntries"
+              (modelChange)="onReferencesChange($event)"
+            >
+            </cadmus-doc-references>
+          </div>
+          <!-- ids -->
+          <div>
+            <cadmus-external-ids
+              [model$]="ids$"
+              (modelChange)="onIdsChange($event)"
+            >
+            </cadmus-external-ids>
+          </div>
+        </mat-tab>
+
+        <!-- categories -->
+        <mat-tab label="categories">
+          <cadmus-thesaurus-tree
+            [entries]="catEntries"
+            rootLabel="categories"
+            [renderLabel]="renderLabel"
+            (entryChange)="onCategoryChange($event)"
+          ></cadmus-thesaurus-tree>
+          <hr />
+          <div *ngIf="categories.value?.length">
+            <table>
+              <tbody>
+                <tr *ngFor="let entry of categories.value; let i = index">
+                  <td>
+                    <button
+                      type="button"
+                      mat-icon-button
+                      color="warn"
+                      type="button"
+                      matTooltip="Remove this category"
+                      (click)="removeCategory(i)"
+                    >
+                      <mat-icon>remove_circle</mat-icon>
+                    </button>
+                  </td>
+                  <td [matTooltip]="entry.id">{{ entry.value }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </mat-tab>
+
+        <!-- keywords -->
+        <mat-tab label="keywords">
+          <div formArrayName="keywords">
+            <div>
+              <button
+                type="button"
+                mat-icon-button
+                color="primary"
+                (click)="addKeyword()"
+              >
+                <mat-icon>add_circle</mat-icon>
+                add keyword
+              </button>
+            </div>
+            <div
+              *ngFor="
+                let item of keywords.controls;
+                let i = index;
+                let first = first;
+                let last = last
+              "
+            >
+              <!-- child form -->
+              <div [formGroupName]="i">
+                <!-- child actions -->
+                {{ i + 1 }}.
+                <button
+                  mat-icon-button
+                  type="button"
+                  matTooltip="Remove this Keyword"
+                  color="warn"
+                  (click)="removeKeyword(i)"
+                >
+                  <mat-icon>remove_circle</mat-icon>
+                </button>
+                <button
+                  [disabled]="first"
+                  mat-icon-button
+                  type="button"
+                  matTooltip="Move Keyword up"
+                  (click)="moveKeywordUp(i)"
+                >
+                  <mat-icon>arrow_upward</mat-icon>
+                </button>
+                <button
+                  [disabled]="last"
+                  mat-icon-button
+                  type="button"
+                  matTooltip="Move Keyword down"
+                  (click)="moveKeywordDown(i)"
+                >
+                  <mat-icon>arrow_downward</mat-icon>
+                </button>
+
+                <!-- child controls -->
+                <!-- indexId (bound) -->
+                <mat-form-field *ngIf="idxEntries?.length" style="width: 8em">
+                  <mat-select formControlName="indexId" placeholder="index">
+                    <mat-option *ngFor="let e of idxEntries" [value]="e.id">{{
+                      e.value
+                    }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <!-- indexId (free) -->
+                <mat-form-field *ngIf="!idxEntries?.length" style="width: 8em">
+                  <input
+                    matInput
+                    formControlName="indexId"
+                    placeholder="indexId"
+                  />
+                  <mat-error
+                    *ngIf="
+                      item['controls'].indexId.errors?.maxLength &&
+                      (item['controls'].indexId.dirty ||
+                        item['controls'].indexId.touched)
+                    "
+                    >ID too long</mat-error
+                  >
+                </mat-form-field>
+                &nbsp;
+                <!-- tag (bound) -->
+                <mat-form-field
+                  *ngIf="!keyTagEntries?.length"
+                  style="width: 8em"
+                >
+                  <mat-select formControlName="tag" placeholder="tag">
+                    <mat-option
+                      *ngFor="let e of keyTagEntries"
+                      [value]="e.id"
+                      >{{ e.value }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+                <!-- tag (free) -->
+                <mat-form-field
+                  *ngIf="!keyTagEntries?.length"
+                  style="width: 8em"
+                >
+                  <input matInput formControlName="tag" placeholder="tag" />
+                  <mat-error
+                    *ngIf="
+                      item['controls'].tag.errors?.maxLength &&
+                      (item['controls'].tag.dirty ||
+                        item['controls'].tag.touched)
+                    "
+                    >tag too long</mat-error
+                  >
+                </mat-form-field>
+
+                <div>
+                  <!-- language (bound) -->
+                  <mat-form-field
+                    *ngIf="langEntries?.length"
+                    style="width: 8em"
+                  >
+                    <mat-select
+                      formControlName="language"
+                      placeholder="language"
+                    >
+                      <mat-option
+                        *ngFor="let e of langEntries"
+                        [value]="e.id"
+                        >{{ e.value }}</mat-option
+                      >
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        item['controls'].language.errors?.required &&
+                        (item['controls'].language.dirty ||
+                          item['controls'].language.touched)
+                      "
+                      >language required</mat-error
+                    >
+                  </mat-form-field>
+
+                  <!-- language (free) -->
+                  <mat-form-field
+                    *ngIf="langEntries?.length"
+                    style="width: 8em"
+                  >
+                    <input
+                      matInput
+                      formControlName="language"
+                      placeholder="language"
+                    />
+                    <mat-error
+                      *ngIf="
+                        item['controls'].language.errors?.required &&
+                        (item['controls'].language.dirty ||
+                          item['controls'].language.touched)
+                      "
+                      >language required</mat-error
+                    >
+                    <mat-error
+                      *ngIf="
+                        item['controls'].language.errors?.maxLength &&
+                        (item['controls'].language.dirty ||
+                          item['controls'].language.touched)
+                      "
+                      >language too long</mat-error
+                    >
+                  </mat-form-field>
+
+                  &nbsp;
+                  <!-- value -->
+                  <mat-form-field>
+                    <input
+                      matInput
+                      formControlName="value"
+                      placeholder="value"
+                    />
+                    <mat-error
+                      *ngIf="
+                        item['controls'].value.errors?.required &&
+                        (item['controls'].value.dirty ||
+                          item['controls'].value.touched)
+                      "
+                      >value required</mat-error
+                    >
+                    <mat-error
+                      *ngIf="
+                        item['controls'].value.errors?.maxLength &&
+                        (item['controls'].value.dirty ||
+                          item['controls'].value.touched)
+                      "
+                      >value too long</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+                <div>
+                  <!-- note -->
+                  <mat-form-field class="ind-long-text">
+                    <textarea
+                      matInput
+                      formControlName="note"
+                      placeholder="note"
+                    ></textarea>
+                    <mat-error
+                      *ngIf="
+                        item['controls'].note.errors?.maxLength &&
+                        (item['controls'].note.dirty ||
+                          item['controls'].note.touched)
+                      "
+                      >note too long</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+    <mat-card-actions>
+      <cadmus-close-save-buttons
+        [form]="form"
+        [noSave]="userLevel < 2"
+        (closeRequest)="close()"
+      ></cadmus-close-save-buttons>
+    </mat-card-actions>
+  </mat-card>
+</form>

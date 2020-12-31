@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { Thesaurus } from '@myrmidon/cadmus-core';
+import { Thesaurus, ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { IndexKeyword } from '../index-keywords-part';
 import {
   FormBuilder,
@@ -26,9 +26,11 @@ export class IndexKeywordComponent implements OnInit {
   }
 
   @Input()
-  public indexIdThesaurus: Thesaurus | null;
+  public idxEntries: ThesaurusEntry[] | undefined;
   @Input()
-  public langThesaurus: Thesaurus | null;
+  public tagEntries: ThesaurusEntry[] | undefined;
+  @Input()
+  public langEntries: ThesaurusEntry[] | undefined;
 
   @Output()
   public editorClose: EventEmitter<any>;
@@ -84,17 +86,13 @@ export class IndexKeywordComponent implements OnInit {
     this.form.markAsPristine();
   }
 
-  private tryTrim(value: string): string {
-    return value ? value.trim() : value;
-  }
-
   private getKeyword(): IndexKeyword {
     return {
-      indexId: this.tryTrim(this.indexId.value),
-      language: this.tryTrim(this.language.value),
-      value: this.tryTrim(this.value.value),
-      note: this.tryTrim(this.note.value),
-      tag: this.tryTrim(this.tag.value)
+      indexId: this.indexId.value?.trim(),
+      language: this.language.value?.trim(),
+      value: this.value.value?.trim(),
+      note: this.note.value?.trim(),
+      tag: this.tag.value?.trim()
     };
   }
 

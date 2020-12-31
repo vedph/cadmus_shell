@@ -7,11 +7,11 @@ import {
   IndexKeyword,
   INDEX_KEYWORDS_PART_TYPEID
 } from '../index-keywords-part';
-import { Thesaurus, deepCopy } from '@myrmidon/cadmus-core';
+import { deepCopy, ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 /**
  * Index keywords part editor.
- * Thesauri: languages, keyword-indexes.
+ * Thesauri: languages, keyword-indexes, keyword-tags.
  */
 @Component({
   selector: 'cadmus-index-keywords-part',
@@ -25,8 +25,9 @@ export class IndexKeywordsPartComponent
   public editedKeyword: IndexKeyword;
   public tabIndex: number;
   // thesaurus
-  public indexIdThesaurus: Thesaurus | null;
-  public langThesaurus: Thesaurus | null;
+  public idxEntries: ThesaurusEntry[] | undefined;
+  public langEntries: ThesaurusEntry[] | undefined;
+  public tagEntries: ThesaurusEntry[] | undefined;
   // form
   public keywordCount: FormControl;
 
@@ -48,15 +49,21 @@ export class IndexKeywordsPartComponent
   protected onThesauriSet(): void {
     let key = 'languages';
     if (this.thesauri && this.thesauri[key]) {
-      this.langThesaurus = this.thesauri[key];
+      this.langEntries = this.thesauri[key].entries;
     } else {
-      this.langThesaurus = null;
+      this.langEntries = undefined;
     }
     key = 'keyword-indexes';
     if (this.thesauri && this.thesauri[key]) {
-      this.indexIdThesaurus = this.thesauri[key];
+      this.idxEntries = this.thesauri[key].entries;
     } else {
-      this.indexIdThesaurus = null;
+      this.idxEntries = undefined;
+    }
+    key = 'keyword-tags';
+    if (this.thesauri && this.thesauri[key]) {
+      this.tagEntries = this.thesauri[key].entries;
+    } else {
+      this.tagEntries = undefined;
     }
   }
 
@@ -155,8 +162,8 @@ export class IndexKeywordsPartComponent
 
   public addNewKeyword(): void {
     const keyword: IndexKeyword = {
-      indexId: this.indexIdThesaurus ? this.indexIdThesaurus.entries[0].id : null,
-      language: this.langThesaurus ? this.langThesaurus[0].id : 'eng',
+      indexId: this.idxEntries?.length ? this.idxEntries[0].id : null,
+      language: this.langEntries?.length ? this.langEntries[0].id : 'eng',
       value: ''
     };
     if (this.addKeyword(keyword)) {

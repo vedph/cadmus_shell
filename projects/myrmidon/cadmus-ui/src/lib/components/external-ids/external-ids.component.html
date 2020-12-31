@@ -1,0 +1,80 @@
+<form [formGroup]="form">
+  <div formArrayName="ids">
+    <div>
+      <button
+        type="button"
+        mat-stroked-button
+        color="primary"
+        (click)="addId()"
+        matTooltip="Add a new ID"
+      >
+        <mat-icon>add_circle</mat-icon> add ID
+      </button>
+    </div>
+    <div
+      *ngFor="
+        let item of ids.controls;
+        let i = index;
+        let first = first;
+        let last = last
+      "
+    >
+      <!-- child form -->
+      <div [formGroupName]="i">
+        <!-- child actions -->
+        {{ i + 1 }}.
+        <button
+          mat-icon-button
+          type="button"
+          matTooltip="Remove this ID"
+          color="warn"
+          (click)="removeId(i)"
+        >
+          <mat-icon>remove_circle</mat-icon>
+        </button>
+        <button
+          [disabled]="first"
+          mat-icon-button
+          type="button"
+          matTooltip="Move ID up"
+          (click)="moveIdUp(i)"
+        >
+          <mat-icon>arrow_upward</mat-icon>
+        </button>
+        <button
+          [disabled]="last"
+          mat-icon-button
+          type="button"
+          matTooltip="Move ID down"
+          (click)="moveIdDown(i)"
+        >
+          <mat-icon>arrow_downward</mat-icon>
+        </button>
+
+        <!-- child controls -->
+        <!-- ID -->
+        <mat-form-field>
+          <input
+            #id
+            matInput
+            maxlength="500"
+            formControlName="id"
+            placeholder="external ID"
+            autofocus
+          />
+          <mat-error>enter an ID</mat-error>
+        </mat-form-field>
+
+        <button
+          *ngIf="isValidUrl(item.value?.id)"
+          mat-icon-button
+          type="button"
+          matTooltip="Visit this URL"
+          (click)="visitUrl(item.value.id)"
+        >
+          <mat-icon>link</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

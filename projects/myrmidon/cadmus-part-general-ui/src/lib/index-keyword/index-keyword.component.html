@@ -1,16 +1,16 @@
 <form [formGroup]="form" (submit)="submit()">
   <!-- index ID -->
-  <div *ngIf="indexIdThesaurus">
+  <div *ngIf="idxEntries?.length">
     <mat-form-field>
       <mat-select formControlName="indexId" placeholder="index ID">
         <mat-option [value]="''">(default)</mat-option>
-        <mat-option *ngFor="let e of indexIdThesaurus.entries" [value]="e.id">{{
+        <mat-option *ngFor="let e of idxEntries" [value]="e.id">{{
           e.value
         }}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
-  <div *ngIf="!indexIdThesaurus">
+  <div *ngIf="!idxEntries?.length">
     <mat-form-field>
       <input
         matInput
@@ -34,18 +34,18 @@
   </div>
 
   <!-- language -->
-  <div *ngIf="langThesaurus">
+  <div *ngIf="langEntries?.length">
     <mat-form-field>
       <mat-select formControlName="language" placeholder="language">
         <mat-option [value]="null">(n/a)</mat-option>
-        <mat-option *ngFor="let e of langThesaurus.entries" [value]="e.id">{{
+        <mat-option *ngFor="let e of langEntries" [value]="e.id">{{
           e.value
         }}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
 
-  <div *ngIf="!langThesaurus">
+  <div *ngIf="!langEntries.length">
     <mat-form-field>
       <input
         matInput
@@ -92,9 +92,16 @@
 
   <!-- tag -->
   <div>
-    <mat-form-field>
-      <input matInput type="text" placeholder="tag" formControlName="tag" />
-      <mat-error *ngIf="tag.hasError('maxLength') && (tag.dirty || tag.touched)"
+    <mat-form-field *ngIf="tagEntries?.length" style="width: 8em">
+      <mat-select [formControl]="tag" placeholder="tag">
+        <mat-option *ngFor="let e of tagEntries" [value]="e.id">{{
+          e.value
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="!tagEntries?.length" style="width: 8em">
+      <input matInput [formControl]="tag" placeholder="tag" />
+      <mat-error *ngIf="tag.errors?.maxLength && (tag.dirty || tag.touched)"
         >tag too long</mat-error
       >
     </mat-form-field>

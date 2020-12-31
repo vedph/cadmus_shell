@@ -38,6 +38,6 @@ export class IndexKeywordsPartFeatureComponent
   }
 
   ngOnInit(): void {
-    this.initEditor(['languages', 'index-keywords']);
+    this.initEditor(['languages', 'keyword-indexes', 'keyword-tags']);
   }
 }

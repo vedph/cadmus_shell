@@ -63,8 +63,9 @@
         <mat-tab label="Keyword" *ngIf="editedKeyword">
           <cadmus-index-keyword
             [keyword]="editedKeyword"
-            [indexIdThesaurus]="indexIdThesaurus"
-            [langThesaurus]="langThesaurus"
+            [idxEntries]="idxEntries"
+            [langEntries]="langEntries"
+            [tagEntries]="tagEntries"
             (editorClose)="onKeywordClose()"
             (save)="onKeywordSave($event)"
           ></cadmus-index-keyword>

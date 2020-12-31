@@ -1,24 +1,47 @@
-import { Fragment } from '@myrmidon/cadmus-core';
-import { Comment } from './comment-part';
+import { DocReference, Part } from '@myrmidon/cadmus-core';
+import { IndexKeyword } from './index-keywords-part';
 
 /**
- * The comment layer fragment server model.
+ * A comment.
  */
-export interface CommentFragment extends Fragment, Comment {
+export interface Comment {
+  tag?: string;
+  text: string;
+  references?: DocReference[];
+  externalIds?: string[];
+  categories?: string[];
+  keywords?: IndexKeyword[];
 }
 
-export const COMMENT_FRAGMENT_TYPEID = 'fr.it.vedph.comment';
+/**
+ * The Comment part model.
+ */
+export interface CommentPart extends Part, Comment {}
 
-export const COMMENT_FRAGMENT_SCHEMA = {
-  definitions: {},
+/**
+ * The type ID used to identify the CommentPart type.
+ */
+export const COMMENT_PART_TYPEID = 'it.vedph.comment';
+
+/**
+ * JSON schema for the Comment part. This is used in the editor demo.
+ * You can use the JSON schema tool at https://jsonschema.net/.
+ */
+export const COMMENT_PART_SCHEMA = {
   $schema: 'http://json-schema.org/draft-07/schema#',
-  $id:
-    'www.vedph.it/cadmus/fragments/general/' +
-    COMMENT_FRAGMENT_TYPEID +
-    '.json',
+  $id: 'www.vedph.it/cadmus/parts/general/' + COMMENT_PART_TYPEID + '.json',
   type: 'object',
-  title: 'CommentFragment',
-  required: ['location', 'text'],
+  title: 'CommentPart',
+  required: [
+    'id',
+    'itemId',
+    'typeId',
+    'timeCreated',
+    'creatorId',
+    'timeModified',
+    'userId',
+    'text'
+  ],
   properties: {
     location: {
       $id: '#/properties/location',

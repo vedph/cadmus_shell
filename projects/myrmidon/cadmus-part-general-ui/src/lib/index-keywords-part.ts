@@ -5,7 +5,7 @@ import { Part } from '@myrmidon/cadmus-core';
  */
 export interface IndexKeyword {
   indexId?: string;
-  language?: string;
+  language: string;
   value: string;
   note?: string;
   tag?: string;

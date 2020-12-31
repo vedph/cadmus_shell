@@ -28,6 +28,7 @@ import { ThesaurusTreeComponent } from './components/thesaurus-tree/thesaurus-tr
 import { DocReferencesComponent } from './components/doc-references/doc-references.component';
 import { PhysicalDimensionComponent } from './components/physical-dimension/physical-dimension.component';
 import { PhysicalSizeComponent } from './components/physical-size/physical-size.component';
+import { ExternalIdsComponent } from './components/external-ids/external-ids.component';
 
 @NgModule({
   imports: [
@@ -48,6 +49,7 @@ import { PhysicalSizeComponent } from './components/physical-size/physical-size.
     DecoratedTokenTextComponent,
     DocReferencesComponent,
     ErrorListComponent,
+    ExternalIdsComponent,
     FacetBadgeComponent,
     FlagsBadgeComponent,
     HistoricalDateEditorComponent,
@@ -68,6 +70,7 @@ import { PhysicalSizeComponent } from './components/physical-size/physical-size.
     DecoratedTokenTextComponent,
     DocReferencesComponent,
     ErrorListComponent,
+    ExternalIdsComponent,
     FacetBadgeComponent,
     FlagsBadgeComponent,
     HistoricalDateEditorComponent,
