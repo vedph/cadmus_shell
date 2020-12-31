@@ -166,7 +166,7 @@
                   <input
                     matInput
                     formControlName="indexId"
-                    placeholder="indexId"
+                    placeholder="index"
                   />
                   <mat-error
                     *ngIf="
@@ -180,7 +180,7 @@
                 &nbsp;
                 <!-- tag (bound) -->
                 <mat-form-field
-                  *ngIf="!keyTagEntries?.length"
+                  *ngIf="keyTagEntries?.length"
                   style="width: 8em"
                 >
                   <mat-select formControlName="tag" placeholder="tag">
@@ -207,7 +207,7 @@
                   >
                 </mat-form-field>
 
-                <div>
+                <div class="ind-long-text">
                   <!-- language (bound) -->
                   <mat-form-field
                     *ngIf="langEntries?.length"
@@ -235,7 +235,7 @@
 
                   <!-- language (free) -->
                   <mat-form-field
-                    *ngIf="langEntries?.length"
+                    *ngIf="!langEntries?.length"
                     style="width: 8em"
                   >
                     <input
