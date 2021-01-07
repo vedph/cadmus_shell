@@ -48,9 +48,10 @@ export class ApparatusFragmentFeatureComponent extends EditFragmentFeatureBase
   ngOnInit(): void {
     this.initEditor([
       '!apparatus-tags',
+      '!apparatus-author-tags',
+      '!author-works',
       'apparatus-witnesses',
-      'apparatus-authors',
-      'apparatus-author-tags'
+      'apparatus-authors'
     ]);
   }
 }

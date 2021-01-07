@@ -348,6 +348,14 @@
     <button type="button" mat-icon-button color="primary" (click)="addAuthor()">
       <mat-icon>add_circle</mat-icon> add author
     </button>
+    <div *ngIf="workEntries?.length">
+      <cadmus-thesaurus-tree
+        [entries]="workEntries"
+        rootLabel="works"
+        [renderLabel]="renderLabel"
+        (entryChange)="onEntryChange($event)"
+      ></cadmus-thesaurus-tree>
+    </div>
   </mat-expansion-panel>
 
   <!-- buttons -->

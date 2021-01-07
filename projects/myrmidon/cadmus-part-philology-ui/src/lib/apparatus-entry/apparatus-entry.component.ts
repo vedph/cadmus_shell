@@ -11,7 +11,9 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { Thesaurus, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { renderLabelFromLastColon } from '@myrmidon/cadmus-ui';
 
 /**
  * Single apparatus entry editor dumb component.
@@ -56,6 +58,13 @@ export class ApparatusEntryComponent implements OnInit {
    */
   @Input()
   public authTagEntries: ThesaurusEntry[] | null;
+  /**
+   * Author/work tags. This can be alternative or additional
+   * to authEntries, and allows picking the work from a tree
+   * of authors and works.
+   */
+  @Input()
+  public workEntries: ThesaurusEntry[] | undefined;
 
   @Output()
   public editorClose: EventEmitter<any>;
@@ -74,7 +83,8 @@ export class ApparatusEntryComponent implements OnInit {
   public authors: FormArray;
   public form: FormGroup;
 
-  constructor(private _formBuilder: FormBuilder) {
+  constructor(private _formBuilder: FormBuilder,
+    private _clipboard: Clipboard) {
     // events
     this.editorClose = new EventEmitter<any>();
     this.save = new EventEmitter<ApparatusEntry>();
@@ -252,6 +262,16 @@ export class ApparatusEntryComponent implements OnInit {
     this.authors.removeAt(index);
     this.authors.insert(index + 1, item);
     this.form.markAsDirty();
+  }
+
+  public onEntryChange(entry: ThesaurusEntry): void {
+    if (entry) {
+      this._clipboard.copy(entry.id);
+    }
+  }
+
+  public renderLabel(label: string): string {
+    return renderLabelFromLastColon(label);
   }
 
   public cancel(): void {

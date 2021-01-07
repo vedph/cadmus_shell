@@ -15,19 +15,19 @@
         <!-- fragment editor -->
         <mat-tab label="Fragment">
           <!-- tag -->
-          <div *ngIf="tagThesaurus">
+          <div *ngIf="tagEntries?.length">
             <mat-form-field>
               <mat-select formControlName="tag" placeholder="tag">
                 <mat-option [value]="null">(none)</mat-option>
                 <mat-option
-                  *ngFor="let e of tagThesaurus.entries"
+                  *ngFor="let e of tagEntries"
                   [value]="e.id"
                   >{{ e.value }}</mat-option
                 >
               </mat-select>
             </mat-form-field>
           </div>
-          <div *ngIf="!tagThesaurus">
+          <div *ngIf="!tagEntries?.length">
             <mat-form-field>
               <input
                 matInput
@@ -130,10 +130,11 @@
         <mat-tab label="Entry" *ngIf="editedEntry">
           <cadmus-apparatus-entry
             [entry]="editedEntry"
-            [tagEntries]="tagThesaurus?.entries"
-            [witEntries]="witnessThesaurus?.entries"
-            [authEntries]="authorThesaurus?.entries"
-            [authTagEntries]="authorTagThesaurus?.entries"
+            [tagEntries]="tagEntries"
+            [witEntries]="witEntries"
+            [authEntries]="authEntries"
+            [authTagEntries]="authTagEntries"
+            [workEntries]="workEntries"
             (save)="onEntrySave($event)"
             (editorClose)="onEntryClose()"
           ></cadmus-apparatus-entry>

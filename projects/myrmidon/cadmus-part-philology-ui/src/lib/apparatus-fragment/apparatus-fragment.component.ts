@@ -9,11 +9,12 @@ import {
   Validators,
   FormGroup,
 } from '@angular/forms';
-import { Thesaurus, deepCopy } from '@myrmidon/cadmus-core';
+import { deepCopy, ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 /**
  * Critical apparatus fragment.
- * Thesauri: apparatus-tags, apparatus-witnesses, apparatus-authors, apparatus-author-tags.
+ * Thesauri: apparatus-tags, apparatus-witnesses, apparatus-authors,
+ * apparatus-author-tags, author-works.
  */
 @Component({
   selector: 'cadmus-apparatus-fragment',
@@ -32,10 +33,16 @@ export class ApparatusFragmentComponent
   public entryCount: FormControl;
   public form: FormGroup;
 
-  public tagThesaurus: Thesaurus | undefined;
-  public witnessThesaurus: Thesaurus | undefined;
-  public authorThesaurus: Thesaurus | undefined;
-  public authorTagThesaurus: Thesaurus | undefined;
+  public tagEntries: ThesaurusEntry[] | undefined;
+  public witEntries: ThesaurusEntry[] | undefined;
+  public authEntries: ThesaurusEntry[] | undefined;
+  public authTagEntries: ThesaurusEntry[] | undefined;
+  /**
+   * Author/work tags. This can be alternative or additional
+   * to authEntries, and allows picking the work from a tree
+   * of authors and works.
+   */
+  public workEntries: ThesaurusEntry[] | undefined;
 
   public entries: ApparatusEntry[];
 
@@ -60,18 +67,41 @@ export class ApparatusFragmentComponent
     this.initEditor();
   }
 
-  private getThesaurus(key: string): Thesaurus {
-    if (this.thesauri && this.thesauri[key]) {
-      return this.thesauri[key];
-    }
-    return null;
-  }
-
   protected onThesauriSet(): void {
-    this.tagThesaurus = this.getThesaurus('apparatus-tags');
-    this.witnessThesaurus = this.getThesaurus('apparatus-witnesses');
-    this.authorThesaurus = this.getThesaurus('apparatus-authors');
-    this.authorTagThesaurus = this.getThesaurus('apparatus-author-tags');
+    let key = 'apparatus-tags';
+    if (this.thesauri && this.thesauri[key]) {
+      this.tagEntries = this.thesauri[key].entries;
+    } else {
+      this.tagEntries = undefined;
+    }
+
+    key = 'apparatus-witnesses';
+    if (this.thesauri && this.thesauri[key]) {
+      this.witEntries = this.thesauri[key].entries;
+    } else {
+      this.witEntries = undefined;
+    }
+
+    key = 'apparatus-authors';
+    if (this.thesauri && this.thesauri[key]) {
+      this.authEntries = this.thesauri[key].entries;
+    } else {
+      this.authEntries = undefined;
+    }
+
+    key = 'apparatus-author-tags';
+    if (this.thesauri && this.thesauri[key]) {
+      this.authTagEntries = this.thesauri[key].entries;
+    } else {
+      this.authTagEntries = undefined;
+    }
+
+    key = 'author-works';
+    if (this.thesauri && this.thesauri[key]) {
+      this.workEntries = this.thesauri[key].entries;
+    } else {
+      this.workEntries = undefined;
+    }
   }
 
   private updateForm(model: ApparatusFragment): void {
