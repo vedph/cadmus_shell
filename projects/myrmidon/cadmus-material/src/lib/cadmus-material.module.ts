@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -36,6 +37,7 @@ import { MatTreeModule } from '@angular/material/tree';
     CommonModule,
     FlexLayoutModule,
     DragDropModule,
+    MatAutocompleteModule,
     MatBadgeModule,
     MatButtonModule,
     MatCardModule,
@@ -61,12 +63,14 @@ import { MatTreeModule } from '@angular/material/tree';
     MatStepperModule,
     MatTableModule,
     MatTabsModule,
+    MatTooltipModule,
     MatToolbarModule,
     MatTreeModule,
   ],
   exports: [
     FlexLayoutModule,
     DragDropModule,
+    MatAutocompleteModule,
     MatBadgeModule,
     MatButtonModule,
     MatCardModule,
