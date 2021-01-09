@@ -1,3 +1,4 @@
+/*
 import { JsonSchemaService } from '@myrmidon/cadmus-core';
 import { AbstractControl } from '@angular/forms';
 
@@ -7,7 +8,7 @@ import { AbstractControl } from '@angular/forms';
  * The returned error objects can be:
  * - for key "json": JSON is not well-formed.
  * - for key "jsonSchema": JSON is not valid. Details are in "errors".
- */
+ * /
 // https://github.com/angular/angular/issues/18867#issuecomment-357484102
 // @dynamic
 export class JsonSchemaValidators {
@@ -19,7 +20,7 @@ export class JsonSchemaValidators {
    *
    * @param schemaService The JSON schema service.
    * @param schemaName The schema name.
-   */
+   * /
   public static create(schemaService: JsonSchemaService, schemaName: string) {
     return (control: AbstractControl) => {
       if (!control.value) {
@@ -53,3 +54,4 @@ export class JsonSchemaValidators {
     };
   }
 }
+*/

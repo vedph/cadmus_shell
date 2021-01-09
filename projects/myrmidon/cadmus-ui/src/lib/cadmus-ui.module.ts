@@ -6,7 +6,7 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
-import { JsonEditorResourcesComponent } from './components/json-editor-resources/json-editor-resources.component';
+// import { JsonEditorResourcesComponent } from './components/json-editor-resources/json-editor-resources.component';
 import { ErrorListComponent } from './components/error-list/error-list.component';
 import { LoginComponent } from './components/login/login.component';
 import { DecoratedTokenTextComponent } from './components/decorated-token-text/decorated-token-text.component';
@@ -53,7 +53,7 @@ import { ExternalIdsComponent } from './components/external-ids/external-ids.com
     FacetBadgeComponent,
     FlagsBadgeComponent,
     HistoricalDateEditorComponent,
-    JsonEditorResourcesComponent,
+    // JsonEditorResourcesComponent,
     LayerHintsComponent,
     LoginComponent,
     PartBadgeComponent,
@@ -74,7 +74,7 @@ import { ExternalIdsComponent } from './components/external-ids/external-ids.com
     FacetBadgeComponent,
     FlagsBadgeComponent,
     HistoricalDateEditorComponent,
-    JsonEditorResourcesComponent,
+    // JsonEditorResourcesComponent,
     LayerHintsComponent,
     LoginComponent,
     PartBadgeComponent,
