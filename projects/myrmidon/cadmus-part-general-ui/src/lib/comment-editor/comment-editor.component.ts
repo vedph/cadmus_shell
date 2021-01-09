@@ -95,29 +95,33 @@ export class CommentEditorComponent
     this.ids$.next(model.externalIds || []);
     // keywords
     this.keywords.clear();
-    if (model.keywords) {
+    if (model.keywords?.length) {
       for (let keyword of model.keywords) {
         this.keywords.controls.push(this.getKeywordGroup(keyword));
       }
     }
-    // categories:
-    // map the category IDs to the corresponding thesaurus
-    // entries, if any -- else just use the IDs
-    const entries: ThesaurusEntry[] = model.categories.map((id) => {
-      const entry = this.catEntries?.find((e) => e.id === id);
-      return entry
-        ? entry
-        : {
-            id,
-            value: id,
-          };
-    });
-    // sort the entries by their display value
-    entries.sort((a: ThesaurusEntry, b: ThesaurusEntry) => {
-      return a.value.localeCompare(b.value);
-    });
-    // assign them to the control
-    this.categories.setValue(entries || []);
+    // categories
+    if (model.categories?.length) {
+      // map the category IDs to the corresponding thesaurus
+      // entries, if any -- else just use the IDs
+      const entries: ThesaurusEntry[] = model.categories.map((id) => {
+        const entry = this.catEntries?.find((e) => e.id === id);
+        return entry
+          ? entry
+          : {
+              id,
+              value: id,
+            };
+      });
+      // sort the entries by their display value
+      entries.sort((a: ThesaurusEntry, b: ThesaurusEntry) => {
+        return a.value.localeCompare(b.value);
+      });
+      // assign them to the control
+      this.categories.setValue(entries || []);
+    } else {
+      this.categories.setValue([]);
+    }
 
     this.form.markAsPristine();
   }
