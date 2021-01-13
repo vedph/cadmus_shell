@@ -81,7 +81,7 @@ export abstract class EditPartServiceBase {
           });
           // loading again
           this.store.setLoading(true);
-          this.thesaurusService.getThesauriSet(thesauriIds).subscribe(
+          this.thesaurusService.getThesauriSet(scopedIds).subscribe(
             (thesauri) => {
               // completed, replace the thesauri
               this.store.update({
