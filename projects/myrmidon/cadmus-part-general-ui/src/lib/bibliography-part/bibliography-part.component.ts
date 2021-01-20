@@ -82,7 +82,10 @@ export class BibliographyPartComponent
       return;
     }
     this.part = model;
-    this.entryCount.setValue(model.entries?.length || 0);
+    if (!this.part.entries) {
+      this.part.entries = [];
+    }
+    this.entryCount.setValue(this.part.entries.length);
     this.form.markAsPristine();
   }
 

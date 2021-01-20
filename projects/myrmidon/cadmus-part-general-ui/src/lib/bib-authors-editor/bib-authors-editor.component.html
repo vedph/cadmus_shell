@@ -1,7 +1,12 @@
 <form *ngIf="parentForm" [formGroup]="parentForm">
   <div [formArrayName]="controlName">
     <div *ngIf="!authors || !authors.length" style="margin: 8px 0">
-      <button type="button" mat-icon-button (click)="addAuthor()">
+      <button
+        type="button"
+        mat-icon-button
+        (click)="addAuthor()"
+        color="primary"
+      >
         <mat-icon>add_circle</mat-icon>
         add author
       </button>
