@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { ErrorService, EnvService, ItemInfo, DataPage } from '@myrmidon/cadmus-core';
+import {
+  ErrorService,
+  EnvService,
+  ItemInfo,
+  DataPage,
+} from '@myrmidon/cadmus-core';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 
@@ -20,8 +25,9 @@ export class ItemBrowserService {
    * @returns Observable with strings array.
    */
   public getBrowserIds(): Observable<string[]> {
+    const url = this._env.get('apiUrl') + 'browser-ids';
     return this._http
-      .get<string[]>(`${this._env.apiUrl}browser-ids`)
+      .get<string[]>(url)
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
@@ -51,7 +57,9 @@ export class ItemBrowserService {
 
     return this._http
       .get<DataPage<ItemInfo>>(
-        `${this._env.apiUrl}${this._env.databaseId}/items-browser/${browserId}`,
+        this._env.get('apiUrl') +
+          this._env.get('databaseId') +
+          `/items-browser/${browserId}`,
         {
           params: httpParams,
         }

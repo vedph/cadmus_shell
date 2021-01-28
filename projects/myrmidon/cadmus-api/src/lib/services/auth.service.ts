@@ -57,7 +57,7 @@ export class AuthService {
   public login(name: string, password: string): Observable<User> {
     return this._http
       .post<any>(
-        this._env.apiUrl + `auth/login`,
+        this._env.get('apiUrl') + `auth/login`,
         {
           Username: name,
           Password: password,
@@ -115,7 +115,7 @@ export class AuthService {
         'Content-Type': 'application/json',
       }),
     };
-    return this._http.get(this._env.apiUrl + 'auth/logout', options);
+    return this._http.get(this._env.get('apiUrl') + 'auth/logout', options);
   }
 
   /**
@@ -205,7 +205,7 @@ export class AuthService {
       }),
     };
     return this._http.get(
-      this._env.apiUrl + 'accounts/emailexists/' + encodeURIComponent(email),
+      this._env.get('apiUrl') + 'accounts/emailexists/' + encodeURIComponent(email),
       options
     );
   }
@@ -224,7 +224,7 @@ export class AuthService {
       }),
     };
     return this._http.get(
-      this._env.apiUrl + 'accounts/nameexists/' + encodeURIComponent(name),
+      this._env.get('apiUrl') + 'accounts/nameexists/' + encodeURIComponent(name),
       options
     );
   }
@@ -240,7 +240,7 @@ export class AuthService {
       }),
     };
     return this._http.post(
-      this._env.apiUrl + 'accounts/register',
+      this._env.get('apiUrl') + 'accounts/register',
       registration,
       options
     );
@@ -257,7 +257,7 @@ export class AuthService {
       }),
     };
     return this._http.get(
-      this._env.apiUrl + 'accounts/resendconfirm/' + encodeURIComponent(email),
+      this._env.get('apiUrl') + 'accounts/resendconfirm/' + encodeURIComponent(email),
       options
     );
   }
@@ -273,7 +273,7 @@ export class AuthService {
     oldPassword: string,
     newPassword: string
   ): Observable<object> {
-    return this._http.post(this._env.apiUrl + 'accounts/changepassword', {
+    return this._http.post(this._env.get('apiUrl') + 'accounts/changepassword', {
       email,
       oldPassword,
       newPassword,
@@ -286,7 +286,7 @@ export class AuthService {
    */
   public requestPasswordReset(email: string): Observable<object> {
     return this._http.post(
-      this._env.apiUrl + 'accounts/resetpassword/request',
+      this._env.get('apiUrl') + 'accounts/resetpassword/request',
       { email }
     );
   }

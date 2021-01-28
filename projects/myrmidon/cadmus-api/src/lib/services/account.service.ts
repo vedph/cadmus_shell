@@ -2,7 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
-import { ErrorService, User, PasswordChange, EnvService } from '@myrmidon/cadmus-core';
+import {
+  ErrorService,
+  User,
+  PasswordChange,
+  EnvService,
+} from '@myrmidon/cadmus-core';
 
 @Injectable({
   providedIn: 'root',
@@ -34,7 +39,7 @@ export class AccountService {
         : {};
 
     return this._http
-      .get<User[]>(this._env.apiUrl + 'users', options)
+      .get<User[]>(this._env.get('apiUrl') + 'users', options)
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
@@ -55,7 +60,7 @@ export class AccountService {
         : {};
 
     return this._http
-      .get<User[]>(this._env.apiUrl + 'users-from-names', options)
+      .get<User[]>(this._env.get('apiUrl') + 'users-from-names', options)
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
@@ -65,7 +70,7 @@ export class AccountService {
    */
   public getUser(name: string): Observable<User> {
     return this._http
-      .get<User>(this._env.apiUrl + 'users/' + name)
+      .get<User>(this._env.get('apiUrl') + 'users/' + name)
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
@@ -75,7 +80,7 @@ export class AccountService {
    */
   public updateUser(user: User): Observable<any> {
     return this._http
-      .put(this._env.apiUrl + 'users', user)
+      .put(this._env.get('apiUrl') + 'users', user)
       .pipe(catchError(this._error.handleError));
   }
 
@@ -85,7 +90,7 @@ export class AccountService {
    */
   public resetPassword(email: string): Observable<any> {
     return this._http
-      .post(this._env.apiUrl + 'accounts/resetpassword/request', {
+      .post(this._env.get('apiUrl') + 'accounts/resetpassword/request', {
         email: email,
       })
       .pipe(catchError(this._error.handleError));
@@ -97,7 +102,7 @@ export class AccountService {
    */
   public changePassword(change: PasswordChange): Observable<any> {
     return this._http
-      .post(this._env.apiUrl + 'accounts/changepassword', change)
+      .post(this._env.get('apiUrl') + 'accounts/changepassword', change)
       .pipe(catchError(this._error.handleError));
   }
 
@@ -107,7 +112,7 @@ export class AccountService {
    */
   public deleteUser(name: string): Observable<any> {
     return this._http
-      .delete(this._env.apiUrl + 'accounts/' + name)
+      .delete(this._env.get('apiUrl') + 'accounts/' + name)
       .pipe(catchError(this._error.handleError));
   }
 }

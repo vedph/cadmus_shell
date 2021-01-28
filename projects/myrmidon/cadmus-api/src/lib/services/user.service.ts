@@ -20,7 +20,7 @@ export class UserService {
 
   public getAllUsers(): Observable<DataPage<UserInfo>> {
     return this._http
-      .get<DataPage<UserInfo>>(`${this._env.apiUrl}users`, {
+      .get<DataPage<UserInfo>>(this._env.get('apiUrl') + 'users', {
         params: new HttpParams().set('pageNumber', '1'),
       })
       .pipe(retry(3), catchError(this._error.handleError));
@@ -35,7 +35,7 @@ export class UserService {
     }
 
     return this._http
-      .get<DataPage<UserInfo>>(`${this._env.apiUrl}users`, {
+      .get<DataPage<UserInfo>>(this._env.get('apiUrl') + 'users', {
         params: httpParams,
       })
       .pipe(retry(3), catchError(this._error.handleError));

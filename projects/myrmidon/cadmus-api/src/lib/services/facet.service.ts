@@ -22,7 +22,8 @@ export class FacetService {
    * @returns Observable with facets array.
    */
   public getFacets(): Observable<FacetDefinition[]> {
-    const url = `${this._env.apiUrl}${this._env.databaseId}/facets`;
+    const url =
+      this._env.get('apiUrl') + this._env.get('databaseId') + '/facets';
 
     return this._http
       .get<FacetDefinition[]>(url)
@@ -35,7 +36,8 @@ export class FacetService {
    * @param id The facet's ID.
    */
   public getFacet(id: string): Observable<FacetDefinition> {
-    const url = `${this._env.apiUrl}${this._env.databaseId}/facets/${id}`;
+    const url =
+      this._env.get('apiUrl') + this._env.get('databaseId') + `/facets/${id}`;
 
     return this._http
       .get<FacetDefinition>(url)
@@ -48,7 +50,10 @@ export class FacetService {
    * @param itemId The item's ID.
    */
   public getFacetFromItemId(itemId: string): Observable<FacetDefinition> {
-    const url = `${this._env.apiUrl}${this._env.databaseId}/facets/items/${itemId}`;
+    const url =
+      this._env.get('apiUrl') +
+      this._env.get('databaseId') +
+      `/facets/items/${itemId}`;
 
     return this._http
       .get<FacetDefinition>(url)
@@ -72,8 +77,12 @@ export class FacetService {
     noRoles = false
   ): Observable<PartDefinition[]> {
     let url = idIsItem
-      ? `${this._env.apiUrl}${this._env.databaseId}/item-facets/${id}/parts`
-      : `${this._env.apiUrl}${this._env.databaseId}/facets/${id}/parts`;
+      ? this._env.get('apiUrl') +
+        this._env.get('databaseId') +
+        `/item-facets/${id}/parts`
+      : this._env.get('apiUrl') +
+        this._env.get('databaseId') +
+        `/facets/${id}/parts`;
     if (noRoles) {
       url += '?noRoles=true';
     }
@@ -88,7 +97,10 @@ export class FacetService {
    * @returns Observable of an object with property typeId=result or null.
    */
   public getTextLayerPartTypeId(): Observable<{ typeId: string }> {
-    const url = `${this._env.apiUrl}${this._env.databaseId}/facets/layer-type-id`;
+    const url =
+      this._env.get('apiUrl') +
+      this._env.get('databaseId') +
+      '/facets/layer-type-id';
 
     return this._http
       .get<{ typeId: string }>(url)

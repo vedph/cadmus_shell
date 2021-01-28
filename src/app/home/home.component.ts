@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { EnvService } from '@myrmidon/cadmus-core';
 import { AuthService } from '@myrmidon/cadmus-api';
 
 @Component({
@@ -11,8 +10,7 @@ export class HomeComponent {
   public title: string;
   public logged: boolean;
 
-  constructor(env: EnvService, authService: AuthService) {
-    this.title = env.name;
+  constructor(authService: AuthService) {
     this.logged = authService.currentUserValue !== null;
   }
 }

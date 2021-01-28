@@ -1,25 +1,24 @@
 import { EnvService } from './env.service';
 
+// https://www.jvandemo.com/how-to-use-environment-variables-to-configure-your-angular-application-without-a-rebuild/
+
 /**
- * This function creates an instance of EnvService and copies
+ * This function creates an instance of EnvService, and copies
  * all the properties from window.__env object into it.
  */
 export const EnvServiceFactory = () => {
-  // Create env
   const env = new EnvService();
 
-  // Read environment variables from browser window
-  const browserWindow = window || {};
+  // read environment variables from browser window
+  const browserWindow: any = window || {};
   const browserWindowEnv = browserWindow['__env'] || {};
 
-  // Assign environment variables from browser window to env
-  // In the current implementation, properties from env.js
-  // overwrite defaults from the EnvService.
-  // If needed, a deep merge can be performed here to merge
-  // properties instead of overwriting them.
+  // assign environment variables from browser window to env;
+  // in the current implementation, properties from env.js
+  // overwrite defaults (if any) from the EnvService.
   for (const key in browserWindowEnv) {
     if (browserWindowEnv.hasOwnProperty(key)) {
-      env[key] = window['__env'][key];
+      env.set(key, browserWindowEnv[key]);
     }
   }
 
@@ -33,5 +32,5 @@ export const EnvServiceFactory = () => {
 export const EnvServiceProvider = {
   provide: EnvService,
   useFactory: EnvServiceFactory,
-  deps: []
+  deps: [],
 };

@@ -24,7 +24,8 @@ export class ThesaurusService {
    * @returns Observable<string> Array of IDs.
    */
   public getThesaurusIds(): Observable<string[]> {
-    const url = `${this._env.apiUrl}${this._env.databaseId}/thesauri-ids`;
+    const url =
+      this._env.get('apiUrl') + this._env.get('databaseId') + '/thesauri-ids';
     return this._http
       .get<string[]>(url)
       .pipe(retry(3), catchError(this._error.handleError));
@@ -46,7 +47,8 @@ export class ThesaurusService {
       httpParams = httpParams.set('emptyIfNotFound', true.toString());
     }
     const url =
-      `${this._env.apiUrl}${this._env.databaseId}` +
+      this._env.get('apiUrl') +
+      this._env.get('databaseId') +
       `/thesauri/${encodeURIComponent(id)}`;
     return this._http
       .get<Thesaurus>(url, {
@@ -63,7 +65,8 @@ export class ThesaurusService {
    */
   public getThesauriSet(ids: string[]): Observable<ThesauriSet> {
     const url =
-      `${this._env.apiUrl}${this._env.databaseId}` +
+      this._env.get('apiUrl') +
+      this._env.get('databaseId') +
       `/thesauri-set/${encodeURIComponent(ids.join(','))}?purgeIds=true`;
     return this._http
       .get<ThesauriSet>(url)
@@ -92,7 +95,8 @@ export class ThesaurusService {
       );
     }
 
-    const url = `${this._env.apiUrl}${this._env.databaseId}` + `/thesauri`;
+    const url =
+      this._env.get('apiUrl') + this._env.get('databaseId') + `/thesauri`;
     return this._http
       .get<DataPage<Thesaurus>>(url, {
         params: httpParams,
@@ -106,7 +110,8 @@ export class ThesaurusService {
    * @param thesaurus The thesaurus.
    */
   public addThesaurus(thesaurus: Thesaurus): Observable<any> {
-    const url = `${this._env.apiUrl}${this._env.databaseId}` + `/thesauri`;
+    const url =
+      this._env.get('apiUrl') + this._env.get('databaseId') + '/thesauri';
     return this._http
       .post(url, thesaurus)
       .pipe(retry(3), catchError(this._error.handleError));
@@ -119,7 +124,7 @@ export class ThesaurusService {
    */
   public deleteThesaurus(id: string): Observable<any> {
     const url =
-      `${this._env.apiUrl}${this._env.databaseId}` + `/thesauri/${id}`;
+      this._env.get('apiUrl') + this._env.get('databaseId') + `/thesauri/${id}`;
     return this._http
       .delete<Thesaurus>(url)
       .pipe(retry(3), catchError(this._error.handleError));
