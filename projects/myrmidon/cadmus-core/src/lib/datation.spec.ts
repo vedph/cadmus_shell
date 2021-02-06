@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Datation } from './datation';
 
-describe('Class: HistoricalDate', () => {
+describe('Class: Datation', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
     });
@@ -9,7 +9,7 @@ describe('Class: HistoricalDate', () => {
 
   it('default Datation should be undefined', () => {
     const d = new Datation();
-    expect(d.isUndefined);
+    expect(d.value).toBeUndefined();
   });
 
   it('getCentury from 480 BC should be -5', () => {
@@ -173,6 +173,40 @@ describe('Class: HistoricalDate', () => {
     expect(d.day).toBe(2);
     expect(d.isDubious).toBeTruthy();
     expect(d.hint).toBe('hint');
+  });
+  it('parse "may IX AD" should be month', () => {
+    const d = Datation.parse('may IX AD');
+    expect(d).toBeTruthy();
+    expect(d.value).toBe(9);
+    expect(d.isCentury).toBeTrue();
+    expect(d.month).toBe(5);
+  });
+  it('parse "30 may IX AD" should be month', () => {
+    const d = Datation.parse('30 may IX AD');
+    expect(d).toBeTruthy();
+    expect(d.value).toBe(9);
+    expect(d.isCentury).toBeTrue();
+    expect(d.month).toBe(5);
+    expect(d.day).toBe(30);
+  });
+  it('parse "c.30 may IX AD" should be day, month, century approx.', () => {
+    const d = Datation.parse('c.30 may IX AD');
+    expect(d).toBeTruthy();
+    expect(d.isApproximate).toBeTrue();
+    expect(d.value).toBe(9);
+    expect(d.isCentury).toBeTrue();
+    expect(d.month).toBe(5);
+    expect(d.day).toBe(30);
+  });
+  it('parse "c.30 may IX AD ?" should be day, month, century approx. and dub.', () => {
+    const d = Datation.parse('c.30 may IX AD ?');
+    expect(d).toBeTruthy();
+    expect(d.isApproximate).toBeTrue();
+    expect(d.isDubious).toBeTrue();
+    expect(d.value).toBe(9);
+    expect(d.isCentury).toBeTrue();
+    expect(d.month).toBe(5);
+    expect(d.day).toBe(30);
   });
 
   // toString
