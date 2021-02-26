@@ -166,9 +166,7 @@ export class IndexKeywordsPartComponent
       language: this.langEntries?.length ? this.langEntries[0].id : 'eng',
       value: ''
     };
-    if (this.addKeyword(keyword)) {
-      this.editKeyword(keyword);
-    }
+    this.editKeyword(keyword);
   }
 
   public deleteKeyword(keyword: IndexKeyword): void {
