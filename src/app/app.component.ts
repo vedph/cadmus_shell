@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { User, GravatarService, Thesaurus, ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { AuthService } from '@myrmidon/cadmus-api';
 import { AppService, AppQuery } from '@myrmidon/cadmus-state';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'cadmus-root',
@@ -19,7 +20,8 @@ export class AppComponent implements OnInit {
     private _authService: AuthService,
     private _gravatarService: GravatarService,
     private _appService: AppService,
-    private _appQuery: AppQuery
+    private _appQuery: AppQuery,
+    private _router: Router
   ) {}
 
   ngOnInit(): void {
@@ -55,5 +57,6 @@ export class AppComponent implements OnInit {
       return;
     }
     this._authService.logout();
+    this._router.navigate(['/home']);
   }
 }

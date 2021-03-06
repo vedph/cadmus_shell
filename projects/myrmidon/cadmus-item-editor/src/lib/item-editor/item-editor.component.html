@@ -156,12 +156,11 @@
           <!-- flags -->
           <div formArrayName="flagChecks" *ngIf="flagDefinitions">
             <mat-checkbox
+              class="flag"
               *ngFor="let c of flagChecks.controls; let i = index"
               [formControlName]="i"
             >
-              <span
-                class="flag"
-                [style.color]="'#' + flagDefinitions[i].colorKey"
+              <span [style.color]="'#' + flagDefinitions[i].colorKey"
                 >&#x2b24;</span
               >
               &nbsp;
@@ -220,7 +219,7 @@
               matTooltip="Add a new part of the selected type"
             >
               <mat-icon>add_circle</mat-icon>
-              new part
+              add part
             </button>
           </form>
         </div>

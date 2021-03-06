@@ -69,7 +69,7 @@ export class ThesaurusListComponent implements OnInit {
 
     // filter
     const initialPageSize = 20;
-    this.filter$ = new BehaviorSubject<ItemFilter>(
+    this.filter$ = new BehaviorSubject<ThesaurusFilter>(
       this.paginator.metadata.get('filter') || {
         pageNumber: 1,
         pageSize: initialPageSize,
