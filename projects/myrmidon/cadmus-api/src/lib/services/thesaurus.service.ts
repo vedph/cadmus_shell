@@ -64,12 +64,15 @@ export class ThesaurusService {
    * equal to the thesaurus model.
    */
   public getThesauriSet(ids: string[]): Observable<ThesauriSet> {
+    let httpParams = new HttpParams();
+    httpParams = httpParams.set('purgeIds', 'true');
+    httpParams = httpParams.set('ids', ids.join(','));
     const url =
-      this._env.get('apiUrl') +
-      this._env.get('databaseId') +
-      `/thesauri-set/${encodeURIComponent(ids.join(','))}?purgeIds=true`;
+      this._env.get('apiUrl') + this._env.get('databaseId') + '/thesauri-set';
     return this._http
-      .get<ThesauriSet>(url)
+      .get<ThesauriSet>(url, {
+        params: httpParams,
+      })
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
