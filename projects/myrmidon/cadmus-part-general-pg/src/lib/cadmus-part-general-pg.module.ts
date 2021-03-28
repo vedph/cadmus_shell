@@ -11,6 +11,7 @@ import {
   NOTE_PART_TYPEID,
   COMMENT_FRAGMENT_TYPEID,
   COMMENT_PART_TYPEID,
+  DOC_REFERENCES_PART_TYPEID,
   KEYWORDS_PART_TYPEID,
   TOKEN_TEXT_PART_TYPEID,
   HISTORICAL_DATE_PART_TYPEID,
@@ -38,6 +39,7 @@ import { TiledTextLayerPartFeatureComponent } from './tiled-text-layer-part-feat
 import { BibliographyPartFeatureComponent } from './bibliography-part-feature/bibliography-part-feature.component';
 import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 import { CommentPartFeatureComponent } from './comment-part-feature/comment-part-feature.component';
+import { DocReferencesPartFeatureComponent } from './doc-references-part-feature/doc-references-part-feature.component';
 
 // https://github.com/ng-packagr/ng-packagr/issues/778
 export const RouterModuleForChild = RouterModule.forChild([
@@ -57,6 +59,12 @@ export const RouterModuleForChild = RouterModule.forChild([
     path: `${COMMENT_PART_TYPEID}/:pid`,
     pathMatch: 'full',
     component: CommentPartFeatureComponent,
+    canDeactivate: [PendingChangesGuard],
+  },
+  {
+    path: `${DOC_REFERENCES_PART_TYPEID}/:pid`,
+    pathMatch: 'full',
+    component: DocReferencesPartFeatureComponent,
     canDeactivate: [PendingChangesGuard],
   },
   {
@@ -141,6 +149,7 @@ export const RouterModuleForChild = RouterModule.forChild([
     ChronologyFragmentFeatureComponent,
     CommentFragmentFeatureComponent,
     CommentPartFeatureComponent,
+    DocReferencesPartFeatureComponent,
     HistoricalDatePartFeatureComponent,
     IndexKeywordsPartFeatureComponent,
     KeywordsPartFeatureComponent,
@@ -156,6 +165,7 @@ export const RouterModuleForChild = RouterModule.forChild([
     ChronologyFragmentFeatureComponent,
     CommentFragmentFeatureComponent,
     CommentPartFeatureComponent,
+    DocReferencesPartFeatureComponent,
     HistoricalDatePartFeatureComponent,
     IndexKeywordsPartFeatureComponent,
     KeywordsPartFeatureComponent,

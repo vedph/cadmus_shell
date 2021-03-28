@@ -1,0 +1,24 @@
+<form [formGroup]="form" (submit)="save()">
+  <mat-card>
+    <mat-card-header>
+      <div mat-card-avatar>
+        <mat-icon>picture_in_picture</mat-icon>
+      </div>
+      <mat-card-title>Document References Part</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <cadmus-doc-references
+        [model$]="references$"
+        [tagEntries]="tagEntries"
+        (modelChange)="onReferencesChanged($event)"
+      ></cadmus-doc-references>
+    </mat-card-content>
+    <mat-card-actions>
+      <cadmus-close-save-buttons
+        [form]="form"
+        [noSave]="userLevel < 2"
+        (closeRequest)="close()"
+      ></cadmus-close-save-buttons>
+    </mat-card-actions>
+  </mat-card>
+</form>

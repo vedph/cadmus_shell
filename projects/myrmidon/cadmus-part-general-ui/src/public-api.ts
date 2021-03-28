@@ -17,6 +17,9 @@ export * from './lib/comment-part';
 export * from './lib/comment-fragment';
 export * from './lib/comment-editor/comment-editor.component';
 
+export * from './lib/doc-references-part';
+export * from './lib/doc-references-part/doc-references-part.component';
+
 export * from './lib/historical-date-part';
 export * from './lib/historical-date-part/historical-date-part.component';
 

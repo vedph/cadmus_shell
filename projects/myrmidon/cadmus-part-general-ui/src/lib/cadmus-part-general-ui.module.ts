@@ -23,6 +23,7 @@ import { TiledTextPartComponent } from './tiled-text-part/tiled-text-part.compon
 import { TextTileComponent } from './text-tile/text-tile.component';
 import { TiledDataComponent } from './tiled-data/tiled-data.component';
 import { CommentEditorComponent } from './comment-editor/comment-editor.component';
+import { DocReferencesPartComponent } from './doc-references-part/doc-references-part.component';
 
 @NgModule({
   imports: [
@@ -44,6 +45,7 @@ import { CommentEditorComponent } from './comment-editor/comment-editor.componen
     CategoriesPartComponent,
     ChronologyFragmentComponent,
     CommentEditorComponent,
+    DocReferencesPartComponent,
     HistoricalDatePartComponent,
     IndexKeywordComponent,
     IndexKeywordsPartComponent,
@@ -61,6 +63,7 @@ import { CommentEditorComponent } from './comment-editor/comment-editor.componen
     CategoriesPartComponent,
     ChronologyFragmentComponent,
     CommentEditorComponent,
+    DocReferencesPartComponent,
     HistoricalDatePartComponent,
     IndexKeywordComponent,
     IndexKeywordsPartComponent,

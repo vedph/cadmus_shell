@@ -1,0 +1,10 @@
+<cadmus-current-item-bar></cadmus-current-item-bar>
+<cadmus-doc-references-part
+  [itemId]="itemId"
+  [roleId]="roleId"
+  [model]="part$ | async"
+  (modelChange)="save($event)"
+  [thesauri]="thesauri$ | async"
+  (editorClose)="close()"
+  (dirtyChange)="onDirtyChange($event)"
+></cadmus-doc-references-part>
