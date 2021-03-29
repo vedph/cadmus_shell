@@ -29,6 +29,7 @@ import { DocReferencesComponent } from './components/doc-references/doc-referenc
 import { PhysicalDimensionComponent } from './components/physical-dimension/physical-dimension.component';
 import { PhysicalSizeComponent } from './components/physical-size/physical-size.component';
 import { ExternalIdsComponent } from './components/external-ids/external-ids.component';
+import { MultiEntrySelectorComponent } from './components/multi-entry-selector/multi-entry-selector.component';
 
 @NgModule({
   imports: [
@@ -56,6 +57,7 @@ import { ExternalIdsComponent } from './components/external-ids/external-ids.com
     // JsonEditorResourcesComponent,
     LayerHintsComponent,
     LoginComponent,
+    MultiEntrySelectorComponent,
     PartBadgeComponent,
     PasswordStrengthBarComponent,
     PhysicalDimensionComponent,
@@ -77,6 +79,7 @@ import { ExternalIdsComponent } from './components/external-ids/external-ids.com
     // JsonEditorResourcesComponent,
     LayerHintsComponent,
     LoginComponent,
+    MultiEntrySelectorComponent,
     PartBadgeComponent,
     PasswordStrengthBarComponent,
     PhysicalDimensionComponent,

@@ -11,7 +11,7 @@ import { EditDocReferencesPartQuery } from './edit-doc-references-part.query';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'itinera-doc-references-part-feature',
+  selector: 'cadmus-doc-references-part-feature',
   templateUrl: './doc-references-part-feature.component.html',
   styleUrls: ['./doc-references-part-feature.component.css'],
 })

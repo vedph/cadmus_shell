@@ -15,6 +15,7 @@ export * from './lib/components/historical-date-editor/historical-date-editor.co
 // export * from './lib/components/json-editor-resources/json-editor-resources.component';
 export * from './lib/components/layer-hints/layer-hints.component';
 export * from './lib/components/login/login.component';
+export * from './lib/components/multi-entry-selector/multi-entry-selector.component';
 export * from './lib/components/part-badge/part-badge.component';
 export * from './lib/components/password-strength-bar/password-strength-bar.component';
 export * from './lib/components/thesaurus-tree/thesaurus-tree.component';
