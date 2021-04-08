@@ -12,7 +12,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 /**
  * Bibliography part editor.
- * Thesauri: languages, bibliography-types (optional),
+ * Thesauri: bibliography-languages, bibliography-types (optional),
  * bibliography-author-roles (optional).
  */
 @Component({
@@ -54,7 +54,7 @@ export class BibliographyPartComponent
   }
 
   protected onThesauriSet(): void {
-    const langKey = 'languages';
+    const langKey = 'bibliography-languages';
     if (this.thesauri && this.thesauri[langKey]) {
       this.langThesaurus = this.thesauri[langKey];
     } else {

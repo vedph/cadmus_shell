@@ -11,6 +11,11 @@ div.new-part {
 span.new-part-role {
   color: #808080;
   margin-left: 8px;
+  vertical-align: middle;
+}
+span.new-part-icon {
+  margin: 0 4px;
+  vertical-align: middle;
 }
 td.count-n {
   text-align: center;

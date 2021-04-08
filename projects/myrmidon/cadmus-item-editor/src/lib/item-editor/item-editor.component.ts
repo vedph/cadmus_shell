@@ -213,6 +213,10 @@ export class ItemEditorComponent implements OnInit, ComponentCanDeactivate {
       }
       defs.push(def);
     }
+    // sort by sort key
+    defs.sort((a, b) => {
+      return a.sortKey.localeCompare(b.sortKey);
+    });
     return defs;
   }
 

@@ -38,7 +38,7 @@ export class BibliographyPartFeatureComponent extends EditPartFeatureBase
 
   ngOnInit(): void {
     this.initEditor([
-      'languages',
+      'bibliography-languages',
       'bibliography-types',
       'bibliography-author-roles'
     ]);

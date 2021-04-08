@@ -13,6 +13,8 @@ export * from './lib/utils';
 
 export * from './lib/guards/pending-changes.guard';
 
+export * from './lib/pipes/sort.pipe';
+
 export * from './lib/services/env.service';
 export * from './lib/services/env.service.provider';
 export * from './lib/services/error.service';

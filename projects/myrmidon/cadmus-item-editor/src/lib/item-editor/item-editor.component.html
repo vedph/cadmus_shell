@@ -201,6 +201,9 @@
                 required
               >
                 <mat-option *ngFor="let p of newPartDefinitions" [value]="p">
+                  <span [style.color]="'#' + p.colorKey" class="new-part-icon"
+                    >&#x2b24;</span
+                  >
                   {{ p.name }}
                   <span *ngIf="p.roleId" class="new-part-role">{{
                     p.roleId
@@ -411,7 +414,10 @@
         </table>
       </mat-tab>
 
-      <mat-tab label="Th-Scopes" *ngIf="parts$ | async as parts">
+      <mat-tab
+        label="Th-Scopes"
+        *ngIf="parts$ | async | sort: 'typeId' | sort: 'roleId' as parts"
+      >
         <cadmus-parts-scope-editor
           [parts]="parts"
           [readonly]="userLevel < 2 || (saving$ | async) || (loading$ | async)"
