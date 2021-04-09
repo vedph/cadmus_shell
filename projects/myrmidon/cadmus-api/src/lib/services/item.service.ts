@@ -132,7 +132,7 @@ export class ItemService {
 
     return this._http
       .post<ErrorWrapper<DataPage<DataPinInfo>>>(
-        this._env.get('apiUrl') + this._env.get('databaseId') + '/search',
+        this._env.get('apiUrl') + this._env.get('databaseId') + '/pin-search',
         {
           query,
           pageNumber,
