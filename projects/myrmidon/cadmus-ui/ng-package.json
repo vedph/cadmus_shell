@@ -6,8 +6,8 @@
     "umdModuleIds": {
       "ngx-monaco-editor": "ngx-monaco-editor",
       "@myrmidon/cadmus-core": "@myrmidon/cadmus-core",
-      "@myrmidon/cadmus-api": "@myrmidon/cadmus-api",
-      "@myrmidon/cadmus-material": "@myrmidon/cadmus-material"
+      "@myrmidon/cadmus-material": "@myrmidon/cadmus-material",
+      "@myrmidon/cadmus-api": "@myrmidon/cadmus-api"
     }
   }
 }
