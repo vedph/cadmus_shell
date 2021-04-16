@@ -10,7 +10,6 @@ import {
 } from '@angular/forms';
 import { Keyword } from '../keywords-part';
 import { distinctUntilChanged } from 'rxjs/operators';
-import { DialogService } from '@myrmidon/cadmus-ui';
 
 /**
  * Bibliography entry editor used by BibliographyPartComponent to edit a single
@@ -37,11 +36,11 @@ export class BibliographyEntryComponent implements OnInit {
   }
 
   @Input()
-  public langThesaurus: Thesaurus | null;
+  public langThesaurus: Thesaurus | undefined;
   @Input()
-  public typeThesaurus: Thesaurus | null;
+  public typeThesaurus: Thesaurus | undefined;
   @Input()
-  public roleThesaurus: Thesaurus | null;
+  public roleThesaurus: Thesaurus | undefined;
 
   @Output()
   public editorClose: EventEmitter<any>;
@@ -60,6 +59,7 @@ export class BibliographyEntryComponent implements OnInit {
   public container: FormControl;
   public edition: FormControl;
   public number: FormControl;
+  public publisher: FormControl;
   public placePub: FormControl;
   public yearPub: FormControl;
   public location: FormControl;
@@ -74,10 +74,7 @@ export class BibliographyEntryComponent implements OnInit {
 
   public form: FormGroup;
 
-  constructor(
-    private _formBuilder: FormBuilder,
-    private _dialogService: DialogService
-  ) {
+  constructor(private _formBuilder: FormBuilder) {
     // events
     this.editorClose = new EventEmitter<any>();
     this.entryChange = new EventEmitter<BibEntry>();
@@ -87,7 +84,10 @@ export class BibliographyEntryComponent implements OnInit {
       Validators.required,
       Validators.maxLength(50),
     ]);
-    this.language = _formBuilder.control(null, Validators.required);
+    this.language = _formBuilder.control(null, [
+      Validators.required,
+      Validators.pattern(/^[a-z]{3}$/),
+    ]);
     this.authors = _formBuilder.array([], Validators.required);
     this.title = _formBuilder.control(null, [
       Validators.required,
@@ -102,6 +102,7 @@ export class BibliographyEntryComponent implements OnInit {
       Validators.max(100),
     ]);
     this.number = _formBuilder.control(null, Validators.maxLength(50));
+    this.publisher = _formBuilder.control(null, Validators.maxLength(100));
     this.placePub = _formBuilder.control(null, Validators.maxLength(100));
     this.yearPub = _formBuilder.control(null, [
       Validators.min(0),
@@ -120,6 +121,7 @@ export class BibliographyEntryComponent implements OnInit {
     // form - keywords
     this.keywords = [];
     this.keyLanguage = _formBuilder.control(null, [
+      Validators.required,
       Validators.pattern(/^[a-z]{3}$/),
     ]);
     this.keyValue = _formBuilder.control(null, [
@@ -142,6 +144,7 @@ export class BibliographyEntryComponent implements OnInit {
       container: this.container,
       edition: this.edition,
       number: this.number,
+      publisher: this.publisher,
       placePub: this.placePub,
       yearPub: this.yearPub,
       location: this.location,
@@ -175,7 +178,7 @@ export class BibliographyEntryComponent implements OnInit {
         Validators.maxLength(50)
       ),
       roleId: this._formBuilder.control(
-        author?.roleId,
+        author?.roleId || null,
         Validators.maxLength(50)
       ),
     });
@@ -210,6 +213,7 @@ export class BibliographyEntryComponent implements OnInit {
     this.container.setValue(entry.container);
     this.edition.setValue(entry.edition);
     this.number.setValue(entry.number);
+    this.publisher.setValue(entry.publisher);
     this.placePub.setValue(entry.placePub);
     this.yearPub.setValue(entry.yearPub);
     this.location.setValue(entry.location);
@@ -251,6 +255,7 @@ export class BibliographyEntryComponent implements OnInit {
       container: this.container.value?.trim(),
       edition: this.edition.value,
       number: this.number.value?.trim(),
+      publisher: this.publisher.value?.trim(),
       placePub: this.placePub.value?.trim(),
       yearPub: this.yearPub.value,
       location: this.location.value?.trim(),
@@ -276,6 +281,7 @@ export class BibliographyEntryComponent implements OnInit {
         language: this.keyLanguage.value,
         value: this.keyValue.value,
       });
+      this.keyValue.reset();
       this.form.markAsDirty();
     }
   }
@@ -306,18 +312,7 @@ export class BibliographyEntryComponent implements OnInit {
   }
 
   public cancel(): void {
-    if (this.form.pristine) {
-      this.editorClose.emit();
-      return;
-    }
-
-    this._dialogService
-      .confirm('Confirm Close', 'Drop entry changes?')
-      .subscribe((result) => {
-        if (result) {
-          this.editorClose.emit();
-        }
-      });
+    this.editorClose.emit();
   }
 
   public save(): void {

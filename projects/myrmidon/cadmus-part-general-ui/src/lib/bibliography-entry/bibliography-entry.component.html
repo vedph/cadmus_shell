@@ -3,36 +3,40 @@
     <!-- general -->
     <mat-tab label="General">
       <!-- typeId -->
-      <mat-form-field *ngIf="typeThesaurus">
-        <mat-select formControlName="type" placeholder="type">
-          <mat-option
-            *ngFor="let e of typeThesaurus?.entries || []"
-            [value]="e.id"
-            >{{ e.value }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field *ngIf="!typeThesaurus">
-        <input
-          matInput
-          type="text"
-          spellcheck="false"
-          placeholder="type"
-          formControlName="type"
-        />
-        <mat-error
-          *ngIf="type.hasError('required') && (type.dirty || type.touched)"
-          >entry type required</mat-error
-        >
-        <mat-error
-          *ngIf="type.hasError('maxLength') && (type.dirty || type.touched)"
-          >too long</mat-error
-        >
-      </mat-form-field>
-
-      <!-- language -->
       <div>
-        <mat-form-field *ngIf="langThesaurus">
+        <mat-form-field *ngIf="typeThesaurus">
+          <mat-select formControlName="type" placeholder="type">
+            <mat-option
+              *ngFor="let e of typeThesaurus?.entries || []"
+              [value]="e.id"
+              >{{ e.value }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field *ngIf="!typeThesaurus">
+          <input
+            matInput
+            type="text"
+            spellcheck="false"
+            placeholder="type"
+            formControlName="type"
+          />
+          <mat-error
+            *ngIf="type.hasError('required') && (type.dirty || type.touched)"
+            >entry type required</mat-error
+          >
+          <mat-error
+            *ngIf="type.hasError('maxLength') && (type.dirty || type.touched)"
+            >too long</mat-error
+          >
+        </mat-form-field>
+
+        <!-- language (bound) -->
+        &nbsp;
+        <mat-form-field
+          *ngIf="langThesaurus?.entries?.length"
+          style="width: 8em"
+        >
           <mat-select formControlName="language" placeholder="language">
             <mat-option
               *ngFor="let e of langThesaurus?.entries || []"
@@ -41,17 +45,31 @@
             >
           </mat-select>
         </mat-form-field>
-      </div>
 
-      <!-- key -->
-      <div>
+        <!-- language (free) -->
+        <mat-form-field
+          *ngIf="!langThesaurus?.entries?.length"
+          style="width: 8em"
+        >
+          <input matInput [formControl]="language" placeholder="language" />
+          <mat-error
+            *ngIf="
+              language.errors?.required && (language.dirty || language.touched)
+            "
+            >required</mat-error
+          >
+          <mat-error
+            *ngIf="
+              language.errors?.pattern && (language.dirty || language.touched)
+            "
+            >invalid</mat-error
+          >
+        </mat-form-field>
+
+        <!-- key -->
+        &nbsp;
         <mat-form-field>
-          <input
-            class="full-width"
-            matInput
-            [formControl]="key"
-            placeholder="key"
-          />
+          <input matInput [formControl]="key" placeholder="key" />
           <mat-error *ngIf="key.errors?.maxLength && (key.dirty || key.touched)"
             >key too long</mat-error
           >
@@ -67,7 +85,7 @@
 
       <!-- title -->
       <div>
-        <mat-form-field class="full-width">
+        <mat-form-field class="long-text">
           <input
             matInput
             type="text"
@@ -89,7 +107,7 @@
 
       <!-- note -->
       <div>
-        <mat-form-field class="full-width">
+        <mat-form-field class="long-text">
           <textarea
             matInput
             formControlName="note"
@@ -115,7 +133,7 @@
 
       <!-- container -->
       <div>
-        <mat-form-field class="full-width">
+        <mat-form-field class="long-text">
           <input
             matInput
             type="text"
@@ -149,10 +167,70 @@
             >too long</mat-error
           >
         </mat-form-field>
+
+        <!-- firstPage -->
+        &nbsp;
+        <mat-form-field [style.width.em]="5">
+          <input
+            matInput
+            type="number"
+            formControlName="firstPage"
+            placeholder="from"
+          />
+          <mat-error
+            *ngIf="
+              firstPage.hasError('min') &&
+              (firstPage.dirty || firstPage.touched)
+            "
+            >page less than 0</mat-error
+          >
+          <mat-error
+            *ngIf="
+              firstPage.hasError('max') &&
+              (firstPage.dirty || firstPage.touched)
+            "
+            >page number too big</mat-error
+          >
+        </mat-form-field>
+        -
+        <!-- lastPage -->
+        <mat-form-field [style.width.em]="5">
+          <input
+            matInput
+            type="number"
+            formControlName="lastPage"
+            placeholder="to"
+          />
+          <mat-error
+            *ngIf="
+              lastPage.hasError('min') && (lastPage.dirty || lastPage.touched)
+            "
+            >page less than 0</mat-error
+          >
+          <mat-error
+            *ngIf="
+              lastPage.hasError('max') && (lastPage.dirty || lastPage.touched)
+            "
+            >page number too big</mat-error
+          >
+        </mat-form-field>
       </div>
 
-      <!-- placePub -->
       <div>
+        <!-- publisher -->
+        <mat-form-field>
+          <input matInput [formControl]="publisher" placeholder="publisher" />
+          <mat-error
+            *ngIf="
+              publisher.errors?.maxLength &&
+              (publisher.dirty || publisher.touched)
+            "
+            >publisher too long</mat-error
+          >
+        </mat-form-field>
+
+        <!-- placePub -->
+        &nbsp;
         <mat-form-field>
           <input
             matInput
@@ -168,10 +246,9 @@
             >too long</mat-error
           >
         </mat-form-field>
-      </div>
 
-      <!-- yearPub -->
-      <div>
+        <!-- yearPub -->
+        &nbsp;
         <mat-form-field [style.width.em]="5">
           <input
             matInput
@@ -234,10 +311,9 @@
             >too long</mat-error
           >
         </mat-form-field>
-      </div>
 
-      <!-- accessDate -->
-      <div>
+        <!-- accessDate -->
+        &nbsp;
         <mat-form-field>
           <input
             matInput
@@ -252,61 +328,17 @@
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       </div>
-
-      <div>
-        <!-- firstPage -->
-        <mat-form-field [style.width.em]="5">
-          <input
-            matInput
-            type="number"
-            formControlName="firstPage"
-            placeholder="from"
-          />
-          <mat-error
-            *ngIf="
-              firstPage.hasError('min') &&
-              (firstPage.dirty || firstPage.touched)
-            "
-            >page less than 0</mat-error
-          >
-          <mat-error
-            *ngIf="
-              firstPage.hasError('max') &&
-              (firstPage.dirty || firstPage.touched)
-            "
-            >page number too big</mat-error
-          >
-        </mat-form-field>
-        -
-        <!-- lastPage -->
-        <mat-form-field [style.width.em]="5">
-          <input
-            matInput
-            type="number"
-            formControlName="lastPage"
-            placeholder="to"
-          />
-          <mat-error
-            *ngIf="
-              lastPage.hasError('min') && (lastPage.dirty || lastPage.touched)
-            "
-            >page less than 0</mat-error
-          >
-          <mat-error
-            *ngIf="
-              lastPage.hasError('max') && (lastPage.dirty || lastPage.touched)
-            "
-            >page number too big</mat-error
-          >
-        </mat-form-field>
-      </div>
     </mat-tab>
 
     <!-- keywords -->
     <mat-tab label="Keywords">
       <form [formGroup]="keyForm" (submit)="addKeyword()">
         <div>
-          <mat-form-field>
+          <!-- language (bound) -->
+          <mat-form-field
+            *ngIf="langThesaurus?.entries?.length"
+            style="width: 8em"
+          >
             <mat-select formControlName="keyLanguage" placeholder="language">
               <mat-option
                 *ngFor="let e of langThesaurus?.entries || []"
@@ -315,6 +347,32 @@
               >
             </mat-select>
           </mat-form-field>
+          <!-- language (free) -->
+          <mat-form-field
+            *ngIf="!langThesaurus?.entries?.length"
+            style="width: 8em"
+          >
+            <input
+              matInput
+              [formControl]="keyLanguage"
+              placeholder="language"
+            />
+            <mat-error
+              *ngIf="
+                keyLanguage.errors?.required &&
+                (keyLanguage.dirty || keyLanguage.touched)
+              "
+              >required</mat-error
+            >
+            <mat-error
+              *ngIf="
+                keyLanguage.errors?.pattern &&
+                (keyLanguage.dirty || keyLanguage.touched)
+              "
+              >invalid</mat-error
+            >
+          </mat-form-field>
+          <!-- value -->
           &nbsp;
           <mat-form-field>
             <input
@@ -328,7 +386,7 @@
                 keyValue.hasError('required') &&
                 (keyValue.dirty || keyValue.touched)
               "
-              >value required</mat-error
+              >required</mat-error
             >
             <mat-error
               *ngIf="
@@ -405,7 +463,6 @@
   </mat-tab-group>
 
   <!-- buttons -->
-  <hr />
   <div>
     <button
       type="button"
@@ -418,7 +475,7 @@
     </button>
     <button
       type="submit"
-      [disabled]="form.invalid || form.pristine"
+      [disabled]="form.invalid"
       mat-icon-button
       color="primary"
       matTooltip="Save entry"

@@ -5,9 +5,10 @@ import {
   TokenTextLine,
 } from '../token-text-part';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
-import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { DialogService, ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { AuthService } from '@myrmidon/cadmus-api';
 import { deepCopy } from '@myrmidon/cadmus-core';
+import { take } from 'rxjs/operators';
 
 /**
  * Editor component for base text, as referenced by token-based layers.
@@ -24,6 +25,8 @@ export class TokenTextPartComponent
   public citation: FormControl;
   public text: FormControl;
 
+  public transform: FormControl;
+
   public editorOptions = {
     theme: 'vs-light',
     wordWrap: 'on',
@@ -31,7 +34,11 @@ export class TokenTextPartComponent
     automaticLayout: true,
   };
 
-  constructor(authService: AuthService, formBuilder: FormBuilder) {
+  constructor(
+    authService: AuthService,
+    formBuilder: FormBuilder,
+    private _dialogService: DialogService
+  ) {
     super(authService);
     // form
     this.citation = formBuilder.control(null);
@@ -40,6 +47,7 @@ export class TokenTextPartComponent
       citation: this.citation,
       text: this.text,
     });
+    this.transform = formBuilder.control('ws');
   }
 
   ngOnInit(): void {
@@ -102,5 +110,67 @@ export class TokenTextPartComponent
     part.citation = this.citation.value ? this.citation.value.trim() : null;
     part.lines = this.getLinesFromText(this.text.value);
     return part;
+  }
+
+  private normalizeWs(text: string): string {
+    text = text.replace(/[ \t]+/g, ' ').trim();
+    text = text.replace(/[ \t]+([\r\n])/g, '$1');
+    text = text.replace(/([\r\n])[ \t]+/g, '$1');
+    return text;
+  }
+
+  private splitAtStops(text: string): string {
+    const crLf = text.indexOf('\r\n') > -1;
+    const r = new RegExp('([.?!]+)', 'g');
+    const parts: string[] = [];
+    let start = 0;
+    let m: RegExpExecArray | undefined;
+
+    while ((m = r.exec(text))) {
+      console.log(m[1].length);
+      const end = m.index + m[1].length;
+      if (end < text.length) {
+        parts.push(text.substr(start, end - start));
+        start = end;
+      }
+    }
+    if (start < text.length) {
+      parts.push(text.substr(start));
+    }
+    return parts.map(s => s.trim()).join(crLf? '\r\n' : '\n');
+  }
+
+  public applyTransform(): void {
+    let name: string;
+    switch (this.transform.value) {
+      case 'ws':
+        name = 'whitespace normalization';
+        break;
+      case 'split':
+        name = 'text splitting';
+        break;
+      default:
+        return;
+    }
+
+    this._dialogService
+      .confirm('Transform Text', `Apply ${name}?`)
+      .pipe(take(1))
+      .subscribe((yes) => {
+        if (yes) {
+          let text: string = this.text.value || '';
+
+          switch (this.transform.value) {
+            case 'ws':
+              text = this.normalizeWs(text);
+              break;
+            case 'split':
+              text = this.splitAtStops(text);
+              break;
+          }
+          this.text.setValue(text);
+          this.form.markAsDirty();
+        }
+      });
   }
 }

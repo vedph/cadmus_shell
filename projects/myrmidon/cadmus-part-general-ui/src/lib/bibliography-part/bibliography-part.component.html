@@ -10,6 +10,15 @@
       <mat-tab-group [(selectedIndex)]="currentTabIndex">
         <!-- bibliography editor -->
         <mat-tab label="Bibliography">
+          <button
+            type="button"
+            mat-button
+            matTooltip="Add a new entry"
+            color="primary"
+            (click)="addEntry()"
+          >
+            <mat-icon>add_circle</mat-icon> add entry
+          </button>
           <table *ngIf="part?.entries?.length">
             <thead>
               <tr>
@@ -66,21 +75,12 @@
                     <mat-icon>remove_circle</mat-icon>
                   </button>
                 </td>
-                <td>{{ entry.typeId }}</td>
+                <td>{{ entryTypeToString(entry.typeId) }}</td>
                 <td>{{ getAuthors(entry.authors) }}</td>
                 <td>{{ entry.title }}</td>
               </tr>
             </tbody>
           </table>
-          <button
-            type="button"
-            mat-button
-            matTooltip="Add a new entry"
-            color="primary"
-            (click)="addEntry()"
-          >
-            <mat-icon>add_circle</mat-icon> add entry
-          </button>
         </mat-tab>
         <!-- entry editor -->
         <mat-tab label="Entry" *ngIf="editedEntry">

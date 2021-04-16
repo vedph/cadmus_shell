@@ -8,11 +8,29 @@
     </mat-card-header>
 
     <mat-card-content>
-      <!-- citation -->
       <div>
+        <!-- citation -->
         <mat-form-field>
           <input matInput formControlName="citation" placeholder="citation" />
         </mat-form-field>
+        &nbsp;
+
+        <!-- transforms -->
+        <mat-form-field style="width: 8em">
+          <mat-select [formControl]="transform" placeholder="operation">
+            <mat-option value="ws">normalize ws</mat-option>
+            <mat-option value="split">split at stops</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button
+          type="button"
+          mat-icon-button
+          color="warn"
+          matTooltip="Apply the selected text transformation"
+          (click)="applyTransform()"
+        >
+          <mat-icon>find_replace</mat-icon>
+        </button>
       </div>
       <!-- text -->
       <div>

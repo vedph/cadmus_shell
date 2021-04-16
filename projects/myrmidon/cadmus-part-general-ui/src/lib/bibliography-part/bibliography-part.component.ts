@@ -3,7 +3,7 @@ import {
   BibliographyPart,
   BibEntry,
   BIBLIOGRAPHY_PART_TYPEID,
-  BibAuthor
+  BibAuthor,
 } from '../bibliography-part';
 import { ModelEditorComponentBase, DialogService } from '@myrmidon/cadmus-ui';
 import { deepCopy, Thesaurus } from '@myrmidon/cadmus-core';
@@ -18,7 +18,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 @Component({
   selector: 'cadmus-bibliography-part',
   templateUrl: './bibliography-part.component.html',
-  styleUrls: ['./bibliography-part.component.css']
+  styleUrls: ['./bibliography-part.component.css'],
 })
 export class BibliographyPartComponent
   extends ModelEditorComponentBase<BibliographyPart>
@@ -29,9 +29,9 @@ export class BibliographyPartComponent
   public editedEntry: BibEntry;
   public currentTabIndex: number;
 
-  public typeThesaurus: Thesaurus;
-  public langThesaurus: Thesaurus;
-  public roleThesaurus: Thesaurus;
+  public typeThesaurus: Thesaurus | undefined;
+  public langThesaurus: Thesaurus | undefined;
+  public roleThesaurus: Thesaurus | undefined;
 
   public entryCount: FormControl;
 
@@ -45,7 +45,7 @@ export class BibliographyPartComponent
     this.entryCount = formBuilder.control(0, Validators.min(1));
 
     this.form = formBuilder.group({
-      entryCount: this.entryCount
+      entryCount: this.entryCount,
     });
   }
 
@@ -58,22 +58,30 @@ export class BibliographyPartComponent
     if (this.thesauri && this.thesauri[langKey]) {
       this.langThesaurus = this.thesauri[langKey];
     } else {
-      this.langThesaurus = null;
+      this.langThesaurus = undefined;
     }
 
     const typeKey = 'bibliography-types';
     if (this.thesauri && this.thesauri[typeKey]) {
       this.typeThesaurus = this.thesauri[typeKey];
     } else {
-      this.typeThesaurus = null;
+      this.typeThesaurus = undefined;
     }
 
     const roleKey = 'bibliography-author-roles';
     if (this.thesauri && this.thesauri[roleKey]) {
       this.roleThesaurus = this.thesauri[roleKey];
     } else {
-      this.roleThesaurus = null;
+      this.roleThesaurus = undefined;
     }
+  }
+
+  public entryTypeToString(id?: string): string {
+    if (!id || !this.typeThesaurus?.entries) {
+      return '';
+    }
+    const entry = this.typeThesaurus.entries.find((e) => e.id === id);
+    return entry ? entry.value : id;
   }
 
   private updateForm(model: BibliographyPart): void {
@@ -105,7 +113,7 @@ export class BibliographyPartComponent
         creatorId: null,
         timeModified: new Date(),
         userId: null,
-        entries: []
+        entries: [],
       };
     }
     part.entries = this.part.entries;
@@ -116,7 +124,7 @@ export class BibliographyPartComponent
     const entry: BibEntry = {
       typeId: this.typeThesaurus?.entries[0].id,
       title: null,
-      language: this.langThesaurus?.entries[0].id
+      language: this.langThesaurus?.entries[0].id,
     };
     this.part.entries.push(entry);
     this.entryCount.setValue(this.part.entries.length);
@@ -151,7 +159,7 @@ export class BibliographyPartComponent
   public removeEntry(index: number): void {
     this._dialogService
       .confirm('Confirm Deletion', 'Delete entry?')
-      .subscribe(result => {
+      .subscribe((result) => {
         if (!result) {
           return;
         }
