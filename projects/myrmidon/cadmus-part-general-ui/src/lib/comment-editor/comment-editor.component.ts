@@ -37,9 +37,9 @@ export class CommentEditorComponent
   public ids: FormControl;
   public categories: FormControl;
   public keywords: FormArray;
+  public initialIds: string[];
 
   public references$: BehaviorSubject<DocReference[]>;
-  public ids$: BehaviorSubject<string[]>;
 
   public comTagEntries: ThesaurusEntry[] | undefined;
   public docTagEntries: ThesaurusEntry[] | undefined;
@@ -59,7 +59,7 @@ export class CommentEditorComponent
   constructor(authService: AuthService, private _formBuilder: FormBuilder) {
     super(authService);
     this.references$ = new BehaviorSubject<DocReference[]>([]);
-    this.ids$ = new BehaviorSubject<string[]>([]);
+    this.initialIds = [];
     // form
     this.tag = _formBuilder.control(null, Validators.maxLength(50));
     this.text = _formBuilder.control(null, [
@@ -92,7 +92,8 @@ export class CommentEditorComponent
     this.tag.setValue(model.tag);
     this.text.setValue(model.text);
     this.references$.next(model.references || []);
-    this.ids$.next(model.externalIds || []);
+    this.initialIds = model.externalIds || [];
+    // this.ids.setValue(model.externalIds || []);
     // keywords
     this.keywords.clear();
     if (model.keywords?.length) {
@@ -135,42 +136,42 @@ export class CommentEditorComponent
     if (this.thesauri && this.thesauri[key]) {
       this.comTagEntries = this.thesauri[key].entries;
     } else {
-      this.comTagEntries = null;
+      this.comTagEntries = undefined;
     }
 
     key = 'doc-reference-tags';
     if (this.thesauri && this.thesauri[key]) {
       this.docTagEntries = this.thesauri[key].entries;
     } else {
-      this.docTagEntries = null;
+      this.docTagEntries = undefined;
     }
 
     key = 'categories';
     if (this.thesauri && this.thesauri[key]) {
       this.catEntries = this.thesauri[key].entries;
     } else {
-      this.catEntries = null;
+      this.catEntries = undefined;
     }
 
     key = 'languages';
     if (this.thesauri && this.thesauri[key]) {
       this.langEntries = this.thesauri[key].entries;
     } else {
-      this.langEntries = null;
+      this.langEntries = undefined;
     }
 
     key = 'keyword-indexes';
     if (this.thesauri && this.thesauri[key]) {
       this.idxEntries = this.thesauri[key].entries;
     } else {
-      this.idxEntries = null;
+      this.idxEntries = undefined;
     }
 
     key = 'keyword-tags';
     if (this.thesauri && this.thesauri[key]) {
       this.keyTagEntries = this.thesauri[key].entries;
     } else {
-      this.keyTagEntries = null;
+      this.keyTagEntries = undefined;
     }
   }
 
@@ -222,10 +223,12 @@ export class CommentEditorComponent
 
   public onReferencesChange(references: DocReference[]): void {
     this.references.setValue(references || []);
+    this.form.markAsDirty();
   }
 
   public onIdsChange(ids: string[]): void {
     this.ids.setValue(ids || []);
+    this.form.markAsDirty();
   }
 
   //#region Categories

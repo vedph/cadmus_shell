@@ -47,6 +47,7 @@
         </mat-tab>
 
         <mat-tab label="references">
+          <h3>references</h3>
           <!-- references -->
           <div>
             <cadmus-doc-references
@@ -56,11 +57,14 @@
             >
             </cadmus-doc-references>
           </div>
+
           <!-- ids -->
+          <br>
+          <h3>external IDs</h3>
           <div>
             <cadmus-external-ids
-              [model$]="ids$"
-              (modelChange)="onIdsChange($event)"
+              [ids]="initialIds"
+              (idsChange)="onIdsChange($event)"
             >
             </cadmus-external-ids>
           </div>

@@ -1,5 +1,5 @@
 <form [formGroup]="form">
-  <div formArrayName="ids">
+  <div formArrayName="idsArr">
     <div>
       <button
         type="button"
@@ -13,7 +13,7 @@
     </div>
     <div
       *ngFor="
-        let item of ids.controls;
+        let item of idsArr.controls;
         let i = index;
         let first = first;
         let last = last
@@ -56,11 +56,11 @@
         <mat-form-field>
           <input
             #id
+            autofocus
             matInput
             maxlength="500"
             formControlName="id"
             placeholder="external ID"
-            autofocus
           />
           <mat-error>enter an ID</mat-error>
         </mat-form-field>
