@@ -11,7 +11,6 @@ import {
   DocReference,
 } from '@myrmidon/cadmus-core';
 import { AuthService } from '@myrmidon/cadmus-api';
-import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'cadmus-historical-date-part',
@@ -22,19 +21,20 @@ export class HistoricalDatePartComponent
   extends ModelEditorComponentBase<HistoricalDatePart>
   implements OnInit {
   public hasDate: FormControl;
+  public references: FormControl;
 
   public date: HistoricalDateModel | undefined;
-  // references
-  public references$: BehaviorSubject<DocReference[]>;
-  public references: DocReference[];
+  public initialRefs: DocReference[];
 
   constructor(authService: AuthService, formBuilder: FormBuilder) {
     super(authService);
     // form
-    this.references$ = new BehaviorSubject<DocReference[]>([]);
+    this.initialRefs = [];
     this.hasDate = formBuilder.control(false, Validators.requiredTrue);
+    this.references = formBuilder.control([]);
     this.form = formBuilder.group({
       hasDate: this.hasDate,
+      references: this.references,
     });
   }
 
@@ -43,7 +43,7 @@ export class HistoricalDatePartComponent
   }
 
   protected onModelSet(model: HistoricalDatePart): void {
-    this.references$.next(model?.references || []);
+    this.initialRefs = model?.references || [];
     this.date = model?.date ? deepCopy(model.date) : undefined;
     this.hasDate.setValue(model ? true : false);
     // TODO: remove hack
@@ -68,7 +68,9 @@ export class HistoricalDatePartComponent
       };
     }
     part.date = this.date;
-    part.references = this.references?.length ? this.references : undefined;
+    part.references = this.references.value?.length
+      ? this.references.value
+      : undefined;
     return part;
   }
 
@@ -79,7 +81,7 @@ export class HistoricalDatePartComponent
   }
 
   public onReferencesChange(references: DocReference[]): void {
-    this.references = references;
+    this.references.setValue(references);
     this.form.markAsDirty();
   }
 }

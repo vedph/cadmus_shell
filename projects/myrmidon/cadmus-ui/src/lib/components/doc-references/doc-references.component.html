@@ -1,5 +1,5 @@
 <form [formGroup]="form">
-  <div formArrayName="references">
+  <div formArrayName="refsArr">
     <!-- add -->
     <div>
       <button
@@ -15,7 +15,7 @@
     <!-- list -->
     <div
       *ngFor="
-        let item of references.controls;
+        let item of refsArr.controls;
         let i = index;
         let first = first;
         let last = last

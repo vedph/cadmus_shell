@@ -8,7 +8,7 @@
     </mat-card-header>
     <mat-card-content>
       <cadmus-doc-references
-        [model$]="references$"
+        [references]="initialRefs"
         [tagEntries]="tagEntries"
         (modelChange)="onReferencesChanged($event)"
       ></cadmus-doc-references>

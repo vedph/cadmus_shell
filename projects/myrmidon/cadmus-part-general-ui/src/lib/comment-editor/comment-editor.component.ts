@@ -37,9 +37,9 @@ export class CommentEditorComponent
   public ids: FormControl;
   public categories: FormControl;
   public keywords: FormArray;
-  public initialIds: string[];
 
-  public references$: BehaviorSubject<DocReference[]>;
+  public initialRefs: DocReference[];
+  public initialIds: string[];
 
   public comTagEntries: ThesaurusEntry[] | undefined;
   public docTagEntries: ThesaurusEntry[] | undefined;
@@ -58,7 +58,7 @@ export class CommentEditorComponent
 
   constructor(authService: AuthService, private _formBuilder: FormBuilder) {
     super(authService);
-    this.references$ = new BehaviorSubject<DocReference[]>([]);
+    this.initialRefs = [];
     this.initialIds = [];
     // form
     this.tag = _formBuilder.control(null, Validators.maxLength(50));
@@ -91,9 +91,8 @@ export class CommentEditorComponent
     }
     this.tag.setValue(model.tag);
     this.text.setValue(model.text);
-    this.references$.next(model.references || []);
+    this.initialRefs = model.references || [];
     this.initialIds = model.externalIds || [];
-    // this.ids.setValue(model.externalIds || []);
     // keywords
     this.keywords.clear();
     if (model.keywords?.length) {

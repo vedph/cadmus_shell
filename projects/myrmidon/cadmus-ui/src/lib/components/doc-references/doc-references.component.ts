@@ -1,9 +1,10 @@
 import {
   AfterViewInit,
   Component,
+  EventEmitter,
   Input,
   OnDestroy,
-  OnInit,
+  Output,
   QueryList,
   ViewChildren,
 } from '@angular/core';
@@ -11,125 +12,204 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ThesaurusEntry, DocReference } from '@myrmidon/cadmus-core';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { InplaceEditorComponentBase } from '../inplace-editor-component-base';
 
 /**
- * In-place editor for a set of DocReference's.
+ * Real-time editor for a set of DocReference's.
+ * Set the references with the references property, and get their changes
+ * in real-time via referencesChange. Usually you should set the references
+ * property once in the container of this component (e.g. using an
+ * initialRefs string array, changed only when a new model is set), and
+ * then change the references as emitted by this component in a FormControl
+ * with an array value.
+ * So for instance you would have [references]="initialRefs" and
+ * (referencesChange)="onRefsChange($event)", and in this handler you would
+ * just call references.setValue(refs). This is required to avoid a
+ * recursive update (setting references would trigger referencesChange, which
+ * in turn would trigger setting references again, and so on), and is due
+ * to the fact that this component has no "save" action, but automatically
+ * emits changes a few milliseconds after they happen.
  */
 @Component({
   selector: 'cadmus-doc-references',
   templateUrl: './doc-references.component.html',
   styleUrls: ['./doc-references.component.css'],
 })
-export class DocReferencesComponent
-  extends InplaceEditorComponentBase<DocReference[]>
-  implements OnInit, AfterViewInit, OnDestroy {
+export class DocReferencesComponent implements AfterViewInit, OnDestroy {
+  private _references: DocReference[];
+  private _updatingForm: boolean;
   private _authorSubscription: Subscription;
-  public references: FormArray;
+  private _refSubs: Subscription[];
 
   @ViewChildren('author') authorQueryList: QueryList<any>;
 
+  /**
+   * The references.
+   */
   @Input()
-  public tagEntries: ThesaurusEntry[];
-  // TODO other thesauri (author/work)
-
-  constructor(formBuilder: FormBuilder) {
-    super(formBuilder);
+  public get references(): DocReference[] {
+    return this._references;
+  }
+  public set references(value: DocReference[]) {
+    this._references = value || [];
+    this.updateForm(value);
   }
 
-  ngOnInit(): void {
-    this.references = this.formBuilder.array([]);
+  @Input()
+  public tagEntries: ThesaurusEntry[] | undefined;
 
-    this.initEditor('references', {
-      references: this.references,
+  /**
+   * Emitted whenever any reference changes.
+   */
+  @Output()
+  public referencesChange: EventEmitter<DocReference[]>;
+
+  public refsArr: FormArray;
+  public form: FormGroup;
+
+  constructor(private _formBuilder: FormBuilder) {
+    this._refSubs = [];
+    this.referencesChange = new EventEmitter<DocReference[]>();
+    // form
+    this.refsArr = _formBuilder.array([]);
+    this.form = _formBuilder.group({
+      refsArr: this.refsArr,
     });
   }
 
   public ngAfterViewInit(): void {
+    // focus on newly added author
     this._authorSubscription = this.authorQueryList.changes
       .pipe(debounceTime(300))
-      .subscribe((_) => {
-        if (this.authorQueryList.length > 0) {
-          this.authorQueryList.last.nativeElement.focus();
+      .subscribe((lst: QueryList<any>) => {
+        if (!this._updatingForm && lst.length > 0) {
+          lst.last.nativeElement.focus();
         }
       });
   }
 
+  private unsubscribeIds(): void {
+    for (let i = 0; i < this._refSubs.length; i++) {
+      this._refSubs[i].unsubscribe();
+    }
+  }
+
   public ngOnDestroy(): void {
-    super.ngOnDestroy();
+    this.unsubscribeIds();
     this._authorSubscription.unsubscribe();
   }
 
+  // #region Authors
   private getReferenceGroup(reference?: DocReference): FormGroup {
-    return this.formBuilder.group({
-      tag: this.formBuilder.control(reference?.tag, [Validators.maxLength(50)]),
-      author: this.formBuilder.control(reference?.author, [
+    return this._formBuilder.group({
+      tag: this._formBuilder.control(reference?.tag, [
+        Validators.maxLength(50),
+      ]),
+      author: this._formBuilder.control(reference?.author, [
         Validators.required,
         Validators.maxLength(50),
       ]),
-      work: this.formBuilder.control(reference?.work, [
+      work: this._formBuilder.control(reference?.work, [
         Validators.required,
         Validators.maxLength(100),
       ]),
-      location: this.formBuilder.control(reference?.location, [
+      location: this._formBuilder.control(reference?.location, [
         Validators.maxLength(20),
       ]),
-      note: this.formBuilder.control(reference?.note, [
+      note: this._formBuilder.control(reference?.note, [
         Validators.maxLength(300),
       ]),
     });
   }
 
   public addReference(reference?: DocReference): void {
-    this.references.push(this.getReferenceGroup(reference));
-  }
+    const g = this.getReferenceGroup(reference);
+    this._refSubs.push(
+      g.valueChanges.pipe(debounceTime(300)).subscribe((_) => {
+        this.emitReferencesChange();
+      })
+    );
+    this.refsArr.push(g);
 
-  public addReferenceBelow(index: number): void {
-    this.references.insert(index + 1, this.getReferenceGroup());
+    if (!this._updatingForm) {
+      this.emitReferencesChange();
+    }
   }
 
   public removeReference(index: number): void {
-    this.references.removeAt(index);
+    this._refSubs[index].unsubscribe();
+    this._refSubs.splice(index, 1);
+    this.refsArr.removeAt(index);
+    this.emitReferencesChange();
+  }
+
+  private swapArrElems(a: any[], i: number, j: number): void {
+    if (i === j) {
+      return;
+    }
+    const t = a[i];
+    a[i] = a[j];
+    a[j] = t;
   }
 
   public moveReferenceUp(index: number): void {
     if (index < 1) {
       return;
     }
-    const item = this.references.controls[index];
-    this.references.removeAt(index);
-    this.references.insert(index - 1, item);
+    const ctl = this.refsArr.controls[index];
+    this.refsArr.removeAt(index);
+    this.refsArr.insert(index - 1, ctl);
+
+    this.swapArrElems(this._refSubs, index, index - 1);
+
+    this.emitReferencesChange();
   }
 
   public moveReferenceDown(index: number): void {
-    if (index + 1 >= this.references.length) {
+    if (index + 1 >= this.refsArr.length) {
       return;
     }
-    const item = this.references.controls[index];
-    this.references.removeAt(index);
-    this.references.insert(index + 1, item);
+    const ctl = this.refsArr.controls[index];
+    this.refsArr.removeAt(index);
+    this.refsArr.insert(index + 1, ctl);
+
+    this.swapArrElems(this._refSubs, index, index + 1);
+
+    this.emitReferencesChange();
   }
 
-  protected setModel(value: DocReference[]): void {
-    if (!this.references) {
+  public clearReferences(): void {
+    this.refsArr.clear();
+    this.unsubscribeIds();
+    this._refSubs = [];
+    if (!this._updatingForm) {
+      this.emitReferencesChange();
+    }
+  }
+  // #endregion
+
+  protected updateForm(value: DocReference[]): void {
+    if (!this.refsArr) {
       return;
     }
+    this._updatingForm = true;
+    this.clearReferences();
+
     if (!value) {
       this.form.reset();
     } else {
-      this.references.clear();
       for (const r of value) {
         this.addReference(r);
       }
       this.form.markAsPristine();
     }
+    this._updatingForm = false;
   }
 
-  protected getModel(): DocReference[] {
+  protected getReferences(): DocReference[] {
     const references: DocReference[] = [];
 
-    for (let i = 0; i < this.references.length; i++) {
-      const g = this.references.controls[i] as FormGroup;
+    for (let i = 0; i < this.refsArr.length; i++) {
+      const g = this.refsArr.controls[i] as FormGroup;
       references.push({
         tag: g.controls.tag.value?.trim(),
         author: g.controls.author.value?.trim(),
@@ -140,5 +220,9 @@ export class DocReferencesComponent
     }
 
     return references;
+  }
+
+  public emitReferencesChange(): void {
+    this.referencesChange.emit(this.getReferences());
   }
 }

@@ -8,7 +8,6 @@ import {
   DocReferencesPart,
   DOC_REFERENCES_PART_TYPEID,
 } from '../doc-references-part';
-import { BehaviorSubject } from 'rxjs';
 
 /**
  * Document references part editor.
@@ -22,24 +21,21 @@ import { BehaviorSubject } from 'rxjs';
 export class DocReferencesPartComponent
   extends ModelEditorComponentBase<DocReferencesPart>
   implements OnInit {
-  private _references: DocReference[];
   private _refChangedFrozen: boolean;
-  public count: FormControl;
 
-  public tagEntries: ThesaurusEntry[];
+  public references: FormControl;
+  public initialRefs: DocReference[];
 
-  public references$: BehaviorSubject<DocReference[]>;
+  public tagEntries: ThesaurusEntry[] | undefined;
 
   constructor(authService: AuthService, formBuilder: FormBuilder) {
     super(authService);
-    this._references = [];
-    this.references$ = new BehaviorSubject<DocReference[]>([]);
+    this.initialRefs = [];
     // form
-    this.count = formBuilder.control(0, Validators.min(1));
+    this.references = formBuilder.control([], Validators.required);
     this.form = formBuilder.group({
-      count: this.count,
+      references: this.references,
     });
-    this._refChangedFrozen = true;
   }
 
   public ngOnInit(): void {
@@ -51,8 +47,7 @@ export class DocReferencesPartComponent
       this.form.reset();
       return;
     }
-    this.references$.next(model.references || []);
-    this.count.setValue(model.references?.length || 0);
+    this.initialRefs = model.references || [];
     this.form.markAsPristine();
   }
 
@@ -65,7 +60,7 @@ export class DocReferencesPartComponent
     if (this.thesauri && this.thesauri[key]) {
       this.tagEntries = this.thesauri[key].entries;
     } else {
-      this.tagEntries = null;
+      this.tagEntries = undefined;
     }
   }
 
@@ -84,19 +79,14 @@ export class DocReferencesPartComponent
         references: [],
       };
     }
-    part.references = this._references;
+    part.references = this.references.value?.length
+      ? this.references.value
+      : undefined;
     return part;
   }
 
   public onReferencesChanged(references: DocReference[]): void {
-    this._references = references;
-    this.count.setValue(references?.length || 0);
-
-    // skip the first time event
-    if (this._refChangedFrozen) {
-      this._refChangedFrozen = false;
-    } else {
-      this.count.markAsDirty();
-    }
+    this.references.setValue(references);
+    this.form.markAsDirty();
   }
 }

@@ -51,9 +51,9 @@
           <!-- references -->
           <div>
             <cadmus-doc-references
-              [model$]="references$"
+              [references]="initialRefs"
               [tagEntries]="docTagEntries"
-              (modelChange)="onReferencesChange($event)"
+              (referencesChange)="onReferencesChange($event)"
             >
             </cadmus-doc-references>
           </div>
