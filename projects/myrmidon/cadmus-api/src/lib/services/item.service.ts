@@ -475,7 +475,8 @@ export class ItemService {
         const filteredParts: Part[] = parts
           .filter((p) => {
             return (
-              p.typeId === def.typeId && (!p.roleId || p.roleId === def.roleId)
+              p.typeId === def.typeId &&
+              ((!p.roleId && !def.roleId) || p.roleId === def.roleId)
             );
           })
           .sort((a, b) => {
