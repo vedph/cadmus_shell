@@ -40,7 +40,7 @@ import { debounceTime } from 'rxjs/operators';
 })
 export class ExternalIdsComponent implements AfterViewInit, OnDestroy {
   // https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url
-  private readonly _urlRegex = new RegExp('^(?:https?://)?www.', 'gi');
+  // private readonly _urlRegex = new RegExp('^(?:https?://)?www.', 'gi');
   private _updatingForm: boolean;
   // private _lastFocusedElId: string | undefined;
   private _ids: string[];
@@ -189,9 +189,9 @@ export class ExternalIdsComponent implements AfterViewInit, OnDestroy {
   }
   // #endregion
 
-  public isValidUrl(url: string): boolean {
-    return this._urlRegex.test(url);
-  }
+  // public isValidUrl(url: string): boolean {
+  //   return this._urlRegex.test(url);
+  // }
 
   private updateForm(ids: string[]): void {
     if (!this.idsArr) {
