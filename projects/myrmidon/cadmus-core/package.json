@@ -1,6 +1,6 @@
 {
   "name": "@myrmidon/cadmus-core",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "Cadmus - core app components: guards, services, validators, and utility classes.",
   "keywords": [
     "Cadmus"

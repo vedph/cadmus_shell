@@ -193,9 +193,9 @@ export interface ThesaurusEntry {
  */
 export interface Thesaurus {
   id: string;
-  language: string;
+  language?: string;
   targetId?: string;
-  entries: ThesaurusEntry[];
+  entries?: ThesaurusEntry[];
 }
 
 /**
