@@ -209,6 +209,7 @@ export class ExternalIdsComponent implements AfterViewInit, OnDestroy {
       this.form.markAsPristine();
     }
     this._updatingForm = false;
+    this.emitIdsChange();
   }
 
   public visitUrl(url: string): void {

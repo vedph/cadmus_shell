@@ -203,6 +203,7 @@ export class DocReferencesComponent implements AfterViewInit, OnDestroy {
       this.form.markAsPristine();
     }
     this._updatingForm = false;
+    this.emitReferencesChange();
   }
 
   protected getReferences(): DocReference[] {
