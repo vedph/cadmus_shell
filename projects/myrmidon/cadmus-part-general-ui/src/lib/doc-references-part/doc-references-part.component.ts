@@ -21,8 +21,6 @@ import {
 export class DocReferencesPartComponent
   extends ModelEditorComponentBase<DocReferencesPart>
   implements OnInit {
-  private _refChangedFrozen: boolean;
-
   public references: FormControl;
   public initialRefs: DocReference[];
 
@@ -85,7 +83,7 @@ export class DocReferencesPartComponent
     return part;
   }
 
-  public onReferencesChanged(references: DocReference[]): void {
+  public onReferencesChange(references: DocReference[]): void {
     this.references.setValue(references);
     this.form.markAsDirty();
   }
