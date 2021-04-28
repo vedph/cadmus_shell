@@ -24,6 +24,7 @@ export * from './lib/services/library-route.service';
 export * from './lib/services/local-storage.service';
 export * from './lib/services/text-layer.service';
 
+export * from './lib/validators/cadmus-validators';
 export * from './lib/validators/password.validator';
 
 export * from './lib/cadmus-core.module';
