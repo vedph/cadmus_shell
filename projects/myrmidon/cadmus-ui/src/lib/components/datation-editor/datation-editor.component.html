@@ -4,10 +4,6 @@
   <div>
     <mat-form-field style="width: 4em">
       <input matInput [formControl]="value" placeholder="value" type="number" />
-      <mat-error
-        *ngIf="value.hasError('required') && (value.touched || value.dirty)"
-        >value required</mat-error
-      >
     </mat-form-field>
     &nbsp;
     <!-- month -->

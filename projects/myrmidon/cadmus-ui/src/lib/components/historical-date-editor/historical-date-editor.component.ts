@@ -93,7 +93,7 @@ export class HistoricalDateEditorComponent implements OnInit {
       .pipe(debounceTime(400), distinctUntilChanged())
       .subscribe((text) => {
         const hd = HistoricalDate.parse(text);
-        if (hd?.a) {
+        if (hd) {
           this.invalidDateText = false;
           this.dateValue = hd.getSortValue();
           this.range.setValue(hd.getDateType() === HistoricalDateType.range);

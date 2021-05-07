@@ -45,7 +45,7 @@ export class DatationEditorComponent
   }
 
   public ngOnInit(): void {
-    this.value = this.formBuilder.control(0, Validators.required);
+    this.value = this.formBuilder.control(0);
     this.century = this.formBuilder.control(false);
     this.span = this.formBuilder.control(false);
     this.month = this.formBuilder.control(0, [
