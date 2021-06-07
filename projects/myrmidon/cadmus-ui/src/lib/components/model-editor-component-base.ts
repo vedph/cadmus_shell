@@ -35,7 +35,7 @@ export abstract class ModelEditorComponentBase<T> {
    * The part's role ID.
    */
   @Input()
-  public roleId: string;
+  public roleId: string | null;
 
   /**
    * The model being edited.
