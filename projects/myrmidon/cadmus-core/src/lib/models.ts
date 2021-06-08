@@ -77,7 +77,7 @@ export interface ItemInfo extends HasVersion {
 export interface DataPinInfo {
   itemId: string;
   partId: string;
-  roleId: string;
+  roleId: string | null;
   partTypeId: string;
   name: string;
   value: string;
@@ -108,7 +108,7 @@ export interface DataPinDefinition {
  */
 export interface PartTypeIds {
   typeId: string;
-  roleId: string;
+  roleId: string | null;
 }
 
 /**
