@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 import {
   HttpEvent,
   HttpInterceptor,
@@ -53,9 +53,13 @@ export class AuthInterceptor implements HttpInterceptor {
             if (err.status === 401) {
               // logout and redirect to the login route
               console.warn('Unauthorized request');
-              auth.logout();
-              const router = this._injector.get(Router);
-              router.navigate(['login']);
+              auth
+                .logout()
+                .pipe(take(1))
+                .subscribe((_) => {
+                  const router = this._injector.get(Router);
+                  router.navigate(['login']);
+                });
             }
           }
         }

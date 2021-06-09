@@ -1,13 +1,19 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { User, GravatarService, Thesaurus, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import {
+  User,
+  GravatarService,
+  Thesaurus,
+  ThesaurusEntry,
+} from '@myrmidon/cadmus-core';
 import { AuthService } from '@myrmidon/cadmus-api';
 import { AppService, AppQuery } from '@myrmidon/cadmus-state';
 import { Router } from '@angular/router';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'cadmus-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
   public user: User;
@@ -56,7 +62,11 @@ export class AppComponent implements OnInit {
     if (!this.logged) {
       return;
     }
-    this._authService.logout();
-    this._router.navigate(['/home']);
+    this._authService
+      .logout()
+      .pipe(take(1))
+      .subscribe((_) => {
+        this._router.navigate(['/home']);
+      });
   }
 }

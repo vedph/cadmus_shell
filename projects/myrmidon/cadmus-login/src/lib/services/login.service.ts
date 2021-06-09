@@ -4,6 +4,7 @@ import { AuthService, RuntimeSettingsService } from '@myrmidon/cadmus-api';
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {

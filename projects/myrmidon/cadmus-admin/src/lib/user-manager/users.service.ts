@@ -31,20 +31,25 @@ export class UsersService {
     );
   }
 
-  public deleteUser(name: string): void {
-    this._store.setLoading(true);
+  public deleteUser(name: string): Promise<boolean> {
+    const promise: Promise<boolean> = new Promise((resolve, reject) => {
+      this._store.setLoading(true);
 
-    this._accountService.deleteUser(name).subscribe(
-      (_) => {
-        this._store.setLoading(false);
-        this._store.setError(null);
-        this._store.remove(name);
-      },
-      (error) => {
-        console.error(error);
-        this._store.setLoading(false);
-        this._store.setError('Error deleting user');
-      }
-    );
+      this._accountService.deleteUser(name).subscribe(
+        (_) => {
+          this._store.setLoading(false);
+          this._store.setError(null);
+          this._store.remove(name);
+          resolve(true);
+        },
+        (error) => {
+          console.error(error);
+          this._store.setLoading(false);
+          this._store.setError('Error deleting user');
+          reject(error);
+        }
+      );
+    });
+    return promise;
   }
 }

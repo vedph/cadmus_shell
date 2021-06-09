@@ -179,9 +179,10 @@
               "
               matTooltip="Save metadata"
               *ngIf="
-                user.roles.includes('admin') ||
-                user.roles.includes('editor') ||
-                user.roles.includes('operator')
+                user?.roles?.length &&
+                (user.roles.includes('admin') ||
+                  user.roles.includes('editor') ||
+                  user.roles.includes('operator'))
               "
             >
               <mat-icon>save</mat-icon> save
@@ -278,9 +279,10 @@
                     "
                     (click)="deletePart(part)"
                     *ngIf="
-                      user.roles.includes('admin') ||
-                      user.roles.includes('editor') ||
-                      user.roles.includes('operator')
+                      user?.roles?.length &&
+                      (user.roles.includes('admin') ||
+                        user.roles.includes('editor') ||
+                        user.roles.includes('operator'))
                     "
                   >
                     <mat-icon color="warn">delete</mat-icon>

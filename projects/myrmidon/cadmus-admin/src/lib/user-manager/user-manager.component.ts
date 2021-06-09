@@ -10,11 +10,10 @@ import {
 import { FormControl, FormBuilder } from '@angular/forms';
 import { USERS_PAGINATOR } from './users.paginator';
 import { UsersState } from './users.store';
-import { UserService, AccountService } from '@myrmidon/cadmus-api';
+import { UserService } from '@myrmidon/cadmus-api';
 import { DialogService } from '@myrmidon/cadmus-ui';
 import { startWith, tap, switchMap, map } from 'rxjs/operators';
 import { PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { UsersService } from './users.service';
 import { UsersQuery } from './users.query';
 
@@ -24,6 +23,8 @@ import { UsersQuery } from './users.query';
   styleUrls: ['./user-manager.component.css'],
 })
 export class UserManagerComponent implements OnInit {
+  private _refresh$: BehaviorSubject<number>;
+
   public pagination$: Observable<PaginationResponse<User>>;
   public filter$: BehaviorSubject<UserFilter>;
   public pageSize: FormControl;
@@ -38,6 +39,7 @@ export class UserManagerComponent implements OnInit {
     private _gravatarService: GravatarService,
     formBuilder: FormBuilder
   ) {
+    this._refresh$ = new BehaviorSubject(0);
     this.pageSize = formBuilder.control(20);
     // https://netbasal.com/manage-your-entities-with-akita-like-a-boss-768732f8d4d1
     this.active$ = this._usersQuery.selectActive();
@@ -76,6 +78,7 @@ export class UserManagerComponent implements OnInit {
     // -page number changes from paginator
     // -page size changes from control
     // -filter changes from filter (in this case, clearing the cache)
+    // -refresh request (in this case, clearing the cache)
     this.pagination$ = combineLatest([
       this.paginator.pageChanges,
       this.pageSize.valueChanges.pipe(
@@ -89,6 +92,12 @@ export class UserManagerComponent implements OnInit {
       ),
       this.filter$.pipe(
         // clear the cache when filters changed
+        tap((_) => {
+          this.paginator.clearCache();
+        })
+      ),
+      this._refresh$.pipe(
+        // clear the cache when forcing refresh
         tap((_) => {
           this.paginator.clearCache();
         })
@@ -126,7 +135,14 @@ export class UserManagerComponent implements OnInit {
         if (!ok) {
           return;
         }
-        this._usersService.deleteUser(user.userName);
+        this._usersService.deleteUser(user.userName).then(
+          (_) => {
+            this._refresh$.next(new Date().getUTCMilliseconds());
+          },
+          (_) => {
+            this._refresh$.next(new Date().getUTCMilliseconds());
+          }
+        );
       });
   }
 

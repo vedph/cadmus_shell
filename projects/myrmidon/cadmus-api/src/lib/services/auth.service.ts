@@ -98,6 +98,7 @@ export class AuthService {
               ],
           };
           this._currentUserSubject.next(user);
+          this.updateCurrentUser(user);
           return user;
         })
       );
@@ -106,9 +107,9 @@ export class AuthService {
   /**
    * Logs out the current user if any.
    */
-  public logout() {
+  public logout(): Observable<any> {
     this._localStorage.remove(STORAGE_AUTH_USER_KEY, true);
-    this._localStorage.remove('id_token');
+    this._localStorage.remove(STORAGE_AUTH_TOKEN_KEY, true);
     this._currentUserSubject.next(null);
     const options = {
       headers: this.createAuthHeaders({
