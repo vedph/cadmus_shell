@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Thesaurus } from '@myrmidon/cadmus-core';
+import { Component, OnInit, Input } from '@angular/core';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { BibAuthor } from '../bibliography-part';
 import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 
@@ -13,8 +13,9 @@ export class BibAuthorsEditorComponent implements OnInit {
   public parentForm: FormGroup;
   @Input()
   public controlName: string;
+  // bibliography-author-roles
   @Input()
-  public roleThesaurus: Thesaurus;
+  public roleEntries: ThesaurusEntry[] | undefined;
 
   public authors: FormArray;
 

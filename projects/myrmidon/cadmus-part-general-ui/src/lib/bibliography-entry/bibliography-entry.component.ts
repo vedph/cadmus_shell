@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { BibEntry, BibAuthor } from '../bibliography-part';
-import { Thesaurus } from '@myrmidon/cadmus-core';
+import { Thesaurus, ThesaurusEntry } from '@myrmidon/cadmus-core';
 import {
   FormGroup,
   FormBuilder,
@@ -35,12 +35,18 @@ export class BibliographyEntryComponent implements OnInit {
     this.updateForm(value);
   }
 
+  // bibliography-languages
   @Input()
-  public langThesaurus: Thesaurus | undefined;
+  public langEntries: ThesaurusEntry[] | undefined;
+  // bibliography-types
   @Input()
-  public typeThesaurus: Thesaurus | undefined;
+  public typeEntries: ThesaurusEntry[] | undefined;
+  // bibliography-tags
   @Input()
-  public roleThesaurus: Thesaurus | undefined;
+  public tagEntries: ThesaurusEntry[] | undefined;
+  // bibliography-author-roles
+  @Input()
+  public roleEntries: ThesaurusEntry[] | undefined;
 
   @Output()
   public editorClose: EventEmitter<any>;
@@ -50,6 +56,7 @@ export class BibliographyEntryComponent implements OnInit {
   // form - general
   public key: FormControl;
   public type: FormControl;
+  public tag: FormControl;
   public language: FormControl;
   public authors: FormArray;
   public title: FormControl;
@@ -84,6 +91,7 @@ export class BibliographyEntryComponent implements OnInit {
       Validators.required,
       Validators.maxLength(50),
     ]);
+    this.tag = _formBuilder.control(null, Validators.maxLength(50));
     this.language = _formBuilder.control(null, [
       Validators.required,
       Validators.pattern(/^[a-z]{3}$/),
@@ -136,6 +144,7 @@ export class BibliographyEntryComponent implements OnInit {
     this.form = _formBuilder.group({
       key: this.key,
       type: this.type,
+      tag: this.tag,
       language: this.language,
       authors: this.authors,
       title: this.title,
@@ -205,6 +214,7 @@ export class BibliographyEntryComponent implements OnInit {
 
     this.key.setValue(entry.key);
     this.type.setValue(entry.typeId);
+    this.tag.setValue(entry.tag);
     this.language.setValue(entry.language);
     this.setAuthors(entry.authors, this.authors);
     this.title.setValue(entry.title);
@@ -247,6 +257,7 @@ export class BibliographyEntryComponent implements OnInit {
     return {
       key: this.key.value?.trim(),
       typeId: this.type.value?.trim(),
+      tag: this.tag.value?.trim(),
       language: this.language.value,
       authors: this.getAuthors(this.authors),
       title: this.title.value?.trim(),

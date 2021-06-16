@@ -86,9 +86,10 @@
         <mat-tab label="Entry" *ngIf="editedEntry">
           <cadmus-bibliography-entry
             [entry]="editedEntry"
-            [langThesaurus]="langThesaurus"
-            [typeThesaurus]="typeThesaurus"
-            [roleThesaurus]="roleThesaurus"
+            [langEntries]="langEntries"
+            [typeEntries]="typeEntries"
+            [tagEntries]="tagEntries"
+            [roleEntries]="roleEntries"
             (editorClose)="onEntryClose()"
             (entryChange)="onEntrySave($event)"
           ></cadmus-bibliography-entry>

@@ -6,14 +6,14 @@ import {
   BibAuthor,
 } from '../bibliography-part';
 import { ModelEditorComponentBase, DialogService } from '@myrmidon/cadmus-ui';
-import { deepCopy, Thesaurus } from '@myrmidon/cadmus-core';
+import { deepCopy, ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { AuthService } from '@myrmidon/cadmus-api';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 /**
  * Bibliography part editor.
  * Thesauri: bibliography-languages, bibliography-types (optional),
- * bibliography-author-roles (optional).
+ * bibliography-tags (optional), bibliography-author-roles (optional).
  */
 @Component({
   selector: 'cadmus-bibliography-part',
@@ -22,16 +22,18 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 })
 export class BibliographyPartComponent
   extends ModelEditorComponentBase<BibliographyPart>
-  implements OnInit {
+  implements OnInit
+{
   private _newEditedEntry: boolean;
 
   public part: BibliographyPart;
   public editedEntry: BibEntry;
   public currentTabIndex: number;
 
-  public typeThesaurus: Thesaurus | undefined;
-  public langThesaurus: Thesaurus | undefined;
-  public roleThesaurus: Thesaurus | undefined;
+  public typeEntries: ThesaurusEntry[] | undefined;
+  public tagEntries: ThesaurusEntry[] | undefined;
+  public langEntries: ThesaurusEntry[] | undefined;
+  public roleEntries: ThesaurusEntry[] | undefined;
 
   public entryCount: FormControl;
 
@@ -56,31 +58,38 @@ export class BibliographyPartComponent
   protected onThesauriSet(): void {
     const langKey = 'bibliography-languages';
     if (this.thesauri && this.thesauri[langKey]) {
-      this.langThesaurus = this.thesauri[langKey];
+      this.langEntries = this.thesauri[langKey].entries;
     } else {
-      this.langThesaurus = undefined;
+      this.langEntries = undefined;
     }
 
     const typeKey = 'bibliography-types';
     if (this.thesauri && this.thesauri[typeKey]) {
-      this.typeThesaurus = this.thesauri[typeKey];
+      this.typeEntries = this.thesauri[typeKey].entries;
     } else {
-      this.typeThesaurus = undefined;
+      this.typeEntries = undefined;
+    }
+
+    const tagKey = 'bibliography-tags';
+    if (this.thesauri && this.thesauri[tagKey]) {
+      this.tagEntries = this.thesauri[tagKey].entries;
+    } else {
+      this.tagEntries = undefined;
     }
 
     const roleKey = 'bibliography-author-roles';
     if (this.thesauri && this.thesauri[roleKey]) {
-      this.roleThesaurus = this.thesauri[roleKey];
+      this.roleEntries = this.thesauri[roleKey].entries;
     } else {
-      this.roleThesaurus = undefined;
+      this.roleEntries = undefined;
     }
   }
 
   public entryTypeToString(id?: string): string {
-    if (!id || !this.typeThesaurus?.entries) {
+    if (!id || !this.typeEntries?.entries) {
       return '';
     }
-    const entry = this.typeThesaurus.entries.find((e) => e.id === id);
+    const entry = this.typeEntries.find((e) => e.id === id);
     return entry ? entry.value : id;
   }
 
@@ -122,9 +131,9 @@ export class BibliographyPartComponent
 
   public addEntry(): void {
     const entry: BibEntry = {
-      typeId: this.typeThesaurus?.entries[0].id,
+      typeId: this.typeEntries?.entries[0].id,
       title: null,
-      language: this.langThesaurus?.entries[0].id,
+      language: this.langEntries?.entries[0].id,
     };
     this.part.entries.push(entry);
     this.entryCount.setValue(this.part.entries.length);

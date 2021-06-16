@@ -95,17 +95,15 @@
           <mat-error>too long</mat-error>
         </mat-form-field>
         <!-- roleId -->
-        <mat-form-field *ngIf="roleThesaurus">
+        <mat-form-field *ngIf="roleEntries?.length">
           <mat-select formControlName="roleId" placeholder="role">
             <mat-option [value]="null">(no role)</mat-option>
-            <mat-option
-              *ngFor="let e of roleThesaurus.entries"
-              [value]="e.id"
-              >{{ e.value }}</mat-option
-            >
+            <mat-option *ngFor="let e of roleEntries" [value]="e.id">{{
+              e.value
+            }}</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field *ngIf="!roleThesaurus">
+        <mat-form-field *ngIf="!roleEntries?.length">
           <input
             matInput
             formControlName="roleId"

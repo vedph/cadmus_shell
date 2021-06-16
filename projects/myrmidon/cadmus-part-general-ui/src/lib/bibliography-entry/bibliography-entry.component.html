@@ -4,16 +4,14 @@
     <mat-tab label="General">
       <!-- typeId -->
       <div>
-        <mat-form-field *ngIf="typeThesaurus">
+        <mat-form-field *ngIf="typeEntries?.length">
           <mat-select formControlName="type" placeholder="type">
-            <mat-option
-              *ngFor="let e of typeThesaurus?.entries || []"
-              [value]="e.id"
-              >{{ e.value }}</mat-option
-            >
+            <mat-option *ngFor="let e of typeEntries || []" [value]="e.id">{{
+              e.value
+            }}</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field *ngIf="!typeThesaurus">
+        <mat-form-field *ngIf="!typeEntries?.length">
           <input
             matInput
             type="text"
@@ -31,26 +29,36 @@
           >
         </mat-form-field>
 
+        <!-- tag (bound) -->
+        &nbsp;
+        <mat-form-field *ngIf="tagEntries?.length" style="width: 8em">
+          <mat-select [formControl]="tag" placeholder="tag">
+            <mat-option *ngFor="let e of tagEntries" [value]="e.id">{{
+              e.value
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- tag (free) -->
+        <mat-form-field *ngIf="!tagEntries?.length" style="width: 8em">
+          <input matInput [formControl]="tag" placeholder="tag" />
+          <mat-error *ngIf="tag.errors?.maxLength && (tag.dirty || tag.touched)"
+            >tag too long</mat-error
+          >
+        </mat-form-field>
+
         <!-- language (bound) -->
         &nbsp;
-        <mat-form-field
-          *ngIf="langThesaurus?.entries?.length"
-          style="width: 8em"
-        >
+        <mat-form-field *ngIf="langEntries?.length" style="width: 8em">
           <mat-select formControlName="language" placeholder="language">
-            <mat-option
-              *ngFor="let e of langThesaurus?.entries || []"
-              [value]="e.id"
-              >{{ e.value }}</mat-option
-            >
+            <mat-option *ngFor="let e of langEntries || []" [value]="e.id">{{
+              e.value
+            }}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <!-- language (free) -->
-        <mat-form-field
-          *ngIf="!langThesaurus?.entries?.length"
-          style="width: 8em"
-        >
+        <mat-form-field *ngIf="!langEntries?.length" style="width: 8em">
           <input matInput [formControl]="language" placeholder="language" />
           <mat-error
             *ngIf="
@@ -80,7 +88,7 @@
       <cadmus-bib-authors-editor
         [parentForm]="form"
         [controlName]="'authors'"
-        [roleThesaurus]="roleThesaurus"
+        [roleEntries]="roleEntries"
       ></cadmus-bib-authors-editor>
 
       <!-- title -->
@@ -128,7 +136,7 @@
       <cadmus-bib-authors-editor
         [parentForm]="form"
         [controlName]="'contributors'"
-        [roleThesaurus]="roleThesaurus"
+        [roleEntries]="roleEntries"
       ></cadmus-bib-authors-editor>
 
       <!-- container -->
@@ -335,23 +343,15 @@
       <form [formGroup]="keyForm" (submit)="addKeyword()">
         <div>
           <!-- language (bound) -->
-          <mat-form-field
-            *ngIf="langThesaurus?.entries?.length"
-            style="width: 8em"
-          >
+          <mat-form-field *ngIf="langEntries?.length" style="width: 8em">
             <mat-select formControlName="keyLanguage" placeholder="language">
-              <mat-option
-                *ngFor="let e of langThesaurus?.entries || []"
-                [value]="e.id"
-                >{{ e.value }}</mat-option
-              >
+              <mat-option *ngFor="let e of langEntries || []" [value]="e.id">{{
+                e.value
+              }}</mat-option>
             </mat-select>
           </mat-form-field>
           <!-- language (free) -->
-          <mat-form-field
-            *ngIf="!langThesaurus?.entries?.length"
-            style="width: 8em"
-          >
+          <mat-form-field *ngIf="!langEntries?.length" style="width: 8em">
             <input
               matInput
               [formControl]="keyLanguage"

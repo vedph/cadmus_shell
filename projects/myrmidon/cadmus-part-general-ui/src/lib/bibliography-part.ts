@@ -10,6 +10,7 @@ export interface BibAuthor {
 export interface BibEntry {
   key?: string;
   typeId: string;
+  tag?: string;
   authors?: BibAuthor[];
   title: string;
   language: string;
@@ -91,6 +92,9 @@ export const BIBLIOGRAPHY_PART_SCHEMA = {
     typeId: {
       type: 'string',
       pattern: '^[a-z][-0-9a-z._]*$',
+    },
+    tag: {
+      type: 'string'
     },
     roleId: {
       type: ['string', 'null'],

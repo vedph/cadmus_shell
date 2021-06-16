@@ -40,6 +40,7 @@ export class BibliographyPartFeatureComponent extends EditPartFeatureBase
     this.initEditor([
       'bibliography-languages',
       'bibliography-types',
+      'bibliography-tags',
       'bibliography-author-roles'
     ]);
   }
