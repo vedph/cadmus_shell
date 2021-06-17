@@ -1,0 +1,23 @@
+{
+  "name": "@myrmidon/cadmus-profile-core",
+  "version": "0.0.1",
+  "description": "Cadmus - profile core components.",
+  "keywords": [
+    "Cadmus"
+  ],
+  "homepage": "https://github.com/vedph/cadmus_shell",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vedph/cadmus_shell"
+  },
+  "author": {
+    "name": "Daniele Fusi"
+  },
+  "peerDependencies": {
+    "@angular/common": "^12.0.4",
+    "@angular/core": "^12.0.4"
+  },
+  "dependencies": {
+    "tslib": "^2.1.0"
+  }
+}

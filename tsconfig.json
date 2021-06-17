@@ -85,6 +85,10 @@
         "dist/myrmidon/cadmus-thesaurus-list/myrmidon-cadmus-thesaurus-list",
         "dist/myrmidon/cadmus-thesaurus-list"
       ],
+      "@myrmidon/cadmus-profile-core": [
+        "dist/myrmidon/cadmus-profile-core/myrmidon-cadmus-profile-core",
+        "dist/myrmidon/cadmus-profile-core"
+      ],
       "@myrmidon/cadmus-cadmus-ui": [
         "dist/myrmidon/cadmus-cadmus-ui/myrmidon-cadmus-cadmus-ui",
         "dist/myrmidon/cadmus-cadmus-ui"

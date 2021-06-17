@@ -8,6 +8,8 @@ import { CadmusApiModule } from '@myrmidon/cadmus-api';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
 import { ThesaurusEditorComponent } from './thesaurus-editor/thesaurus-editor.component';
+import { ThesaurusLookupComponent } from './thesaurus-lookup/thesaurus-lookup.component';
+import { ThesaurusNodeComponent } from './thesaurus-node/thesaurus-node.component';
 
 // https://github.com/ng-packagr/ng-packagr/issues/778
 export const RouterModuleForChild = RouterModule.forChild([
@@ -26,7 +28,15 @@ export const RouterModuleForChild = RouterModule.forChild([
     CadmusUiModule,
     CadmusStateModule,
   ],
-  declarations: [ThesaurusEditorComponent],
-  exports: [ThesaurusEditorComponent],
+  declarations: [
+    ThesaurusEditorComponent,
+    ThesaurusLookupComponent,
+    ThesaurusNodeComponent,
+  ],
+  exports: [
+    ThesaurusEditorComponent,
+    ThesaurusLookupComponent,
+    ThesaurusNodeComponent,
+  ],
 })
 export class CadmusThesaurusEditorModule {}

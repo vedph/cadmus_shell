@@ -3,4 +3,6 @@
  */
 
 export * from './lib/thesaurus-editor/thesaurus-editor.component';
+export * from './lib/thesaurus-lookup/thesaurus-lookup.component';
+export * from './lib/thesaurus-node/thesaurus-node.component';
 export * from './lib/cadmus-thesaurus-editor.module';
