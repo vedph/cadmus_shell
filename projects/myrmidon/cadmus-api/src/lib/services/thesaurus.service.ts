@@ -21,14 +21,26 @@ export class ThesaurusService {
 
   /**
    * Get the list of thesauri IDs.
-   * @returns Observable<string> Array of IDs.
+   * @param filter The optional filter to use (page size can be 0 to get
+   * all the IDs at once).
+   * @returns Array of IDs.
    */
-  public getThesaurusIds(): Observable<string[]> {
+  public getThesaurusIds(filter?: ThesaurusFilter): Observable<string[]> {
     const url =
       this._env.get('apiUrl') + this._env.get('databaseId') + '/thesauri-ids';
-    return this._http
-      .get<string[]>(url)
-      .pipe(retry(3), catchError(this._error.handleError));
+
+    if (!filter) {
+      return this._http
+        .get<string[]>(url)
+        .pipe(retry(3), catchError(this._error.handleError));
+    } else {
+      let httpParams = this.GetFilterParams(filter);
+      return this._http
+        .get<string[]>(url, {
+          params: httpParams,
+        })
+        .pipe(retry(3), catchError(this._error.handleError));
+    }
   }
 
   /**
@@ -76,12 +88,7 @@ export class ThesaurusService {
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
-  /**
-   * Get a page of thesauri.
-   *
-   * @param filter The filter.
-   */
-  public getThesauri(filter: ThesaurusFilter): Observable<DataPage<Thesaurus>> {
+  private GetFilterParams(filter: ThesaurusFilter): HttpParams {
     let httpParams = new HttpParams();
     httpParams = httpParams.set('pageNumber', filter.pageNumber.toString());
     httpParams = httpParams.set('pageSize', filter.pageSize.toString());
@@ -97,6 +104,16 @@ export class ThesaurusService {
         filter.isAlias === true ? 'true' : 'false'
       );
     }
+    return httpParams;
+  }
+
+  /**
+   * Get a page of thesauri.
+   *
+   * @param filter The filter.
+   */
+  public getThesauri(filter: ThesaurusFilter): Observable<DataPage<Thesaurus>> {
+    let httpParams = this.GetFilterParams(filter);
 
     const url =
       this._env.get('apiUrl') + this._env.get('databaseId') + `/thesauri`;
