@@ -6,17 +6,25 @@ import { ItemService } from '@myrmidon/cadmus-api';
 export class ThesauriListService {
   constructor(private _store: ThesauriStore, private _service: ItemService) {}
 
-  public delete(id: string): void {
-    this._store.setLoading(true);
-    this._service.deleteItem(id).subscribe(
-      (_) => {
-        this._store.remove(id);
-        this._store.setLoading(false);
-      },
-      (error) => {
-        console.error(error);
-        this._store.setLoading(false);
-      }
-    );
+  public delete(id: string): Promise<boolean> {
+    const promise: Promise<boolean> = new Promise((resolve, reject) => {
+      this._store.setLoading(true);
+
+      this._service.deleteItem(id).subscribe(
+        (_) => {
+          this._store.remove(id);
+          this._store.setError(null);
+          this._store.setLoading(false);
+          resolve(true);
+        },
+        (error) => {
+          console.error(error);
+          this._store.setLoading(false);
+          this._store.setError('Error deleting thesaurus');
+          reject(error);
+        }
+      );
+    });
+    return promise;
   }
 }

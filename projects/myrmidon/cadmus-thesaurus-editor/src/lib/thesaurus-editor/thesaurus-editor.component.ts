@@ -93,14 +93,17 @@ export class ThesaurusEditorComponent implements OnInit {
 
   public addEntry(item?: ThesaurusEntry): void {
     this.entries.push(this.getEntryGroup(item));
+    this.form.markAsDirty();
   }
 
   public addEntryBelow(index: number): void {
     this.entries.insert(index + 1, this.getEntryGroup());
+    this.form.markAsDirty();
   }
 
   public removeEntry(index: number): void {
     this.entries.removeAt(index);
+    this.form.markAsDirty();
   }
 
   public moveEntryUp(index: number): void {
@@ -110,6 +113,7 @@ export class ThesaurusEditorComponent implements OnInit {
     const item = this.entries.controls[index];
     this.entries.removeAt(index);
     this.entries.insert(index - 1, item);
+    this.form.markAsDirty();
   }
 
   public moveEntryDown(index: number): void {
@@ -119,10 +123,12 @@ export class ThesaurusEditorComponent implements OnInit {
     const item = this.entries.controls[index];
     this.entries.removeAt(index);
     this.entries.insert(index + 1, item);
+    this.form.markAsDirty();
   }
 
   public clearEntries(): void {
     this.entries.clear();
+    this.form.markAsDirty();
   }
 
   private updateForm(thesaurus: Thesaurus): void {
@@ -175,7 +181,7 @@ export class ThesaurusEditorComponent implements OnInit {
     }
 
     this._dialogService
-      .confirm('Discard Changes', `Discard any changes?`)
+      .confirm('Discard Changes', `Discard changes?`)
       .subscribe((result) => {
         if (!result) {
           return;
