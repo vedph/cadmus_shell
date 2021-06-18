@@ -1,207 +1,407 @@
-import { Component, OnInit } from '@angular/core';
-import { Thesaurus, User, ThesaurusEntry } from '@myrmidon/cadmus-core';
-import { Observable } from 'rxjs';
 import {
-  FormControl,
-  FormArray,
-  FormGroup,
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
+import {
   FormBuilder,
+  FormControl,
+  FormGroup,
   Validators,
 } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import {
-  EditThesaurusService,
-  EditThesaurusQuery,
-} from '@myrmidon/cadmus-state';
-import { AuthService } from '@myrmidon/cadmus-api';
+import { PageEvent } from '@angular/material/paginator';
+import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
+import { DataPage, Thesaurus, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { ComponentSignal } from '@myrmidon/cadmus-profile-core';
 import { DialogService } from '@myrmidon/cadmus-ui';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { debounceTime, map, startWith, switchMap, tap } from 'rxjs/operators';
+import {
+  ThesaurusNode,
+  ThesaurusNodeFilter,
+  ThesaurusNodesService,
+} from '../services/thesaurus-nodes.service';
+import { THESAURUS_EDITOR_PAGINATOR } from './store/thesaurus-editor.paginator';
+import { ThesaurusEditorState } from './store/thesaurus-editor.store';
 
+const THES_ID_PATTERN = '^[a-zA-Z0-9][.\\-_a-zA-Z0-9]*@[a-z]{2,3}$';
+
+/**
+ * Thesaurus editor. This edits a thesaurus per pages. Each page
+ * contains a set of thesauri nodes, which are a representation of
+ * thesaurus entries used to ease facilitate the editing of hierarchical
+ * thesauri, but can be equally used with normal thesauri.
+ */
 @Component({
   selector: 'cadmus-thesaurus-editor',
   templateUrl: './thesaurus-editor.component.html',
   styleUrls: ['./thesaurus-editor.component.css'],
 })
 export class ThesaurusEditorComponent implements OnInit {
-  public id: string;
-  public user: User;
-  public userLevel: number;
-  public loading$: Observable<boolean>;
-  public saving$: Observable<boolean>;
-  public error$: Observable<string>;
+  private _thesaurus: Thesaurus | undefined;
+  private _refresh$: BehaviorSubject<number>;
 
-  public editId: FormControl;
-  public entries: FormArray;
+  @Input()
+  public get thesaurus(): Thesaurus | undefined {
+    return this._thesaurus;
+  }
+  public set thesaurus(value: Thesaurus | undefined) {
+    this._thesaurus = value;
+    this.updateForm(value);
+  }
+
+  @Output()
+  public thesaurusChange: EventEmitter<Thesaurus>;
+
+  @Output()
+  public editorClose: EventEmitter<any>;
+
+  public filter$: BehaviorSubject<ThesaurusNodeFilter>;
+  public pageSize: FormControl;
+
+  // thesaurus form
+  public id: FormControl;
+  public alias: FormControl;
+  public targetId: FormControl;
+  public entryCount: FormControl;
   public form: FormGroup;
 
-  constructor(
-    private _route: ActivatedRoute,
-    private _router: Router,
-    private _query: EditThesaurusQuery,
-    private _editService: EditThesaurusService,
-    private _authService: AuthService,
-    private _dialogService: DialogService,
-    private _formBuilder: FormBuilder
-  ) {
-    this.id = this._route.snapshot.params['id'];
-    if (this.id === 'new') {
-      this.id = null;
-    }
-    this.userLevel = 0;
+  // filter
+  public parentId: FormControl;
+  public idOrValue: FormControl;
+  public filterForm: FormGroup;
 
-    this.editId = _formBuilder.control(null, [
-      Validators.required,
-      Validators.maxLength(100),
-      Validators.pattern(/^[a-zA-Z0-9_\-\.]+\@[a-z]{2,3}$/g),
-    ]);
-    this.entries = _formBuilder.array([]);
-    this.form = _formBuilder.group({
-      editId: this.editId,
-      entries: this.entries,
+  public parentIds$: Observable<ThesaurusEntry[]>;
+  public page$: Observable<PaginationResponse<ThesaurusNode>> | undefined;
+
+  constructor(
+    @Inject(THESAURUS_EDITOR_PAGINATOR)
+    public paginator: PaginatorPlugin<ThesaurusEditorState>,
+    private _nodesService: ThesaurusNodesService,
+    private _dialogService: DialogService,
+    formBuilder: FormBuilder
+  ) {
+    this.filter$ = new BehaviorSubject<ThesaurusNodeFilter>({
+      pageNumber: 1,
+      pageSize: 20,
     });
+    this._refresh$ = new BehaviorSubject(0);
+    this.pageSize = formBuilder.control(20);
+    this.thesaurusChange = new EventEmitter<Thesaurus>();
+    this.editorClose = new EventEmitter<any>();
+    // the list of all the parent nodes IDs in the edited thesaurus
+    this.parentIds$ = this._nodesService.selectParentIds();
+    // thesaurus form
+    this.id = formBuilder.control(null, [
+      Validators.required,
+      Validators.maxLength(50),
+      Validators.pattern(new RegExp(THES_ID_PATTERN)),
+    ]);
+    this.alias = formBuilder.control(false);
+    this.targetId = formBuilder.control(null);
+    this.entryCount = formBuilder.control(0, Validators.min(1));
+    this.form = formBuilder.group({
+      id: this.id,
+      alias: this.alias,
+      targetId: this.targetId,
+      entryCount: this.entryCount,
+    });
+    // filter form
+    this.idOrValue = formBuilder.control(null);
+    this.parentId = formBuilder.control(null);
+    this.filterForm = formBuilder.group({
+      idOrValue: this.idOrValue,
+      parentId: this.parentId,
+    });
+  }
+
+  /**
+   * Update the form's validators according to whether the edited
+   * thesaurus is just an alias or a full thesaurus.
+   */
+  private updateValidators(): void {
+    if (this.alias.value) {
+      // alias: target ID required and valid, no entries
+      this.entryCount.setValidators(null);
+      this.targetId.setValidators([
+        Validators.required,
+        Validators.maxLength(50),
+        Validators.pattern(new RegExp(THES_ID_PATTERN)),
+      ]);
+    } else {
+      // not an alias: entries required, no target ID
+      this.entryCount.setValidators(Validators.min(1));
+      this.targetId.setValidators(null);
+    }
+
+    this.entryCount.updateValueAndValidity();
+    this.targetId.updateValueAndValidity();
+  }
+
+  private refresh(): void {
+    let n = this._refresh$.value + 1;
+    if (n > 100) {
+      n = 1;
+    }
+    this._refresh$.next(n);
+    this.entryCount.setValue(this._nodesService.length);
+  }
+
+  private getRequest(
+    filter: ThesaurusNodeFilter
+  ): () => Observable<PaginationResponse<ThesaurusNode>> {
+    return () =>
+      this._nodesService.getPage(filter).pipe(
+        // adapt page to paginator plugin
+        map((p: DataPage<ThesaurusNode>) => {
+          return {
+            currentPage: p.pageNumber,
+            perPage: p.pageSize,
+            lastPage: p.pageCount,
+            data: p.items,
+            total: p.total,
+          };
+        })
+      );
+  }
+
+  private getPaginatorResponse(
+    pageNumber: number,
+    pageSize: number
+  ): Observable<PaginationResponse<ThesaurusNode>> {
+    const filter = {
+      ...this.filter$.value,
+      pageNumber: pageNumber,
+      pageSize: pageSize,
+    };
+    const request = this.getRequest(filter);
+    // update saved filters
+    this.paginator.metadata.set('filter', filter);
+
+    return this.paginator.getPage(request);
   }
 
   ngOnInit(): void {
-    this._authService.currentUser$.subscribe((user: User) => {
-      this.user = user;
-      this.userLevel = this._authService.getCurrentUserLevel();
+    // filter
+    const initialPageSize = 20;
+    this.pageSize.setValue(initialPageSize);
+
+    // combine and get latest:
+    // -page number changes from paginator;
+    // -page size changes from control;
+    // -filter changes from filter (in this case, clearing the cache);
+    // -refresh request (in this case, clearing the cache).
+    this.page$ = combineLatest([
+      this.paginator.pageChanges.pipe(startWith(0)),
+      this.pageSize.valueChanges.pipe(
+        // we are required to emit at least the initial value
+        // as combineLatest emits only if ALL observables have emitted
+        startWith(initialPageSize),
+        // clear the cache when page size changes
+        tap((_) => {
+          this.paginator.clearCache();
+        })
+      ),
+      this.filter$.pipe(
+        startWith(undefined as string),
+        // clear the cache when filters change
+        tap((_) => {
+          this.paginator.clearCache();
+        })
+      ),
+      this._refresh$.pipe(
+        // clear the cache when forcing refresh
+        tap((_) => {
+          this.paginator.clearCache();
+        })
+      ),
+    ]).pipe(
+      // https://blog.strongbrew.io/combine-latest-glitch/
+      debounceTime(0),
+      // for each emitted value, combine into a filter and use it
+      // to request the page from server
+      switchMap(([pageNumber, pageSize, _]) => {
+        return this.getPaginatorResponse(pageNumber, pageSize);
+      })
+    );
+
+    // change validation according to whether this is an alias
+    this.alias.valueChanges.subscribe((_) => {
+      this.updateValidators();
     });
 
-    // update form whenever we get new data
-    this._query.selectThesaurus().subscribe((thesaurus) => {
-      this.updateForm(thesaurus);
-    });
-    this.loading$ = this._query.selectLoading();
-    this.saving$ = this._query.selectSaving();
-    this.error$ = this._query.selectError();
-
-    this._editService.load(this.id);
-  }
-
-  private getEntryGroup(entry?: ThesaurusEntry): FormGroup {
-    return this._formBuilder.group({
-      id: this._formBuilder.control(entry ? entry.id : null, [
-        Validators.required,
-        Validators.maxLength(100),
-        Validators.pattern('^[a-zA-Z0-9_\\-\\.]+$'),
-      ]),
-      value: this._formBuilder.control(entry ? entry.value : null, [
-        Validators.required,
-        Validators.maxLength(200),
-      ]),
-    });
-  }
-
-  public addEntry(item?: ThesaurusEntry): void {
-    this.entries.push(this.getEntryGroup(item));
-    this.form.markAsDirty();
-  }
-
-  public addEntryBelow(index: number): void {
-    this.entries.insert(index + 1, this.getEntryGroup());
-    this.form.markAsDirty();
-  }
-
-  public removeEntry(index: number): void {
-    this.entries.removeAt(index);
-    this.form.markAsDirty();
-  }
-
-  public moveEntryUp(index: number): void {
-    if (index < 1) {
-      return;
+    // load
+    if (this._thesaurus) {
+      this.updateForm(this._thesaurus);
     }
-    const item = this.entries.controls[index];
-    this.entries.removeAt(index);
-    this.entries.insert(index - 1, item);
-    this.form.markAsDirty();
   }
 
-  public moveEntryDown(index: number): void {
-    if (index + 1 >= this.entries.length) {
-      return;
+  public onTargetIdChange(id: string | null): void {
+    this.targetId.setValue(id);
+  }
+
+  public pageChanged(event: PageEvent): void {
+    // https://material.angular.io/components/paginator/api
+    this.paginator.setPage(event.pageIndex + 1);
+    if (event.pageSize !== this.pageSize.value) {
+      this.pageSize.setValue(event.pageSize);
     }
-    const item = this.entries.controls[index];
-    this.entries.removeAt(index);
-    this.entries.insert(index + 1, item);
-    this.form.markAsDirty();
   }
 
-  public clearEntries(): void {
-    this.entries.clear();
-    this.form.markAsDirty();
+  public applyFilter(): void {
+    this.filter$.next({
+      pageNumber: 1,
+      pageSize: 20,
+      idOrValue: this.idOrValue.value,
+      parentId: this.parentId.value,
+    });
   }
 
-  private updateForm(thesaurus: Thesaurus): void {
+  public addNode(node: ThesaurusNode): void {
+    this._nodesService.add(node);
+    this.refresh();
+  }
+
+  public expandAll(): void {
+    this._nodesService.toggleAll(false);
+    this.refresh();
+  }
+
+  public collapseAll(): void {
+    this._nodesService.toggleAll(true);
+    this.refresh();
+  }
+
+  public onSignal(signal: ComponentSignal<ThesaurusNode>): void {
+    const node = signal.payload as ThesaurusNode;
+    switch (signal.id) {
+      case 'expand':
+        node.collapsed = false;
+        this._nodesService.add(node);
+        this.refresh();
+        break;
+      case 'collapse':
+        node.collapsed = true;
+        this._nodesService.add(node);
+        this.refresh();
+        break;
+      case 'move-up':
+        this._nodesService.moveUp(node.id);
+        this.refresh();
+        break;
+      case 'move-down':
+        this._nodesService.moveDown(node.id);
+        this.refresh();
+        break;
+      case 'delete':
+        this._dialogService
+          .confirm('Confirm Deletion', 'Delete node\n' + node.id + '?')
+          .subscribe((result) => {
+            if (!result) {
+              return;
+            }
+            this._nodesService.delete(node.id);
+            this.refresh();
+          });
+        break;
+      case 'add-sibling':
+        // add sibling
+        const sibling: ThesaurusNode = {
+          id: '',
+          value: '',
+          level: node.level,
+          ordinal: 0,
+          parentId: node.parentId,
+        };
+        this._nodesService.add(sibling);
+        this.refresh();
+        break;
+      case 'add-child':
+        // add child
+        const child: ThesaurusNode = {
+          id: '',
+          value: '',
+          level: node.level + 1,
+          ordinal: 0,
+          parentId: node.id,
+        };
+        this._nodesService.add(child);
+        // expand parent if collapsed
+        if (node.collapsed) {
+          node.collapsed = false;
+          this._nodesService.add(node);
+        }
+        this.refresh();
+        break;
+    }
+  }
+
+  public appendNode(): void {
+    const node: ThesaurusNode = {
+      id: '',
+      value: '',
+      level: 1,
+      ordinal: 1,
+    };
+    this._nodesService.add(node);
+    this.refresh();
+  }
+
+  private updateForm(thesaurus?: Thesaurus): void {
     if (!thesaurus) {
       this.form.reset();
-    } else {
-      this.editId.setValue(thesaurus.id);
-      // entries
-      this.entries.clear();
-      for (let i = 0; i < thesaurus.entries.length; i++) {
-        this.entries.push(this.getEntryGroup(thesaurus.entries[i]));
-      }
-      this.form.markAsPristine();
+      return;
     }
-  }
+    this.id.setValue(thesaurus.id);
+    this.targetId.setValue(thesaurus.targetId);
+    this.entryCount.setValue(thesaurus.entries?.length || 0);
+    this.alias.setValue(thesaurus.targetId ? true : false);
+    this.form.markAsPristine();
 
-  private getLanguage(id: string): string {
-    const r = new RegExp('@([a-z]{2,3})$', 'g');
-    const m = r.exec(id);
-    if (!m) {
-      return '';
-    } else {
-      return m[1];
-    }
+    // nodes
+    const entries: ThesaurusEntry[] = [];
+    thesaurus.entries?.forEach((e: ThesaurusEntry) => {
+      entries.push({ ...e });
+    });
+    this._nodesService.importEntries(
+      entries,
+      thesaurus.id?.startsWith('model-types@')
+    );
+    this.refresh();
   }
 
   private getThesaurus(): Thesaurus {
     const thesaurus: Thesaurus = {
-      id: this.editId.value,
-      language: this.getLanguage(this.editId.value),
+      id: this.id.value,
+      language: 'en',
       entries: [],
     };
 
-    // collect entries
-    for (let i = 0; i < this.entries.controls.length; i++) {
-      const g = this.entries.at(i) as FormGroup;
-      thesaurus.entries.push({
-        id: g.controls.id.value,
-        value: g.controls.value.value,
+    if (this.alias.value) {
+      thesaurus.targetId = this.targetId.value;
+    } else {
+      thesaurus.entries = this._nodesService.getNodes().map((n) => {
+        return {
+          id: n.id,
+          value: n.value,
+        };
       });
     }
 
     return thesaurus;
   }
 
-  public cancel(): void {
-    if (this.form.pristine) {
-      this._router.navigate(['/thesauri']);
-      return;
-    }
-
-    this._dialogService
-      .confirm('Discard Changes', `Discard changes?`)
-      .subscribe((result) => {
-        if (!result) {
-          return;
-        }
-        this._router.navigate(['/thesauri']);
-      });
+  public close(): void {
+    this.editorClose.emit();
   }
 
   public save(): void {
-    if (this.form.invalid || this.userLevel < 3) {
+    if (this.form.invalid) {
       return;
     }
-    const thesaurus = this.getThesaurus();
-    // save and reload as edited if was new
-    this._editService.save(thesaurus).then((saved) => {
-      this.form.markAsPristine();
-      if (!this.id) {
-        this.id = saved.id;
-        this._router.navigate(['/thesauri', saved.id]);
-      }
-    });
+    this.thesaurusChange.emit(this.getThesaurus());
   }
 }

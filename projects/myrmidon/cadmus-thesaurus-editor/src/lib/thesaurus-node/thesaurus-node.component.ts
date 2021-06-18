@@ -59,8 +59,8 @@ export class ThesaurusNodeComponent implements OnInit {
     // form
     this.id = formBuilder.control(null, [
       Validators.required,
-      Validators.maxLength(50),
-      Validators.pattern(/^[a-zA-Z0-9][.-_a-zA-Z0-9]*$/),
+      Validators.maxLength(100),
+      Validators.pattern(/^[a-zA-Z0-9][.\-_a-zA-Z0-9]*$/),
     ]);
     this.value = formBuilder.control(null, [
       Validators.required,
@@ -100,8 +100,8 @@ export class ThesaurusNodeComponent implements OnInit {
       ...this._node,
       id: this.id.value.trim(),
       value: this.value.value.trim(),
-      level: 0,
-      ordinal: 0,
+      level: this._node.level,
+      ordinal: this._node.ordinal,
     };
   }
 

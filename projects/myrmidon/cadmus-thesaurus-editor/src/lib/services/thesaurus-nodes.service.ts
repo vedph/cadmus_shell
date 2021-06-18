@@ -187,10 +187,15 @@ export class ThesaurusNodesService {
    * Set all the nodes at once.
    *
    * @param entries The nodes to set.
+   * @param flat True if the entries belong to a flat thesaurus.
+   * This disables the hierarchical structure, and is used for special
+   * thesauri like model-types, which include non-hierarchy dots.
    */
-  public importEntries(entries: ThesaurusEntry[]): void {
+  public importEntries(entries: ThesaurusEntry[], flat = false): void {
     const nodes = entries as ThesaurusNode[];
-    this.assignParentIds(nodes);
+    if (!flat) {
+      this.assignParentIds(nodes);
+    }
     this.assignLevels(nodes);
     this.assignOrdinals(nodes);
 
@@ -276,6 +281,14 @@ export class ThesaurusNodesService {
    * @param node The node.
    */
   public add(node: ThesaurusNode): void {
+    // delete a node with empty id; this corresponds to a previously
+    // added node, which now should be removed. Typically, a user adds
+    // a new node, which gets an empty ID; then he edits it, thus
+    // adding another node with a non-empty ID. At this stage, we should
+    // remove the empty node, which is to be replaced. In other terms,
+    // whenever adding a node we first remove the no-ID node if present.
+    this.delete('');
+
     const nodes = [...this._nodes$.value];
     const i = nodes.findIndex((n) => n.id === node.id);
 
@@ -311,7 +324,11 @@ export class ThesaurusNodesService {
       } else {
         // no parent: just append
         if (nodes.length) {
-          nodes[nodes.length - 1].lastSibling = false;
+          const last = nodes[nodes.length - 1];
+          nodes[nodes.length - 1] = {
+            ...last,
+            lastSibling: false,
+          };
         }
         node.ordinal = nodes.length + 1;
         node.lastSibling = true;
@@ -345,6 +362,7 @@ export class ThesaurusNodesService {
     if (i === -1) {
       return;
     }
+    const parentIndex = this.getParentIndex(nodes, i);
     const deleted = nodes[i];
     nodes.splice(i, 1);
 
@@ -353,7 +371,6 @@ export class ThesaurusNodesService {
       // if it was also the 1st, we have removed all the children
       if (deleted.ordinal === 1) {
         // clear the children in the parent node
-        const parentIndex = this.getParentIndex(nodes, i);
         if (parentIndex > -1) {
           nodes.splice(parentIndex, 1, {
             ...nodes[parentIndex],
@@ -370,7 +387,7 @@ export class ThesaurusNodesService {
     }
 
     // update ordinals for the next siblings if any
-    let j = i + 1;
+    let j = i;
     while (j < nodes.length && nodes[j].parentId === deleted.parentId) {
       const sibling = nodes[j];
       nodes.splice(j, 1, { ...sibling, ordinal: sibling.ordinal - 1 });

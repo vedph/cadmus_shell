@@ -4,6 +4,7 @@
   "lib": {
     "entryFile": "src/public-api.ts",
     "umdModuleIds": {
+      "@datorama/akita": "@datorama/akita",
       "@myrmidon/cadmus-api": "@myrmidon/cadmus-api",
       "@myrmidon/cadmus-material": "@myrmidon/cadmus-material",
       "@myrmidon/cadmus-state": "@myrmidon/cadmus-state",

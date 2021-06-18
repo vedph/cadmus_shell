@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { retry, catchError } from 'rxjs/operators';
+import { retry, catchError, take } from 'rxjs/operators';
 import {
   ErrorService,
   Thesaurus,
@@ -41,6 +41,37 @@ export class ThesaurusService {
         })
         .pipe(retry(3), catchError(this._error.handleError));
     }
+  }
+
+  /**
+   * Check whether a thesaurus with the specified ID exists.
+   *
+   * @param id The ID of the thesaurus to check for.
+   * @returns Promise having true/false on resolution.
+   */
+  public thesaurusExists(id: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      const url =
+        this._env.get('apiUrl') + this._env.get('databaseId') + '/thesauri-ids';
+
+      let httpParams = new HttpParams();
+      httpParams = httpParams.set('pageNumber', '1');
+      httpParams = httpParams.set('pageSize', '1');
+      httpParams = httpParams.set('id', id);
+
+      this._http
+        .get<string[]>(url, { params: httpParams })
+        .pipe(retry(3), take(1), catchError(this._error.handleError))
+        .subscribe(
+          (ids) => {
+            resolve(ids.length > 0);
+          },
+          (_) => {
+            console.error('Error checking for existence of thesaurus ' + id);
+            reject(false);
+          }
+        );
+    });
   }
 
   /**

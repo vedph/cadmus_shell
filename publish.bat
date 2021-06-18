@@ -60,6 +60,10 @@ cd .\dist\myrmidon\cadmus-part-philology-ui
 call npm publish --access=public
 cd ..\..\..
 pause
+cd .\dist\myrmidon\cadmus-profile-core
+call npm publish --access=public
+cd ..\..\..
+pause
 cd .\dist\myrmidon\cadmus-reset-password
 call npm publish --access=public
 cd ..\..\..

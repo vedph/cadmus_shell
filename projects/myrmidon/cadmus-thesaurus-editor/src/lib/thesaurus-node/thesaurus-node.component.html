@@ -76,6 +76,25 @@
       >
         <mat-icon>remove_circle</mat-icon>
       </button>
+      <!-- add sibling -->
+      <button
+        type="button"
+        mat-icon-button
+        color="primary"
+        matTooltip="Add a sibling after this node"
+        (click)="emitSignal('add-sibling')"
+      >
+        <mat-icon>add_box</mat-icon>
+      </button>
+      <!-- add child -->
+      <button
+        type="button"
+        mat-icon-button
+        matTooltip="Add a child of this node"
+        (click)="emitSignal('add-child')"
+      >
+        <mat-icon>library_add</mat-icon>
+      </button>
     </span>
   </div>
 

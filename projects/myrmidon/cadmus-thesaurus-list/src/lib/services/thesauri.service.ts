@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { ThesauriStore } from '../state/thesauri.store';
-import { ItemService } from '@myrmidon/cadmus-api';
+import { ThesaurusService } from '@myrmidon/cadmus-api';
 
 @Injectable({ providedIn: 'root' })
 export class ThesauriListService {
-  constructor(private _store: ThesauriStore, private _service: ItemService) {}
+  constructor(private _store: ThesauriStore, private _service: ThesaurusService) {}
 
   public delete(id: string): Promise<boolean> {
     const promise: Promise<boolean> = new Promise((resolve, reject) => {
       this._store.setLoading(true);
 
-      this._service.deleteItem(id).subscribe(
+      this._service.deleteThesaurus(id).subscribe(
         (_) => {
           this._store.remove(id);
           this._store.setError(null);
