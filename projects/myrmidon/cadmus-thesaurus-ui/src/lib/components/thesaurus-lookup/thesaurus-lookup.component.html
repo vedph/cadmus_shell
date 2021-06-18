@@ -1,11 +1,11 @@
 <form [formGroup]="form">
   <mat-autocomplete #lookupAuto="matAutocomplete">
     <mat-option
-      *ngFor="let entry of ids$ | async"
-      [value]="entry"
+      *ngFor="let id of ids$ | async"
+      [value]="id"
       (onSelectionChange)="pickId(id)"
     >
-      {{ entry?.id }}
+      {{ id }}
     </mat-option>
   </mat-autocomplete>
 

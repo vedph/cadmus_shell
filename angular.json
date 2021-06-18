@@ -1008,6 +1008,37 @@
           }
         }
       }
+    },
+    "@myrmidon/cadmus-thesaurus-ui": {
+      "projectType": "library",
+      "root": "projects/myrmidon/cadmus-thesaurus-ui",
+      "sourceRoot": "projects/myrmidon/cadmus-thesaurus-ui/src",
+      "prefix": "cadmus",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/myrmidon/cadmus-thesaurus-ui/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/myrmidon/cadmus-thesaurus-ui/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/myrmidon/cadmus-thesaurus-ui/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/myrmidon/cadmus-thesaurus-ui/src/test.ts",
+            "tsConfig": "projects/myrmidon/cadmus-thesaurus-ui/tsconfig.spec.json",
+            "karmaConfig": "projects/myrmidon/cadmus-thesaurus-ui/karma.conf.js"
+          }
+        }
+      }
     }
   },
   "defaultProject": "cadmus-shell"

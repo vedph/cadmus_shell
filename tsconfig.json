@@ -105,6 +105,10 @@
         "dist/myrmidon/cadmus-api/myrmidon-cadmus-api",
         "dist/myrmidon/cadmus-api"
       ],
+      "@myrmidon/cadmus-thesaurus-ui": [
+        "dist/myrmidon/cadmus-thesaurus-ui/myrmidon-cadmus-thesaurus-ui",
+        "dist/myrmidon/cadmus-thesaurus-ui"
+      ],
       "@myrmidon/cadmus-ui": [
         "dist/myrmidon/cadmus-ui/myrmidon-cadmus-ui",
         "dist/myrmidon/cadmus-ui"

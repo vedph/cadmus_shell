@@ -14,7 +14,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ComponentSignal } from '@myrmidon/cadmus-profile-core';
-import { ThesaurusNode } from '../services/thesaurus-nodes.service';
+import { ThesaurusNode } from '../../services/thesaurus-nodes.service';
 
 /**
  * A single thesaurus node used to display and edit a thesaurus entry.

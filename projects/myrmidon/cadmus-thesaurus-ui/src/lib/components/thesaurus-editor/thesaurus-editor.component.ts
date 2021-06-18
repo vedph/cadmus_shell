@@ -14,7 +14,7 @@ import {
 } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
-import { DataPage, Thesaurus, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { DataPage, Thesaurus, ThesaurusEntry, ThesaurusFilter } from '@myrmidon/cadmus-core';
 import { ComponentSignal } from '@myrmidon/cadmus-profile-core';
 import { DialogService } from '@myrmidon/cadmus-ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -23,7 +23,7 @@ import {
   ThesaurusNode,
   ThesaurusNodeFilter,
   ThesaurusNodesService,
-} from '../services/thesaurus-nodes.service';
+} from '../../services/thesaurus-nodes.service';
 import { THESAURUS_EDITOR_PAGINATOR } from './store/thesaurus-editor.paginator';
 import { ThesaurusEditorState } from './store/thesaurus-editor.store';
 
@@ -44,6 +44,9 @@ export class ThesaurusEditorComponent implements OnInit {
   private _thesaurus: Thesaurus | undefined;
   private _refresh$: BehaviorSubject<number>;
 
+  /**
+   * The thesaurus being edited.
+   */
   @Input()
   public get thesaurus(): Thesaurus | undefined {
     return this._thesaurus;
@@ -53,9 +56,21 @@ export class ThesaurusEditorComponent implements OnInit {
     this.updateForm(value);
   }
 
+  /**
+   * The lookup function used to lookup thesauri when editing aliases.
+   */
+  @Input()
+  public lookupFn: (filter?: ThesaurusFilter) => Observable<string[]>;
+
+  /**
+   * Emitted when the thesaurus is saved.
+   */
   @Output()
   public thesaurusChange: EventEmitter<Thesaurus>;
 
+  /**
+   * Emitted when user requests to close the editor.
+   */
   @Output()
   public editorClose: EventEmitter<any>;
 

@@ -5,7 +5,7 @@ import {
   EntityStore,
   StoreConfig,
 } from '@datorama/akita';
-import { ThesaurusNode } from '../../services/thesaurus-nodes.service';
+import { ThesaurusNode } from '../../../services/thesaurus-nodes.service';
 
 export interface ThesaurusEditorState
   extends EntityState<ThesaurusNode, string>,

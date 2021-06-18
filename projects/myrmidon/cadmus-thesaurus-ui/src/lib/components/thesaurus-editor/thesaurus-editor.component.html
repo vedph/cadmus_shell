@@ -23,10 +23,12 @@
         &nbsp;
         <mat-checkbox [formControl]="alias">alias</mat-checkbox>
         &nbsp;
+        <!-- lookup -->
         <cadmus-thesaurus-lookup
           *ngIf="alias?.value"
           style="display: inline-block"
           [initialValue]="targetId?.value"
+          [lookupFn]="lookupFn"
           label="target ID"
           (entryChange)="onTargetIdChange($event)"
         ></cadmus-thesaurus-lookup>

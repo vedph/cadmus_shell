@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ThesaurusService } from '@myrmidon/cadmus-api';
+import { ThesaurusFilter } from '@myrmidon/cadmus-core';
 import { Observable, of } from 'rxjs';
 import {
   debounceTime,
@@ -9,6 +9,9 @@ import {
   take,
 } from 'rxjs/operators';
 
+/**
+ * Thesaurus ID lookup component.
+ */
 @Component({
   selector: 'cadmus-thesaurus-lookup',
   templateUrl: './thesaurus-lookup.component.html',
@@ -53,6 +56,12 @@ export class ThesaurusLookupComponent implements OnInit {
   @Input()
   public resetOnPick: boolean | undefined;
 
+  /**
+   * The lookup function used to lookup thesauri.
+   */
+  @Input()
+  public lookupFn: (filter?: ThesaurusFilter) => Observable<string[]>;
+
   @Output()
   public entryChange: EventEmitter<string | null>;
 
@@ -61,10 +70,7 @@ export class ThesaurusLookupComponent implements OnInit {
   public ids$: Observable<string[]> | undefined;
   public id: string | undefined;
 
-  constructor(
-    formBuilder: FormBuilder,
-    private _thesService: ThesaurusService
-  ) {
+  constructor(formBuilder: FormBuilder) {
     this.label = 'thesaurus';
     // events
     this.entryChange = new EventEmitter<string | null>();
@@ -77,10 +83,10 @@ export class ThesaurusLookupComponent implements OnInit {
   }
 
   private lookupEntries(filter: string, limit: number): Observable<string[]> {
-    if (!filter) {
+    if (!filter || !this.lookupFn) {
       return of([]);
     }
-    return this._thesService.getThesaurusIds({
+    return this.lookupFn({
       pageNumber: 1,
       pageSize: limit,
       id: filter,

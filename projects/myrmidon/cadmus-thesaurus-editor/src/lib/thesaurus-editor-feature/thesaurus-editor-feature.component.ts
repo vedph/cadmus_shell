@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService, ThesaurusService } from '@myrmidon/cadmus-api';
-import { Thesaurus, User } from '@myrmidon/cadmus-core';
+import { Thesaurus, ThesaurusFilter, User } from '@myrmidon/cadmus-core';
 import {
   EditThesaurusQuery,
   EditThesaurusService,
@@ -30,7 +30,7 @@ export class ThesaurusEditorFeatureComponent implements OnInit {
     private _query: EditThesaurusQuery,
     private _editService: EditThesaurusService,
     private _authService: AuthService,
-    private _thesService: ThesaurusService,
+    public thesService: ThesaurusService,
     private _dialogService: DialogService,
     private _snackbar: MatSnackBar
   ) {
@@ -56,6 +56,12 @@ export class ThesaurusEditorFeatureComponent implements OnInit {
     this.error$ = this._query.selectError();
 
     this._editService.load(this.id);
+  }
+
+  public wrapLookup(service: ThesaurusService) {
+    return (filter?: ThesaurusFilter): Observable<string[]> => {
+      return service.getThesaurusIds(filter);
+    };
   }
 
   public onThesaurusChange(thesaurus: Thesaurus): void {
@@ -100,7 +106,7 @@ export class ThesaurusEditorFeatureComponent implements OnInit {
     // if the thesaurus is new, or its id has changed,
     // ensure that a thesaurus with that id does not already exist
     if (!this.id || this.id !== this.thesaurus.id) {
-      this._thesService
+      this.thesService
         .thesaurusExists(this.thesaurus.id)
         .then((exists: boolean) => {
           if (exists) {

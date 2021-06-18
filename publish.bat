@@ -80,6 +80,10 @@ cd .\dist\myrmidon\cadmus-thesaurus-list
 call npm publish --access=public
 cd ..\..\..
 pause
+cd .\dist\myrmidon\cadmus-thesaurus-ui
+call npm publish --access=public
+cd ..\..\..
+pause
 cd .\dist\myrmidon\cadmus-ui
 call npm publish --access=public
 cd ..\..\..
