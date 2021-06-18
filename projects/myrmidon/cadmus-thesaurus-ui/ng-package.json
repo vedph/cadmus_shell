@@ -6,8 +6,7 @@
     "umdModuleIds": {
       "@datorama/akita": "@datorama/akita",
       "@myrmidon/cadmus-ui": "@myrmidon/cadmus-ui",
-      "@myrmidon/cadmus-material": "@myrmidon/cadmus-material",
-      "@myrmidon/cadmus-state": "@myrmidon/cadmus-state"
+      "@myrmidon/cadmus-material": "@myrmidon/cadmus-material"
     }
   }
 }
