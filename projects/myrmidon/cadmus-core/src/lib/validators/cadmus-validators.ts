@@ -41,4 +41,29 @@ export class CadmusValidators {
         : null;
     };
   }
+
+  /**
+   * Conditionally validate using the specified validator
+   * when predicate is true.
+   * See https://medium.com/ngx/3-ways-to-implement-conditional-validation-of-reactive-forms-c59ed6fc3325.
+   *
+   * @param predicate The predicate function to use when determining
+   * if the validator should be used.
+   * @param validator The conditional validator to use.
+   * @returns Validation results.
+   */
+  public static conditionalValidator(
+    predicate: () => boolean,
+    validator: ValidatorFn
+  ): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.parent) {
+        return null;
+      }
+      if (predicate()) {
+        return validator(control);
+      }
+      return null;
+    };
+  }
 }
