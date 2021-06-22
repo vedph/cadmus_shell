@@ -131,9 +131,9 @@ export class BibliographyPartComponent
 
   public addEntry(): void {
     const entry: BibEntry = {
-      typeId: this.typeEntries?.entries[0].id,
+      typeId: this.typeEntries?.entries[0]?.id,
       title: null,
-      language: this.langEntries?.entries[0].id,
+      language: this.langEntries?.entries[0]?.id,
     };
     this.part.entries.push(entry);
     this.entryCount.setValue(this.part.entries.length);
