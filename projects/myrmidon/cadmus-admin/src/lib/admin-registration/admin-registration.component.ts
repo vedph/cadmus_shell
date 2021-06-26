@@ -6,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { AuthService } from '@myrmidon/cadmus-api';
 import {
   ExistResult,
@@ -34,7 +35,8 @@ export class AdminRegistrationComponent implements OnInit {
   constructor(
     formBuilder: FormBuilder,
     private _snackbar: MatSnackBar,
-    private _authService: AuthService
+    private _authService: AuthService,
+    private _router: Router
   ) {
     this.email = formBuilder.control(
       '',
@@ -241,8 +243,10 @@ export class AdminRegistrationComponent implements OnInit {
         () => {
           this.busy = false;
           this._snackbar.open('Registration succeeded', 'OK');
-          this.registration.reset();
-          this.registration.markAsPristine();
+          // this.registration.reset();
+          // this.registration.clearValidators();
+          // this.registration.markAsPristine();
+          this._router.navigate(['/admin']);
         },
         (error) => {
           this.busy = false;

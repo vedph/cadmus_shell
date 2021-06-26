@@ -156,5 +156,6 @@ export class UserManagerComponent implements OnInit {
 
   public saveActiveUser(user: User): void {
     this._usersService.updateActive(user);
+    this._refresh$.next(new Date().getUTCMilliseconds());
   }
 }
