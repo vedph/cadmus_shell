@@ -37,7 +37,7 @@ export class CategoriesPartComponent
   }
 
   private updateForm(model: CategoriesPart): void {
-    if (!model) {
+    if (!model?.categories) {
       this.categories.reset();
       return;
     }
