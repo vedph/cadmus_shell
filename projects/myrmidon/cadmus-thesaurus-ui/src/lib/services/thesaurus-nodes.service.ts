@@ -275,6 +275,68 @@ export class ThesaurusNodesService {
     });
   }
 
+  private insertNodeAtOrdinal(node: ThesaurusNode, nodes: ThesaurusNode[]) {
+    let i = 0;
+
+    // the parent if any should have its hasChildren set
+    if (node.parentId) {
+      i = nodes.findIndex((p) => p.id === node.parentId);
+      if (i === -1) {
+        console.log('Parent node not found: ' + node.parentId);
+        return;
+      }
+      const parent = nodes[i];
+      if (!parent.hasChildren) {
+        nodes.splice(i, 1, { ...parent, hasChildren: true });
+      }
+      i++;  // move to children
+    }
+
+    // scan and insert at ordinal (or append, when node's ordinal=0)
+    let ordinal = 1;
+    let inserted = false;
+
+    while (i < nodes.length &&
+      (!node.parentId || nodes[i].parentId === node.parentId)) {
+      // if at insertion point, add it
+      if (node.ordinal === ordinal) {
+        nodes.splice(i, 0, node);
+        inserted = true;
+      } else {
+        // if it was inserted, we need to update ordinals
+        if (inserted) {
+          nodes[i] = {
+            ...nodes[i],
+            ordinal: ordinal,
+            lastSibling: false
+          };
+        }
+      }
+      // move to the next node
+      ordinal++;
+      i++;
+    }
+
+    // if not yet inserted, just append
+    if (!inserted) {
+      // the last node is no more the last
+      nodes[i - 1] = {
+        ...nodes[i - 1],
+        lastSibling: false
+      };
+      // the new node becomes the last
+      node.ordinal = ordinal;
+      node.lastSibling = true;
+      nodes.push(node);
+    } else {
+      // else ensure that the last node has lastSibling
+      nodes[i - 1] = {
+        ...nodes[i - 1],
+        lastSibling: true
+      };
+    }
+  }
+
   /**
    * Add or replace the specified node.
    *
@@ -292,48 +354,14 @@ export class ThesaurusNodesService {
     const nodes = [...this._nodes$.value];
     const i = nodes.findIndex((n) => n.id === node.id);
 
-    // replace an existing node
     if (i > -1) {
+      // if node exists, replace it
       node.ordinal = nodes[i].ordinal;
       node.lastSibling = nodes[i].lastSibling;
       nodes.splice(i, 1, node);
     } else {
-      // else it's a new node -- has the node a parent?
-      if (node.parentId) {
-        // yes: append as the last child
-        let i = nodes.findIndex((p) => p.id === node.parentId);
-        if (i === -1) {
-          console.log('Parent node not found: ' + node.parentId);
-          return;
-        }
-        // the parent should have its hasChildren set
-        const parent = nodes[i];
-        if (!parent.hasChildren) {
-          nodes.splice(i, 1, { ...parent, hasChildren: true });
-        }
-        // assign ordinals and lastSibling
-        i++;
-        let n = 1;
-        while (i < nodes.length && nodes[i].parentId === node.parentId) {
-          n++;
-          i++;
-        }
-        node.lastSibling = true;
-        node.ordinal = n;
-        nodes.splice(i, 0, node);
-      } else {
-        // no parent: just append
-        if (nodes.length) {
-          const last = nodes[nodes.length - 1];
-          nodes[nodes.length - 1] = {
-            ...last,
-            lastSibling: false,
-          };
-        }
-        node.ordinal = nodes.length + 1;
-        node.lastSibling = true;
-        nodes.push(node);
-      }
+      // else insert at ordinal or just append
+      this.insertNodeAtOrdinal(node, nodes);
     }
 
     // save (we must refresh parent IDs as we might have an updated node

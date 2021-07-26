@@ -328,7 +328,8 @@ export class ThesaurusEditorComponent implements OnInit {
           id: '',
           value: '',
           level: node.level,
-          ordinal: 0,
+          // will add after the current node
+          ordinal: node.ordinal + 1,
           parentId: node.parentId,
         };
         this._nodesService.add(sibling);
