@@ -1,4 +1,5 @@
-import { DocReference, Part } from '@myrmidon/cadmus-core';
+import { Part } from '@myrmidon/cadmus-core';
+import { DocReference } from '@myrmidon/cadmus-refs-doc-references';
 import { IndexKeyword } from './index-keywords-part';
 
 /**
@@ -63,18 +64,15 @@ export const COMMENT_PART_SCHEMA = {
         anyOf: [
           {
             type: 'object',
-            required: ['author', 'work'],
+            required: ['citation'],
             properties: {
+              type: {
+                type: 'string',
+              },
               tag: {
                 type: 'string',
               },
-              author: {
-                type: 'string',
-              },
-              work: {
-                type: 'string',
-              },
-              location: {
+              citation: {
                 type: 'string',
               },
               note: {

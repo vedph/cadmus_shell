@@ -12,15 +12,15 @@ import {
   renderLabelFromLastColon,
 } from '@myrmidon/cadmus-ui';
 import { AuthService } from '@myrmidon/cadmus-api';
-import { ThesaurusEntry, deepCopy, DocReference } from '@myrmidon/cadmus-core';
-import { BehaviorSubject } from 'rxjs';
+import { ThesaurusEntry, deepCopy } from '@myrmidon/cadmus-core';
 import { Comment, CommentPart, COMMENT_PART_TYPEID } from '../comment-part';
 import { CommentFragment } from '../comment-fragment';
 import { IndexKeyword } from '../index-keywords-part';
+import { DocReference } from '@myrmidon/cadmus-refs-doc-references';
 
 /**
  * Comment part/fragment editor component.
- * Thesauri: comment-tags, doc-reference-tags, categories, languages,
+ * Thesauri: comment-tags, doc-reference-tags, doc-reference-types, categories, languages,
  * keyword-indexes, keyword-tags (all optional).
  */
 @Component({
@@ -30,7 +30,8 @@ import { IndexKeyword } from '../index-keywords-part';
 })
 export class CommentEditorComponent
   extends ModelEditorComponentBase<CommentPart | CommentFragment>
-  implements OnInit {
+  implements OnInit
+{
   public tag: FormControl;
   public text: FormControl;
   public references: FormControl;
@@ -43,6 +44,7 @@ export class CommentEditorComponent
 
   public comTagEntries: ThesaurusEntry[] | undefined;
   public docTagEntries: ThesaurusEntry[] | undefined;
+  public docTypeEntries: ThesaurusEntry[] | undefined;
   public catEntries: ThesaurusEntry[] | undefined;
   public langEntries: ThesaurusEntry[] | undefined;
   public idxEntries: ThesaurusEntry[] | undefined;
@@ -143,6 +145,13 @@ export class CommentEditorComponent
       this.docTagEntries = this.thesauri[key].entries;
     } else {
       this.docTagEntries = undefined;
+    }
+
+    key = 'doc-reference-types';
+    if (this.thesauri && this.thesauri[key]) {
+      this.docTypeEntries = this.thesauri[key].entries;
+    } else {
+      this.docTypeEntries = undefined;
     }
 
     key = 'categories';

@@ -7,11 +7,13 @@
       <mat-card-title>Document References Part</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <cadmus-doc-references
+
+      <cadmus-refs-doc-references
         [references]="initialRefs"
+        [typeEntries]="typeEntries"
         [tagEntries]="tagEntries"
         (referencesChange)="onReferencesChange($event)"
-      ></cadmus-doc-references>
+      ></cadmus-refs-doc-references>
     </mat-card-content>
     <mat-card-actions>
       <cadmus-close-save-buttons

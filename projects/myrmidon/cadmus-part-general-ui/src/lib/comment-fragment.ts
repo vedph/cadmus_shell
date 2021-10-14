@@ -40,18 +40,15 @@ export const COMMENT_FRAGMENT_SCHEMA = {
         anyOf: [
           {
             type: 'object',
-            required: ['author', 'work'],
+            required: ['citation'],
             properties: {
+              type: {
+                type: 'string',
+              },
               tag: {
                 type: 'string',
               },
-              author: {
-                type: 'string',
-              },
-              work: {
-                type: 'string',
-              },
-              location: {
+              citation: {
                 type: 'string',
               },
               note: {

@@ -8,6 +8,8 @@ import { MarkdownModule } from 'ngx-markdown';
 import { CadmusCoreModule } from '@myrmidon/cadmus-core';
 import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
+import { CadmusRefsDocReferencesModule } from '@myrmidon/cadmus-refs-doc-references';
+
 import { NotePartComponent } from './note-part/note-part.component';
 import { TokenTextPartComponent } from './token-text-part/token-text-part.component';
 import { BibAuthorsEditorComponent } from './bib-authors-editor/bib-authors-editor.component';
@@ -36,6 +38,7 @@ import { DocReferencesPartComponent } from './doc-references-part/doc-references
     CadmusCoreModule,
     CadmusMaterialModule,
     CadmusUiModule,
+    CadmusRefsDocReferencesModule
   ],
   declarations: [
     BibAuthorsEditorComponent,

@@ -3,15 +3,16 @@ import { FormControl, FormBuilder, Validators } from '@angular/forms';
 
 import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { AuthService } from '@myrmidon/cadmus-api';
-import { deepCopy, DocReference, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { deepCopy, ThesaurusEntry } from '@myrmidon/cadmus-core';
 import {
   DocReferencesPart,
   DOC_REFERENCES_PART_TYPEID,
 } from '../doc-references-part';
+import { DocReference } from '@myrmidon/cadmus-refs-doc-references';
 
 /**
  * Document references part editor.
- * Thesauri: doc-reference-tags (optional).
+ * Thesauri: doc-reference-tags, doc-reference-types (all optional).
  */
 @Component({
   selector: 'cadmus-doc-references-part',
@@ -20,10 +21,12 @@ import {
 })
 export class DocReferencesPartComponent
   extends ModelEditorComponentBase<DocReferencesPart>
-  implements OnInit {
+  implements OnInit
+{
   public references: FormControl;
   public initialRefs: DocReference[];
 
+  public typeEntries: ThesaurusEntry[] | undefined;
   public tagEntries: ThesaurusEntry[] | undefined;
 
   constructor(authService: AuthService, formBuilder: FormBuilder) {
@@ -54,11 +57,18 @@ export class DocReferencesPartComponent
   }
 
   protected onThesauriSet(): void {
-    const key = 'doc-reference-tags';
+    let key = 'doc-reference-tags';
     if (this.thesauri && this.thesauri[key]) {
       this.tagEntries = this.thesauri[key].entries;
     } else {
       this.tagEntries = undefined;
+    }
+
+    key = 'doc-reference-types';
+    if (this.thesauri && this.thesauri[key]) {
+      this.typeEntries = this.thesauri[key].entries;
+    } else {
+      this.typeEntries = undefined;
     }
   }
 

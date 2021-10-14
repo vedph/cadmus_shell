@@ -50,6 +50,7 @@ export class CommentFragmentFeatureComponent
     this.initEditor([
       'comment-tags',
       'doc-reference-tags',
+      'doc-reference-types',
       'categories',
       'languages',
       'keyword-indexes',

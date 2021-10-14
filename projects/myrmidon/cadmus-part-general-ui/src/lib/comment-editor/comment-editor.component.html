@@ -50,12 +50,13 @@
           <h3>references</h3>
           <!-- references -->
           <div>
-            <cadmus-doc-references
+            <cadmus-refs-doc-references
               [references]="initialRefs"
               [tagEntries]="docTagEntries"
+              [typeEntries]="docTypeEntries"
               (referencesChange)="onReferencesChange($event)"
             >
-            </cadmus-doc-references>
+            </cadmus-refs-doc-references>
           </div>
 
           <!-- ids -->
