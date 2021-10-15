@@ -73,39 +73,10 @@
 
       <!-- date -->
       <div>
-        <mat-slide-toggle formControlName="range">
-          A-B <span>{{ range.value ? "interval" : "point" }}</span>
-        </mat-slide-toggle>
-        <mat-tab-group>
-          <mat-tab>
-            <ng-template mat-tab-label>
-              <mat-icon class="tab-icon">{{
-                range.value ? "arrow_right" : "room"
-              }}</mat-icon>
-              A-point
-            </ng-template>
-            <cadmus-datation-editor
-              [datation]="a"
-              (datationChange)="updateA($event)"
-            ></cadmus-datation-editor>
-          </mat-tab>
-          <mat-tab *ngIf="range.value">
-            <ng-template mat-tab-label>
-              <mat-icon class="tab-icon">arrow_left</mat-icon>
-              B-point
-            </ng-template>
-            <cadmus-datation-editor
-              [datation]="b"
-              (datationChange)="updateB($event)"
-            ></cadmus-datation-editor>
-          </mat-tab>
-        </mat-tab-group>
-        <mat-error
-          *ngIf="
-            txtDate.hasError('required') && (txtDate.dirty || txtDate.touched)
-          "
-          >date required</mat-error
-        >
+        <cadmus-historical-date-editor
+          [date]="date"
+          (dateChange)="onDateChange($event)"
+        ></cadmus-historical-date-editor>
       </div>
     </mat-card-content>
 

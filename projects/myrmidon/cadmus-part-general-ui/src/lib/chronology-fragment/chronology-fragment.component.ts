@@ -3,10 +3,8 @@ import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { ChronologyFragment } from '../chronology-fragment';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import {
-  Datation,
   deepCopy,
-  HistoricalDate,
-  HistoricalDateType,
+  HistoricalDateModel,
   ThesaurusEntry,
 } from '@myrmidon/cadmus-core';
 import { AuthService } from '@myrmidon/cadmus-api';
@@ -26,13 +24,9 @@ export class ChronologyFragmentComponent
   public tagEntries: ThesaurusEntry[];
 
   // the date being edited in its text form
-  public txtDate: FormControl;
-  // true if editing a range (A and B)
-  public range: FormControl;
-  // the A and B datations being edited
-  public a: Datation;
-  public b: Datation;
+  public initialDate: HistoricalDateModel | undefined;
 
+  public date: FormControl;
   public tag: FormControl;
   public tags: FormControl;
   public label: FormControl;
@@ -40,18 +34,14 @@ export class ChronologyFragmentComponent
 
   constructor(authService: AuthService, formBuilder: FormBuilder) {
     super(authService);
-    this.a = new Datation();
-    this.b = new Datation();
     // form
-    this.txtDate = formBuilder.control(null, Validators.required);
-    this.range = formBuilder.control(false);
+    this.date = formBuilder.control(null, Validators.required);
     this.tag = formBuilder.control(null, Validators.maxLength(100));
     this.tags = formBuilder.control([]);
     this.label = formBuilder.control(null, Validators.maxLength(150));
     this.eventId = formBuilder.control(null, Validators.maxLength(300));
     this.form = formBuilder.group({
-      txtDate: this.txtDate,
-      range: this.range,
+      date: this.date,
       tag: this.tag,
       tags: this.tags,
       label: this.label,
@@ -72,38 +62,13 @@ export class ChronologyFragmentComponent
     }
   }
 
-  // invoked when A editor saves
-  public updateA(d: Datation): void {
-    this.a = d;
-    const model = this.getModelFromForm();
-    this.txtDate.markAsDirty();
-    this.txtDate.setValue(model.date.toString());
-  }
-
-  // invoked when B editor saves
-  public updateB(d: Datation): void {
-    this.b = d;
-    const model = this.getModelFromForm();
-    this.txtDate.markAsDirty();
-    this.txtDate.setValue(model.date.toString());
-  }
-
   private updateForm(model: ChronologyFragment): void {
     if (!model || !model.date) {
       this.form.reset();
     } else {
       // date
-      const d = Object.assign(new HistoricalDate(), model.date);
-      if (model.date.a) {
-        d.a = Object.assign(new Datation(), d.a);
-      }
-      if (model.date.b) {
-        d.b = Object.assign(new Datation(), d.b);
-      }
-      this.a = d.a;
-      this.b = d.b;
-      this.range.setValue(d.getDateType() === HistoricalDateType.range);
-      this.txtDate.setValue(d.toString());
+      this.initialDate = model.date;
+      this.date.setValue(model.date);
       // label and tag
       this.label.setValue(model.label);
       this.tag.setValue(model.tag);
@@ -111,6 +76,10 @@ export class ChronologyFragmentComponent
       this.tags.setValue(model.tag);
       this.form.markAsPristine();
     }
+  }
+
+  public onDateChange(date: HistoricalDateModel): void {
+    this.date.setValue(date);
   }
 
   protected onModelSet(model: ChronologyFragment): void {
@@ -125,9 +94,7 @@ export class ChronologyFragmentComponent
         date: null,
       };
     }
-    fr.date = new HistoricalDate();
-    fr.date.a = this.a;
-    fr.date.b = this.b;
+    fr.date = this.date.value;
     // label and tag
     fr.label = this.label.value?.trim();
     fr.eventId = this.eventId.value?.trim();
