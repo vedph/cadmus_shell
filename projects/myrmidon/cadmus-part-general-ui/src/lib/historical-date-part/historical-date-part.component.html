@@ -16,10 +16,12 @@
         <mat-expansion-panel-header>
           <mat-panel-title>references</mat-panel-title>
         </mat-expansion-panel-header>
-        <cadmus-doc-references
+        <cadmus-refs-doc-references
           [references]="initialRefs"
+          [typeEntries]="typeEntries"
+          [tagEntries]="tagEntries"
           (referencesChange)="onReferencesChange($event)"
-        ></cadmus-doc-references>
+        ></cadmus-refs-doc-references>
       </mat-expansion-panel>
     </mat-card-content>
     <mat-card-actions>

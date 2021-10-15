@@ -8,9 +8,10 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import {
   HistoricalDateModel,
   deepCopy,
-  DocReference,
+  ThesaurusEntry,
 } from '@myrmidon/cadmus-core';
 import { AuthService } from '@myrmidon/cadmus-api';
+import { DocReference } from '@myrmidon/cadmus-refs-doc-references';
 
 @Component({
   selector: 'cadmus-historical-date-part',
@@ -26,6 +27,9 @@ export class HistoricalDatePartComponent
   public date: HistoricalDateModel | undefined;
   public initialRefs: DocReference[];
 
+  public typeEntries: ThesaurusEntry[] | undefined;
+  public tagEntries: ThesaurusEntry[] | undefined;
+
   constructor(authService: AuthService, formBuilder: FormBuilder) {
     super(authService);
     // form
@@ -40,6 +44,22 @@ export class HistoricalDatePartComponent
 
   ngOnInit(): void {
     this.initEditor();
+  }
+
+  protected onThesauriSet(): void {
+    let key = 'doc-reference-tags';
+    if (this.thesauri && this.thesauri[key]) {
+      this.tagEntries = this.thesauri[key].entries;
+    } else {
+      this.tagEntries = undefined;
+    }
+
+    key = 'doc-reference-types';
+    if (this.thesauri && this.thesauri[key]) {
+      this.typeEntries = this.thesauri[key].entries;
+    } else {
+      this.typeEntries = undefined;
+    }
   }
 
   protected onModelSet(model: HistoricalDatePart): void {

@@ -1,4 +1,5 @@
-import { Part, HistoricalDateModel, DocReference } from '@myrmidon/cadmus-core';
+import { Part, HistoricalDateModel } from '@myrmidon/cadmus-core';
+import { DocReference } from '@myrmidon/cadmus-refs-doc-references';
 
 /**
  * The HistoricalDate part model.
@@ -138,18 +139,15 @@ export const HISTORICAL_DATE_PART_SCHEMA = {
         anyOf: [
           {
             type: 'object',
-            required: ['author', 'work'],
+            required: ['citation'],
             properties: {
+              type: {
+                type: 'string',
+              },
               tag: {
                 type: 'string',
               },
-              author: {
-                type: 'string',
-              },
-              work: {
-                type: 'string',
-              },
-              location: {
+              citation: {
                 type: 'string',
               },
               note: {

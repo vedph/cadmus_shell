@@ -16,7 +16,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class HistoricalDatePartFeatureComponent
   extends EditPartFeatureBase
-  implements OnInit {
+  implements OnInit
+{
   constructor(
     router: Router,
     route: ActivatedRoute,
@@ -38,6 +39,6 @@ export class HistoricalDatePartFeatureComponent
   }
 
   ngOnInit(): void {
-    this.initEditor(null);
+    this.initEditor(['doc-reference-tags', 'doc-reference-types']);
   }
 }
