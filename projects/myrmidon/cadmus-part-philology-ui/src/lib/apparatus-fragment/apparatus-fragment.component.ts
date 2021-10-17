@@ -10,6 +10,7 @@ import {
   FormGroup,
 } from '@angular/forms';
 import { deepCopy, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { ApparatusEntrySummaryService } from './apparatus-entry-summary.service';
 
 /**
  * Critical apparatus fragment.
@@ -45,11 +46,13 @@ export class ApparatusFragmentComponent
   public workEntries: ThesaurusEntry[] | undefined;
 
   public entries: ApparatusEntry[];
+  public summary?: string;
 
   constructor(
     authService: AuthService,
     formBuilder: FormBuilder,
-    private _dialogService: DialogService
+    private _dialogService: DialogService,
+    private _summaryService: ApparatusEntrySummaryService
   ) {
     super(authService);
     this.entries = [];
@@ -105,6 +108,7 @@ export class ApparatusFragmentComponent
   }
 
   private updateForm(model: ApparatusFragment): void {
+    this.summary = this._summaryService.build(model);
     if (!model) {
       this.form.reset();
       return;
@@ -161,6 +165,7 @@ export class ApparatusFragmentComponent
     this.entries.push(entry);
     this.entryCount.setValue(this.entries.length);
     this._newEditedEntry = true;
+    this.summary = this._summaryService.build(this.getModelFromForm());
     this.editEntry(entry);
   }
 
@@ -175,6 +180,7 @@ export class ApparatusFragmentComponent
     this.entries.splice(i, 1, entry);
     this.currentTabIndex = 0;
     this.editedEntry = null;
+    this.summary = this._summaryService.build(this.getModelFromForm());
     this.form.markAsDirty();
   }
 
@@ -197,6 +203,7 @@ export class ApparatusFragmentComponent
         }
         this.entries.splice(index, 1);
         this.entryCount.setValue(this.entries.length);
+        this.summary = this._summaryService.build(this.getModelFromForm());
         this.form.markAsDirty();
       });
   }
@@ -208,6 +215,7 @@ export class ApparatusFragmentComponent
     const entry = this.entries[index];
     this.entries.splice(index, 1);
     this.entries.splice(index - 1, 0, entry);
+    this.summary = this._summaryService.build(this.getModelFromForm());
     this.form.markAsDirty();
   }
 
@@ -218,6 +226,7 @@ export class ApparatusFragmentComponent
     const item = this.entries[index];
     this.entries.splice(index, 1);
     this.entries.splice(index + 1, 0, item);
+    this.summary = this._summaryService.build(this.getModelFromForm());
     this.form.markAsDirty();
   }
 }

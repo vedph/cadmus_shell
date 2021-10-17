@@ -5,3 +5,67 @@ th {
   font-weight: normal;
   color: silver;
 }
+
+/* summary */
+:host /deep/ article.apparatus-summary {
+  margin: 8px 0;
+  border: 1px solid silver;
+  border-radius: 6px;
+  padding: 6px;
+}
+:host /deep/ article.apparatus-summary .adpar-loc {
+  color: #0d4d4d;
+}
+:host /deep/ article.apparatus-summary .adpar-tag {
+  color: white;
+  background-color: #0d4d4d;
+  padding: 0 8px;
+  border: 1px solid #0d4d4d;
+  border-radius: 6px;
+}
+:host /deep/ article.apparatus-summary .adpar-group {
+  background-color: #669999;
+}
+:host /deep/ article.apparatus-summary .adpar-etag {
+  background-color: #7887ab;
+  padding: 0 8px;
+  border: 1px solid #7887ab;
+  border-radius: 6px;
+}
+:host /deep/ article.apparatus-summary .adpar-accepted {
+  color: #003333;
+}
+:host /deep/ article.apparatus-summary .adpar-value {
+  font-weight: bold;
+}
+:host /deep/ article.apparatus-summary .adpar-norm-value {
+  color: #162955;
+}
+:host /deep/ article.apparatus-summary .adpar-note {
+  font-style: italic;
+}
+:host /deep/ article.apparatus-summary .adpar-wit-v {
+  font-weight: bold;
+  color: #061539;
+}
+:host /deep/ article.apparatus-summary .adpar-wit-n {
+  font-style: italic;
+  color: #061539;
+}
+:host /deep/ article.apparatus-summary .adpar-aut-t {
+  color: white;
+  background-color: #c0c0c0;
+  padding: 0 8px;
+  border: 1px solid #c0c0c0;
+  border-radius: 6px;
+}
+:host /deep/ article.apparatus-summary .adpar-aut-v {
+  color: #552700;
+}
+:host /deep/ article.apparatus-summary .adpar-aut-n {
+  color: #552700;
+  font-style: italic;
+}
+:host /deep/ article.apparatus-summary .adpar-aut-l {
+  color: #552700;
+}
