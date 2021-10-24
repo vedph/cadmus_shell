@@ -14,7 +14,12 @@ import {
 } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
-import { DataPage, Thesaurus, ThesaurusEntry, ThesaurusFilter } from '@myrmidon/cadmus-core';
+import {
+  DataPage,
+  Thesaurus,
+  ThesaurusEntry,
+  ThesaurusFilter,
+} from '@myrmidon/cadmus-core';
 import { ComponentSignal } from '@myrmidon/cadmus-profile-core';
 import { DialogService } from '@myrmidon/cadmus-ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
