@@ -24,9 +24,9 @@ export const RouterModuleForChild = RouterModule.forChild([
     // cadmus
     CadmusApiModule,
     CadmusMaterialModule,
-    CadmusUiModule,
     CadmusStateModule,
     CadmusThesaurusUiModule,
+    CadmusUiModule,
   ],
   declarations: [ThesaurusEditorFeatureComponent],
   exports: [ThesaurusEditorFeatureComponent],

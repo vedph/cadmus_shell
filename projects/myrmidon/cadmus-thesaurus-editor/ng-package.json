@@ -8,8 +8,8 @@
       "@myrmidon/cadmus-api": "@myrmidon/cadmus-api",
       "@myrmidon/cadmus-material": "@myrmidon/cadmus-material",
       "@myrmidon/cadmus-state": "@myrmidon/cadmus-state",
-      "@myrmidon/cadmus-ui": "@myrmidon/cadmus-ui",
-      "@myrmidon/cadmus-thesaurus-ui": "@myrmidon/cadmus-thesaurus-ui"
+      "@myrmidon/cadmus-thesaurus-ui": "@myrmidon/cadmus-thesaurus-ui",
+      "@myrmidon/cadmus-ui": "@myrmidon/cadmus-ui"
     }
   }
 }
