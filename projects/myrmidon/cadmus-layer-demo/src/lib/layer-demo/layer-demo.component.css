@@ -3,18 +3,18 @@ textarea#text {
   min-height: 100px;
 }
 /* https://stackoverflow.com/questions/36265026/angular-2-innerhtml-styling */
-:host >>> div#result {
+:host ::ng-deep div#result {
   counter-reset: text-y-counter;
 }
 
-:host >>> div#result p:before {
+:host ::ng-deep div#result p:before {
   content: counter(text-y-counter);
   counter-increment: text-y-counter;
   margin-right: 6px;
   color: #A0A0A0;
 }
 
-:host >>> span.fr {
+:host ::ng-deep span.fr {
   background-color: yellow;
   border: 1px solid silver;
   border-radius: 6px;

@@ -1,6 +1,6 @@
 {
   "name": "@myrmidon/cadmus-login",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "Cadmus - login component.",
   "keywords": [
     "Cadmus"
@@ -14,10 +14,10 @@
     "name": "Daniele Fusi"
   },
   "peerDependencies": {
-    "@angular/common": "^11.0.0",
-    "@angular/core": "^11.0.0",
-    "@myrmidon/cadmus-material": "^0.0.1",
-    "@myrmidon/cadmus-ui": "^0.0.1"
+    "@angular/common": "^13.0.0",
+    "@angular/core": "^13.0.0",
+    "@myrmidon/cadmus-material": "^0.1.0",
+    "@myrmidon/cadmus-ui": "^0.1.0"
   },
   "dependencies": {
     "tslib": "^2.0.0"

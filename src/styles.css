@@ -1,4 +1,4 @@
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
 /* Offline material icons: used for developing.
    To remove, just comment out this import.
    The local font files are under assets/icons. If you want to totally

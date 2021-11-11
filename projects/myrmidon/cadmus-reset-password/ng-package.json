@@ -2,12 +2,6 @@
   "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../../dist/myrmidon/cadmus-reset-password",
   "lib": {
-    "entryFile": "src/public-api.ts",
-    "umdModuleIds": {
-      "@myrmidon/cadmus-api": "@myrmidon/cadmus-api",
-      "@myrmidon/cadmus-core": "@myrmidon/cadmus-core",
-      "@myrmidon/cadmus-material": "@myrmidon/cadmus-material",
-      "@myrmidon/cadmus-ui": "@myrmidon/cadmus-ui"
-    }
+    "entryFile": "src/public-api.ts"
   }
 }

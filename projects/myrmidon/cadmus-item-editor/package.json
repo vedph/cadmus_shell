@@ -1,6 +1,6 @@
 {
   "name": "@myrmidon/cadmus-item-editor",
-  "version": "0.0.14",
+  "version": "0.1.0",
   "description": "Cadmus - item editor component.",
   "keywords": [
     "Cadmus"
@@ -14,13 +14,13 @@
     "name": "Daniele Fusi"
   },
   "peerDependencies": {
-    "@angular/common": "^11.0.0",
-    "@angular/core": "^11.0.0",
-    "@myrmidon/cadmus-core": "^0.0.1",
-    "@myrmidon/cadmus-material": "^0.0.1",
-    "@myrmidon/cadmus-api": "^0.0.1",
-    "@myrmidon/cadmus-ui": "^0.0.1",
-    "@myrmidon/cadmus-state": "^0.0.1"
+    "@angular/common": "^13.0.0",
+    "@angular/core": "^13.0.0",
+    "@myrmidon/cadmus-core": "^0.1.0",
+    "@myrmidon/cadmus-material": "^0.1.0",
+    "@myrmidon/cadmus-api": "^0.1.0",
+    "@myrmidon/cadmus-ui": "^0.1.0",
+    "@myrmidon/cadmus-state": "^0.1.0"
   },
   "dependencies": {
     "tslib": "^2.0.0"

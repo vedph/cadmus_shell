@@ -111,19 +111,6 @@
             "scripts": []
           }
         },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        },
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
@@ -163,18 +150,6 @@
             "tsConfig": "projects/myrmidon/cadmus-admin/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-admin/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-admin/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-admin/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -202,18 +177,6 @@
             "main": "projects/myrmidon/cadmus-browser-hierarchy/src/test.ts",
             "tsConfig": "projects/myrmidon/cadmus-browser-hierarchy/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-browser-hierarchy/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-browser-hierarchy/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-browser-hierarchy/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }
@@ -243,18 +206,6 @@
             "tsConfig": "projects/myrmidon/cadmus-core/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-core/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-core/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-core/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -282,18 +233,6 @@
             "main": "projects/myrmidon/cadmus-item-editor/src/test.ts",
             "tsConfig": "projects/myrmidon/cadmus-item-editor/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-item-editor/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-item-editor/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-item-editor/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }
@@ -323,18 +262,6 @@
             "tsConfig": "projects/myrmidon/cadmus-item-list/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-item-list/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-item-list/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-item-list/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -362,18 +289,6 @@
             "main": "projects/myrmidon/cadmus-item-search/src/test.ts",
             "tsConfig": "projects/myrmidon/cadmus-item-search/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-item-search/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-item-search/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-item-search/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }
@@ -403,18 +318,6 @@
             "tsConfig": "projects/myrmidon/cadmus-layer-demo/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-layer-demo/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-layer-demo/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-layer-demo/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -442,18 +345,6 @@
             "main": "projects/myrmidon/cadmus-login/src/test.ts",
             "tsConfig": "projects/myrmidon/cadmus-login/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-login/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-login/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-login/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }
@@ -483,18 +374,6 @@
             "tsConfig": "projects/myrmidon/cadmus-material/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-material/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-material/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-material/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -522,18 +401,6 @@
             "main": "projects/myrmidon/cadmus-part-general-pg/src/test.ts",
             "tsConfig": "projects/myrmidon/cadmus-part-general-pg/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-part-general-pg/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-part-general-pg/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-part-general-pg/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }
@@ -563,18 +430,6 @@
             "tsConfig": "projects/myrmidon/cadmus-part-general-ui/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-part-general-ui/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-part-general-ui/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-part-general-ui/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -602,18 +457,6 @@
             "main": "projects/myrmidon/cadmus-part-philology-pg/src/test.ts",
             "tsConfig": "projects/myrmidon/cadmus-part-philology-pg/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-part-philology-pg/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-part-philology-pg/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-part-philology-pg/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }
@@ -643,18 +486,6 @@
             "tsConfig": "projects/myrmidon/cadmus-part-philology-ui/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-part-philology-ui/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-part-philology-ui/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-part-philology-ui/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -682,18 +513,6 @@
             "main": "projects/myrmidon/cadmus-reset-password/src/test.ts",
             "tsConfig": "projects/myrmidon/cadmus-reset-password/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-reset-password/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-reset-password/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-reset-password/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }
@@ -723,18 +542,6 @@
             "tsConfig": "projects/myrmidon/cadmus-state/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-state/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-state/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-state/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -762,18 +569,6 @@
             "main": "projects/myrmidon/cadmus-thesaurus-editor/src/test.ts",
             "tsConfig": "projects/myrmidon/cadmus-thesaurus-editor/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-thesaurus-editor/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-thesaurus-editor/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-thesaurus-editor/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }
@@ -803,18 +598,6 @@
             "tsConfig": "projects/myrmidon/cadmus-thesaurus-list/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-thesaurus-list/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-thesaurus-list/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-thesaurus-list/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -842,18 +625,6 @@
             "main": "projects/myrmidon/cadmus-api/src/test.ts",
             "tsConfig": "projects/myrmidon/cadmus-api/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-api/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-api/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-api/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }
@@ -883,18 +654,6 @@
             "tsConfig": "projects/myrmidon/cadmus-ui/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-ui/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-ui/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-ui/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -923,18 +682,6 @@
             "tsConfig": "projects/myrmidon/cadmus-ui-pg/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-ui-pg/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-ui-pg/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-ui-pg/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -962,18 +709,6 @@
             "main": "projects/myrmidon/cadmus-user/src/test.ts",
             "tsConfig": "projects/myrmidon/cadmus-user/tsconfig.spec.json",
             "karmaConfig": "projects/myrmidon/cadmus-user/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/myrmidon/cadmus-user/tsconfig.lib.json",
-              "projects/myrmidon/cadmus-user/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }
