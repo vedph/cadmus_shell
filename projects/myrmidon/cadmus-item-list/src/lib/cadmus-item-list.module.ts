@@ -11,6 +11,7 @@ import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { ItemListComponent } from './item-list/item-list.component';
 import { ItemFilterComponent } from './item-filter/item-filter.component';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 // https://github.com/ng-packagr/ng-packagr/issues/778
 export const RouterModuleForChild = RouterModule.forChild([
@@ -25,6 +26,7 @@ export const RouterModuleForChild = RouterModule.forChild([
     RouterModuleForChild,
     MomentModule,
     // cadmus
+    FlexLayoutModule,
     CadmusApiModule,
     CadmusMaterialModule,
     CadmusUiModule,
