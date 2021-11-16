@@ -172,4 +172,85 @@ export class GraphService {
     const url = this._env.get('apiUrl') + '/graph/nodes/' + id.toString();
     return this._http.delete(url).pipe(catchError(this._error.handleError));
   }
+
+  /**
+   * Get the specified page of triples.
+   *
+   * @param filter The filter.
+   * @returns The page.
+   */
+  public getTriples(filter: TripleFilter): Observable<DataPage<TripleResult>> {
+    const url = this._env.get('apiUrl') + '/graph/triples';
+
+    let httpParams = new HttpParams();
+    httpParams = httpParams.set('pageNumber', filter.pageNumber.toString());
+    httpParams = httpParams.set('pageSize', filter.pageSize.toString());
+
+    if (filter.subjectId) {
+      httpParams = httpParams.set('subjectId', filter.subjectId.toString());
+    }
+    if (filter.predicateId) {
+      httpParams = httpParams.set('predicateId', filter.predicateId.toString());
+    }
+    if (filter.objectId) {
+      httpParams = httpParams.set('objectId', filter.objectId.toString());
+    }
+    if (filter.objectLiteral) {
+      httpParams = httpParams.set(
+        'objectLiteral',
+        filter.objectLiteral.toString()
+      );
+    }
+    if (filter.sid) {
+      httpParams = httpParams.set('sid', filter.sid);
+    }
+    if (filter.isSidPrefix) {
+      httpParams = httpParams.set('isSidPrefix', 'true');
+    }
+    if (filter.tag) {
+      httpParams = httpParams.set('tag', filter.tag);
+    }
+
+    return this._http
+      .get<DataPage<TripleResult>>(url, {
+        params: httpParams,
+      })
+      .pipe(retry(3), catchError(this._error.handleError));
+  }
+
+  /**
+   * Get the triple with the specified ID.
+   *
+   * @param id The triple's ID.
+   * @returns The triple.
+   */
+  public getTriple(id: number): Observable<TripleResult> {
+    const url = this._env.get('apiUrl') + '/graph/triples/' + id.toString();
+    return this._http
+      .get<TripleResult>(url)
+      .pipe(retry(3), catchError(this._error.handleError));
+  }
+
+  /**
+   * Add or update the specified triple.
+   *
+   * @param node The triple to add.
+   * @returns The added triple.
+   */
+  public addTriple(triple: Triple): Observable<Triple> {
+    const url = this._env.get('apiUrl') + '/graph/triples/';
+    return this._http
+      .post<Triple>(url, triple)
+      .pipe(catchError(this._error.handleError));
+  }
+
+  /**
+   * Delete the triple with the specified ID.
+   *
+   * @param id The triple's ID.
+   */
+  public deleteTriple(id: number): Observable<any> {
+    const url = this._env.get('apiUrl') + '/graph/triples/' + id.toString();
+    return this._http.delete(url).pipe(catchError(this._error.handleError));
+  }
 }
