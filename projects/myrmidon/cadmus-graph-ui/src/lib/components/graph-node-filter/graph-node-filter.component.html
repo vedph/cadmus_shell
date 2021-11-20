@@ -1,0 +1,122 @@
+<form [formGroup]="form" (submit)="apply()" ng-disabled="disabled">
+  <!-- label -->
+  <div>
+    <mat-form-field>
+      <input matInput [formControl]="label" placeholder="label" />
+    </mat-form-field>
+  </div>
+
+  <!-- uid -->
+  <div>
+    <mat-form-field>
+      <input matInput [formControl]="uid" placeholder="uid" />
+    </mat-form-field>
+  </div>
+
+  <!-- tag -->
+  <div>
+    <mat-form-field>
+      <input matInput [formControl]="tag" placeholder="tag" />
+    </mat-form-field>
+  </div>
+
+  <!-- sourceType -->
+  <div>
+    <mat-form-field>
+      <mat-select [formControl]="sourceType" placeholder="source type">
+        <mat-option [value]="-1">(any)</mat-option>
+        <mat-option [value]="0">user</mat-option>
+        <mat-option [value]="1">item</mat-option>
+        <mat-option [value]="2">facet</mat-option>
+        <mat-option [value]="3">group</mat-option>
+        <mat-option [value]="4">pin</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- sid, sidPrefix -->
+  <div>
+    <mat-form-field>
+      <input matInput [formControl]="sid" placeholder="source ID" />
+    </mat-form-field>
+    &nbsp;
+    <mat-checkbox [formControl]="sidPrefix">prefix</mat-checkbox>
+  </div>
+
+  <!-- linkedNode, linkedNodeRole -->
+  <div>
+    <fieldset>
+      <legend>linked node</legend>
+      <cadmus-graph-node-lookup
+        (nodeChange)="onLinkedNodeSet($event)"
+      ></cadmus-graph-node-lookup>
+      <div *ngIf="linkedNode$ | async">
+        <mat-form-field>
+          <mat-select [formControl]="linkedNodeRole" placeholder="role">
+            <mat-option value="S">subject</mat-option>
+            <mat-option value="O">object</mat-option>
+          </mat-select>
+          <button
+            type="button"
+            mat-icon-button
+            color="warn"
+            matTooltip="Reset linked node"
+          >
+            cancel
+          </button>
+        </mat-form-field>
+      </div>
+    </fieldset>
+  </div>
+
+  <!-- classes -->
+  <div>
+    <fieldset>
+      <legend>classes</legend>
+      <cadmus-graph-node-lookup
+        [isClass]="true"
+        (nodeChange)="onClassAdd($event)"
+      ></cadmus-graph-node-lookup>
+      <mat-chip-list *ngIf="classNodes$ | async as classNodes">
+        <mat-chip
+          *ngFor="let node of classNodes"
+          [removable]="true"
+          (removed)="onClassRemove($event)"
+          matTooltip="{{ node.uid }}"
+          >{{ node.label }}
+          <button type="button" matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+      </mat-chip-list>
+    </fieldset>
+  </div>
+
+  <br />
+  <div
+    class="btn-group"
+    role="group"
+    aria-label="toolbar"
+    style="margin-bottom: 10px"
+  >
+    <button
+      mat-icon-button
+      type="button"
+      (click)="reset()"
+      color="warn"
+      matTooltip="Reset filters"
+      [disabled]="disabled"
+    >
+      <mat-icon>clear</mat-icon>
+    </button>
+    <button
+      type="submit"
+      mat-icon-button
+      color="primary"
+      [disabled]="disabled"
+      matTooltip="Apply filters"
+    >
+      <mat-icon>check_circle</mat-icon>
+    </button>
+  </div>
+</form>

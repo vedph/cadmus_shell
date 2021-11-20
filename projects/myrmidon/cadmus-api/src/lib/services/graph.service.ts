@@ -37,7 +37,7 @@ export interface NodeFilter {
   isSidPrefix?: boolean;
   linkedNodeId?: number;
   linkedNodeRole?: 'S' | 'O';
-  classIds?: string[];
+  classIds?: number[];
 }
 
 export interface Triple {
