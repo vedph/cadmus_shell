@@ -8,9 +8,10 @@ import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
 
 import { GraphNodeFilterComponent } from './components/graph-node-filter/graph-node-filter.component';
 import { GraphNodeLookupComponent } from './components/graph-node-lookup/graph-node-lookup.component';
+import { GraphNodeListComponent } from './components/graph-node-list/graph-node-list.component';
 
 @NgModule({
-  declarations: [GraphNodeFilterComponent, GraphNodeLookupComponent],
+  declarations: [GraphNodeFilterComponent, GraphNodeLookupComponent, GraphNodeListComponent],
   imports: [
     CommonModule,
     FormsModule,

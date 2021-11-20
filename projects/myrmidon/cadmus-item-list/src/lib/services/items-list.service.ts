@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ItemsStore } from '../state/items.store';
+
 import { ItemService } from '@myrmidon/cadmus-api';
+import { ItemsStore } from '../state/items.store';
 
 @Injectable({ providedIn: 'root' })
 export class ItemsListService {

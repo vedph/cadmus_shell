@@ -3,14 +3,16 @@ import { StoreConfig, Store } from '@datorama/akita';
 import {
   EditFragmentState,
   EditFragmentStoreApi,
-  editFragmentInitialState
+  editFragmentInitialState,
 } from '@myrmidon/cadmus-state';
 import { APPARATUS_FRAGMENT_TYPEID } from '@myrmidon/cadmus-part-philology-ui';
 
 @Injectable({ providedIn: 'root' })
 @StoreConfig({ name: APPARATUS_FRAGMENT_TYPEID })
-export class EditApparatusFragmentStore extends Store<EditFragmentState>
-  implements EditFragmentStoreApi {
+export class EditApparatusFragmentStore
+  extends Store<EditFragmentState>
+  implements EditFragmentStoreApi
+{
   constructor() {
     super(editFragmentInitialState);
   }

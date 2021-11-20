@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { TextLayerService, TokenLocation } from '@myrmidon/cadmus-core';
 

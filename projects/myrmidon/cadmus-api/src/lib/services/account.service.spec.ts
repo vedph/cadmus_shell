@@ -2,7 +2,8 @@ import { TestBed } from '@angular/core/testing';
 
 import { AccountService } from './account.service';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { EnvServiceProvider, CadmusCoreModule } from '@myrmidon/cadmus-core';
+import { CadmusCoreModule } from '@myrmidon/cadmus-core';
+import { EnvServiceProvider } from '@myrmidon/ng-tools';
 
 describe('AccountService', () => {
   beforeEach(() =>

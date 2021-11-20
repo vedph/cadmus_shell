@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ItemsLookupStore } from '../state/items-lookup.store';
+
 import { FlagService, FacetService, UserService } from '@myrmidon/cadmus-api';
-import { DataPage, UserInfo } from '@myrmidon/cadmus-core';
+import { UserInfo } from '@myrmidon/cadmus-core';
+import { DataPage } from '@myrmidon/ng-tools';
+
+import { ItemsLookupStore } from '../state/items-lookup.store';
 
 @Injectable({ providedIn: 'root' })
 export class ItemsLookupService {
@@ -14,15 +17,15 @@ export class ItemsLookupService {
 
   private loadFacets(): void {
     this._facetService.getFacets().subscribe(
-      facets => {
-        this._store.update(state => {
+      (facets) => {
+        this._store.update((state) => {
           return {
             ...state,
-            facets
+            facets,
           };
         });
       },
-      err => {
+      (err) => {
         this._store.setError(err);
       }
     );
@@ -30,15 +33,15 @@ export class ItemsLookupService {
 
   private loadFlags(): void {
     this._flagService.getFlags().subscribe(
-      flags => {
-        this._store.update(state => {
+      (flags) => {
+        this._store.update((state) => {
           return {
             ...state,
-            flags
+            flags,
           };
         });
       },
-      err => {
+      (err) => {
         this._store.setError(err);
       }
     );
@@ -47,20 +50,20 @@ export class ItemsLookupService {
   private loadUsers(): void {
     this._userService.getAllUsers().subscribe(
       (page: DataPage<UserInfo>) => {
-        this._store.update(state => {
+        this._store.update((state) => {
           return {
             ...state,
-            users: page.items.map(u => {
+            users: page.items.map((u) => {
               return {
                 id: u.userName,
                 firstName: u.firstName,
-                lastName: u.lastName
+                lastName: u.lastName,
               };
-            })
+            }),
           };
         });
       },
-      err => {
+      (err) => {
         this._store.setError(err);
       }
     );

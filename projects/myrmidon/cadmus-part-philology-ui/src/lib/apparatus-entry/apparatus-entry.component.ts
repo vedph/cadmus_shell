@@ -1,10 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {
-  ApparatusEntry,
-  AnnotatedValue,
-  LocAnnotatedValue,
-} from '../apparatus-fragment';
-import {
   FormGroup,
   FormControl,
   FormArray,
@@ -12,8 +7,15 @@ import {
   Validators,
 } from '@angular/forms';
 import { Clipboard } from '@angular/cdk/clipboard';
+
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { renderLabelFromLastColon } from '@myrmidon/cadmus-ui';
+
+import {
+  ApparatusEntry,
+  AnnotatedValue,
+  LocAnnotatedValue,
+} from '../apparatus-fragment';
 
 /**
  * Single apparatus entry editor dumb component.
@@ -83,8 +85,10 @@ export class ApparatusEntryComponent implements OnInit {
   public authors: FormArray;
   public form: FormGroup;
 
-  constructor(private _formBuilder: FormBuilder,
-    private _clipboard: Clipboard) {
+  constructor(
+    private _formBuilder: FormBuilder,
+    private _clipboard: Clipboard
+  ) {
     // events
     this.editorClose = new EventEmitter<any>();
     this.save = new EventEmitter<ApparatusEntry>();

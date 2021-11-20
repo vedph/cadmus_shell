@@ -5,21 +5,22 @@ import {
   EventEmitter,
   Output,
   ElementRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
-import { TextTile, TEXT_TILE_TEXT_DATA_NAME } from '../tiled-text-part';
 import {
   FormControl,
   FormGroup,
   FormBuilder,
-  Validators
+  Validators,
 } from '@angular/forms';
 import { distinctUntilChanged } from 'rxjs/operators';
+
+import { TextTile, TEXT_TILE_TEXT_DATA_NAME } from '../tiled-text-part';
 
 @Component({
   selector: 'cadmus-text-tile',
   templateUrl: './text-tile.component.html',
-  styleUrls: ['./text-tile.component.css']
+  styleUrls: ['./text-tile.component.css'],
 })
 export class TextTileComponent implements OnInit {
   private _tile: TextTile;
@@ -82,10 +83,10 @@ export class TextTileComponent implements OnInit {
     this.editedText = formBuilder.control(null, [
       Validators.required,
       Validators.maxLength(100),
-      Validators.pattern(/^[^\s]+$/)
+      Validators.pattern(/^[^\s]+$/),
     ]);
     this.form = formBuilder.group({
-      editedText: this.editedText
+      editedText: this.editedText,
     });
 
     this.checker = formBuilder.control(false);
@@ -100,13 +101,13 @@ export class TextTileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.checker.valueChanges.pipe(distinctUntilChanged()).subscribe(_ => {
+    this.checker.valueChanges.pipe(distinctUntilChanged()).subscribe((_) => {
       if (this._checkedChangeFrozen || !this.checkable) {
         return;
       }
       this.checkedChange.emit({
         checked: this.checker.value,
-        tile: this.tile
+        tile: this.tile,
       });
     });
   }

@@ -15,6 +15,8 @@ import {
   FormControl,
   Validators,
 } from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
 import { ItemService } from '@myrmidon/cadmus-api';
 import {
   DataPinDefinition,
@@ -22,7 +24,6 @@ import {
   PartDefinition,
 } from '@myrmidon/cadmus-core';
 import { AppQuery } from '@myrmidon/cadmus-state';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 interface PartDefViewModel {
   typeId: string;

@@ -1,18 +1,19 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { LayerHint } from '@myrmidon/cadmus-core';
-import { DialogService } from '../../services/dialog.service';
 import {
   FormGroup,
   FormArray,
   FormBuilder,
   FormControl,
-  Validators
+  Validators,
 } from '@angular/forms';
+
+import { LayerHint } from '@myrmidon/cadmus-core';
+import { DialogService } from '@myrmidon/ng-mat-tools';
 
 @Component({
   selector: 'cadmus-layer-hints',
   templateUrl: './layer-hints.component.html',
-  styleUrls: ['./layer-hints.component.css']
+  styleUrls: ['./layer-hints.component.css'],
 })
 export class LayerHintsComponent implements OnInit {
   private _hints: LayerHint[];
@@ -63,7 +64,7 @@ export class LayerHintsComponent implements OnInit {
     this.patchCheck = _formBuilder.control(0, Validators.min(1));
     this.form = _formBuilder.group({
       checks: this.checks,
-      patchCheck: this.patchCheck
+      patchCheck: this.patchCheck,
     });
   }
 

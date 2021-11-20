@@ -1,6 +1,6 @@
 {
   "name": "@myrmidon/cadmus-part-philology-ui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Cadmus - philological UI components.",
   "keywords": [
     "Cadmus"
@@ -16,9 +16,9 @@
   "peerDependencies": {
     "@angular/common": "^13.0.0",
     "@angular/core": "^13.0.0",
-    "@myrmidon/cadmus-core": "^0.1.0",
+    "@myrmidon/cadmus-core": "^0.2.0",
     "@myrmidon/cadmus-material": "^0.1.0",
-    "@myrmidon/cadmus-ui": "^0.1.0"
+    "@myrmidon/cadmus-ui": "^0.2.0"
   },
   "dependencies": {
     "tslib": "^2.0.0"

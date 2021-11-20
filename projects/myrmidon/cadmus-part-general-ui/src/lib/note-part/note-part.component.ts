@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
-import { deepCopy, ThesaurusEntry } from '@myrmidon/cadmus-core';
+
+import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { AuthService } from '@myrmidon/cadmus-api';
+import { deepCopy } from '@myrmidon/ng-tools';
+
 import { NotePart, NOTE_PART_TYPEID } from '../note-part';
 
 /**
@@ -12,10 +15,12 @@ import { NotePart, NOTE_PART_TYPEID } from '../note-part';
 @Component({
   selector: 'cadmus-note-part',
   templateUrl: './note-part.component.html',
-  styleUrls: ['./note-part.component.css']
+  styleUrls: ['./note-part.component.css'],
 })
-export class NotePartComponent extends ModelEditorComponentBase<NotePart>
-  implements OnInit {
+export class NotePartComponent
+  extends ModelEditorComponentBase<NotePart>
+  implements OnInit
+{
   public tag: FormControl;
   public tags: FormControl;
   public text: FormControl;
@@ -27,7 +32,7 @@ export class NotePartComponent extends ModelEditorComponentBase<NotePart>
     language: 'markdown',
     wordWrap: 'on',
     // https://github.com/atularen/ngx-monaco-editor/issues/19
-    automaticLayout: true
+    automaticLayout: true,
   };
 
   constructor(authService: AuthService, formBuilder: FormBuilder) {
@@ -39,7 +44,7 @@ export class NotePartComponent extends ModelEditorComponentBase<NotePart>
     this.form = formBuilder.group({
       tag: this.tag,
       tags: this.tags,
-      text: this.text
+      text: this.text,
     });
   }
 
@@ -84,7 +89,7 @@ export class NotePartComponent extends ModelEditorComponentBase<NotePart>
         timeModified: new Date(),
         userId: null,
         tag: null,
-        text: null
+        text: null,
       };
     }
     part.tag = this.tagEntries ? this.tags.value : this.tag.value;

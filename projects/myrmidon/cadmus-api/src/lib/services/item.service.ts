@@ -1,23 +1,23 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+
+import { Observable, of } from 'rxjs';
+import { retry, catchError } from 'rxjs/operators';
+
 import {
-  ErrorService,
   ItemFilter,
   ItemInfo,
-  DataPage,
   Item,
   Part,
   PartDefinition,
   PartGroup,
   LayerPartInfo,
   LayerHint,
-  EnvService,
-  ErrorWrapper,
   DataPinInfo,
   DataPinDefinition,
 } from '@myrmidon/cadmus-core';
-import { Observable, of } from 'rxjs';
-import { retry, catchError } from 'rxjs/operators';
+
+import { DataPage, EnvService, ErrorService, ErrorWrapper } from '@myrmidon/ng-tools';
 
 export interface RolePartId {
   roleId: string;

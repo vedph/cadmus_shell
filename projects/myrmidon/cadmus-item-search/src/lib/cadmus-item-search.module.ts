@@ -9,6 +9,8 @@ import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
 import { CadmusApiModule } from '@myrmidon/cadmus-api';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
+import { NgToolsModule } from '@myrmidon/ng-tools';
+import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 
 import { ItemQueryComponent } from './item-query/item-query.component';
 import { ItemSearchComponent } from './item-search/item-search.component';
@@ -30,6 +32,8 @@ export const RouterModuleForChild = RouterModule.forChild([
     CadmusMaterialModule,
     CadmusUiModule,
     CadmusStateModule,
+    NgToolsModule,
+    NgMatToolsModule
   ],
   declarations: [ItemQueryComponent, ItemSearchComponent],
   exports: [ItemQueryComponent, ItemSearchComponent],

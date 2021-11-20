@@ -1,5 +1,6 @@
 import { inject, InjectionToken } from '@angular/core';
 import { PaginatorPlugin } from '@datorama/akita';
+
 import { ThesauriQuery } from '../state/thesauri.query';
 
 // create a factory provider for the thesauri paginator

@@ -12,11 +12,13 @@ import {
   renderLabelFromLastColon,
 } from '@myrmidon/cadmus-ui';
 import { AuthService } from '@myrmidon/cadmus-api';
-import { ThesaurusEntry, deepCopy } from '@myrmidon/cadmus-core';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { DocReference } from '@myrmidon/cadmus-refs-doc-references';
+import { deepCopy } from '@myrmidon/ng-tools';
+
+import { IndexKeyword } from '../index-keywords-part';
 import { Comment, CommentPart, COMMENT_PART_TYPEID } from '../comment-part';
 import { CommentFragment } from '../comment-fragment';
-import { IndexKeyword } from '../index-keywords-part';
-import { DocReference } from '@myrmidon/cadmus-refs-doc-references';
 
 /**
  * Comment part/fragment editor component.

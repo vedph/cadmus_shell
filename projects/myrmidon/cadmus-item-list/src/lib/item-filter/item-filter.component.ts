@@ -1,7 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
-import { ItemFilter } from '@myrmidon/cadmus-core';
 import { BehaviorSubject, Observable } from 'rxjs';
+
+import { ItemFilter } from '@myrmidon/cadmus-core';
+
 import { ItemsLookupService } from '../services/items-lookup.service';
 import { ItemsLookupQuery } from '../state/items-lookup.query';
 import { ItemsLookupState } from '../state/items-lookup.store';
@@ -12,7 +14,7 @@ import { ItemsLookupState } from '../state/items-lookup.store';
 @Component({
   selector: 'cadmus-item-filter',
   templateUrl: './item-filter.component.html',
-  styleUrls: ['./item-filter.component.css']
+  styleUrls: ['./item-filter.component.css'],
 })
 export class ItemFilterComponent implements OnInit {
   @Input()
@@ -33,7 +35,8 @@ export class ItemFilterComponent implements OnInit {
   constructor(
     private _itemsLookupService: ItemsLookupService,
     private _itemsLookupQuery: ItemsLookupQuery,
-    formBuilder: FormBuilder) {
+    formBuilder: FormBuilder
+  ) {
     this.title = formBuilder.control(null);
     this.description = formBuilder.control(null);
     this.facet = formBuilder.control(null);
@@ -51,7 +54,7 @@ export class ItemFilterComponent implements OnInit {
       flags: this.flags,
       minModified: this.minModified,
       maxModified: this.maxModified,
-      user: this.user
+      user: this.user,
     });
   }
 
@@ -60,9 +63,9 @@ export class ItemFilterComponent implements OnInit {
     this.lookup$ = this._itemsLookupQuery.select();
 
     // update form when filter changes
-    this.filter$.subscribe(f => {
+    this.filter$.subscribe((f) => {
       this.updateForm(f);
-    })
+    });
 
     // lookup
     this._itemsLookupService.load();
@@ -90,7 +93,7 @@ export class ItemFilterComponent implements OnInit {
       flags: 0, // this.getFlagsValue(),
       userId: this.user.value ? this.user.value.userName : null,
       minModified: this.minModified.value ? this.minModified.value : null,
-      maxModified: this.maxModified.value ? this.maxModified.value : null
+      maxModified: this.maxModified.value ? this.maxModified.value : null,
     };
   }
 

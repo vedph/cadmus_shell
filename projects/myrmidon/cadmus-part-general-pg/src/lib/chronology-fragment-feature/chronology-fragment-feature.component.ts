@@ -1,24 +1,28 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import {
   EditItemQuery,
   EditItemService,
   EditLayerPartQuery,
   EditLayerPartService,
-  EditFragmentFeatureBase
+  EditFragmentFeatureBase,
 } from '@myrmidon/cadmus-state';
-import { Router, ActivatedRoute } from '@angular/router';
+import { LibraryRouteService } from '@myrmidon/cadmus-core';
+
 import { EditChronologyFragmentQuery } from './edit-chronology-fragment.query';
 import { EditChronologyFragmentService } from './edit-chronology-fragment.service';
-import { LibraryRouteService } from '@myrmidon/cadmus-core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'cadmus-chronology-fragment-feature',
   templateUrl: './chronology-fragment-feature.component.html',
-  styleUrls: ['./chronology-fragment-feature.component.css']
+  styleUrls: ['./chronology-fragment-feature.component.css'],
 })
-export class ChronologyFragmentFeatureComponent extends EditFragmentFeatureBase
-  implements OnInit {
+export class ChronologyFragmentFeatureComponent
+  extends EditFragmentFeatureBase
+  implements OnInit
+{
   constructor(
     router: Router,
     route: ActivatedRoute,

@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { BibEntry, BibAuthor } from '../bibliography-part';
-import { Thesaurus, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 import {
   FormGroup,
   FormBuilder,
@@ -8,8 +7,10 @@ import {
   Validators,
   FormArray,
 } from '@angular/forms';
-import { Keyword } from '../keywords-part';
 import { distinctUntilChanged } from 'rxjs/operators';
+
+import { BibEntry, BibAuthor } from '../bibliography-part';
+import { Keyword } from '../keywords-part';
 
 /**
  * Bibliography entry editor used by BibliographyPartComponent to edit a single

@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
-import {
-  ErrorService,
-  User,
-  PasswordChange,
-  EnvService,
-} from '@myrmidon/cadmus-core';
+
+import { User, PasswordChange } from '@myrmidon/cadmus-core';
+import { EnvService, ErrorService } from '@myrmidon/ng-tools';
 
 @Injectable({
   providedIn: 'root',

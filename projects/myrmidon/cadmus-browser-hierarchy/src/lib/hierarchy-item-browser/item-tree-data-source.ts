@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
+import { FlatTreeControl } from '@angular/cdk/tree';
+import { CollectionViewer, SelectionChange } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable, merge } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { ItemInfo } from '@myrmidon/cadmus-core';
+import { ItemBrowserService } from '@myrmidon/cadmus-api';
+import { DataPage } from '@myrmidon/ng-tools';
+
 import {
   TreeNode,
   ItemTreeNode,
   PagerTreeNode,
-  HIERARCHY_ITEM_BROWSER_TYPEID
+  HIERARCHY_ITEM_BROWSER_TYPEID,
 } from '../state/hierarchy-item-browser.store';
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { CollectionViewer, SelectionChange } from '@angular/cdk/collections';
-import { map } from 'rxjs/operators';
-import { ItemInfo, DataPage } from '@myrmidon/cadmus-core';
-import { ItemBrowserService } from '@myrmidon/cadmus-api';
 
 // Angular dynamic tree official sample:
 // https://stackblitz.com/angular/bqnqjjvgjym
@@ -88,14 +91,14 @@ export class ItemTreeDataSource {
     this._itemBrowserService
       .getItems(HIERARCHY_ITEM_BROWSER_TYPEID, 1, 0, {
         tag: this.tag,
-        parentId: null
+        parentId: null,
       })
       .subscribe(
-        page => {
+        (page) => {
           this.rootLoading$.next(false);
           this.data = this.pageToNodes(page, null);
         },
-        error => {
+        (error) => {
           console.error('Error loading root node(s): ' + error);
           this.rootLoading$.next(false);
         }
@@ -122,7 +125,7 @@ export class ItemTreeDataSource {
       facetId: item.facetId,
       flags: item.flags,
       description: item.description,
-      payload: item.payload
+      payload: item.payload,
     };
   }
 
@@ -154,12 +157,12 @@ export class ItemTreeDataSource {
         pager: -1,
         pageNumber: page.pageNumber,
         pageCount: page.pageCount,
-        total: page.total
+        total: page.total,
       } as PagerTreeNode);
 
       // items
       nodes.push(
-        page.items.map(i => {
+        page.items.map((i) => {
           return this.itemToNode(i, page.pageNumber, parentNode);
         })
       );
@@ -171,11 +174,11 @@ export class ItemTreeDataSource {
         pager: 1,
         pageNumber: page.pageNumber,
         pageCount: page.pageCount,
-        total: page.total
+        total: page.total,
       } as PagerTreeNode);
     } else {
       // just 1 page
-      return page.items.map(i => {
+      return page.items.map((i) => {
         return this.itemToNode(i, page.pageNumber, parentNode);
       });
     }
@@ -205,7 +208,7 @@ export class ItemTreeDataSource {
     }
     return {
       start,
-      end
+      end,
     };
   }
 
@@ -218,10 +221,10 @@ export class ItemTreeDataSource {
     const nodes$ = this._itemBrowserService
       .getItems(HIERARCHY_ITEM_BROWSER_TYPEID, pageNumber, pageSize, {
         tag: tag,
-        parentId: parentNode.id
+        parentId: parentNode.id,
       })
       .pipe(
-        map(page => {
+        map((page) => {
           return this.pageToNodes(page, parentNode);
         })
       );
@@ -273,7 +276,7 @@ export class ItemTreeDataSource {
         }
         node.loading = false;
       },
-      error => {
+      (error) => {
         console.error('Error loading items page: ' + error);
         node.loading = false;
       }
@@ -326,7 +329,7 @@ export class ItemTreeDataSource {
         this.data$.next(this.data);
         node.loading = false;
       },
-      error => {
+      (error) => {
         console.error('Error loading items page: ' + error);
         node.loading = false;
       }
@@ -340,15 +343,15 @@ export class ItemTreeDataSource {
    */
   public handleTreeControl(change: SelectionChange<TreeNode>): void {
     if (change.added) {
-      change.added.forEach(node => this.toggleNode(node, true));
+      change.added.forEach((node) => this.toggleNode(node, true));
     }
     if (change.removed) {
-      change.removed.reverse().forEach(node => this.toggleNode(node, false));
+      change.removed.reverse().forEach((node) => this.toggleNode(node, false));
     }
   }
 
   public connect(collectionViewer: CollectionViewer): Observable<TreeNode[]> {
-    this._treeControl.expansionModel.changed.subscribe(change => {
+    this._treeControl.expansionModel.changed.subscribe((change) => {
       if (
         (change as SelectionChange<TreeNode>).added ||
         (change as SelectionChange<TreeNode>).removed

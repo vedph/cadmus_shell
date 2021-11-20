@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
+
 import { UserFilter } from '@myrmidon/cadmus-core';
 
 @Component({

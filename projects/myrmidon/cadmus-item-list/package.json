@@ -1,6 +1,6 @@
 {
   "name": "@myrmidon/cadmus-item-list",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Cadmus - items list component.",
   "keywords": [
     "Cadmus"
@@ -16,10 +16,10 @@
   "peerDependencies": {
     "@angular/common": "^13.0.0",
     "@angular/core": "^13.0.0",
-    "@myrmidon/cadmus-api": "^0.1.0",
+    "@myrmidon/cadmus-api": "^0.2.0",
     "@myrmidon/cadmus-material": "^0.1.0",
-    "@myrmidon/cadmus-ui": "^0.1.0",
-    "@myrmidon/cadmus-state": "^0.1.0"
+    "@myrmidon/cadmus-ui": "^0.2.0",
+    "@myrmidon/cadmus-state": "^0.2.0"
   },
   "dependencies": {
     "tslib": "^2.0.0"

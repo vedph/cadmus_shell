@@ -1,21 +1,20 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
-import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
-import {
-  Thesaurus,
-  ThesaurusFilter,
-  User,
-  DataPage,
-} from '@myrmidon/cadmus-core';
 import { FormControl, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
+import { PageEvent } from '@angular/material/paginator';
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
+import { map, startWith, tap, switchMap, debounceTime } from 'rxjs/operators';
+
+import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
+
+import { Thesaurus, ThesaurusFilter, User } from '@myrmidon/cadmus-core';
+import { ThesaurusService, AuthService } from '@myrmidon/cadmus-api';
+
 import { THESAURI_PAGINATOR } from '../services/thesauri-paginator';
 import { ThesauriState } from '../state/thesauri.store';
-import { ThesaurusService, AuthService } from '@myrmidon/cadmus-api';
 import { ThesauriListService } from '../services/thesauri.service';
-import { DialogService } from '@myrmidon/cadmus-ui';
-import { Router } from '@angular/router';
-import { map, startWith, tap, switchMap, debounceTime } from 'rxjs/operators';
-import { PageEvent } from '@angular/material/paginator';
+import { DialogService } from '@myrmidon/ng-mat-tools';
+import { DataPage } from '@myrmidon/ng-tools';
 
 @Component({
   selector: 'cadmus-thesaurus-list',

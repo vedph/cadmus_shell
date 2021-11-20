@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-import { ItemService, FacetService, ThesaurusService } from '@myrmidon/cadmus-api';
-import { EditLayerPartStore } from './edit-layer-part.store';
 import { forkJoin } from 'rxjs';
+
+import { TextLayerPart, TokenLocation, Fragment } from '@myrmidon/cadmus-core';
 import {
-  TextLayerPart,
-  TokenLocation,
-  Fragment,
-  deepCopy
-} from '@myrmidon/cadmus-core';
+  ItemService,
+  FacetService,
+  ThesaurusService,
+} from '@myrmidon/cadmus-api';
+import { deepCopy } from '@myrmidon/ng-tools';
+
+import { EditLayerPartStore } from './edit-layer-part.store';
 
 @Injectable({ providedIn: 'root' })
 export class EditLayerPartService {

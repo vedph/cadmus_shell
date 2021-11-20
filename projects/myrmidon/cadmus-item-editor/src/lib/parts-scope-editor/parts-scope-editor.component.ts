@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Part } from '@myrmidon/cadmus-core';
 import {
   FormGroup,
   FormArray,
@@ -7,9 +6,12 @@ import {
   FormControl,
   Validators,
 } from '@angular/forms';
-import { CustomValidators, DialogService } from '@myrmidon/cadmus-ui';
+
+import { Part } from '@myrmidon/cadmus-core';
+import { CustomValidators } from '@myrmidon/cadmus-ui';
 import { FacetService } from '@myrmidon/cadmus-api';
 import { EditItemQuery, AppQuery } from '@myrmidon/cadmus-state';
+import { DialogService } from '@myrmidon/ng-mat-tools';
 
 export interface PartScopeSetRequest {
   ids: string[];

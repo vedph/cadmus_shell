@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 import { FlagService } from './flag.service';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 describe('FlagService', () => {
   beforeEach(() => {

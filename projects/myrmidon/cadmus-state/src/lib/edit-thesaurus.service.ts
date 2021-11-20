@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { EditThesaurusStore } from './edit-thesaurus.store';
 import { ThesaurusService } from '@myrmidon/cadmus-api';
 import { Thesaurus } from '@myrmidon/cadmus-core';
+
+import { EditThesaurusStore } from './edit-thesaurus.store';
 
 @Injectable({ providedIn: 'root' })
 export class EditThesaurusService {

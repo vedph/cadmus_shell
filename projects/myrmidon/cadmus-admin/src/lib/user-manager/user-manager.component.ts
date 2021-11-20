@@ -1,19 +1,19 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
-import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
-import {
-  User,
-  UserFilter,
-  DataPage,
-  GravatarService,
-} from '@myrmidon/cadmus-core';
 import { FormControl, FormBuilder } from '@angular/forms';
+import { PageEvent } from '@angular/material/paginator';
+
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
+import { startWith, tap, switchMap, map } from 'rxjs/operators';
+
+import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
+
+import { User, UserFilter, GravatarService } from '@myrmidon/cadmus-core';
+import { UserService } from '@myrmidon/cadmus-api';
+import { DataPage } from '@myrmidon/ng-tools';
+import { DialogService } from '@myrmidon/ng-mat-tools';
+
 import { USERS_PAGINATOR } from './users.paginator';
 import { UsersState } from './users.store';
-import { UserService } from '@myrmidon/cadmus-api';
-import { DialogService } from '@myrmidon/cadmus-ui';
-import { startWith, tap, switchMap, map } from 'rxjs/operators';
-import { PageEvent } from '@angular/material/paginator';
 import { UsersService } from './users.service';
 import { UsersQuery } from './users.query';
 

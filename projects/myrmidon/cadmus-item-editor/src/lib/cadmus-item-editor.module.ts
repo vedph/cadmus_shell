@@ -11,6 +11,9 @@ import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
 import { CadmusApiModule } from '@myrmidon/cadmus-api';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
+import { NgToolsModule } from '@myrmidon/ng-tools';
+import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
+
 import { ItemEditorComponent } from './item-editor/item-editor.component';
 import { PartsScopeEditorComponent } from './parts-scope-editor/parts-scope-editor.component';
 import { MissingPartsComponent } from './missing-parts/missing-parts.component';
@@ -34,6 +37,8 @@ export const RouterModuleForChild = RouterModule.forChild([
     CadmusApiModule,
     CadmusUiModule,
     CadmusStateModule,
+    NgToolsModule,
+    NgMatToolsModule
   ],
   declarations: [
     ItemEditorComponent,

@@ -16,25 +16,25 @@ import { MarkdownModule } from 'ngx-markdown';
 // Akita
 import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 
-import {
-  CadmusCoreModule,
-  PendingChangesGuard,
-  EnvServiceProvider,
-} from '@myrmidon/cadmus-core';
+import { CadmusCoreModule, PendingChangesGuard } from '@myrmidon/cadmus-core';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusPartGeneralUiModule } from '@myrmidon/cadmus-part-general-ui';
 import { CadmusPartPhilologyUiModule } from '@myrmidon/cadmus-part-philology-ui';
-import { HomeComponent } from './home/home.component';
 import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
+import { EnvServiceProvider, NgToolsModule } from '@myrmidon/ng-tools';
+import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
+
 import {
   AuthInterceptor,
   AdminGuardService,
   AuthGuardService,
   EditorGuardService,
 } from '@myrmidon/cadmus-api';
+
 import { PART_EDITOR_KEYS } from './part-editor-keys';
 import { ITEM_BROWSER_KEYS } from './item-browser-keys';
 import { INDEX_LOOKUP_DEFINITIONS } from './index-lookup-definitions';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -171,6 +171,8 @@ import { INDEX_LOOKUP_DEFINITIONS } from './index-lookup-definitions';
     CadmusPartGeneralUiModule,
     CadmusPartPhilologyUiModule,
     CadmusUiModule,
+    NgToolsModule,
+    NgMatToolsModule,
   ],
   providers: [
     EnvServiceProvider,

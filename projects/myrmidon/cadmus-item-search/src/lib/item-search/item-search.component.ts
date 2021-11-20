@@ -1,25 +1,27 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
+import { FormControl, FormBuilder } from '@angular/forms';
+import { PageEvent } from '@angular/material/paginator';
+import { Router } from '@angular/router';
 import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
+
+import { Observable, combineLatest } from 'rxjs';
+import { startWith, tap, switchMap, map } from 'rxjs/operators';
+
 import {
   ItemInfo,
   User,
-  DataPage,
-  ErrorWrapper,
   FlagDefinition,
   FacetDefinition,
 } from '@myrmidon/cadmus-core';
-import { FormControl, FormBuilder } from '@angular/forms';
-import { DialogService } from '@myrmidon/cadmus-ui';
-import { Router } from '@angular/router';
+import { ItemService, AuthService } from '@myrmidon/cadmus-api';
+import { AppQuery } from '@myrmidon/cadmus-state';
+
 import { ITEMS_SEARCH_PAGINATOR } from '../services/items-search-paginator';
 import { ItemsSearchState } from '../state/items-search.store';
-import { ItemService, AuthService } from '@myrmidon/cadmus-api';
 import { ItemsSearchService } from '../services/items-search.service';
-import { startWith, tap, switchMap, map } from 'rxjs/operators';
 import { ItemsSearchQuery } from '../state/items-search.query';
-import { PageEvent } from '@angular/material/paginator';
-import { AppQuery } from '@myrmidon/cadmus-state';
+import { DialogService } from '@myrmidon/ng-mat-tools';
+import { DataPage, ErrorWrapper } from '@myrmidon/ng-tools';
 
 @Component({
   selector: 'cadmus-item-search',

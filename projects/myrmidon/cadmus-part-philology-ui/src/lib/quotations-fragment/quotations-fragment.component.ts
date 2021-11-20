@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { QuotationsFragment, QuotationEntry } from '../quotations-fragment';
-import { ModelEditorComponentBase, DialogService } from '@myrmidon/cadmus-ui';
-import { AuthService } from '@myrmidon/cadmus-api';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { Thesaurus, ThesaurusEntry, deepCopy } from '@myrmidon/cadmus-core';
+
+import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { AuthService } from '@myrmidon/cadmus-api';
+import { Thesaurus, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { deepCopy } from '@myrmidon/ng-tools';
+import { DialogService } from '@myrmidon/ng-mat-tools';
+
 import { QuotationWorksService } from './quotation-works.service';
+import { QuotationsFragment, QuotationEntry } from '../quotations-fragment';
 
 /**
  * Quotations fragment editor.
@@ -17,7 +21,8 @@ import { QuotationWorksService } from './quotation-works.service';
 })
 export class QuotationsFragmentComponent
   extends ModelEditorComponentBase<QuotationsFragment>
-  implements OnInit {
+  implements OnInit
+{
   private _newEditedEntry: boolean;
 
   public editedEntry: QuotationEntry;

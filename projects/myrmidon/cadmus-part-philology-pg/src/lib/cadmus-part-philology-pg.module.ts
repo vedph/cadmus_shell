@@ -13,12 +13,15 @@ import {
   WITNESSES_FRAGMENT_TYPEID,
   QUOTATIONS_FRAGMENT_TYPEID,
 } from '@myrmidon/cadmus-part-philology-ui';
+import { CadmusStateModule } from '@myrmidon/cadmus-state';
+import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
+import { NgToolsModule } from '@myrmidon/ng-tools';
+import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
+
 import { ApparatusFragmentFeatureComponent } from './apparatus-fragment-feature/apparatus-fragment-feature.component';
 import { OrthographyFragmentFeatureComponent } from './orthography-fragment-feature/orthography-fragment-feature.component';
 import { WitnessesFragmentFeatureComponent } from './witnesses-fragment-feature/witnesses-fragment-feature.component';
 import { QuotationsFragmentFeatureComponent } from './quotations-fragment-feature/quotations-fragment-feature.component';
-import { CadmusStateModule } from '@myrmidon/cadmus-state';
-import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 
 // https://github.com/ng-packagr/ng-packagr/issues/778
 export const RouterModuleForChild = RouterModule.forChild([
@@ -61,6 +64,8 @@ export const RouterModuleForChild = RouterModule.forChild([
     CadmusPartPhilologyUiModule,
     CadmusStateModule,
     CadmusUiPgModule,
+    NgToolsModule,
+    NgMatToolsModule,
   ],
   declarations: [
     ApparatusFragmentFeatureComponent,

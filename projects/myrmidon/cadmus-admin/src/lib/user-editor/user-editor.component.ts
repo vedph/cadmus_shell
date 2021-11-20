@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { User } from '@myrmidon/cadmus-core';
 import {
   FormGroup,
   FormControl,
   FormBuilder,
   Validators,
 } from '@angular/forms';
+
+import { User } from '@myrmidon/cadmus-core';
 import { AuthService } from '@myrmidon/cadmus-api';
 
 @Component({

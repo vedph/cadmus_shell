@@ -1,15 +1,17 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ThesaurusEntry } from '@myrmidon/cadmus-core';
-import { QuotationEntry } from '../quotations-fragment';
+
 import {
   FormBuilder,
   FormGroup,
   FormControl,
   Validators,
 } from '@angular/forms';
-import { DialogService } from '@myrmidon/cadmus-ui';
 import { BehaviorSubject } from 'rxjs';
+
 import { QuotationWorksService } from '../quotations-fragment/quotation-works.service';
+import { QuotationEntry } from '../quotations-fragment';
+import { DialogService } from '@myrmidon/ng-mat-tools';
 
 @Component({
   selector: 'cadmus-quotation-entry',
@@ -109,8 +111,7 @@ export class QuotationEntryComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   private loadAuthorWorks(authorId: string): void {
     // const oldWorkId = this.work.value;

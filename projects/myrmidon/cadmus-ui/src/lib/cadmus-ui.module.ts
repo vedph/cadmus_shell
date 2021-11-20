@@ -9,9 +9,9 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
 // Cadmus
 import { CadmusCoreModule } from '@myrmidon/cadmus-core';
 import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
+import { NgToolsModule } from '@myrmidon/ng-tools';
 
 import { CloseSaveButtonsComponent } from './components/close-save-buttons/close-save-buttons.component';
-import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { DocReferencesComponent } from './components/doc-references/doc-references.component';
 import { ErrorListComponent } from './components/error-list/error-list.component';
 import { FacetBadgeComponent } from './components/facet-badge/facet-badge.component';
@@ -41,9 +41,9 @@ import { ThesaurusTreeComponent } from './components/thesaurus-tree/thesaurus-tr
     // cadmus
     CadmusCoreModule,
     CadmusMaterialModule,
+    NgToolsModule,
   ],
   declarations: [
-    ConfirmDialogComponent,
     CloseSaveButtonsComponent,
     DatationEditorComponent,
     DecoratedTokenTextComponent,
@@ -65,7 +65,6 @@ import { ThesaurusTreeComponent } from './components/thesaurus-tree/thesaurus-tr
     ThesaurusTreeComponent,
   ],
   exports: [
-    ConfirmDialogComponent,
     CloseSaveButtonsComponent,
     DatationEditorComponent,
     DecoratedTokenTextComponent,

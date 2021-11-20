@@ -1,5 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormArray,
+} from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
+
+import { AuthService } from '@myrmidon/cadmus-api';
 import {
   Item,
   PartGroup,
@@ -14,21 +25,12 @@ import {
   ComponentCanDeactivate,
 } from '@myrmidon/cadmus-core';
 import {
-  FormControl,
-  FormGroup,
-  FormBuilder,
-  Validators,
-  FormArray,
-} from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { DialogService } from '@myrmidon/cadmus-ui';
-import {
   EditItemQuery,
   EditItemService,
   AppQuery,
 } from '@myrmidon/cadmus-state';
-import { AuthService } from '@myrmidon/cadmus-api';
+import { DialogService } from '@myrmidon/ng-mat-tools';
+
 import { PartScopeSetRequest } from '../parts-scope-editor/parts-scope-editor.component';
 
 /**

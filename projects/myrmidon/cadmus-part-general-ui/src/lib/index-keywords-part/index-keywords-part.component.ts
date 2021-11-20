@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
+
 import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { AuthService } from '@myrmidon/cadmus-api';
-import { FormBuilder, Validators, FormControl } from '@angular/forms';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { deepCopy } from '@myrmidon/ng-tools';
+
 import {
   IndexKeywordsPart,
   IndexKeyword,
-  INDEX_KEYWORDS_PART_TYPEID
+  INDEX_KEYWORDS_PART_TYPEID,
 } from '../index-keywords-part';
-import { deepCopy, ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 /**
  * Index keywords part editor.
@@ -16,11 +19,12 @@ import { deepCopy, ThesaurusEntry } from '@myrmidon/cadmus-core';
 @Component({
   selector: 'cadmus-index-keywords-part',
   templateUrl: './index-keywords-part.component.html',
-  styleUrls: ['./index-keywords-part.component.css']
+  styleUrls: ['./index-keywords-part.component.css'],
 })
 export class IndexKeywordsPartComponent
   extends ModelEditorComponentBase<IndexKeywordsPart>
-  implements OnInit {
+  implements OnInit
+{
   public keywords: IndexKeyword[];
   public editedKeyword: IndexKeyword;
   public tabIndex: number;
@@ -37,7 +41,7 @@ export class IndexKeywordsPartComponent
     this.keywords = [];
     this.keywordCount = formBuilder.control(0, Validators.min(1));
     this.form = formBuilder.group({
-      keywordCount: this.keywordCount
+      keywordCount: this.keywordCount,
     });
     this.tabIndex = 0;
   }
@@ -127,7 +131,7 @@ export class IndexKeywordsPartComponent
         creatorId: null,
         timeModified: new Date(),
         userId: null,
-        keywords: []
+        keywords: [],
       };
     }
     part.keywords = [...this.keywords];
@@ -164,7 +168,7 @@ export class IndexKeywordsPartComponent
     const keyword: IndexKeyword = {
       indexId: this.idxEntries?.length ? this.idxEntries[0].id : null,
       language: this.langEntries?.length ? this.langEntries[0].id : 'eng',
-      value: ''
+      value: '',
     };
     this.editKeyword(keyword);
   }

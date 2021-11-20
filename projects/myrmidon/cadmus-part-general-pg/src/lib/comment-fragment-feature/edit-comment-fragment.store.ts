@@ -11,7 +11,8 @@ import { COMMENT_FRAGMENT_TYPEID } from '@myrmidon/cadmus-part-general-ui';
 @StoreConfig({ name: COMMENT_FRAGMENT_TYPEID })
 export class EditCommentFragmentStore
   extends Store<EditFragmentState>
-  implements EditFragmentStoreApi {
+  implements EditFragmentStoreApi
+{
   constructor() {
     super(editFragmentInitialState);
   }

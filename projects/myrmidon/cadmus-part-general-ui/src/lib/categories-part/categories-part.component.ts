@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { CategoriesPart, CATEGORIES_PART_TYPEID } from '../categories-part';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
+
 import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { AuthService } from '@myrmidon/cadmus-api';
-import { deepCopy, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { deepCopy } from '@myrmidon/ng-tools';
 import { renderLabelFromLastColon } from '@myrmidon/cadmus-ui';
-import { BehaviorSubject } from 'rxjs';
+
+import { CategoriesPart, CATEGORIES_PART_TYPEID } from '../categories-part';
 
 /**
  * Categories component editor.
@@ -18,7 +21,8 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class CategoriesPartComponent
   extends ModelEditorComponentBase<CategoriesPart>
-  implements OnInit {
+  implements OnInit
+{
   public categories: FormControl;
   public entries$: BehaviorSubject<ThesaurusEntry[]>;
 

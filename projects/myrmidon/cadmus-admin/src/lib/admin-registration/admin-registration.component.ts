@@ -5,15 +5,16 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { take } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { AuthService } from '@myrmidon/cadmus-api';
 import {
   ExistResult,
   RegistrationModel,
   PasswordValidator,
 } from '@myrmidon/cadmus-core';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'cadmus-admin-registration',

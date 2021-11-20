@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+
 import {
   TokenLocation,
   LibraryRouteService,
@@ -7,8 +9,6 @@ import {
   ComponentCanDeactivate,
   LayerHint,
 } from '@myrmidon/cadmus-core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DialogService } from '@myrmidon/cadmus-ui';
 import {
   EditLayerPartQuery,
   EditLayerPartService,
@@ -16,6 +16,7 @@ import {
   EditItemService,
 } from '@myrmidon/cadmus-state';
 import { AuthService } from '@myrmidon/cadmus-api';
+import { DialogService } from '@myrmidon/ng-mat-tools';
 
 /**
  * Token-based text layer part feature editor. This is a special type of editor,
@@ -30,7 +31,8 @@ import { AuthService } from '@myrmidon/cadmus-api';
   styleUrls: ['./token-text-layer-part-feature.component.css'],
 })
 export class TokenTextLayerPartFeatureComponent
-  implements OnInit, ComponentCanDeactivate {
+  implements OnInit, ComponentCanDeactivate
+{
   public itemId: string;
   public partId: string;
   public roleId: string;

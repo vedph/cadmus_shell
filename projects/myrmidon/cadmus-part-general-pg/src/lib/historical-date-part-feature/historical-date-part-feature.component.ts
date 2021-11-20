@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import {
   EditPartFeatureBase,
   EditItemQuery,
   EditItemService,
 } from '@myrmidon/cadmus-state';
-import { Router, ActivatedRoute } from '@angular/router';
+
 import { EditHistoricalDatePartQuery } from './edit-historical-date-part.query';
 import { EditHistoricalDatePartService } from './edit-historical-date-part.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'cadmus-historical-date-part-feature',

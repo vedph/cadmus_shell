@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { QueryEntity } from '@datorama/akita';
-import { UsersState, UsersStore } from './users.store';
+
 import { User } from '@myrmidon/cadmus-core';
+
+import { UsersState, UsersStore } from './users.store';
 
 @Injectable({ providedIn: 'root' })
 export class UsersQuery extends QueryEntity<UsersState, User, string> {

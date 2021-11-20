@@ -2,14 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { retry, catchError, take } from 'rxjs/operators';
-import {
-  ErrorService,
-  Thesaurus,
-  ThesauriSet,
-  EnvService,
-  ThesaurusFilter,
-  DataPage,
-} from '@myrmidon/cadmus-core';
+
+import { Thesaurus, ThesauriSet, ThesaurusFilter } from '@myrmidon/cadmus-core';
+import { DataPage, EnvService, ErrorService } from '@myrmidon/ng-tools';
 
 @Injectable({ providedIn: 'root' })
 export class ThesaurusService {

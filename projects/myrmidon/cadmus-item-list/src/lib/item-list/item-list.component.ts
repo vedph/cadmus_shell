@@ -1,24 +1,28 @@
 import { Component, OnInit, Inject } from '@angular/core';
+import { FormControl, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
+import { PageEvent } from '@angular/material/paginator';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
+import { map, switchMap, tap, startWith } from 'rxjs/operators';
+
 import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
+
 import {
   ItemInfo,
-  DataPage,
   ItemFilter,
   User,
   FlagDefinition,
   FacetDefinition,
 } from '@myrmidon/cadmus-core';
-import { ITEMS_PAGINATOR } from '../services/items-paginator';
-import { map, switchMap, tap, startWith } from 'rxjs/operators';
-import { ItemsState } from '../state/items.store';
-import { PageEvent } from '@angular/material/paginator';
+
 import { ItemService, AuthService } from '@myrmidon/cadmus-api';
-import { DialogService } from '@myrmidon/cadmus-ui';
-import { FormControl, FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ItemsListService } from '../services/items-list.service';
 import { AppQuery } from '@myrmidon/cadmus-state';
+import { DataPage } from '@myrmidon/ng-tools';
+import { DialogService } from '@myrmidon/ng-mat-tools';
+
+import { ItemsListService } from '../services/items-list.service';
+import { ITEMS_PAGINATOR } from '../services/items-paginator';
+import { ItemsState } from '../state/items.store';
 
 @Component({
   selector: 'cadmus-item-list',

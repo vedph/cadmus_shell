@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { WitnessesFragment, Witness } from '../witnesses-fragment';
-import { AuthService } from '@myrmidon/cadmus-api';
 import {
   FormBuilder,
   FormControl,
   Validators,
   FormGroup,
 } from '@angular/forms';
-import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import {
   trigger,
   state,
@@ -15,7 +12,12 @@ import {
   transition,
   animate,
 } from '@angular/animations';
-import { deepCopy } from '@myrmidon/cadmus-core';
+
+import { AuthService } from '@myrmidon/cadmus-api';
+import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { deepCopy } from '@myrmidon/ng-tools';
+
+import { WitnessesFragment, Witness } from '../witnesses-fragment';
 
 @Component({
   selector: 'cadmus-witnesses-fragment',
@@ -41,7 +43,8 @@ import { deepCopy } from '@myrmidon/cadmus-core';
 })
 export class WitnessesFragmentComponent
   extends ModelEditorComponentBase<WitnessesFragment>
-  implements OnInit {
+  implements OnInit
+{
   public currentWitnessOpen: boolean;
   public currentWitnessId: string;
   public editorOptions = {

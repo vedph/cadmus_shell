@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from '../services/login.service';
 import { Credentials } from '@myrmidon/cadmus-ui';
-import { AuthQuery } from '../state/auth.query';
 import { Observable } from 'rxjs';
+
+import { LoginService } from '../services/login.service';
+import { AuthQuery } from '../state/auth.query';
 
 @Component({
   selector: 'cadmus-login-page',
   templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.css']
+  styleUrls: ['./login-page.component.css'],
 })
 export class LoginPageComponent implements OnInit {
   public validating$: Observable<boolean>;

@@ -1,8 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ItemBrowserService } from './item-browser.service';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { EnvServiceProvider, CadmusCoreModule } from '@myrmidon/cadmus-core';
+import { CadmusCoreModule } from '@myrmidon/cadmus-core';
+import { EnvServiceProvider } from '@myrmidon/ng-tools';
+
+import { ItemBrowserService } from './item-browser.service';
 
 describe('ItemBrowserService', () => {
   beforeEach(() =>

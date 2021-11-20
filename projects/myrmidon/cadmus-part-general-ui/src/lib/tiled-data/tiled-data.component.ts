@@ -1,7 +1,13 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
-import { DialogService } from '@myrmidon/cadmus-ui';
+
+import { DialogService } from '@myrmidon/ng-mat-tools';
 
 interface Data {
   [key: string]: any;
@@ -20,7 +26,7 @@ const VALUE_MAX_LEN = 100;
 @Component({
   selector: 'cadmus-tiled-data',
   templateUrl: './tiled-data.component.html',
-  styleUrls: ['./tiled-data.component.css']
+  styleUrls: ['./tiled-data.component.css'],
 })
 export class TiledDataComponent implements OnInit {
   private _data: Data;
@@ -64,24 +70,26 @@ export class TiledDataComponent implements OnInit {
 
   public form: FormGroup;
 
-  constructor(private _formBuilder: FormBuilder,
-    private _dialogService: DialogService) {
+  constructor(
+    private _formBuilder: FormBuilder,
+    private _dialogService: DialogService
+  ) {
     // filter form
     this.keyFilter = _formBuilder.control(null);
     this.filterForm = _formBuilder.group({
-      keyFilter: this.keyFilter
+      keyFilter: this.keyFilter,
     });
     // new datum form
     this.newKey = _formBuilder.control(null, [
       Validators.required,
-      Validators.pattern('^[a-zA-Z_$][[a-zA-Z_$0-9]{0,49}$')
+      Validators.pattern('^[a-zA-Z_$][[a-zA-Z_$0-9]{0,49}$'),
     ]);
     this.newValue = _formBuilder.control(null, [
-      Validators.maxLength(VALUE_MAX_LEN)
+      Validators.maxLength(VALUE_MAX_LEN),
     ]);
     this.newForm = _formBuilder.group({
       newKey: this.newKey,
-      newValue: this.newValue
+      newValue: this.newValue,
     });
     // editing form (controls are dynamically populated)
     this.form = _formBuilder.group({});
@@ -92,11 +100,8 @@ export class TiledDataComponent implements OnInit {
 
   ngOnInit(): void {
     this.keyFilter.valueChanges
-      .pipe(
-        distinctUntilChanged(),
-        debounceTime(300)
-      )
-      .subscribe(_ => {
+      .pipe(distinctUntilChanged(), debounceTime(300))
+      .subscribe((_) => {
         this.updateDataVisibility();
       });
   }
@@ -110,7 +115,7 @@ export class TiledDataComponent implements OnInit {
   }
 
   public isVisibleKey(key: string): boolean {
-    const dataKey = this.keys.find(k => {
+    const dataKey = this.keys.find((k) => {
       return k.value === key;
     });
     return dataKey ? dataKey.visible : false;
@@ -155,13 +160,13 @@ export class TiledDataComponent implements OnInit {
     for (let i = 0; i < this.keys.length; i++) {
       this.keys[i] = {
         value: this.keys[i].value,
-        visible: this.matchesFilter(this.keys[i].value)
+        visible: this.matchesFilter(this.keys[i].value),
       };
     }
   }
 
   private getData(): Data {
-    const data: Data = this._hiddenData? {...this._hiddenData} : {};
+    const data: Data = this._hiddenData ? { ...this._hiddenData } : {};
 
     for (let i = 0; i < this.keys.length; i++) {
       const keyValue = this.keys[i].value;
@@ -173,14 +178,14 @@ export class TiledDataComponent implements OnInit {
 
   public deleteDatum(key: DataKey): void {
     this._dialogService
-    .confirm('Confirm Deletion', `Delete datum #"${key.value}"?`)
-    .subscribe((ok: boolean) => {
-      if (!ok) {
-        return;
-      }
-      delete this._data[key.value];
-      this.updateForm();
-    });
+      .confirm('Confirm Deletion', `Delete datum #"${key.value}"?`)
+      .subscribe((ok: boolean) => {
+        if (!ok) {
+          return;
+        }
+        delete this._data[key.value];
+        this.updateForm();
+      });
   }
 
   public addDatum(): void {

@@ -7,10 +7,11 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { MspValidators } from '../msp-validators';
-import { DialogService, ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { take } from 'rxjs/operators';
+
 import { diff_match_patch } from 'diff-match-patch';
+
+import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import {
   trigger,
   transition,
@@ -18,10 +19,13 @@ import {
   animate,
   state,
 } from '@angular/animations';
-import { MspOperation } from '../msp-operation';
-import { DifferResultToMspAdapter } from '../differ-result-to-msp-adapter';
 import { AuthService } from '@myrmidon/cadmus-api';
-import { deepCopy } from '@myrmidon/cadmus-core';
+import { deepCopy } from '@myrmidon/ng-tools';
+import { DialogService } from '@myrmidon/ng-mat-tools';
+
+import { DifferResultToMspAdapter } from '../differ-result-to-msp-adapter';
+import { MspOperation } from '../msp-operation';
+import { MspValidators } from '../msp-validators';
 
 @Component({
   selector: 'cadmus-orthography-fragment',
@@ -47,7 +51,8 @@ import { deepCopy } from '@myrmidon/cadmus-core';
 })
 export class OrthographyFragmentComponent
   extends ModelEditorComponentBase<OrthographyFragment>
-  implements OnInit {
+  implements OnInit
+{
   private _currentOperationIndex: number;
   private _differ: diff_match_patch;
   private _adapter: DifferResultToMspAdapter;

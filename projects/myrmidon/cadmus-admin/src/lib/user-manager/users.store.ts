@@ -1,11 +1,12 @@
+import { Injectable } from '@angular/core';
 import {
   StoreConfig,
   EntityStore,
   EntityState,
   ActiveState,
 } from '@datorama/akita';
+
 import { User } from '@myrmidon/cadmus-core';
-import { Injectable } from '@angular/core';
 
 // https://netbasal.gitbook.io/akita/entity-store/entity-store/active-state
 export interface UsersState

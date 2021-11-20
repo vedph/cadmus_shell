@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { EnvServiceProvider } from '@myrmidon/ng-tools';
 
 import { LibraryRouteService } from './library-route.service';
-import { EnvServiceProvider } from '@myrmidon/cadmus-core';
 
 describe('LibraryRouteServiceService', () => {
   beforeEach(() =>
@@ -10,9 +10,9 @@ describe('LibraryRouteServiceService', () => {
         EnvServiceProvider,
         {
           provide: 'partEditorKeys',
-          useValue: {}
-        }
-      ]
+          useValue: {},
+        },
+      ],
     })
   );
 

@@ -1,16 +1,12 @@
-import { Observable, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
-import {
-  User,
-  LocalStorageService,
-  LoginResult,
-  RegistrationModel,
-  EnvService,
-} from '@myrmidon/cadmus-core';
+
+import { User, LoginResult, RegistrationModel } from '@myrmidon/cadmus-core';
+import { EnvService, LocalStorageService } from '@myrmidon/ng-tools';
 
 // https://github.com/cornflourblue/angular-7-registration-login-example-cli/blob/master/src/app/_services/authentication.service.ts
 
@@ -206,7 +202,9 @@ export class AuthService {
       }),
     };
     return this._http.get(
-      this._env.get('apiUrl') + 'accounts/emailexists/' + encodeURIComponent(email),
+      this._env.get('apiUrl') +
+        'accounts/emailexists/' +
+        encodeURIComponent(email),
       options
     );
   }
@@ -225,7 +223,9 @@ export class AuthService {
       }),
     };
     return this._http.get(
-      this._env.get('apiUrl') + 'accounts/nameexists/' + encodeURIComponent(name),
+      this._env.get('apiUrl') +
+        'accounts/nameexists/' +
+        encodeURIComponent(name),
       options
     );
   }
@@ -258,7 +258,9 @@ export class AuthService {
       }),
     };
     return this._http.get(
-      this._env.get('apiUrl') + 'accounts/resendconfirm/' + encodeURIComponent(email),
+      this._env.get('apiUrl') +
+        'accounts/resendconfirm/' +
+        encodeURIComponent(email),
       options
     );
   }
@@ -274,11 +276,14 @@ export class AuthService {
     oldPassword: string,
     newPassword: string
   ): Observable<object> {
-    return this._http.post(this._env.get('apiUrl') + 'accounts/changepassword', {
-      email,
-      oldPassword,
-      newPassword,
-    });
+    return this._http.post(
+      this._env.get('apiUrl') + 'accounts/changepassword',
+      {
+        email,
+        oldPassword,
+        newPassword,
+      }
+    );
   }
 
   /**

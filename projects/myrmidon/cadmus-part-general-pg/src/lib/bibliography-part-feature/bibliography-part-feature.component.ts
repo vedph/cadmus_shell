@@ -5,17 +5,19 @@ import { EditBibliographyPartQuery } from './edit-bibliography-part.query';
 import {
   EditItemQuery,
   EditItemService,
-  EditPartFeatureBase
+  EditPartFeatureBase,
 } from '@myrmidon/cadmus-state';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'cadmus-bibliography-part-feature',
   templateUrl: './bibliography-part-feature.component.html',
-  styleUrls: ['./bibliography-part-feature.component.css']
+  styleUrls: ['./bibliography-part-feature.component.css'],
 })
-export class BibliographyPartFeatureComponent extends EditPartFeatureBase
-  implements OnInit {
+export class BibliographyPartFeatureComponent
+  extends EditPartFeatureBase
+  implements OnInit
+{
   constructor(
     router: Router,
     route: ActivatedRoute,
@@ -41,7 +43,7 @@ export class BibliographyPartFeatureComponent extends EditPartFeatureBase
       'bibliography-languages',
       'bibliography-types',
       'bibliography-tags',
-      'bibliography-author-roles'
+      'bibliography-author-roles',
     ]);
   }
 }

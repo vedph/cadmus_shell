@@ -7,6 +7,9 @@ import { CadmusCoreModule } from '@myrmidon/cadmus-core';
 import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
 import { CadmusApiModule } from '@myrmidon/cadmus-api';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
+import { NgToolsModule } from '@myrmidon/ng-tools';
+import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
+
 import { AdminRegistrationComponent } from './admin-registration/admin-registration.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { UserEditorComponent } from './user-editor/user-editor.component';
@@ -43,6 +46,8 @@ export const RouterModuleForChild = RouterModule.forChild([
     CadmusMaterialModule,
     CadmusApiModule,
     CadmusUiModule,
+    NgToolsModule,
+    NgMatToolsModule,
   ],
   declarations: [
     AdminHomeComponent,

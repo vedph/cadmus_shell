@@ -9,25 +9,6 @@ export interface HasVersion {
 }
 
 /**
- * A page of data.
- */
-export interface DataPage<T> {
-  pageNumber: number;
-  pageSize: number;
-  pageCount: number;
-  total: number;
-  items: T[];
-}
-
-/**
- * A wrapper for a value or an optional error message.
- */
-export interface ErrorWrapper<T> {
-  value?: T;
-  error?: string;
-}
-
-/**
  * Item's properties, excluding its parts.
  */
 export interface Item extends HasVersion {

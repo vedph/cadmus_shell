@@ -3,12 +3,14 @@ import { FormControl, FormBuilder, Validators } from '@angular/forms';
 
 import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { AuthService } from '@myrmidon/cadmus-api';
-import { deepCopy, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { deepCopy } from '@myrmidon/ng-tools';
+import { DocReference } from '@myrmidon/cadmus-refs-doc-references';
+
 import {
   DocReferencesPart,
   DOC_REFERENCES_PART_TYPEID,
 } from '../doc-references-part';
-import { DocReference } from '@myrmidon/cadmus-refs-doc-references';
 
 /**
  * Document references part editor.

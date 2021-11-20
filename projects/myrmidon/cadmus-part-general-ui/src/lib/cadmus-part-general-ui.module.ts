@@ -9,6 +9,8 @@ import { CadmusCoreModule } from '@myrmidon/cadmus-core';
 import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { CadmusRefsDocReferencesModule } from '@myrmidon/cadmus-refs-doc-references';
+import { NgToolsModule } from '@myrmidon/ng-tools';
+import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 
 import { NotePartComponent } from './note-part/note-part.component';
 import { TokenTextPartComponent } from './token-text-part/token-text-part.component';
@@ -38,7 +40,9 @@ import { DocReferencesPartComponent } from './doc-references-part/doc-references
     CadmusCoreModule,
     CadmusMaterialModule,
     CadmusUiModule,
-    CadmusRefsDocReferencesModule
+    CadmusRefsDocReferencesModule,
+    NgToolsModule,
+    NgMatToolsModule,
   ],
   declarations: [
     BibAuthorsEditorComponent,

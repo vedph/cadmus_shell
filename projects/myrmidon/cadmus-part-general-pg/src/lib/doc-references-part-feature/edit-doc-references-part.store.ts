@@ -13,7 +13,8 @@ import { DOC_REFERENCES_PART_TYPEID } from '@myrmidon/cadmus-part-general-ui';
 @StoreConfig({ name: DOC_REFERENCES_PART_TYPEID })
 export class EditDocReferencesPartStore
   extends Store<EditPartState>
-  implements EditPartStoreApi {
+  implements EditPartStoreApi
+{
   constructor() {
     super(editPartInitialState);
   }

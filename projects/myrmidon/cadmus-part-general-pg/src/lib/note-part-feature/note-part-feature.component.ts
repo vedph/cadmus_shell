@@ -1,21 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { EditNotePartService } from './edit-note-part.service';
-import { EditNotePartQuery } from './edit-note-part.query';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import {
   EditItemQuery,
   EditItemService,
-  EditPartFeatureBase
+  EditPartFeatureBase,
 } from '@myrmidon/cadmus-state';
-import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { EditNotePartService } from './edit-note-part.service';
+import { EditNotePartQuery } from './edit-note-part.query';
 
 @Component({
   selector: 'cadmus-note-part-feature',
   templateUrl: './note-part-feature.component.html',
-  styleUrls: ['./note-part-feature.component.css']
+  styleUrls: ['./note-part-feature.component.css'],
 })
-export class NotePartFeatureComponent extends EditPartFeatureBase
-  implements OnInit {
+export class NotePartFeatureComponent
+  extends EditPartFeatureBase
+  implements OnInit
+{
   constructor(
     router: Router,
     route: ActivatedRoute,

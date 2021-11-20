@@ -7,21 +7,18 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ItemService } from '@myrmidon/cadmus-api';
-import {
-  DataPage,
-  DataPinInfo,
-  ErrorWrapper,
-  IndexLookupDefinitions,
-} from '@myrmidon/cadmus-core';
 import { Observable, of } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
+  map,
   switchMap,
   take,
 } from 'rxjs/operators';
-import { map } from 'rxjs/operators';
+
+import { DataPinInfo, IndexLookupDefinitions } from '@myrmidon/cadmus-core';
+import { ItemService } from '@myrmidon/cadmus-api';
+import { DataPage, ErrorWrapper } from '@myrmidon/ng-tools';
 
 /**
  * Generic data pin lookup component. This allows users typing a part

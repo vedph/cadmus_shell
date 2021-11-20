@@ -1,21 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { DialogService, ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import {
   FormControl,
   FormBuilder,
   Validators,
-  FormGroup
+  FormGroup,
 } from '@angular/forms';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+
+import { AuthService } from '@myrmidon/cadmus-api';
+import { deepCopy } from '@myrmidon/ng-tools';
+import { DialogService } from '@myrmidon/ng-mat-tools';
+
 import {
   TiledTextPart,
   TextTileRow,
   TILED_TEXT_PART_TYPEID,
   TEXT_TILE_TEXT_DATA_NAME,
-  TextTile
+  TextTile,
 } from '../tiled-text-part';
-import { AuthService } from '@myrmidon/cadmus-api';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { deepCopy } from '@myrmidon/cadmus-core';
 
 interface Data {
   [key: string]: any;
@@ -24,11 +27,12 @@ interface Data {
 @Component({
   selector: 'cadmus-tiled-text-part',
   templateUrl: './tiled-text-part.component.html',
-  styleUrls: ['./tiled-text-part.component.css']
+  styleUrls: ['./tiled-text-part.component.css'],
 })
 export class TiledTextPartComponent
   extends ModelEditorComponentBase<TiledTextPart>
-  implements OnInit {
+  implements OnInit
+{
   private _editedDataTile: TextTile;
   private _editedDataRow: TextTileRow;
 
@@ -50,7 +54,7 @@ export class TiledTextPartComponent
     // form
     this.citation = formBuilder.control(null, Validators.maxLength(1000));
     this.form = formBuilder.group({
-      citation: this.citation
+      citation: this.citation,
     });
   }
 
@@ -102,7 +106,7 @@ export class TiledTextPartComponent
         timeModified: new Date(),
         userId: null,
         citation: null,
-        rows: []
+        rows: [],
       };
     }
     // ensure that form's coordinates are ok
@@ -125,9 +129,9 @@ export class TiledTextPartComponent
       tiles: [
         {
           x: 1,
-          data: data
-        }
-      ]
+          data: data,
+        },
+      ],
     });
     this.form.markAsDirty();
   }
@@ -145,7 +149,7 @@ export class TiledTextPartComponent
     }
     row.tiles.push({
       x: x,
-      data: data
+      data: data,
     });
     this.form.markAsDirty();
   }

@@ -1,17 +1,20 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { Thesaurus, ThesaurusEntry } from '@myrmidon/cadmus-core';
-import { IndexKeyword } from '../index-keywords-part';
+
 import {
   FormBuilder,
   FormControl,
   FormGroup,
-  Validators
+  Validators,
 } from '@angular/forms';
+
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+
+import { IndexKeyword } from '../index-keywords-part';
 
 @Component({
   selector: 'cadmus-index-keyword',
   templateUrl: './index-keyword.component.html',
-  styleUrls: ['./index-keyword.component.css']
+  styleUrls: ['./index-keyword.component.css'],
 })
 export class IndexKeywordComponent implements OnInit {
   private _keyword: IndexKeyword;
@@ -51,14 +54,14 @@ export class IndexKeywordComponent implements OnInit {
     // form
     this.indexId = formBuilder.control(null, [
       Validators.maxLength(50),
-      Validators.pattern(/^[-.a-zA-Z0-9_]{0,50}$/)
+      Validators.pattern(/^[-.a-zA-Z0-9_]{0,50}$/),
     ]);
     this.language = formBuilder.control(null, [
-      Validators.pattern(/^[a-z]{3}$/)
+      Validators.pattern(/^[a-z]{3}$/),
     ]);
     this.value = formBuilder.control(null, [
       Validators.required,
-      Validators.maxLength(100)
+      Validators.maxLength(100),
     ]);
     this.note = formBuilder.control(null, Validators.maxLength(200));
     this.tag = formBuilder.control(null, Validators.maxLength(100));
@@ -67,7 +70,7 @@ export class IndexKeywordComponent implements OnInit {
       language: this.language,
       value: this.value,
       note: this.note,
-      tag: this.tag
+      tag: this.tag,
     });
   }
 
@@ -92,7 +95,7 @@ export class IndexKeywordComponent implements OnInit {
       language: this.language.value?.trim(),
       value: this.value.value?.trim(),
       note: this.note.value?.trim(),
-      tag: this.tag.value?.trim()
+      tag: this.tag.value?.trim(),
     };
   }
 

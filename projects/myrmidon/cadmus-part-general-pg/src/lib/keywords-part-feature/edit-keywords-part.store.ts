@@ -3,14 +3,16 @@ import { Injectable } from '@angular/core';
 import {
   EditPartState,
   EditPartStoreApi,
-  editPartInitialState
+  editPartInitialState,
 } from '@myrmidon/cadmus-state';
 import { KEYWORDS_PART_TYPEID } from '@myrmidon/cadmus-part-general-ui';
 
 @Injectable({ providedIn: 'root' })
 @StoreConfig({ name: KEYWORDS_PART_TYPEID })
-export class EditKeywordsPartStore extends Store<EditPartState>
-  implements EditPartStoreApi {
+export class EditKeywordsPartStore
+  extends Store<EditPartState>
+  implements EditPartStoreApi
+{
   constructor() {
     super(editPartInitialState);
   }

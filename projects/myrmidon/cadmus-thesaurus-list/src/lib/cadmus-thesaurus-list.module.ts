@@ -6,8 +6,11 @@ import { RouterModule } from '@angular/router';
 import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
 import { CadmusApiModule } from '@myrmidon/cadmus-api';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
-import { ThesaurusListComponent } from './thesaurus-list/thesaurus-list.component';
+import { NgToolsModule } from '@myrmidon/ng-tools';
+import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
+
 import { ThesaurusFilterComponent } from './thesaurus-filter/thesaurus-filter.component';
+import { ThesaurusListComponent } from './thesaurus-list/thesaurus-list.component';
 
 // https://github.com/ng-packagr/ng-packagr/issues/778
 export const RouterModuleForChild = RouterModule.forChild([
@@ -24,6 +27,8 @@ export const RouterModuleForChild = RouterModule.forChild([
     CadmusApiModule,
     CadmusMaterialModule,
     CadmusUiModule,
+    NgToolsModule,
+    NgMatToolsModule
   ],
   declarations: [ThesaurusListComponent, ThesaurusFilterComponent],
   exports: [ThesaurusListComponent],

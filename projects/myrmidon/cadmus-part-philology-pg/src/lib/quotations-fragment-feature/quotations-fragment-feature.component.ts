@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { EditQuotationsFragmentQuery } from './edit-quotations-fragment.query';
-import { EditQuotationsFragmentService } from './edit-quotations-fragment.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   EditItemQuery,
   EditItemService,
@@ -10,7 +9,9 @@ import {
   EditFragmentFeatureBase,
 } from '@myrmidon/cadmus-state';
 import { LibraryRouteService } from '@myrmidon/cadmus-core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { EditQuotationsFragmentQuery } from './edit-quotations-fragment.query';
+import { EditQuotationsFragmentService } from './edit-quotations-fragment.service';
 
 @Component({
   selector: 'cadmus-quotations-fragment-feature',
@@ -19,7 +20,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class QuotationsFragmentFeatureComponent
   extends EditFragmentFeatureBase
-  implements OnInit {
+  implements OnInit
+{
   constructor(
     router: Router,
     route: ActivatedRoute,

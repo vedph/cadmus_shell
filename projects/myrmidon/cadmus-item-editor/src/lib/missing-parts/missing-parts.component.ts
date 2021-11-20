@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+
 import { PartDefinition, Part, Thesaurus } from '@myrmidon/cadmus-core';
 
 @Component({

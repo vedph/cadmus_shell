@@ -1,16 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { ApparatusFragment } from '../apparatus-fragment';
-import { AuthService } from '@myrmidon/cadmus-api';
-import { ModelEditorComponentBase, DialogService } from '@myrmidon/cadmus-ui';
-import { ApparatusEntryType, ApparatusEntry } from '../apparatus-fragment';
 import {
   FormControl,
   FormBuilder,
   Validators,
   FormGroup,
 } from '@angular/forms';
-import { deepCopy, ThesaurusEntry } from '@myrmidon/cadmus-core';
+
+import { AuthService } from '@myrmidon/cadmus-api';
+import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { deepCopy } from '@myrmidon/ng-tools';
+import { DialogService } from '@myrmidon/ng-mat-tools';
+
+import { ApparatusEntryType, ApparatusEntry } from '../apparatus-fragment';
 import { ApparatusEntrySummaryService } from './apparatus-entry-summary.service';
+import { ApparatusFragment } from '../apparatus-fragment';
 
 /**
  * Critical apparatus fragment.

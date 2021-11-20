@@ -13,7 +13,8 @@ import { COMMENT_PART_TYPEID } from '@myrmidon/cadmus-part-general-ui';
 @StoreConfig({ name: COMMENT_PART_TYPEID })
 export class EditCommentPartStore
   extends Store<EditPartState>
-  implements EditPartStoreApi {
+  implements EditPartStoreApi
+{
   constructor() {
     super(editPartInitialState);
   }

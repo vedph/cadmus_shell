@@ -6,7 +6,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
+
 import { TextRange } from '@myrmidon/cadmus-core';
+
 import { MspValidators } from '../msp-validators';
 import { MspOperation, MspOperator } from '../msp-operation';
 
@@ -159,7 +161,10 @@ export class MspOperationComponent implements OnInit {
     this.adjustVisualForOperator();
   }
 
-  private updateFormControls(operation: MspOperation, updateText: boolean): void {
+  private updateFormControls(
+    operation: MspOperation,
+    updateText: boolean
+  ): void {
     if (!operation) {
       this.form.reset();
       return;

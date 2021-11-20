@@ -31,6 +31,8 @@
     "@datorama/akita": "^6.2.4",
     "@datorama/akita-ngdevtools": "^6.0.1",
     "@myrmidon/cadmus-refs-doc-references": "^0.1.0",
+    "@myrmidon/ng-mat-tools": "0.0.3",
+    "@myrmidon/ng-tools": "0.0.3",
     "@types/diff-match-patch": "^1.0.32",
     "@types/rangy": "0.0.34",
     "diff-match-patch": "^1.0.5",

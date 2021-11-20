@@ -1,5 +1,6 @@
 import { inject, InjectionToken } from '@angular/core';
 import { PaginatorPlugin } from '@datorama/akita';
+
 import { UsersQuery } from './users.query';
 
 // create a factory provider for the items paginator

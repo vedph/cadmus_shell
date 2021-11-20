@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 import { ItemService } from './item.service';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { EnvServiceProvider } from '@myrmidon/cadmus-core';
+import { EnvServiceProvider } from '@myrmidon/ng-tools';
 
 describe('ItemService', () => {
   beforeEach(() =>

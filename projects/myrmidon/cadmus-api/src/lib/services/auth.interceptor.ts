@@ -1,6 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { Observable } from 'rxjs';
-import { take, tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import {
   HttpEvent,
   HttpInterceptor,
@@ -8,8 +7,10 @@ import {
   HttpRequest,
   HttpErrorResponse,
 } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { take, tap } from 'rxjs/operators';
+
 import { AuthService } from './auth.service';
-import { Router } from '@angular/router';
 
 // https://angular.io/guide/http
 // https://medium.com/@ryanchenkie_40935/angular-authentication-using-the-http-client-and-http-interceptors-2f9d1540eb8

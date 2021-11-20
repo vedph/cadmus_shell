@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { KeywordsPart, Keyword, KEYWORDS_PART_TYPEID } from '../keywords-part';
-import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import {
   FormBuilder,
   FormControl,
   Validators,
-  FormGroup
+  FormGroup,
 } from '@angular/forms';
-import { ThesaurusEntry, deepCopy } from '@myrmidon/cadmus-core';
+
+import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { deepCopy } from '@myrmidon/ng-tools';
 import { AuthService } from '@myrmidon/cadmus-api';
+
+import { KeywordsPart, Keyword, KEYWORDS_PART_TYPEID } from '../keywords-part';
 
 /**
  * Keywords editor component.
@@ -17,11 +20,12 @@ import { AuthService } from '@myrmidon/cadmus-api';
 @Component({
   selector: 'cadmus-keywords-part',
   templateUrl: './keywords-part.component.html',
-  styleUrls: ['./keywords-part.component.css']
+  styleUrls: ['./keywords-part.component.css'],
 })
 export class KeywordsPartComponent
   extends ModelEditorComponentBase<KeywordsPart>
-  implements OnInit {
+  implements OnInit
+{
   public keywords: FormControl;
   // new keyword form
   public newLanguage: FormControl;
@@ -35,17 +39,17 @@ export class KeywordsPartComponent
     // form
     this.keywords = formBuilder.control([], Validators.required);
     this.form = formBuilder.group({
-      keywords: this.keywords
+      keywords: this.keywords,
     });
     // new keyword form
     this.newLanguage = formBuilder.control('eng', Validators.required);
     this.newValue = formBuilder.control(null, [
       Validators.required,
-      Validators.maxLength(100)
+      Validators.maxLength(100),
     ]);
     this.newForm = formBuilder.group({
       newLanguage: this.newLanguage,
-      newValue: this.newValue
+      newValue: this.newValue,
     });
   }
 
@@ -108,7 +112,7 @@ export class KeywordsPartComponent
         creatorId: null,
         timeModified: new Date(),
         userId: null,
-        keywords: []
+        keywords: [],
       };
     }
     part.keywords = [...this.keywords.value];
@@ -121,7 +125,7 @@ export class KeywordsPartComponent
     }
     const keyword: Keyword = {
       language: this.newLanguage.value,
-      value: this.newValue.value
+      value: this.newValue.value,
     };
     let i = 0;
     while (i < this.keywords.value?.length || 0) {

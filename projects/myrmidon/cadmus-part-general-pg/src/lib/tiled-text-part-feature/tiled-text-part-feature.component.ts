@@ -1,21 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { EditTiledTextPartService } from './edit-tiled-text-part.service';
-import { EditTiledTextPartQuery } from './edit-tiled-text-part.query';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import {
   EditItemQuery,
   EditItemService,
-  EditPartFeatureBase
+  EditPartFeatureBase,
 } from '@myrmidon/cadmus-state';
-import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { EditTiledTextPartService } from './edit-tiled-text-part.service';
+import { EditTiledTextPartQuery } from './edit-tiled-text-part.query';
 
 @Component({
   selector: 'cadmus-tiled-text-part-feature',
   templateUrl: './tiled-text-part-feature.component.html',
-  styleUrls: ['./tiled-text-part-feature.component.css']
+  styleUrls: ['./tiled-text-part-feature.component.css'],
 })
-export class TiledTextPartFeatureComponent extends EditPartFeatureBase
-  implements OnInit {
+export class TiledTextPartFeatureComponent
+  extends EditPartFeatureBase
+  implements OnInit
+{
   constructor(
     router: Router,
     route: ActivatedRoute,

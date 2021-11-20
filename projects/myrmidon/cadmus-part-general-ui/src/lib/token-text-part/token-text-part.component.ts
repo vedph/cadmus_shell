@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormBuilder, Validators } from '@angular/forms';
+import { take } from 'rxjs/operators';
+
+import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { AuthService } from '@myrmidon/cadmus-api';
+import { deepCopy } from '@myrmidon/ng-tools';
+import { DialogService } from '@myrmidon/ng-mat-tools';
+
 import {
   TokenTextPart,
   TOKEN_TEXT_PART_TYPEID,
   TokenTextLine,
 } from '../token-text-part';
-import { FormControl, FormBuilder, Validators } from '@angular/forms';
-import { DialogService, ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
-import { AuthService } from '@myrmidon/cadmus-api';
-import { deepCopy } from '@myrmidon/cadmus-core';
-import { take } from 'rxjs/operators';
 
 /**
  * Editor component for base text, as referenced by token-based layers.
@@ -21,7 +24,8 @@ import { take } from 'rxjs/operators';
 })
 export class TokenTextPartComponent
   extends ModelEditorComponentBase<TokenTextPart>
-  implements OnInit {
+  implements OnInit
+{
   public citation: FormControl;
   public text: FormControl;
 
@@ -137,7 +141,7 @@ export class TokenTextPartComponent
     if (start < text.length) {
       parts.push(text.substr(start));
     }
-    return parts.map(s => s.trim()).join(crLf? '\r\n' : '\n');
+    return parts.map((s) => s.trim()).join(crLf ? '\r\n' : '\n');
   }
 
   public applyTransform(): void {

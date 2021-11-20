@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
-import { AuthStore } from '../state/auth.store';
-import { AuthService, RuntimeSettingsService } from '@myrmidon/cadmus-api';
 import { Router } from '@angular/router';
+
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { take } from 'rxjs/operators';
+
+import { AuthService, RuntimeSettingsService } from '@myrmidon/cadmus-api';
+
+import { AuthStore } from '../state/auth.store';
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {

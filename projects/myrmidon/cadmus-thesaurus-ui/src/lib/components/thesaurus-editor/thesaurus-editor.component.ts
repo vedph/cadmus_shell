@@ -13,17 +13,19 @@ import {
   Validators,
 } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { debounceTime, map, startWith, switchMap, tap } from 'rxjs/operators';
+
 import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
+
 import {
-  DataPage,
   Thesaurus,
   ThesaurusEntry,
   ThesaurusFilter,
 } from '@myrmidon/cadmus-core';
 import { ComponentSignal } from '@myrmidon/cadmus-profile-core';
-import { DialogService } from '@myrmidon/cadmus-ui';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { debounceTime, map, startWith, switchMap, tap } from 'rxjs/operators';
+import { DataPage } from '@myrmidon/ng-tools';
+
 import {
   ThesaurusNode,
   ThesaurusNodeFilter,
@@ -31,6 +33,7 @@ import {
 } from '../../services/thesaurus-nodes.service';
 import { THESAURUS_EDITOR_PAGINATOR } from './store/thesaurus-editor.paginator';
 import { ThesaurusEditorState } from './store/thesaurus-editor.store';
+import { DialogService } from '@myrmidon/ng-mat-tools';
 
 const THES_ID_PATTERN = '^[a-zA-Z0-9][.\\-_a-zA-Z0-9]*@[a-z]{2,3}$';
 

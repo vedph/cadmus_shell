@@ -1,14 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+
+import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { AuthService } from '@myrmidon/cadmus-api';
+import { DialogService } from '@myrmidon/ng-mat-tools';
+import { deepCopy } from '@myrmidon/ng-tools';
+
 import {
   BibliographyPart,
   BibEntry,
   BIBLIOGRAPHY_PART_TYPEID,
   BibAuthor,
 } from '../bibliography-part';
-import { ModelEditorComponentBase, DialogService } from '@myrmidon/cadmus-ui';
-import { deepCopy, ThesaurusEntry } from '@myrmidon/cadmus-core';
-import { AuthService } from '@myrmidon/cadmus-api';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 /**
  * Bibliography part editor.

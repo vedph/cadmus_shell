@@ -1,12 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { ThesaurusFilter } from '@myrmidon/cadmus-core';
 import {
   FormBuilder,
   FormGroup,
   FormControl,
   Validators,
 } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
+
+import { ThesaurusFilter } from '@myrmidon/cadmus-core';
 
 @Component({
   selector: 'cadmus-thesaurus-filter',

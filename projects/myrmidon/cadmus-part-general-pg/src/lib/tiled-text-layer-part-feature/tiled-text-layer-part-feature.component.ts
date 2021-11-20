@@ -1,22 +1,24 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+
 import {
   TokenLocation,
   LibraryRouteService,
   ComponentCanDeactivate,
   LayerHint,
 } from '@myrmidon/cadmus-core';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
   EditLayerPartQuery,
   EditLayerPartService,
   EditItemQuery,
   EditItemService,
 } from '@myrmidon/cadmus-state';
-import { DialogService } from '@myrmidon/cadmus-ui';
 import { TextTileRow, TiledTextPart } from '@myrmidon/cadmus-part-general-ui';
-import { TiledTextLayerView, TextTileLayerView } from './tiled-text-layer-view';
 import { AuthService } from '@myrmidon/cadmus-api';
+import { DialogService } from '@myrmidon/ng-mat-tools';
+
+import { TiledTextLayerView, TextTileLayerView } from './tiled-text-layer-view';
 
 /**
  * Tiled text layer part editor.
@@ -37,7 +39,8 @@ import { AuthService } from '@myrmidon/cadmus-api';
   styleUrls: ['./tiled-text-layer-part-feature.component.css'],
 })
 export class TiledTextLayerPartFeatureComponent
-  implements OnInit, ComponentCanDeactivate {
+  implements OnInit, ComponentCanDeactivate
+{
   public view: TiledTextLayerView;
   public selectedTile: TextTileLayerView;
 
@@ -254,9 +257,8 @@ export class TiledTextLayerPartFeatureComponent
       return;
     }
     const locations = this._editQuery.getValue().locations;
-    this.pickedLocation = (lf.fragment === -1
-      ? lf.location
-      : locations[lf.fragment]
+    this.pickedLocation = (
+      lf.fragment === -1 ? lf.location : locations[lf.fragment]
     ).toString();
   }
 

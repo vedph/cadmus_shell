@@ -9,6 +9,8 @@ import { GraphNodesService } from '../../state/graph-nodes.service';
 
 /**
  * Graph nodes filter used in graph nodes list.
+ * Its data are in the graph nodes store, which gets updated when
+ * users apply new filters.
  */
 @Component({
   selector: 'cadmus-graph-node-filter',

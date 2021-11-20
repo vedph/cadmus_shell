@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import {
   EditItemQuery,
   EditItemService,
@@ -8,7 +10,6 @@ import {
 
 import { EditDocReferencesPartService } from './edit-doc-references-part.service';
 import { EditDocReferencesPartQuery } from './edit-doc-references-part.query';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'cadmus-doc-references-part-feature',

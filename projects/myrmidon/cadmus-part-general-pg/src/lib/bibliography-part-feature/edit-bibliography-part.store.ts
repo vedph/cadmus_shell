@@ -11,7 +11,8 @@ import { BIBLIOGRAPHY_PART_TYPEID } from '@myrmidon/cadmus-part-general-ui';
 @StoreConfig({ name: BIBLIOGRAPHY_PART_TYPEID })
 export class EditBibliographyPartStore
   extends Store<EditPartState>
-  implements EditPartStoreApi {
+  implements EditPartStoreApi
+{
   constructor() {
     super(editPartInitialState);
   }

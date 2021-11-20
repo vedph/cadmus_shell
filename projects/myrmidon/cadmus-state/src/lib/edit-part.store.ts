@@ -26,7 +26,7 @@ export const editPartInitialState: EditPartState = {
   dirty: false,
   saving: false,
   loading: false,
-  error: null
+  error: null,
 };
 
 /**

@@ -11,7 +11,8 @@ import { CHRONOLOGY_FRAGMENT_TYPEID } from '@myrmidon/cadmus-part-general-ui';
 @StoreConfig({ name: CHRONOLOGY_FRAGMENT_TYPEID })
 export class EditChronologyFragmentStore
   extends Store<EditFragmentState>
-  implements EditFragmentStoreApi {
+  implements EditFragmentStoreApi
+{
   constructor() {
     super(editFragmentInitialState);
   }

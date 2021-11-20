@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+
+import { HistoricalDateModel, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
+import { AuthService } from '@myrmidon/cadmus-api';
+import { DocReference } from '@myrmidon/cadmus-refs-doc-references';
+import { deepCopy } from '@myrmidon/ng-tools';
+
 import {
   HistoricalDatePart,
   HISTORICAL_DATE_PART_TYPEID,
 } from '../historical-date-part';
-import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import {
-  HistoricalDateModel,
-  deepCopy,
-  ThesaurusEntry,
-} from '@myrmidon/cadmus-core';
-import { AuthService } from '@myrmidon/cadmus-api';
-import { DocReference } from '@myrmidon/cadmus-refs-doc-references';
 
 @Component({
   selector: 'cadmus-historical-date-part',
@@ -20,7 +19,8 @@ import { DocReference } from '@myrmidon/cadmus-refs-doc-references';
 })
 export class HistoricalDatePartComponent
   extends ModelEditorComponentBase<HistoricalDatePart>
-  implements OnInit {
+  implements OnInit
+{
   public hasDate: FormControl;
   public references: FormControl;
 

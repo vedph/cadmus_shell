@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { DataPage, ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
+
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { DataPage } from '@myrmidon/ng-tools';
 
 /**
  * A thesaurus entry edited in a set of thesauri nodes.
@@ -201,7 +203,6 @@ export class ThesaurusNodesService {
    * thesauri like model-types, which include non-hierarchy dots.
    */
   public importEntries(entries: ThesaurusEntry[], flat = false): void {
-
     const nodes = entries as ThesaurusNode[];
     if (!flat) {
       this.assignParentIds(nodes);

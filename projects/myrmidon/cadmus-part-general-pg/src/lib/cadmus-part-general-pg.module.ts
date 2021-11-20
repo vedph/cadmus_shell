@@ -20,15 +20,18 @@ import {
   BIBLIOGRAPHY_PART_TYPEID,
 } from '@myrmidon/cadmus-part-general-ui';
 import { CadmusStateModule } from '@myrmidon/cadmus-state';
+import {
+  CATEGORIES_PART_TYPEID,
+  CHRONOLOGY_FRAGMENT_TYPEID,
+} from '@myrmidon/cadmus-part-general-ui';
+import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
+import { NgToolsModule } from '@myrmidon/ng-tools';
+import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 
 import { NotePartFeatureComponent } from './note-part-feature/note-part-feature.component';
 import { CommentFragmentFeatureComponent } from './comment-fragment-feature/comment-fragment-feature.component';
 import { TokenTextPartFeatureComponent } from './token-text-part-feature/token-text-part-feature.component';
 import { CategoriesPartFeatureComponent } from './categories-part-feature/categories-part-feature.component';
-import {
-  CATEGORIES_PART_TYPEID,
-  CHRONOLOGY_FRAGMENT_TYPEID,
-} from '@myrmidon/cadmus-part-general-ui';
 import { KeywordsPartFeatureComponent } from './keywords-part-feature/keywords-part-feature.component';
 import { ChronologyFragmentFeatureComponent } from './chronology-fragment-feature/chronology-fragment-feature.component';
 import { HistoricalDatePartFeatureComponent } from './historical-date-part-feature/historical-date-part-feature.component';
@@ -37,7 +40,6 @@ import { TokenTextLayerPartFeatureComponent } from './token-text-layer-part-feat
 import { TiledTextPartFeatureComponent } from './tiled-text-part-feature/tiled-text-part-feature.component';
 import { TiledTextLayerPartFeatureComponent } from './tiled-text-layer-part-feature/tiled-text-layer-part-feature.component';
 import { BibliographyPartFeatureComponent } from './bibliography-part-feature/bibliography-part-feature.component';
-import { CadmusUiPgModule } from '@myrmidon/cadmus-ui-pg';
 import { CommentPartFeatureComponent } from './comment-part-feature/comment-part-feature.component';
 import { DocReferencesPartFeatureComponent } from './doc-references-part-feature/doc-references-part-feature.component';
 
@@ -142,6 +144,8 @@ export const RouterModuleForChild = RouterModule.forChild([
     CadmusPartGeneralUiModule,
     CadmusStateModule,
     CadmusUiPgModule,
+    NgToolsModule,
+    NgMatToolsModule,
   ],
   declarations: [
     BibliographyPartFeatureComponent,

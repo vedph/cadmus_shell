@@ -1,24 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { EditApparatusFragmentQuery } from './edit-apparatus-fragment.query';
-import { EditApparatusFragmentService } from './edit-apparatus-fragment.service';
 import {
   EditItemQuery,
   EditItemService,
   EditLayerPartQuery,
   EditLayerPartService,
-  EditFragmentFeatureBase
+  EditFragmentFeatureBase,
 } from '@myrmidon/cadmus-state';
 import { LibraryRouteService } from '@myrmidon/cadmus-core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+import { EditApparatusFragmentQuery } from './edit-apparatus-fragment.query';
+import { EditApparatusFragmentService } from './edit-apparatus-fragment.service';
+
 @Component({
   selector: 'cadmus-apparatus-fragment-feature',
   templateUrl: './apparatus-fragment-feature.component.html',
-  styleUrls: ['./apparatus-fragment-feature.component.css']
+  styleUrls: ['./apparatus-fragment-feature.component.css'],
 })
-export class ApparatusFragmentFeatureComponent extends EditFragmentFeatureBase
-  implements OnInit {
+export class ApparatusFragmentFeatureComponent
+  extends EditFragmentFeatureBase
+  implements OnInit
+{
   constructor(
     router: Router,
     route: ActivatedRoute,
@@ -51,7 +54,7 @@ export class ApparatusFragmentFeatureComponent extends EditFragmentFeatureBase
       '!apparatus-author-tags',
       '!author-works',
       'apparatus-witnesses',
-      'apparatus-authors'
+      'apparatus-authors',
     ]);
   }
 }

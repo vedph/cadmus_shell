@@ -7,6 +7,8 @@ import { CadmusCoreModule } from '@myrmidon/cadmus-core';
 import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
 import { CadmusApiModule } from '@myrmidon/cadmus-api';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
+import { NgToolsModule } from '@myrmidon/ng-tools';
+
 import { UserHomeComponent } from './user-home/user-home.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 
@@ -35,6 +37,7 @@ export const RouterModuleForChild = RouterModule.forChild([
     CadmusMaterialModule,
     CadmusApiModule,
     CadmusUiModule,
+    NgToolsModule,
   ],
   declarations: [ChangePasswordComponent, UserHomeComponent],
   exports: [ChangePasswordComponent, UserHomeComponent],

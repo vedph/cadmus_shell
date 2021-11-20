@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import {
-  ErrorService,
-  EnvService,
-  ItemInfo,
-  DataPage,
-} from '@myrmidon/cadmus-core';
+
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
+
+import { ItemInfo } from '@myrmidon/cadmus-core';
+import { DataPage, EnvService, ErrorService } from '@myrmidon/ng-tools';
 
 @Injectable({
   providedIn: 'root',

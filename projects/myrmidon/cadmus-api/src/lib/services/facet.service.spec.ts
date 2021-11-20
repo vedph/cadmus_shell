@@ -1,8 +1,9 @@
 import { TestBed } from '@angular/core/testing';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+
+import { EnvServiceProvider } from '@myrmidon/ng-tools';
 
 import { FacetService } from './facet.service';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { EnvServiceProvider } from '@myrmidon/cadmus-core';
 
 describe('FacetService', () => {
   beforeEach(() => {

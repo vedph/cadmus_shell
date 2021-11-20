@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
-import {
-  ErrorService,
-  FlagDefinition,
-  EnvService,
-} from '@myrmidon/cadmus-core';
+
+import { FlagDefinition } from '@myrmidon/cadmus-core';
+import { EnvService, ErrorService } from '@myrmidon/ng-tools';
 
 @Injectable({ providedIn: 'root' })
 export class FlagService {

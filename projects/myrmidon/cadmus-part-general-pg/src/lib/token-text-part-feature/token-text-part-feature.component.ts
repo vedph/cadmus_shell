@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { ThesauriSet } from '@myrmidon/cadmus-core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import {
   EditItemQuery,
   EditItemService,
   EditPartFeatureBase,
 } from '@myrmidon/cadmus-state';
+
 import { EditTokenTextPartQuery } from './edit-token-text-part.query';
 import { EditTokenTextPartService } from './edit-token-text-part.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'cadmus-token-text-part-feature',
@@ -18,7 +18,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class TokenTextPartFeatureComponent
   extends EditPartFeatureBase
-  implements OnInit {
+  implements OnInit
+{
   constructor(
     router: Router,
     route: ActivatedRoute,

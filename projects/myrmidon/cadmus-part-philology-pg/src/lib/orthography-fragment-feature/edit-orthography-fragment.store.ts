@@ -3,14 +3,16 @@ import { StoreConfig, Store } from '@datorama/akita';
 import {
   EditFragmentState,
   EditFragmentStoreApi,
-  editFragmentInitialState
+  editFragmentInitialState,
 } from '@myrmidon/cadmus-state';
 import { ORTHOGRAPHY_FRAGMENT_TYPEID } from '@myrmidon/cadmus-part-philology-ui';
 
 @Injectable({ providedIn: 'root' })
 @StoreConfig({ name: ORTHOGRAPHY_FRAGMENT_TYPEID })
-export class EditOrthographyFragmentStore extends Store<EditFragmentState>
-  implements EditFragmentStoreApi {
+export class EditOrthographyFragmentStore
+  extends Store<EditFragmentState>
+  implements EditFragmentStoreApi
+{
   constructor() {
     super(editFragmentInitialState);
   }

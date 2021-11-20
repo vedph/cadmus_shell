@@ -5,10 +5,10 @@ import {
   EditItemService,
   EditPartFeatureBase,
 } from '@myrmidon/cadmus-state';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { EditCommentPartService } from './edit-comment-part.service';
 import { EditCommentPartQuery } from './edit-comment-part.query';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'cadmus-comment-part-feature',
@@ -17,7 +17,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class CommentPartFeatureComponent
   extends EditPartFeatureBase
-  implements OnInit {
+  implements OnInit
+{
   constructor(
     router: Router,
     route: ActivatedRoute,

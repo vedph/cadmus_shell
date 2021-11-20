@@ -7,7 +7,7 @@ import {
   EditThesaurusQuery,
   EditThesaurusService,
 } from '@myrmidon/cadmus-state';
-import { DialogService } from '@myrmidon/cadmus-ui';
+import { DialogService } from '@myrmidon/ng-mat-tools';
 import { Observable } from 'rxjs';
 
 @Component({

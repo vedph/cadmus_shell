@@ -1,4 +1,4 @@
-import { RomanNumber } from './roman-number';
+import { RomanNumber } from '@myrmidon/ng-tools';
 
 /**
  * Interface implemented by a single datation point in a historical date,

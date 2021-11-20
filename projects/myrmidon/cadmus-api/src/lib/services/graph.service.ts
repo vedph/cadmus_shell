@@ -1,8 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ErrorService, EnvService, DataPage } from '@myrmidon/cadmus-core';
+
 import { Observable } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+
+import { DataPage, EnvService, ErrorService } from '@myrmidon/ng-tools';
 
 export enum NodeSourceType {
   User = 0,

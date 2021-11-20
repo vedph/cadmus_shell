@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
-import { ChronologyFragment } from '../chronology-fragment';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
-import {
-  deepCopy,
-  HistoricalDateModel,
-  ThesaurusEntry,
-} from '@myrmidon/cadmus-core';
+
+import { HistoricalDateModel, ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { AuthService } from '@myrmidon/cadmus-api';
+import { deepCopy } from '@myrmidon/ng-tools';
+
+import { ChronologyFragment } from '../chronology-fragment';
 
 /**
  * Chronology fragment editor component.
@@ -20,7 +19,8 @@ import { AuthService } from '@myrmidon/cadmus-api';
 })
 export class ChronologyFragmentComponent
   extends ModelEditorComponentBase<ChronologyFragment>
-  implements OnInit {
+  implements OnInit
+{
   public tagEntries: ThesaurusEntry[];
 
   // the date being edited in its text form
