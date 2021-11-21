@@ -1,6 +1,6 @@
 import { CanDeactivate } from '@angular/router';
-import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 // https://stackoverflow.com/questions/35922071/warn-user-of-unsaved-changes-before-leaving-page
 
@@ -14,10 +14,11 @@ export interface ComponentCanDeactivate {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PendingChangesGuard
-  implements CanDeactivate<ComponentCanDeactivate> {
+  implements CanDeactivate<ComponentCanDeactivate>
+{
   canDeactivate(
     component: ComponentCanDeactivate
   ): boolean | Observable<boolean> {

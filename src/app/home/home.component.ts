@@ -7,7 +7,6 @@ import { AuthService } from '@myrmidon/cadmus-api';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent {
-  public title: string;
   public logged: boolean;
 
   constructor(authService: AuthService) {

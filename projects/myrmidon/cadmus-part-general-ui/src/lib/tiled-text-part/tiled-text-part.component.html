@@ -118,7 +118,7 @@
             mat-icon-button
             matTooltip="Edit selected tile's data"
             [disabled]="!selectedTile"
-            (click)="editTileData(selectedTile)"
+            (click)="editTileData(selectedTile!)"
           >
             <mat-icon>list</mat-icon>
           </button>

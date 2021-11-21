@@ -17,7 +17,7 @@ export class HierarchyItemBrowserService {
    *
    * @param nodes The nodes.
    */
-  public setNodes(nodes: TreeNode[] | null): void {
+  public setNodes(nodes: TreeNode[]): void {
     this._store.setNodes(nodes);
   }
 
@@ -31,7 +31,7 @@ export class HierarchyItemBrowserService {
     this._thesaurusService.getThesaurus(thesaurusId, true).subscribe(
       (thesaurus) => {
         this._store.setLoading(false);
-        this._store.setTags(thesaurus.entries.length ? thesaurus : null);
+        this._store.setTags(thesaurus.entries?.length ? thesaurus : undefined);
       },
       (error) => {
         console.error(error);

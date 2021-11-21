@@ -16,7 +16,7 @@ export class QuotationWorksService {
    * or null if no thesaurus entries.
    */
   public collectAuthors(
-    dictionary: Record<string, ThesaurusEntry[]> | null
+    dictionary?: Record<string, ThesaurusEntry[]>
   ): ThesaurusEntry[] | null {
     const authors: ThesaurusEntry[] = [];
     if (!dictionary) {
@@ -49,7 +49,7 @@ export class QuotationWorksService {
   public buildDictionary(
     entries: ThesaurusEntry[]
   ): Record<string, ThesaurusEntry[]> {
-    const record = {};
+    const record: Record<string, ThesaurusEntry[]> = {};
     if (!entries?.length) {
       return record;
     }

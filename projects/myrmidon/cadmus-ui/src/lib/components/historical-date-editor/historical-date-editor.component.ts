@@ -1,12 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import {
-  HistoricalDate,
-  Datation,
-  HistoricalDateModel,
-  DatationModel,
-  HistoricalDateType,
-} from '@myrmidon/cadmus-core';
-import {
   FormGroup,
   FormControl,
   FormBuilder,
@@ -15,32 +8,40 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
+import {
+  HistoricalDate,
+  Datation,
+  HistoricalDateModel,
+  DatationModel,
+  HistoricalDateType,
+} from '@myrmidon/cadmus-core';
+
 @Component({
   selector: 'cadmus-historical-date-editor',
   templateUrl: './historical-date-editor.component.html',
   styleUrls: ['./historical-date-editor.component.css'],
 })
 export class HistoricalDateEditorComponent implements OnInit {
-  private _disabled: boolean;
-  private _date: HistoricalDateModel;
+  private _disabled?: boolean;
+  private _date?: HistoricalDateModel;
 
   @Input()
-  public get date(): HistoricalDateModel {
+  public get date(): HistoricalDateModel | undefined {
     return this._date;
   }
-  public set date(value: HistoricalDateModel) {
+  public set date(value: HistoricalDateModel | undefined) {
     this._date = value;
     this.updateForm(value);
   }
 
   @Input()
-  public label: string;
+  public label?: string;
 
   @Input()
-  public get disabled(): boolean {
+  public get disabled(): boolean | undefined {
     return this._disabled;
   }
-  public set disabled(value: boolean) {
+  public set disabled(value: boolean | undefined) {
     this._disabled = value;
     if (value) {
       this.visualExpanded = false;
@@ -54,14 +55,14 @@ export class HistoricalDateEditorComponent implements OnInit {
   public dateChange: EventEmitter<HistoricalDateModel>;
 
   // set by date text:
-  public a$: BehaviorSubject<DatationModel>;
-  public b$: BehaviorSubject<DatationModel>;
-  public invalidDateText: boolean;
-  public dateValue: number;
-  public visualExpanded: boolean;
+  public a$: BehaviorSubject<DatationModel | undefined>;
+  public b$: BehaviorSubject<DatationModel | undefined>;
+  public invalidDateText?: boolean;
+  public dateValue?: number;
+  public visualExpanded?: boolean;
   // set by events:
-  public a: DatationModel;
-  public b: DatationModel;
+  public a?: DatationModel;
+  public b?: DatationModel;
 
   // form
   public form: FormGroup;
@@ -72,10 +73,10 @@ export class HistoricalDateEditorComponent implements OnInit {
     // events
     this.dateChange = new EventEmitter<HistoricalDateModel>();
     // data
-    this.a$ = new BehaviorSubject<DatationModel>({
+    this.a$ = new BehaviorSubject<DatationModel | undefined>({
       value: 0,
     });
-    this.b$ = new BehaviorSubject<DatationModel>({
+    this.b$ = new BehaviorSubject<DatationModel | undefined>({
       value: 0,
     });
     // form
@@ -108,7 +109,7 @@ export class HistoricalDateEditorComponent implements OnInit {
     this.updateForm(this._date);
   }
 
-  private updateForm(date: HistoricalDateModel): void {
+  private updateForm(date?: HistoricalDateModel): void {
     if (!date) {
       this.form.reset();
     } else {

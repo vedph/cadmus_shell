@@ -21,7 +21,7 @@ export class FacetService {
    */
   public getFacets(): Observable<FacetDefinition[]> {
     const url =
-      this._env.get('apiUrl') + this._env.get('databaseId') + '/facets';
+      this._env.get('apiUrl')! + this._env.get('databaseId') + '/facets';
 
     return this._http
       .get<FacetDefinition[]>(url)
@@ -35,7 +35,7 @@ export class FacetService {
    */
   public getFacet(id: string): Observable<FacetDefinition> {
     const url =
-      this._env.get('apiUrl') + this._env.get('databaseId') + `/facets/${id}`;
+      this._env.get('apiUrl')! + this._env.get('databaseId') + `/facets/${id}`;
 
     return this._http
       .get<FacetDefinition>(url)
@@ -49,7 +49,7 @@ export class FacetService {
    */
   public getFacetFromItemId(itemId: string): Observable<FacetDefinition> {
     const url =
-      this._env.get('apiUrl') +
+      this._env.get('apiUrl')! +
       this._env.get('databaseId') +
       `/facets/items/${itemId}`;
 
@@ -75,10 +75,10 @@ export class FacetService {
     noRoles = false
   ): Observable<PartDefinition[]> {
     let url = idIsItem
-      ? this._env.get('apiUrl') +
+      ? this._env.get('apiUrl')! +
         this._env.get('databaseId') +
         `/item-facets/${id}/parts`
-      : this._env.get('apiUrl') +
+      : this._env.get('apiUrl')! +
         this._env.get('databaseId') +
         `/facets/${id}/parts`;
     if (noRoles) {
@@ -96,7 +96,7 @@ export class FacetService {
    */
   public getTextLayerPartTypeId(): Observable<{ typeId: string }> {
     const url =
-      this._env.get('apiUrl') +
+      this._env.get('apiUrl')! +
       this._env.get('databaseId') +
       '/facets/layer-type-id';
 
@@ -115,10 +115,10 @@ export class FacetService {
    */
   public getPartColor(
     typeId: string,
-    roleId: string,
-    facet: FacetDefinition
+    roleId: string | undefined,
+    facet: FacetDefinition | undefined
   ): string {
-    let def: PartDefinition = null;
+    let def: PartDefinition | undefined;
     if (facet) {
       def = facet.partDefinitions.find((d) => {
         return d.typeId === typeId && (!roleId || roleId === d.roleId);

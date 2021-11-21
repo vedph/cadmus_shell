@@ -20,9 +20,9 @@ export class CurrentLayerPartBarComponent implements OnInit {
     private _facetService: FacetService
   ) {}
 
-  public typeId: string;
-  public roleId: string;
-  public color: string;
+  public typeId?: string;
+  public roleId?: string;
+  public color?: string;
 
   private getTypeIdName(typeId: string): string {
     const state = this._appQuery.getValue();
@@ -34,28 +34,28 @@ export class CurrentLayerPartBarComponent implements OnInit {
     if (i > -1) {
       typeId = typeId.substr(0, i);
     }
-    const entry = state.typeThesaurus.entries.find((e) => e.id === typeId);
+    const entry = state.typeThesaurus.entries?.find((e) => e.id === typeId);
     return entry ? entry.value : typeId;
   }
 
-  private getRoleIdName(roleId: string): string {
+  private getRoleIdName(roleId?: string): string | undefined {
     if (!roleId || !roleId.startsWith('fr.')) {
       return roleId;
     }
     return this.getTypeIdName(roleId);
   }
 
-  private getPartColor(typeId: string, roleId: string): string {
+  private getPartColor(typeId: string, roleId?: string): string {
     const state = this._itemQuery.getValue();
     return this._facetService.getPartColor(typeId, roleId, state?.facet);
   }
 
   private updateLabels(): void {
-    const part: TextLayerPart = this._partQuery.getValue().part;
+    const part: TextLayerPart | undefined = this._partQuery.getValue().part;
     if (!part) {
-      this.typeId = null;
-      this.roleId = null;
-      this.color = null;
+      this.typeId = undefined;
+      this.roleId = undefined;
+      this.color = undefined;
       return;
     } else {
       this.typeId = this.getTypeIdName(part.typeId);

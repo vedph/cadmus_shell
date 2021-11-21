@@ -26,8 +26,8 @@ export class ThesaurusListComponent implements OnInit {
   public pagination$: Observable<PaginationResponse<Thesaurus>>;
   public filter$: BehaviorSubject<ThesaurusFilter>;
   public pageSize: FormControl;
-  public user: User;
-  public userLevel: number;
+  public user?: User;
+  public userLevel?: number;
 
   constructor(
     @Inject(THESAURI_PAGINATOR)
@@ -41,31 +41,6 @@ export class ThesaurusListComponent implements OnInit {
   ) {
     this.pageSize = formBuilder.control(20);
     this._refresh$ = new BehaviorSubject(0);
-  }
-
-  private getRequest(
-    filter: ThesaurusFilter
-  ): () => Observable<PaginationResponse<Thesaurus>> {
-    return () =>
-      this._thesaurusService.getThesauri(filter).pipe(
-        // adapt server results to the paginator plugin
-        map((p: DataPage<Thesaurus>) => {
-          return {
-            currentPage: p.pageNumber,
-            perPage: p.pageSize,
-            lastPage: p.pageCount,
-            data: p.items,
-            total: p.total,
-          };
-        })
-      );
-  }
-
-  ngOnInit(): void {
-    this._authService.currentUser$.subscribe((user: User) => {
-      this.user = user;
-      this.userLevel = this._authService.getCurrentUserLevel();
-    });
 
     // filter
     const initialPageSize = 20;
@@ -120,6 +95,31 @@ export class ThesaurusListComponent implements OnInit {
     );
   }
 
+  private getRequest(
+    filter: ThesaurusFilter
+  ): () => Observable<PaginationResponse<Thesaurus>> {
+    return () =>
+      this._thesaurusService.getThesauri(filter).pipe(
+        // adapt server results to the paginator plugin
+        map((p: DataPage<Thesaurus>) => {
+          return {
+            currentPage: p.pageNumber,
+            perPage: p.pageSize,
+            lastPage: p.pageCount,
+            data: p.items,
+            total: p.total,
+          };
+        })
+      );
+  }
+
+  ngOnInit(): void {
+    this._authService.currentUser$.subscribe((user: User | null) => {
+      this.user = user ?? undefined;
+      this.userLevel = this._authService.getCurrentUserLevel();
+    });
+  }
+
   public pageChanged(event: PageEvent): void {
     // https://material.angular.io/components/paginator/api
     this.paginator.setPage(event.pageIndex + 1);
@@ -145,7 +145,7 @@ export class ThesaurusListComponent implements OnInit {
   }
 
   public deleteThesaurus(thesaurus: Thesaurus): void {
-    if (this.user.roles.every((r) => r !== 'admin' && r !== 'editor')) {
+    if (this.user?.roles.every((r) => r !== 'admin' && r !== 'editor')) {
       return;
     }
 

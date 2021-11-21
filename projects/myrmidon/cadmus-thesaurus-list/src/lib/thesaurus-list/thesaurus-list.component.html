@@ -84,9 +84,9 @@
   </mat-card-content>
   <mat-card-actions
     *ngIf="
-      user.roles.includes('admin') ||
-      user.roles.includes('editor') ||
-      user.roles.includes('operator')
+      user?.roles.includes('admin') ||
+      user?.roles.includes('editor') ||
+      user?.roles.includes('operator')
     "
   >
     <button

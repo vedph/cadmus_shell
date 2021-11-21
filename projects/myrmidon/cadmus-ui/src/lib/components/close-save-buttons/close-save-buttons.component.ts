@@ -8,9 +8,9 @@ import { FormGroup } from '@angular/forms';
 })
 export class CloseSaveButtonsComponent {
   @Input()
-  public form: FormGroup;
+  public form?: FormGroup;
   @Input()
-  public noSave: boolean;
+  public noSave?: boolean;
 
   @Output()
   public closeRequest: EventEmitter<any>;

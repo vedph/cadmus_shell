@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ItemInfo } from '@myrmidon/cadmus-core';
-import { ItemBrowserService } from '@myrmidon/cadmus-api';
+import { ItemBrowserService, NodeSourceType } from '@myrmidon/cadmus-api';
 import { DataPage } from '@myrmidon/ng-tools';
 
 import {
@@ -20,7 +20,7 @@ import {
 
 @Injectable()
 export class ItemTreeDataSource {
-  private _tag: string;
+  private _tag?: string;
   private _pageSize: number;
 
   /**
@@ -47,10 +47,10 @@ export class ItemTreeDataSource {
   /**
    * The tag filter. Changing this property resets the tree.
    */
-  public get tag(): string | null {
+  public get tag(): string | undefined {
     return this._tag;
   }
-  public set tag(value: string | null) {
+  public set tag(value: string | undefined) {
     if (this._tag === value) {
       return;
     }
@@ -76,7 +76,7 @@ export class ItemTreeDataSource {
     private _treeControl: FlatTreeControl<TreeNode>,
     private _itemBrowserService: ItemBrowserService
   ) {
-    this._tag = null;
+    this._tag = undefined;
     this.data$ = new BehaviorSubject<TreeNode[]>([]);
     this.rootLoading$ = new BehaviorSubject<boolean>(false);
     this._pageSize = 20;
@@ -96,7 +96,7 @@ export class ItemTreeDataSource {
       .subscribe(
         (page) => {
           this.rootLoading$.next(false);
-          this.data = this.pageToNodes(page, null);
+          this.data = this.pageToNodes(page);
         },
         (error) => {
           console.error('Error loading root node(s): ' + error);
@@ -115,7 +115,7 @@ export class ItemTreeDataSource {
   private itemToNode(
     item: ItemInfo,
     pageNumber: number,
-    parent: ItemTreeNode
+    parent?: ItemTreeNode
   ): ItemTreeNode {
     return {
       level: parent ? parent.level + 1 : 0,
@@ -138,7 +138,7 @@ export class ItemTreeDataSource {
    */
   private pageToNodes(
     page: DataPage<ItemInfo>,
-    parentNode: ItemTreeNode
+    parentNode?: ItemTreeNode
   ): TreeNode[] {
     // empty
     if (!page.total) {
@@ -148,7 +148,7 @@ export class ItemTreeDataSource {
     // N pages
     if (page.pageCount > 1) {
       const pageLevel = parentNode ? parentNode.level + 1 : 0;
-      const nodes = [];
+      const nodes: any[] = [];
 
       // 'prev' pager
       nodes.push({
@@ -176,6 +176,7 @@ export class ItemTreeDataSource {
         pageCount: page.pageCount,
         total: page.total,
       } as PagerTreeNode);
+      return nodes;
     } else {
       // just 1 page
       return page.items.map((i) => {
@@ -265,7 +266,7 @@ export class ItemTreeDataSource {
     // expand: load children
     node.loading = true;
 
-    this.loadChildNodes(this._tag, 1, this._pageSize, itemNode).subscribe(
+    this.loadChildNodes(this._tag!, 1, this._pageSize, itemNode).subscribe(
       (nodes: TreeNode[]) => {
         // insert children nodes after their parent
         nodes = nodes || [];
@@ -314,26 +315,28 @@ export class ItemTreeDataSource {
 
     // expand: load children
     const parent = this.getParentNode(node);
-    parent.loading = true;
+    if (parent) {
+      parent.loading = true;
 
-    this.loadChildNodes(
-      this._tag,
-      reqPageNumber,
-      this._pageSize,
-      parent as ItemTreeNode
-    ).subscribe(
-      (nodes: TreeNode[]) => {
-        // insert children nodes after their parent
-        this.data.splice(this.data.indexOf(parent) + 1, 0, ...nodes);
-        // notify the change
-        this.data$.next(this.data);
-        node.loading = false;
-      },
-      (error) => {
-        console.error('Error loading items page: ' + error);
-        node.loading = false;
-      }
-    );
+      this.loadChildNodes(
+        this._tag!,
+        reqPageNumber,
+        this._pageSize,
+        parent as ItemTreeNode
+      ).subscribe(
+        (nodes: TreeNode[]) => {
+          // insert children nodes after their parent
+          this.data.splice(this.data.indexOf(parent) + 1, 0, ...nodes);
+          // notify the change
+          this.data$.next(this.data);
+          node.loading = false;
+        },
+        (error) => {
+          console.error('Error loading items page: ' + error);
+          node.loading = false;
+        }
+      );
+    }
   }
 
   /**

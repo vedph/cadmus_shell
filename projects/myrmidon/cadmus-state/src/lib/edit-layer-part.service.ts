@@ -25,7 +25,7 @@ export class EditLayerPartService {
 
     if (part && part.fragments) {
       part.fragments.forEach((p) => {
-        locations.push(TokenLocation.parse(p.location));
+        locations.push(TokenLocation.parse(p.location)!);
       });
     }
     return locations;
@@ -41,7 +41,7 @@ export class EditLayerPartService {
   public load(
     itemId: string,
     partId: string,
-    thesauriIds: string[] | null = null
+    thesauriIds?: string[]
   ): void {
     if (this._store.getValue().loading) {
       return;
@@ -51,7 +51,7 @@ export class EditLayerPartService {
     if (thesauriIds) {
       // remove trailing ! from IDs if any
       const unscopedIds = thesauriIds.map((id) => {
-        return this._thesaurusService.getScopedId(id, null);
+        return this._thesaurusService.getScopedId(id);
       });
 
       forkJoin({
@@ -73,14 +73,14 @@ export class EditLayerPartService {
             layerHints: result.layerHints,
             thesauri: result.thesauri,
             loading: false,
-            error: null,
+            error: undefined,
           });
           // if the loaded part has a thesaurus scope, reload the thesauri
-          if (result.layerPart.thesaurusScope) {
+          if (result.layerPart?.thesaurusScope) {
             const scopedIds: string[] = thesauriIds.map((id) => {
               return this._thesaurusService.getScopedId(
                 id,
-                result.layerPart.thesaurusScope
+                result.layerPart!.thesaurusScope
               );
             });
             this._store.setLoading(true);
@@ -124,7 +124,7 @@ export class EditLayerPartService {
             breakChance: result.breakChance.chance,
             layerHints: result.layerHints,
             loading: false,
-            error: null,
+            error: undefined,
           });
         },
         (error) => {
@@ -192,7 +192,7 @@ export class EditLayerPartService {
       return;
     }
     const i = part.fragments.findIndex((p) => {
-      return TokenLocation.parse(p.location).overlaps(loc);
+      return TokenLocation.parse(p.location)?.overlaps(loc);
     });
     if (i === -1) {
       return;
@@ -201,13 +201,13 @@ export class EditLayerPartService {
     // remove it from the part
     // work on a copy, as store objects are immutable
     part = deepCopy(part);
-    part.fragments.splice(i, 1);
+    part!.fragments.splice(i, 1);
 
     // update the part and reload state once done
-    this._itemService.addPart(part).subscribe(
+    this._itemService.addPart(part!).subscribe(
       (_) => {
         this._store.setDeletingFragment(false);
-        this.load(part.itemId, part.id);
+        this.load(part!.itemId, part!.id);
         // this._store.update({
         //   part: part,
         //   deletingFragment: false,
@@ -218,7 +218,7 @@ export class EditLayerPartService {
         console.error(error);
         this._store.setDeletingFragment(false);
         this._store.setError(
-          `Error deleting fragment at ${loc} in part ${part.id}`
+          `Error deleting fragment at ${loc} in part ${part!.id}`
         );
       }
     );
@@ -243,15 +243,15 @@ export class EditLayerPartService {
     part = deepCopy(part);
 
     // replace all the overlapping fragments with the new one
-    const newLoc = TokenLocation.parse(fragment.location);
+    const newLoc = TokenLocation.parse(fragment.location)!;
     let insertAt = 0;
-    for (let i = part.fragments.length - 1; i > -1; i--) {
-      const frLoc = TokenLocation.parse(part.fragments[i].location);
+    for (let i = part!.fragments.length - 1; i > -1; i--) {
+      const frLoc = TokenLocation.parse(part!.fragments[i].location)!;
       if (newLoc.compareTo(frLoc) >= 0) {
         insertAt = i + 1;
       }
       if (newLoc.overlaps(frLoc)) {
-        part.fragments.splice(i, 1);
+        part!.fragments.splice(i, 1);
         if (insertAt > i && insertAt > 0) {
           insertAt--;
         }
@@ -259,12 +259,12 @@ export class EditLayerPartService {
     }
 
     // add the new fragment
-    part.fragments.splice(insertAt, 0, fragment);
+    part!.fragments.splice(insertAt, 0, fragment);
 
     // update the part and reload once done
-    this._itemService.addPart(part).subscribe(
+    this._itemService.addPart(part!).subscribe(
       (_) => {
-        this.load(part.itemId, part.id);
+        this.load(part!.itemId, part!.id);
         // this._store.update({
         //   part: part,
         //   deletingFragment: false,
@@ -275,7 +275,7 @@ export class EditLayerPartService {
         console.error(error);
         this._store.setSavingFragment(false);
         this._store.setError(
-          `Error saving fragment at ${fragment.location} in part ${part.id}`
+          `Error saving fragment at ${fragment.location} in part ${part!.id}`
         );
       }
     );

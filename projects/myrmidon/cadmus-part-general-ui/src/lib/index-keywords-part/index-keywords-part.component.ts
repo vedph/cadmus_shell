@@ -26,7 +26,7 @@ export class IndexKeywordsPartComponent
   implements OnInit
 {
   public keywords: IndexKeyword[];
-  public editedKeyword: IndexKeyword;
+  public editedKeyword?: IndexKeyword;
   public tabIndex: number;
   // thesaurus
   public idxEntries: ThesaurusEntry[] | undefined;
@@ -103,16 +103,16 @@ export class IndexKeywordsPartComponent
     return a.value.localeCompare(b.value);
   }
 
-  private updateForm(model: IndexKeywordsPart): void {
+  private updateForm(model?: IndexKeywordsPart): void {
     if (!model) {
-      this.form.reset();
+      this.form!.reset();
       return;
     }
 
     const ck = Object.assign([], model.keywords);
     ck.sort(this.compareKeywords);
     this.keywords = ck;
-    this.form.markAsPristine();
+    this.form!.markAsPristine();
   }
 
   protected onModelSet(model: IndexKeywordsPart): void {
@@ -123,14 +123,14 @@ export class IndexKeywordsPartComponent
     let part = this.model;
     if (!part) {
       part = {
-        itemId: this.itemId,
-        id: null,
+        itemId: this.itemId || '',
+        id: '',
         typeId: INDEX_KEYWORDS_PART_TYPEID,
         roleId: this.roleId,
         timeCreated: new Date(),
-        creatorId: null,
+        creatorId: '',
         timeModified: new Date(),
-        userId: null,
+        userId: '',
         keywords: [],
       };
     }
@@ -148,7 +148,7 @@ export class IndexKeywordsPartComponent
       if (n <= 0) {
         const ck = Object.assign([], this.keywords);
         ck.splice(i, 0, keyword);
-        this.form.markAsDirty();
+        this.form!.markAsDirty();
         this.keywords = ck;
         break;
       }
@@ -157,7 +157,7 @@ export class IndexKeywordsPartComponent
     if (i === this.keywords.length) {
       const ck = Object.assign([], this.keywords);
       ck.push(keyword);
-      this.form.markAsDirty();
+      this.form!.markAsDirty();
       this.keywords = ck;
     }
     this.keywordCount.setValue(this.keywords.length);
@@ -166,7 +166,7 @@ export class IndexKeywordsPartComponent
 
   public addNewKeyword(): void {
     const keyword: IndexKeyword = {
-      indexId: this.idxEntries?.length ? this.idxEntries[0].id : null,
+      indexId: this.idxEntries?.length ? this.idxEntries[0].id : undefined,
       language: this.langEntries?.length ? this.langEntries[0].id : 'eng',
       value: '',
     };
@@ -176,7 +176,7 @@ export class IndexKeywordsPartComponent
   public deleteKeyword(keyword: IndexKeyword): void {
     const ck = Object.assign([], this.keywords);
     ck.splice(this.keywords.indexOf(keyword), 1);
-    this.form.markAsDirty();
+    this.form!.markAsDirty();
     this.keywords = ck;
     this.keywordCount.setValue(this.keywords.length);
   }
@@ -188,12 +188,12 @@ export class IndexKeywordsPartComponent
 
   public onKeywordClose(): void {
     this.tabIndex = 0;
-    this.editedKeyword = null;
+    this.editedKeyword = undefined;
   }
 
   public onKeywordSave(keyword: IndexKeyword): void {
     this.tabIndex = 0;
     this.addKeyword(keyword);
-    this.editedKeyword = null;
+    this.editedKeyword = undefined;
   }
 }

@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Query } from '@datorama/akita';
+
+import { LayerHint } from '@myrmidon/cadmus-core';
+
 import {
   EditLayerPartState,
   EditLayerPartStore,
 } from './edit-layer-part.store';
-import { Observable } from 'rxjs';
-import { LayerHint } from '@myrmidon/cadmus-core';
 
 @Injectable({ providedIn: 'root' })
 export class EditLayerPartQuery extends Query<EditLayerPartState> {
@@ -13,15 +15,15 @@ export class EditLayerPartQuery extends Query<EditLayerPartState> {
     super(store);
   }
 
-  public selectDeletingFragment(): Observable<boolean> {
+  public selectDeletingFragment(): Observable<boolean | undefined> {
     return this.select((state) => state.deletingFragment);
   }
 
-  public selectSavingFragment(): Observable<boolean> {
+  public selectSavingFragment(): Observable<boolean | undefined> {
     return this.select((state) => state.savingFragment);
   }
 
-  public selectRefreshingBreakChance(): Observable<boolean> {
+  public selectRefreshingBreakChance(): Observable<boolean | undefined> {
     return this.select((state) => state.refreshingBreakChance);
   }
 
@@ -33,7 +35,7 @@ export class EditLayerPartQuery extends Query<EditLayerPartState> {
     return this.select((state) => state.layerHints);
   }
 
-  public selectPatchingLayers(): Observable<boolean> {
+  public selectPatchingLayers(): Observable<boolean | undefined> {
     return this.select((state) => state.patchingLayer);
   }
 }

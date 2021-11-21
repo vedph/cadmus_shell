@@ -8,13 +8,13 @@ import { FlagDefinition } from '@myrmidon/cadmus-core';
 @Component({
   selector: 'cadmus-flags-badge',
   templateUrl: './flags-badge.component.html',
-  styleUrls: ['./flags-badge.component.css']
+  styleUrls: ['./flags-badge.component.css'],
 })
 export class FlagsBadgeComponent implements OnInit {
   private _flags: number;
   private _flagDefinitions: FlagDefinition[];
 
-  public badgeFlags: FlagDefinition[]
+  public badgeFlags: FlagDefinition[];
 
   @Input()
   public get flags(): number {
@@ -29,7 +29,7 @@ export class FlagsBadgeComponent implements OnInit {
   }
 
   @Input()
-  public get flagDefinitions() : FlagDefinition[] {
+  public get flagDefinitions(): FlagDefinition[] {
     return this._flagDefinitions;
   }
   public set flagDefinitions(value: FlagDefinition[]) {
@@ -38,19 +38,20 @@ export class FlagsBadgeComponent implements OnInit {
   }
 
   constructor() {
+    this._flags = 0;
+    this._flagDefinitions = [];
     this.badgeFlags = [];
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   private updateBadge() {
     if (!this._flagDefinitions) {
       return;
     }
-    this.badgeFlags = this._flagDefinitions.filter(def => {
+    this.badgeFlags = this._flagDefinitions.filter((def) => {
       // tslint:disable-next-line: no-bitwise
-      return (def.id & this._flags);
+      return def.id & this._flags;
     });
   }
 }

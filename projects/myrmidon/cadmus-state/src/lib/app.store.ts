@@ -1,5 +1,10 @@
-import { FacetDefinition, FlagDefinition, Thesaurus } from '@myrmidon/cadmus-core';
+import {
+  FacetDefinition,
+  FlagDefinition,
+  Thesaurus,
+} from '@myrmidon/cadmus-core';
 import { Injectable } from '@angular/core';
+
 import { StoreConfig, Store } from '@datorama/akita';
 
 /**
@@ -10,11 +15,11 @@ export interface AppState {
   /**
    * All the available facets definitions.
    */
-  facets: FacetDefinition[] | null;
+  facets: FacetDefinition[];
   /**
    * All the available flags definitions.
    */
-  flags: FlagDefinition[] | null;
+  flags: FlagDefinition[];
   /**
    * The thesaurus for model-types. This (if present) is used to display
    * human-friendly part types names from their IDs. Otherwise, the raw
@@ -34,8 +39,6 @@ export interface AppState {
 const initialState: AppState = {
   facets: [],
   flags: [],
-  typeThesaurus: null,
-  itemBrowserThesaurus: null,
 };
 
 @Injectable({ providedIn: 'root' })

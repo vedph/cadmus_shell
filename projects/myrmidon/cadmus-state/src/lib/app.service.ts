@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
-import { AppStore } from './app.store';
-import { FacetService, FlagService, ThesaurusService } from '@myrmidon/cadmus-api';
 import { forkJoin } from 'rxjs';
+
+import {
+  FacetService,
+  FlagService,
+  ThesaurusService,
+} from '@myrmidon/cadmus-api';
+
+import { AppStore } from './app.store';
 
 @Injectable({ providedIn: 'root' })
 export class AppService {

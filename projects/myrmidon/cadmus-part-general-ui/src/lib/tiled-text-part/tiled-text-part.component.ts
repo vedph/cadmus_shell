@@ -33,15 +33,15 @@ export class TiledTextPartComponent
   extends ModelEditorComponentBase<TiledTextPart>
   implements OnInit
 {
-  private _editedDataTile: TextTile;
-  private _editedDataRow: TextTileRow;
+  private _editedDataTile?: TextTile;
+  private _editedDataRow?: TextTileRow;
 
-  public selectedTile: TextTile;
+  public selectedTile?: TextTile;
   public form: FormGroup;
   public citation: FormControl;
   public rows: TextTileRow[];
-  public editedData: Data;
-  public editedDataTitle: string;
+  public editedData?: Data;
+  public editedDataTitle?: string;
   public currentTabIndex: number;
 
   constructor(
@@ -51,6 +51,7 @@ export class TiledTextPartComponent
   ) {
     super(authService);
     this.currentTabIndex = 0;
+    this.rows = [];
     // form
     this.citation = formBuilder.control(null, Validators.maxLength(1000));
     this.form = formBuilder.group({
@@ -97,15 +98,15 @@ export class TiledTextPartComponent
     let part = this.model;
     if (!part) {
       part = {
-        itemId: this.itemId,
-        id: null,
+        itemId: this.itemId || '',
+        id: '',
         typeId: TILED_TEXT_PART_TYPEID,
         roleId: this.roleId,
         timeCreated: new Date(),
-        creatorId: null,
+        creatorId: '',
         timeModified: new Date(),
-        userId: null,
-        citation: null,
+        userId: '',
+        citation: '',
         rows: [],
       };
     }
@@ -121,7 +122,7 @@ export class TiledTextPartComponent
    * Append a new row at the bottom.
    */
   public addRow(): void {
-    const data = {};
+    const data: { [key: string]: any } = {};
     data[TEXT_TILE_TEXT_DATA_NAME] = 'text1';
 
     this.rows.push({
@@ -142,7 +143,7 @@ export class TiledTextPartComponent
    */
   public addTile(row: TextTileRow): void {
     const x = row.tiles ? row.tiles.length + 1 : 1;
-    const data = {};
+    const data: { [key: string]: any } = {};
     data[TEXT_TILE_TEXT_DATA_NAME] = 'text' + x;
     if (!row.tiles) {
       row.tiles = [];
@@ -172,7 +173,7 @@ export class TiledTextPartComponent
               ? row.tiles[index + 1]
               : row.tiles.length > 1
               ? row.tiles[index - 1]
-              : null;
+              : undefined;
           row.tiles.splice(index, 1);
           this.adjustCoords();
           this.form.markAsDirty();
@@ -238,7 +239,7 @@ export class TiledTextPartComponent
 
   public editRowData(row: TextTileRow): void {
     this._editedDataRow = row;
-    this._editedDataTile = null;
+    this._editedDataTile = undefined;
     this.editedDataTitle = `Row ${row.y}`;
     this.editedData = row.data;
     this.currentTabIndex = 1;
@@ -246,7 +247,7 @@ export class TiledTextPartComponent
 
   public editTileData(tile: TextTile): void {
     this._editedDataTile = tile;
-    this._editedDataRow = null;
+    this._editedDataRow = undefined;
     this.editedDataTitle = `Tile ${this.getTileCoords(tile)}`;
     this.editedData = tile.data;
     this.currentTabIndex = 1;
@@ -254,22 +255,22 @@ export class TiledTextPartComponent
 
   public closeDataEditor(): void {
     this.currentTabIndex = 0;
-    this._editedDataRow = null;
-    this.editedDataTitle = null;
-    this.editedData = null;
+    this._editedDataRow = undefined;
+    this.editedDataTitle = undefined;
+    this.editedData = undefined;
   }
 
   public saveEditedData(data: Data): void {
     if (this._editedDataTile) {
       this._editedDataTile.data = data;
     } else {
-      this._editedDataRow.data = data;
+      this._editedDataRow!.data = data;
     }
     this.form.markAsDirty();
     this.closeDataEditor();
   }
 
-  public getTileCoords(tile: TextTile = null): string {
+  public getTileCoords(tile?: TextTile): string {
     if (!tile) {
       tile = this.selectedTile;
     }

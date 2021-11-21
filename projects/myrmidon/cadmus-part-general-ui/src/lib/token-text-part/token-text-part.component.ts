@@ -58,7 +58,7 @@ export class TokenTextPartComponent
     this.initEditor();
   }
 
-  private getTextFromModel(model: TokenTextPart): string {
+  private getTextFromModel(model: TokenTextPart): string | null {
     if (!model || !model.lines) {
       return null;
     }
@@ -84,12 +84,12 @@ export class TokenTextPartComponent
 
   private updateForm(model: TokenTextPart): void {
     if (!model) {
-      this.form.reset();
+      this.form!.reset();
       return;
     }
     this.citation.setValue(model.citation);
     this.text.setValue(this.getTextFromModel(model));
-    this.form.markAsPristine();
+    this.form!.markAsPristine();
   }
 
   protected onModelSet(model: TokenTextPart): void {
@@ -100,15 +100,15 @@ export class TokenTextPartComponent
     let part = this.model;
     if (!part) {
       part = {
-        itemId: this.itemId,
-        id: null,
+        itemId: this.itemId || '',
+        id: '',
         typeId: TOKEN_TEXT_PART_TYPEID,
         roleId: this.roleId,
-        lines: null,
+        lines: [],
         timeCreated: new Date(),
-        creatorId: null,
+        creatorId: '',
         timeModified: new Date(),
-        userId: null,
+        userId: '',
       };
     }
     part.citation = this.citation.value ? this.citation.value.trim() : null;
@@ -128,7 +128,7 @@ export class TokenTextPartComponent
     const r = new RegExp('([.?!]+)', 'g');
     const parts: string[] = [];
     let start = 0;
-    let m: RegExpExecArray | undefined;
+    let m: RegExpExecArray | null;
 
     while ((m = r.exec(text))) {
       console.log(m[1].length);
@@ -173,7 +173,7 @@ export class TokenTextPartComponent
               break;
           }
           this.text.setValue(text);
-          this.form.markAsDirty();
+          this.form!.markAsDirty();
         }
       });
   }

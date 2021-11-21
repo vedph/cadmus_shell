@@ -68,7 +68,7 @@ export class ThesaurusEditorComponent implements OnInit {
    * The lookup function used to lookup thesauri when editing aliases.
    */
   @Input()
-  public lookupFn: (filter?: ThesaurusFilter) => Observable<string[]>;
+  public lookupFn?: (filter?: ThesaurusFilter) => Observable<string[]>;
 
   /**
    * Emitted when the thesaurus is saved.
@@ -229,7 +229,7 @@ export class ThesaurusEditorComponent implements OnInit {
         })
       ),
       this.filter$.pipe(
-        startWith(undefined as string),
+        startWith(''),
         // clear the cache when filters change
         tap((_) => {
           this.paginator.clearCache();

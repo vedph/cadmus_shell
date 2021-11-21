@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { AuthService } from '@myrmidon/cadmus-api';
-import { Thesaurus, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { deepCopy } from '@myrmidon/ng-tools';
 import { DialogService } from '@myrmidon/ng-mat-tools';
 
@@ -23,14 +23,14 @@ export class QuotationsFragmentComponent
   extends ModelEditorComponentBase<QuotationsFragment>
   implements OnInit
 {
-  private _newEditedEntry: boolean;
+  private _newEditedEntry?: boolean;
 
-  public editedEntry: QuotationEntry;
+  public editedEntry?: QuotationEntry;
   public currentTabIndex: number;
 
-  public worksThesaurus: Thesaurus;
-  public tagsThesaurus: Thesaurus;
-  public workDictionary: Record<string, ThesaurusEntry[]>;
+  public workEntries?: ThesaurusEntry[];
+  public tagEntries?: ThesaurusEntry[];
+  public workDictionary?: Record<string, ThesaurusEntry[]>;
 
   public entryCount: FormControl;
   public entries: QuotationEntry[];
@@ -43,6 +43,7 @@ export class QuotationsFragmentComponent
   ) {
     super(authService);
     this.entries = [];
+    this.currentTabIndex = 0;
     // form
     this.entryCount = formBuilder.control(0, Validators.min(1));
 
@@ -56,32 +57,32 @@ export class QuotationsFragmentComponent
   }
 
   protected onThesauriSet(): void {
-    const wKey = 'quotation-works';
-    if (this.thesauri && this.thesauri[wKey]) {
-      this.worksThesaurus = this.thesauri[wKey];
+    let key = 'quotation-works';
+    if (this.thesauri && this.thesauri[key]) {
+      this.workEntries = this.thesauri[key].entries;
       this.workDictionary = this._worksService.buildDictionary(
-        this.worksThesaurus.entries
+        this.workEntries || []
       );
     } else {
-      this.worksThesaurus = null;
-      this.workDictionary = null;
+      this.workEntries = undefined;
+      this.workDictionary = undefined;
     }
 
-    const tKey = 'quotation-tags';
-    if (this.thesauri && this.thesauri[tKey]) {
-      this.tagsThesaurus = this.thesauri[tKey];
+    key = 'quotation-tags';
+    if (this.thesauri && this.thesauri[key]) {
+      this.tagEntries = this.thesauri[key].entries;
     } else {
-      this.tagsThesaurus = null;
+      this.tagEntries = undefined;
     }
   }
 
   private updateForm(model: QuotationsFragment): void {
     if (!model) {
-      this.form.reset();
+      this.form!.reset();
       return;
     }
     this.entryCount.setValue(model.entries?.length || 0);
-    this.form.markAsPristine();
+    this.form!.markAsPristine();
   }
 
   protected onModelSet(model: QuotationsFragment): void {
@@ -96,14 +97,14 @@ export class QuotationsFragmentComponent
   }
 
   public getNameFromId(id: string): string {
-    return this.worksThesaurus.entries.find((e) => e.id === id)?.value || id;
+    return this.workEntries?.find((e) => e.id === id)?.value || id;
   }
 
   public addEntry(): void {
     const entry: QuotationEntry = {
-      author: null,
-      work: null,
-      citation: null,
+      author: '',
+      work: '',
+      citation: '',
     };
     this.entries.push(entry);
     this.entryCount.setValue(this.entries.length);
@@ -117,22 +118,28 @@ export class QuotationsFragmentComponent
   }
 
   public onEntrySave(entry: QuotationEntry): void {
+    if (!this.editedEntry) {
+      return;
+    }
     this._newEditedEntry = false;
     const i = this.entries.indexOf(this.editedEntry);
     this.entries.splice(i, 1, entry);
     this.currentTabIndex = 0;
-    this.editedEntry = null;
-    this.form.markAsDirty();
+    this.editedEntry = undefined;
+    this.form!.markAsDirty();
   }
 
   public onEntryClose(entry: QuotationEntry): void {
+    if (!this.editedEntry) {
+      return;
+    }
     if (this._newEditedEntry) {
       const index = this.entries.indexOf(this.editedEntry);
       this.entries.splice(index, 1);
       this.entryCount.setValue(this.entries.length);
     }
     this.currentTabIndex = 0;
-    this.editedEntry = null;
+    this.editedEntry = undefined;
   }
 
   public removeEntry(index: number): void {
@@ -144,7 +151,7 @@ export class QuotationsFragmentComponent
         }
         this.entries.splice(index, 1);
         this.entryCount.setValue(this.entries.length);
-        this.form.markAsDirty();
+        this.form!.markAsDirty();
       });
   }
 
@@ -155,7 +162,7 @@ export class QuotationsFragmentComponent
     const entry = this.entries[index];
     this.entries.splice(index, 1);
     this.entries.splice(index - 1, 0, entry);
-    this.form.markAsDirty();
+    this.form!.markAsDirty();
   }
 
   public moveEntryDown(index: number): void {
@@ -165,6 +172,6 @@ export class QuotationsFragmentComponent
     const item = this.entries[index];
     this.entries.splice(index, 1);
     this.entries.splice(index + 1, 0, item);
-    this.form.markAsDirty();
+    this.form!.markAsDirty();
   }
 }

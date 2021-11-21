@@ -14,7 +14,7 @@ import { AccountService } from '@myrmidon/cadmus-api';
   styleUrls: ['./reset-password.component.css'],
 })
 export class ResetPasswordComponent {
-  public busy: boolean;
+  public busy?: boolean;
   public form: FormGroup;
   public email: FormControl;
 

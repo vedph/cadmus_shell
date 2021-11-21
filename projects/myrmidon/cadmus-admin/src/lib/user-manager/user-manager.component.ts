@@ -7,7 +7,12 @@ import { startWith, tap, switchMap, map } from 'rxjs/operators';
 
 import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
 
-import { User, UserFilter, GravatarService } from '@myrmidon/cadmus-core';
+import {
+  User,
+  UserFilter,
+  GravatarService,
+  UserInfo,
+} from '@myrmidon/cadmus-core';
 import { UserService } from '@myrmidon/cadmus-api';
 import { DataPage } from '@myrmidon/ng-tools';
 import { DialogService } from '@myrmidon/ng-mat-tools';
@@ -25,10 +30,10 @@ import { UsersQuery } from './users.query';
 export class UserManagerComponent implements OnInit {
   private _refresh$: BehaviorSubject<number>;
 
-  public pagination$: Observable<PaginationResponse<User>>;
+  public pagination$: Observable<PaginationResponse<UserInfo>>;
   public filter$: BehaviorSubject<UserFilter>;
   public pageSize: FormControl;
-  public active$: Observable<User>;
+  public active$: Observable<UserInfo | undefined>;
 
   constructor(
     @Inject(USERS_PAGINATOR) public paginator: PaginatorPlugin<UsersState>,
@@ -43,27 +48,7 @@ export class UserManagerComponent implements OnInit {
     this.pageSize = formBuilder.control(20);
     // https://netbasal.com/manage-your-entities-with-akita-like-a-boss-768732f8d4d1
     this.active$ = this._usersQuery.selectActive();
-  }
 
-  private getRequest(
-    filter: UserFilter
-  ): () => Observable<PaginationResponse<User>> {
-    return () =>
-      this._userService.getUsers(filter).pipe(
-        // adapt server results to the paginator plugin
-        map((p: DataPage<User>) => {
-          return {
-            currentPage: p.pageNumber,
-            perPage: p.pageSize,
-            lastPage: p.pageCount,
-            data: p.items,
-            total: p.total,
-          };
-        })
-      );
-  }
-
-  ngOnInit(): void {
     // filter
     const initialPageSize = 20;
     this.filter$ = new BehaviorSubject<UserFilter>(
@@ -115,6 +100,26 @@ export class UserManagerComponent implements OnInit {
       })
     );
   }
+
+  private getRequest(
+    filter: UserFilter
+  ): () => Observable<PaginationResponse<UserInfo>> {
+    return () =>
+      this._userService.getUsers(filter).pipe(
+        // adapt server results to the paginator plugin
+        map((p: DataPage<UserInfo>) => {
+          return {
+            currentPage: p.pageNumber,
+            perPage: p.pageSize,
+            lastPage: p.pageCount,
+            data: p.items,
+            total: p.total,
+          };
+        })
+      );
+  }
+
+  ngOnInit(): void {}
 
   public getGravatarUrl(email: string, size = 80): string {
     return this._gravatarService.buildGravatarUrl(email, size);

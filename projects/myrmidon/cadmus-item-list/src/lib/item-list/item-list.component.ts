@@ -35,8 +35,8 @@ export class ItemListComponent implements OnInit {
   public flagDefinitions$: Observable<FlagDefinition[]>;
   public facetDefinitions$: Observable<FacetDefinition[]>;
   public pageSize: FormControl;
-  public user: User;
-  public userLevel: number;
+  public user?: User;
+  public userLevel?: number;
   private _refresh$: BehaviorSubject<number>;
 
   constructor(
@@ -51,31 +51,6 @@ export class ItemListComponent implements OnInit {
   ) {
     this.pageSize = formBuilder.control(20);
     this._refresh$ = new BehaviorSubject(0);
-  }
-
-  private getRequest(
-    filter: ItemFilter
-  ): () => Observable<PaginationResponse<ItemInfo>> {
-    return () =>
-      this._itemService.getItems(filter).pipe(
-        // adapt server results to the paginator plugin
-        map((p: DataPage<ItemInfo>) => {
-          return {
-            currentPage: p.pageNumber,
-            perPage: p.pageSize,
-            lastPage: p.pageCount,
-            data: p.items,
-            total: p.total,
-          };
-        })
-      );
-  }
-
-  public ngOnInit(): void {
-    this._authService.currentUser$.subscribe((user: User) => {
-      this.user = user;
-      this.userLevel = this._authService.getCurrentUserLevel();
-    });
 
     this.flagDefinitions$ = this._appQuery.selectFlags();
     this.facetDefinitions$ = this._appQuery.selectFacets();
@@ -132,6 +107,31 @@ export class ItemListComponent implements OnInit {
     );
   }
 
+  private getRequest(
+    filter: ItemFilter
+  ): () => Observable<PaginationResponse<ItemInfo>> {
+    return () =>
+      this._itemService.getItems(filter).pipe(
+        // adapt server results to the paginator plugin
+        map((p: DataPage<ItemInfo>) => {
+          return {
+            currentPage: p.pageNumber,
+            perPage: p.pageSize,
+            lastPage: p.pageCount,
+            data: p.items,
+            total: p.total,
+          };
+        })
+      );
+  }
+
+  public ngOnInit(): void {
+    this._authService.currentUser$.subscribe((user: User | null) => {
+      this.user = user ?? undefined;
+      this.userLevel = this._authService.getCurrentUserLevel();
+    });
+  }
+
   public pageChanged(event: PageEvent): void {
     // https://material.angular.io/components/paginator/api
     this.paginator.setPage(event.pageIndex + 1);
@@ -149,7 +149,7 @@ export class ItemListComponent implements OnInit {
   }
 
   public deleteItem(item: ItemInfo): void {
-    if (this.user.roles.every((r) => r !== 'admin' && r !== 'editor')) {
+    if (this.user?.roles.every((r) => r !== 'admin' && r !== 'editor')) {
       return;
     }
 

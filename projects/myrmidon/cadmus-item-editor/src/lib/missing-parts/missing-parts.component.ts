@@ -8,26 +8,26 @@ import { PartDefinition, Part, Thesaurus } from '@myrmidon/cadmus-core';
   styleUrls: ['./missing-parts.component.css'],
 })
 export class MissingPartsComponent implements OnInit {
-  private _partDefinitions: PartDefinition[];
-  private _parts: Part[];
-  private _typeThesaurus: Thesaurus;
+  private _partDefinitions?: PartDefinition[];
+  private _parts?: Part[];
+  private _typeThesaurus?: Thesaurus;
 
   public missingDefinitions: PartDefinition[];
 
   @Input()
-  public get partDefinitions(): PartDefinition[] {
+  public get partDefinitions(): PartDefinition[] | undefined {
     return this._partDefinitions;
   }
-  public set partDefinitions(value: PartDefinition[]) {
+  public set partDefinitions(value: PartDefinition[] | undefined) {
     this._partDefinitions = value;
     this.updateMissing();
   }
 
   @Input()
-  public get parts(): Part[] {
+  public get parts(): Part[] | undefined {
     return this._parts;
   }
-  public set parts(value: Part[]) {
+  public set parts(value: Part[] | undefined) {
     this._parts = value;
     this.updateMissing();
   }
@@ -36,10 +36,10 @@ export class MissingPartsComponent implements OnInit {
    * The types thesaurus.
    */
   @Input()
-  public get typeThesaurus(): Thesaurus {
+  public get typeThesaurus(): Thesaurus | undefined {
     return this._typeThesaurus;
   }
-  public set typeThesaurus(value: Thesaurus) {
+  public set typeThesaurus(value: Thesaurus | undefined) {
     this._typeThesaurus = value;
     this.updateMissing();
   }
@@ -54,7 +54,10 @@ export class MissingPartsComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  private isPartPresent(typeId: string, roleId: string): boolean {
+  private isPartPresent(typeId: string, roleId?: string): boolean {
+    if (!this._partDefinitions) {
+      return false;
+    }
     return this._partDefinitions.some(
       (d) => d.typeId === typeId && d.roleId === roleId
     );

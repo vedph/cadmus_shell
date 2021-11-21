@@ -21,18 +21,18 @@ import { MspOperation, MspOperator } from '../msp-operation';
   styleUrls: ['./msp-operation.component.css'],
 })
 export class MspOperationComponent implements OnInit {
-  private _operation: MspOperation;
-  private _ignoreTextUpdate: boolean;
-  private _ignoreVisualUpdate: boolean;
+  private _operation?: MspOperation;
+  private _ignoreTextUpdate?: boolean;
+  private _ignoreVisualUpdate?: boolean;
 
   /**
    * The operation being edited.
    */
   @Input()
-  public get operation(): MspOperation {
+  public get operation(): MspOperation | undefined {
     return this._operation;
   }
-  public set operation(value: MspOperation) {
+  public set operation(value: MspOperation | undefined) {
     this._operation = value;
     this.updateFormControls(value, true);
     this.form.markAsPristine();
@@ -46,7 +46,7 @@ export class MspOperationComponent implements OnInit {
   @Output()
   public operationClose: EventEmitter<any>;
 
-  public visualExpanded: boolean;
+  public visualExpanded?: boolean;
 
   // form
   public form: FormGroup;
@@ -162,8 +162,8 @@ export class MspOperationComponent implements OnInit {
   }
 
   private updateFormControls(
-    operation: MspOperation,
-    updateText: boolean
+    operation?: MspOperation,
+    updateText?: boolean
   ): void {
     if (!operation) {
       this.form.reset();
@@ -268,9 +268,9 @@ export class MspOperationComponent implements OnInit {
   private getOperation(): MspOperation {
     const op = new MspOperation();
     op.operator = this.operator.value;
-    op.rangeA = TextRange.parse(this.rangeA.value);
+    op.rangeA = TextRange.parse(this.rangeA.value)!;
     op.valueA = this.valueA.value;
-    op.rangeB = TextRange.parse(this.rangeB.value);
+    op.rangeB = TextRange.parse(this.rangeB.value)!;
     op.valueB = this.valueB.value;
     op.tag = this.tag.value;
     op.note = this.note.value;

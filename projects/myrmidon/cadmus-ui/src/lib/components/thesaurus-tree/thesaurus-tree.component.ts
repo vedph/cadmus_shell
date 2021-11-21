@@ -48,16 +48,16 @@ export const renderLabelFromLastColon = (label: string): string => {
   styleUrls: ['./thesaurus-tree.component.css'],
 })
 export class ThesaurusTreeComponent implements OnInit {
-  private _entries: ThesaurusEntry[];
+  private _entries?: ThesaurusEntry[];
 
   /**
    * The thesaurus entries.
    */
   @Input()
-  public get entries(): ThesaurusEntry[] {
+  public get entries(): ThesaurusEntry[] | undefined {
     return this._entries;
   }
-  public set entries(value: ThesaurusEntry[]) {
+  public set entries(value: ThesaurusEntry[] | undefined) {
     if (this._entries !== value) {
       this._entries = value;
       this.initTree();
@@ -117,7 +117,7 @@ export class ThesaurusTreeComponent implements OnInit {
   private initTree(): void {
     this.foundNodes = undefined;
 
-    this.root = this.buildTreeModel(this._entries);
+    this.root = this.buildTreeModel(this._entries || []);
     this.treeDataSource.data = [this.root];
     // https://github.com/angular/components/issues/12469
     this.treeControl.dataNodes = this.treeDataSource.data;

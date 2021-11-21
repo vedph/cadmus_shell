@@ -1,10 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormControl, FormBuilder, Validators } from '@angular/forms';
+
 import { Datation, DatationModel } from '@myrmidon/cadmus-core';
-import {
-  FormControl,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
+
 import { InplaceEditorComponentBase } from '../inplace-editor-component-base';
 
 /**
@@ -17,8 +15,8 @@ import { InplaceEditorComponentBase } from '../inplace-editor-component-base';
 })
 export class DatationEditorComponent
   extends InplaceEditorComponentBase<DatationModel>
-  implements OnInit {
-
+  implements OnInit
+{
   public value: FormControl;
   public century: FormControl;
   public span: FormControl;
@@ -31,7 +29,7 @@ export class DatationEditorComponent
   /**
    * The optional label to display for this datation.
    */
-  @Input() public label: string;
+  @Input() public label?: string;
 
   /**
    * The optional custom ID to be assigned to this component's
@@ -42,9 +40,6 @@ export class DatationEditorComponent
   constructor(formBuilder: FormBuilder) {
     super(formBuilder);
     this.idInParentForm = 'datation';
-  }
-
-  public ngOnInit(): void {
     this.value = this.formBuilder.control(0);
     this.century = this.formBuilder.control(false);
     this.span = this.formBuilder.control(false);
@@ -59,7 +54,9 @@ export class DatationEditorComponent
     this.about = this.formBuilder.control(false);
     this.dubious = this.formBuilder.control(false);
     this.hint = this.formBuilder.control(null, Validators.maxLength(500));
+  }
 
+  public ngOnInit(): void {
     this.initEditor(this.idInParentForm || 'datation', {
       value: this.value,
       century: this.century,
@@ -100,7 +97,7 @@ export class DatationEditorComponent
       day: this.day.value ? +this.day.value : 0,
       isApproximate: this.about.value || false,
       isDubious: this.dubious.value || false,
-      hint: Datation.sanitizeHint(this.hint.value)
+      hint: Datation.sanitizeHint(this.hint.value),
     };
   }
 }

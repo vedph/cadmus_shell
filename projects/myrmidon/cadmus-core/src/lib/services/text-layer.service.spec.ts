@@ -6,7 +6,7 @@ import { TextLayerService, SelectedRange } from './text-layer.service';
 describe('TextLayerService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [TextLayerService]
+      providers: [TextLayerService],
     });
   });
 
@@ -72,7 +72,7 @@ describe('TextLayerService', () => {
   it('render with empty text should return empty div', inject(
     [TextLayerService],
     (service: TextLayerService) => {
-      const html = service.render('', null);
+      const html = service.render('');
       expect(html).toEqual('<div></div>');
     }
   ));
@@ -80,7 +80,7 @@ describe('TextLayerService', () => {
   it('render with 1 line "[alpha]" should return div/p', inject(
     [TextLayerService],
     (service: TextLayerService) => {
-      const html = service.render('alpha', null);
+      const html = service.render('alpha');
       expect(html).toEqual('<div><p id="y1">alpha</p></div>');
     }
   ));
@@ -88,7 +88,7 @@ describe('TextLayerService', () => {
   it('render with 1 line "[alpha beta]" should return div/p', inject(
     [TextLayerService],
     (service: TextLayerService) => {
-      const html = service.render('alpha beta', null);
+      const html = service.render('alpha beta');
       expect(html).toEqual('<div><p id="y1">alpha beta</p></div>');
     }
   ));
@@ -96,7 +96,7 @@ describe('TextLayerService', () => {
   it('render with 2 lines should return div/p*2', inject(
     [TextLayerService],
     (service: TextLayerService) => {
-      const html = service.render('alpha\nbeta', null);
+      const html = service.render('alpha\nbeta');
       expect(html).toEqual(
         '<div><p id="y1">alpha</p>' + '<p id="y2">beta</p></div>'
       );
@@ -106,7 +106,7 @@ describe('TextLayerService', () => {
   it('render with empty text should return empty div', inject(
     [TextLayerService],
     (service: TextLayerService) => {
-      const html = service.render('', null);
+      const html = service.render('');
       expect(html).toEqual('<div></div>');
     }
   ));
@@ -115,7 +115,7 @@ describe('TextLayerService', () => {
   it('render 1 line "[alpha]" should return div/p/span', inject(
     [TextLayerService],
     (service: TextLayerService) => {
-      const html = service.render('alpha', [TokenLocation.parse('1.1')]);
+      const html = service.render('alpha', [TokenLocation.parse('1.1')!]);
       expect(html).toEqual(
         '<div><p id="y1">' +
           '<span id="f1.1_0" class="fr">alpha</span>' +
@@ -127,7 +127,7 @@ describe('TextLayerService', () => {
   it('render 1 line "al[pha]" should return div/p/span', inject(
     [TextLayerService],
     (service: TextLayerService) => {
-      const html = service.render('alpha', [TokenLocation.parse('1.1@3x3')]);
+      const html = service.render('alpha', [TokenLocation.parse('1.1@3x3')!]);
       expect(html).toEqual(
         '<div><p id="y1">' +
           'al<span id="f1.1@3x3_0" class="fr">pha</span>' +
@@ -139,7 +139,7 @@ describe('TextLayerService', () => {
   it('render 1 line "[al]pha" should return div/p/span', inject(
     [TextLayerService],
     (service: TextLayerService) => {
-      const html = service.render('alpha', [TokenLocation.parse('1.1@1x2')]);
+      const html = service.render('alpha', [TokenLocation.parse('1.1@1x2')!]);
       expect(html).toEqual(
         '<div><p id="y1">' +
           '<span id="f1.1@1x2_0" class="fr">al</span>pha' +
@@ -151,7 +151,7 @@ describe('TextLayerService', () => {
   it('render 1 line "al[p]ha" should return div/p/span', inject(
     [TextLayerService],
     (service: TextLayerService) => {
-      const html = service.render('alpha', [TokenLocation.parse('1.1@3x1')]);
+      const html = service.render('alpha', [TokenLocation.parse('1.1@3x1')!]);
       expect(html).toEqual(
         '<div><p id="y1">' +
           'al<span id="f1.1@3_0" class="fr">p</span>ha' +
@@ -165,7 +165,7 @@ describe('TextLayerService', () => {
     [TextLayerService],
     (service: TextLayerService) => {
       const html = service.render('alpha beta gamma', [
-        TokenLocation.parse('1.1-1.2')
+        TokenLocation.parse('1.1-1.2')!,
       ]);
       expect(html).toEqual(
         '<div><p id="y1">' +
@@ -179,7 +179,7 @@ describe('TextLayerService', () => {
     [TextLayerService],
     (service: TextLayerService) => {
       const html = service.render('alpha beta gamma', [
-        TokenLocation.parse('1.1-1.3')
+        TokenLocation.parse('1.1-1.3')!,
       ]);
       expect(html).toEqual(
         '<div><p id="y1">' +
@@ -193,7 +193,7 @@ describe('TextLayerService', () => {
     [TextLayerService],
     (service: TextLayerService) => {
       const html = service.render('alpha beta gamma', [
-        TokenLocation.parse('1.1@3x3-1.2')
+        TokenLocation.parse('1.1@3x3-1.2')!,
       ]);
       expect(html).toEqual(
         '<div><p id="y1">' +
@@ -207,7 +207,7 @@ describe('TextLayerService', () => {
     [TextLayerService],
     (service: TextLayerService) => {
       const html = service.render('alpha beta gamma', [
-        TokenLocation.parse('1.1-1.2@1x2')
+        TokenLocation.parse('1.1-1.2@1x2')!,
       ]);
       expect(html).toEqual(
         '<div><p id="y1">' +
@@ -221,7 +221,7 @@ describe('TextLayerService', () => {
     [TextLayerService],
     (service: TextLayerService) => {
       const html = service.render('alpha beta gamma', [
-        TokenLocation.parse('1.1@3x3-1.2@1x2')
+        TokenLocation.parse('1.1@3x3-1.2@1x2')!,
       ]);
       expect(html).toEqual(
         '<div><p id="y1">' +
@@ -239,7 +239,7 @@ describe('TextLayerService', () => {
     [TextLayerService],
     (service: TextLayerService) => {
       const html = service.render('alpha beta gamma', [
-        TokenLocation.parse('1.1')
+        TokenLocation.parse('1.1')!,
       ]);
       const doc = document.createRange().createContextualFragment(html);
 
@@ -249,12 +249,12 @@ describe('TextLayerService', () => {
         startContainer: p.childNodes.item(0),
         startOffset: 0,
         endContainer: p.childNodes.item(2),
-        endOffset: 5
+        endOffset: 5,
       };
 
       const loc = service.getSelectedLocationForEdit(range);
 
-      expect(loc.toString()).toEqual('1.1');
+      expect(loc!.toString()).toEqual('1.1');
     }
   ));
 

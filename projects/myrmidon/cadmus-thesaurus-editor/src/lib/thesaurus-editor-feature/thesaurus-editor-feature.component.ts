@@ -16,13 +16,13 @@ import { Observable } from 'rxjs';
   styleUrls: ['./thesaurus-editor-feature.component.css'],
 })
 export class ThesaurusEditorFeatureComponent implements OnInit {
-  public id: string | undefined;
-  public user: User | undefined;
+  public id?: string;
+  public user?: User;
   public userLevel: number;
-  public loading$: Observable<boolean>;
-  public saving$: Observable<boolean>;
-  public error$: Observable<string>;
-  public thesaurus: Thesaurus | undefined;
+  public loading$: Observable<boolean | undefined>;
+  public saving$: Observable<boolean | undefined>;
+  public error$: Observable<string | undefined>;
+  public thesaurus?: Thesaurus;
 
   constructor(
     private _route: ActivatedRoute,
@@ -36,14 +36,17 @@ export class ThesaurusEditorFeatureComponent implements OnInit {
   ) {
     this.id = this._route.snapshot.params['id'];
     if (this.id === 'new') {
-      this.id = null;
+      this.id = undefined;
     }
     this.userLevel = 0;
+    this.loading$ = this._query.selectLoading();
+    this.saving$ = this._query.selectSaving();
+    this.error$ = this._query.selectError();
   }
 
   ngOnInit(): void {
-    this._authService.currentUser$.subscribe((user: User) => {
-      this.user = user;
+    this._authService.currentUser$.subscribe((user: User | null) => {
+      this.user = user ?? undefined;
       this.userLevel = this._authService.getCurrentUserLevel();
     });
 
@@ -51,9 +54,6 @@ export class ThesaurusEditorFeatureComponent implements OnInit {
     this._query.selectThesaurus().subscribe((thesaurus) => {
       this.thesaurus = thesaurus;
     });
-    this.loading$ = this._query.selectLoading();
-    this.saving$ = this._query.selectSaving();
-    this.error$ = this._query.selectError();
 
     this._editService.load(this.id);
   }
@@ -82,7 +82,7 @@ export class ThesaurusEditorFeatureComponent implements OnInit {
 
   private doSave(): void {
     // save and reload as edited if was new
-    this._editService.save(this.thesaurus).then((saved) => {
+    this._editService.save(this.thesaurus!).then((saved) => {
       this._snackbar.open('Thesaurus saved', 'OK', {
         duration: 1500,
       });
@@ -105,13 +105,13 @@ export class ThesaurusEditorFeatureComponent implements OnInit {
 
     // if the thesaurus is new, or its id has changed,
     // ensure that a thesaurus with that id does not already exist
-    if (!this.id || this.id !== this.thesaurus.id) {
+    if (!this.id || this.id !== this.thesaurus!.id) {
       this.thesService
-        .thesaurusExists(this.thesaurus.id)
+        .thesaurusExists(this.thesaurus!.id)
         .then((exists: boolean) => {
           if (exists) {
             this._snackbar.open(
-              `A thesaurus with ID ${this.thesaurus.id}\nalready exists!`,
+              `A thesaurus with ID ${this.thesaurus!.id}\nalready exists!`,
               'OK'
             );
           } else {

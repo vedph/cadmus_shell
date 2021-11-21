@@ -29,6 +29,7 @@ Note: should you have transient issues with the workspace, remove the `node_modu
 
 ## History
 
+- 2021-11-20: migrated Angular compiler to strict mode, with a lot of minute fixes in all the libraries except for Cadmus material. All the libraries affected have bumped their version to 0.3.0.
 - 2021-11-20: replaced some code in core and ui with code from `@myrmidon/ng-tools` and `@myrmidon/ng-mat-tools`. All the libraries affected have bumped their version to 0.2.0. When upgrading to these versions, ensure you also npm install the ng- libraries.
 
 ## Building Libraries

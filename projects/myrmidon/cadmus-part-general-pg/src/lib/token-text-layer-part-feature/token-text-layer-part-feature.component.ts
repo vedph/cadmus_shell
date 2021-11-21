@@ -34,20 +34,20 @@ export class TokenTextLayerPartFeatureComponent
   implements OnInit, ComponentCanDeactivate
 {
   public itemId: string;
-  public partId: string;
-  public roleId: string;
+  public partId?: string;
+  public roleId?: string;
 
-  public loading$: Observable<boolean>;
-  public error$: Observable<string>;
-  public baseText$: Observable<string>;
-  public locations$: Observable<TokenLocation[]>;
-  public refreshingBreakChance$: Observable<boolean>;
+  public loading$: Observable<boolean | undefined>;
+  public error$: Observable<string | undefined>;
+  public baseText$: Observable<string | undefined>;
+  public locations$: Observable<TokenLocation[] | undefined>;
+  public refreshingBreakChance$: Observable<boolean | undefined>;
   public breakChance$: Observable<number>;
   public layerHints$: Observable<LayerHint[]>;
-  public patchingLayer$: Observable<boolean>;
-  public deletingFragment$: Observable<boolean>;
+  public patchingLayer$: Observable<boolean | undefined>;
+  public deletingFragment$: Observable<boolean | undefined>;
 
-  public pickedLocation: string;
+  public pickedLocation?: string;
   public userLevel: number;
 
   public textSize: number;
@@ -68,13 +68,23 @@ export class TokenTextLayerPartFeatureComponent
     this.itemId = route.snapshot.params.iid;
     this.partId = route.snapshot.params.pid;
     if (this.partId === 'new') {
-      this.partId = null;
+      this.partId = undefined;
     }
     this.roleId = route.snapshot.queryParams.rid;
     if (this.roleId === 'default') {
-      this.roleId = null;
+      this.roleId = undefined;
     }
     this.userLevel = authService.getCurrentUserLevel();
+
+    this.loading$ = this._editQuery.selectLoading();
+    this.error$ = this._editQuery.selectError();
+    this.baseText$ = this._editQuery.select((state) => state.baseText);
+    this.locations$ = this._editQuery.select((state) => state.locations);
+    this.refreshingBreakChance$ = this._editQuery.selectRefreshingBreakChance();
+    this.breakChance$ = this._editQuery.selectBreakChance();
+    this.layerHints$ = this._editQuery.selectLayerHints();
+    this.patchingLayer$ = this._editQuery.selectPatchingLayers();
+    this.deletingFragment$ = this._editQuery.selectDeletingFragment();
   }
 
   public canDeactivate(): boolean {
@@ -104,16 +114,6 @@ export class TokenTextLayerPartFeatureComponent
   }
 
   ngOnInit(): void {
-    this.loading$ = this._editQuery.selectLoading();
-    this.error$ = this._editQuery.selectError();
-    this.baseText$ = this._editQuery.select((state) => state.baseText);
-    this.locations$ = this._editQuery.select((state) => state.locations);
-    this.refreshingBreakChance$ = this._editQuery.selectRefreshingBreakChance();
-    this.breakChance$ = this._editQuery.selectBreakChance();
-    this.layerHints$ = this._editQuery.selectLayerHints();
-    this.patchingLayer$ = this._editQuery.selectPatchingLayers();
-    this.deletingFragment$ = this._editQuery.selectDeletingFragment();
-
     // when the base text changes, load all the fragments locations
     // this.baseText$.subscribe(_ => {
     //   this.loadAllFragmentLocations();
@@ -123,13 +123,17 @@ export class TokenTextLayerPartFeatureComponent
     this.ensureItemLoaded(this.itemId);
 
     // load the layer part data
-    this._editService.load(this.itemId, this.partId);
+    if (this.partId) {
+      this._editService.load(this.itemId, this.partId);
+    }
   }
 
   public deleteFragment() {
-    const location = this._textLayerService.getSelectedLocationForEdit(
-      this._textLayerService.getSelectedRange()
-    );
+    const range = this._textLayerService.getSelectedRange();
+    if (!range) {
+      return;
+    }
+    const location = this._textLayerService.getSelectedLocationForEdit(range);
     if (!location) {
       return;
     }
@@ -139,9 +143,11 @@ export class TokenTextLayerPartFeatureComponent
       .subscribe((ok: boolean) => {
         if (ok) {
           // find the fragment and remove it from the part
-          const i = this._editQuery.getValue().part.fragments.findIndex((p) => {
-            return TokenLocation.parse(p.location).overlaps(location);
-          });
+          const i = this._editQuery
+            .getValue()!
+            .part!.fragments.findIndex((p) => {
+              return TokenLocation.parse(p.location)?.overlaps(location);
+            });
           if (i === -1) {
             return;
           }
@@ -152,7 +158,9 @@ export class TokenTextLayerPartFeatureComponent
 
   public deleteFragmentFromHint(hint: LayerHint): void {
     const loc = TokenLocation.parse(hint.location);
-    this._editService.deleteFragment(loc);
+    if (loc) {
+      this._editService.deleteFragment(loc);
+    }
   }
 
   public refreshBreakChance(): void {
@@ -161,9 +169,12 @@ export class TokenTextLayerPartFeatureComponent
 
   private navigateToFragmentEditor(loc: string): void {
     const part = this._editQuery.getValue().part;
+    if (!part) {
+      return;
+    }
 
     const { route, rid } = this._libraryRouteService.buildFragmentEditorRoute(
-      this._editItemQuery.getValue().facet.partDefinitions,
+      this._editItemQuery.getValue().facet!.partDefinitions,
       part.itemId,
       part.id,
       part.typeId,
@@ -185,9 +196,11 @@ export class TokenTextLayerPartFeatureComponent
   }
 
   public editFragment(): void {
-    const location = this._textLayerService.getSelectedLocationForEdit(
-      this._textLayerService.getSelectedRange()
-    );
+    const range = this._textLayerService.getSelectedRange();
+    if (!range) {
+      return;
+    }
+    const location = this._textLayerService.getSelectedLocationForEdit(range);
     if (location) {
       this.navigateToFragmentEditor(location.toString());
     }
@@ -198,9 +211,13 @@ export class TokenTextLayerPartFeatureComponent
   }
 
   public addFragment(): void {
+    const range = this._textLayerService.getSelectedRange();
+    if (!range) {
+      return;
+    }
     const location = this._textLayerService.getSelectedLocationForNew(
-      this._textLayerService.getSelectedRange(),
-      this._editQuery.getValue().baseText
+      range,
+      this._editQuery.getValue()?.baseText || ''
     );
     if (location) {
       this.navigateToFragmentEditor(location.toString());
@@ -208,7 +225,11 @@ export class TokenTextLayerPartFeatureComponent
   }
 
   public moveFragmentFromHint(hint: LayerHint): void {
-    if (!this.pickedLocation || this.pickedLocation === hint.location) {
+    if (
+      !this.pickedLocation ||
+      this.pickedLocation === hint.location ||
+      !this.partId
+    ) {
       return;
     }
     this._editService.applyLayerPatches(this.partId, [
@@ -217,13 +238,19 @@ export class TokenTextLayerPartFeatureComponent
   }
 
   public applyLayerPatches(patches: string[]): void {
-    this._editService.applyLayerPatches(this.partId, patches);
+    if (this.partId) {
+      this._editService.applyLayerPatches(this.partId, patches);
+    }
   }
 
   public pickLocation(): void {
+    const range = this._textLayerService.getSelectedRange();
+    if (!range) {
+      return;
+    }
     const location = this._textLayerService.getSelectedLocationForNew(
-      this._textLayerService.getSelectedRange(),
-      this._editQuery.getValue().baseText
+      range,
+      this._editQuery.getValue()?.baseText || ''
     );
     if (location) {
       this.pickedLocation = location.toString();

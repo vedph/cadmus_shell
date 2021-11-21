@@ -17,7 +17,7 @@ export interface EditPartStoreApi {
  * Base class for part editor services.
  */
 export abstract class EditPartServiceBase {
-  protected store: EditPartStoreApi;
+  protected store?: EditPartStoreApi;
 
   constructor(
     protected itemService: ItemService,
@@ -31,38 +31,38 @@ export abstract class EditPartServiceBase {
    * it will get a null ID, but use the specified itemId and roleId.
    *
    * @param partId The part ID, unless it's a new part.
-   * @param thesauriIds The thesauri IDs array, or null.
+   * @param thesauriIds The thesauri IDs array.
    * @param itemId The item ID for the new part.
    * @param typeId The part type ID for the new part.
    * @param roleId The role ID for the new part.
    */
   public load(
     partId?: string,
-    thesauriIds: string[] | null = null,
+    thesauriIds?: string[],
     itemId?: string,
     typeId?: string,
     roleId?: string
   ): void {
     // signal that we're loading
-    this.store.setLoading(true);
+    this.store!.setLoading(true);
 
     // if thesauri are required:
     if (thesauriIds) {
       // remove trailing ! from IDs if any
       const unscopedIds = thesauriIds.map((id) => {
-        return this.thesaurusService.getScopedId(id, null);
+        return this.thesaurusService.getScopedId(id);
       });
 
       // fetch part and thesauri
       forkJoin({
-        part: this.itemService.getPart(partId),
+        part: this.itemService.getPart(partId || ''),
         thesauri: this.thesaurusService.getThesauriSet(unscopedIds),
       }).subscribe((result) => {
         // loading has ended
-        this.store.setLoading(false);
+        this.store!.setLoading(false);
         // update the store with a new or existing part,
         // and its requested thesauri
-        this.store.update({
+        this.store!.update({
           part: result.part || {
             id: null,
             itemId,
@@ -76,23 +76,23 @@ export abstract class EditPartServiceBase {
           const scopedIds: string[] = thesauriIds.map((id) => {
             return this.thesaurusService.getScopedId(
               id,
-              result.part.thesaurusScope
+              result.part?.thesaurusScope
             );
           });
           // loading again
-          this.store.setLoading(true);
+          this.store!.setLoading(true);
           this.thesaurusService.getThesauriSet(scopedIds).subscribe(
             (thesauri) => {
               // completed, replace the thesauri
-              this.store.update({
+              this.store!.update({
                 thesauri,
                 loading: false,
               });
             },
             (error) => {
               console.error(error);
-              this.store.setLoading(false);
-              this.store.setError(
+              this.store!.setLoading(false);
+              this.store!.setError(
                 'Error loading thesauri ' + scopedIds.join(', ')
               );
             }
@@ -101,9 +101,9 @@ export abstract class EditPartServiceBase {
       });
     } else {
       // without thesauri to be fetched, just fetch the part
-      this.itemService.getPart(partId).subscribe(
+      this.itemService.getPart(partId || '').subscribe(
         (part) => {
-          this.store.update({
+          this.store!.update({
             part: part || {
               id: null,
               itemId,
@@ -116,8 +116,8 @@ export abstract class EditPartServiceBase {
         },
         (error) => {
           console.error(error);
-          this.store.setLoading(false);
-          this.store.setError('Error loading part ' + partId);
+          this.store!.setLoading(false);
+          this.store!.setError('Error loading part ' + partId);
         }
       );
     }
@@ -130,13 +130,13 @@ export abstract class EditPartServiceBase {
    * @returns Promise which when successful returns the saved part.
    */
   public save(part: Part): Promise<Part> {
-    this.store.setSaving(true);
-    this.store.setDirty(true);
+    this.store!.setSaving(true);
+    this.store!.setDirty(true);
 
     return new Promise((resolve, reject) => {
       this.itemService.addPart(part).subscribe(
         (saved: Part) => {
-          this.store.update({
+          this.store!.update({
             part: saved,
             saving: false,
             dirty: false,
@@ -146,8 +146,8 @@ export abstract class EditPartServiceBase {
         },
         (error) => {
           console.error(error);
-          this.store.setSaving(false);
-          this.store.setError('Error saving part');
+          this.store!.setSaving(false);
+          this.store!.setError('Error saving part');
           reject(error);
         }
       );
@@ -155,6 +155,6 @@ export abstract class EditPartServiceBase {
   }
 
   public setDirty(value = true): void {
-    this.store.setDirty(value);
+    this.store!.setDirty(value);
   }
 }

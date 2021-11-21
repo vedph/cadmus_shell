@@ -28,10 +28,10 @@ export class BibliographyPartComponent
   extends ModelEditorComponentBase<BibliographyPart>
   implements OnInit
 {
-  private _newEditedEntry: boolean;
+  private _newEditedEntry?: boolean;
 
-  public part: BibliographyPart;
-  public editedEntry: BibEntry;
+  public part?: BibliographyPart;
+  public editedEntry?: BibEntry;
   public currentTabIndex: number;
 
   public typeEntries: ThesaurusEntry[] | undefined;
@@ -47,6 +47,7 @@ export class BibliographyPartComponent
     private _dialogService: DialogService
   ) {
     super(authService);
+    this.currentTabIndex = 0;
     // form
     this.entryCount = formBuilder.control(0, Validators.min(1));
 
@@ -99,7 +100,7 @@ export class BibliographyPartComponent
 
   private updateForm(model: BibliographyPart): void {
     if (!model) {
-      this.form.reset();
+      this.form!.reset();
       return;
     }
     this.part = model;
@@ -107,7 +108,7 @@ export class BibliographyPartComponent
       this.part.entries = [];
     }
     this.entryCount.setValue(this.part.entries.length);
-    this.form.markAsPristine();
+    this.form!.markAsPristine();
   }
 
   protected onModelSet(model: BibliographyPart): void {
@@ -118,29 +119,29 @@ export class BibliographyPartComponent
     let part = this.model;
     if (!part) {
       part = {
-        itemId: this.itemId,
-        id: null,
+        itemId: this.itemId!,
+        id: '',
         typeId: BIBLIOGRAPHY_PART_TYPEID,
         roleId: this.roleId,
         timeCreated: new Date(),
-        creatorId: null,
+        creatorId: '',
         timeModified: new Date(),
-        userId: null,
+        userId: '',
         entries: [],
       };
     }
-    part.entries = this.part.entries;
+    part.entries = this.part?.entries || [];
     return part;
   }
 
   public addEntry(): void {
     const entry: BibEntry = {
-      typeId: this.typeEntries?.entries[0]?.id,
-      title: null,
-      language: this.langEntries?.entries[0]?.id,
+      typeId: this.typeEntries ? this.typeEntries[0].id : '',
+      title: '',
+      language: this.langEntries ? this.langEntries[0].id : '',
     };
-    this.part.entries.push(entry);
-    this.entryCount.setValue(this.part.entries.length);
+    this.part!.entries.push(entry);
+    this.entryCount.setValue(this.part!.entries.length);
     this._newEditedEntry = true;
     this.editEntry(entry);
   }
@@ -151,22 +152,28 @@ export class BibliographyPartComponent
   }
 
   public onEntrySave(entry: BibEntry): void {
+    if (!this.editedEntry) {
+      return;
+    }
     this._newEditedEntry = false;
-    const i = this.part.entries.indexOf(this.editedEntry);
-    this.part.entries.splice(i, 1, entry);
+    const i = this.part!.entries.indexOf(this.editedEntry);
+    this.part!.entries.splice(i, 1, entry);
     this.currentTabIndex = 0;
-    this.editedEntry = null;
-    this.form.markAsDirty();
+    this.editedEntry = undefined;
+    this.form!.markAsDirty();
   }
 
   public onEntryClose(entry: BibEntry): void {
+    if (!this.editedEntry) {
+      return;
+    }
     if (this._newEditedEntry) {
-      const index = this.part.entries.indexOf(this.editedEntry);
-      this.part.entries.splice(index, 1);
-      this.entryCount.setValue(this.part.entries.length);
+      const index = this.part!.entries.indexOf(this.editedEntry);
+      this.part!.entries.splice(index, 1);
+      this.entryCount.setValue(this.part!.entries.length);
     }
     this.currentTabIndex = 0;
-    this.editedEntry = null;
+    this.editedEntry = undefined;
   }
 
   public removeEntry(index: number): void {
@@ -176,9 +183,9 @@ export class BibliographyPartComponent
         if (!result) {
           return;
         }
-        this.part.entries.splice(index, 1);
-        this.entryCount.setValue(this.part.entries.length);
-        this.form.markAsDirty();
+        this.part!.entries.splice(index, 1);
+        this.entryCount.setValue(this.part!.entries.length);
+        this.form!.markAsDirty();
       });
   }
 
@@ -186,20 +193,20 @@ export class BibliographyPartComponent
     if (index < 1) {
       return;
     }
-    const entry = this.part.entries[index];
-    this.part.entries.splice(index, 1);
-    this.part.entries.splice(index - 1, 0, entry);
-    this.form.markAsDirty();
+    const entry = this.part!.entries[index];
+    this.part!.entries.splice(index, 1);
+    this.part!.entries.splice(index - 1, 0, entry);
+    this.form!.markAsDirty();
   }
 
   public moveEntryDown(index: number): void {
-    if (index + 1 >= this.part.entries.length) {
+    if (index + 1 >= this.part!.entries.length) {
       return;
     }
-    const item = this.part.entries[index];
-    this.part.entries.splice(index, 1);
-    this.part.entries.splice(index + 1, 0, item);
-    this.form.markAsDirty();
+    const item = this.part!.entries[index];
+    this.part!.entries.splice(index, 1);
+    this.part!.entries.splice(index + 1, 0, item);
+    this.form!.markAsDirty();
   }
 
   public getAuthors(authors: BibAuthor[]): string {
@@ -211,7 +218,7 @@ export class BibliographyPartComponent
       sb.push(authors[i].lastName);
       if (authors[i].firstName) {
         sb.push(', ');
-        sb.push(authors[i].firstName);
+        sb.push(authors[i].firstName!);
       }
       if (authors[i].roleId) {
         sb.push(` (${authors[i].roleId})`);

@@ -15,36 +15,36 @@ import { debounceTime } from 'rxjs/operators';
   styleUrls: ['./physical-dimension.component.css'],
 })
 export class PhysicalDimensionComponent implements OnInit {
-  private _disabled: boolean;
-  private _changeFrozen: boolean;
-  private _dimension: PhysicalDimension;
+  private _disabled?: boolean;
+  private _changeFrozen?: boolean;
+  private _dimension?: PhysicalDimension;
 
   @Input()
-  public parentForm: FormGroup;
+  public parentForm?: FormGroup;
 
   @Input()
-  public label: string;
+  public label?: string;
 
   @Input()
-  public unitEntries: ThesaurusEntry[];
+  public unitEntries?: ThesaurusEntry[];
 
   @Input()
-  public tagEntries: ThesaurusEntry[];
+  public tagEntries?: ThesaurusEntry[];
 
   @Input()
-  public get dimension(): PhysicalDimension {
+  public get dimension(): PhysicalDimension | undefined {
     return this._dimension;
   }
-  public set dimension(value: PhysicalDimension) {
+  public set dimension(value: PhysicalDimension | undefined) {
     this._dimension = value;
     this.updateForm(value);
   }
 
   @Input()
-  public get disabled(): boolean {
+  public get disabled(): boolean | undefined {
     return this._disabled;
   }
-  public set disabled(value: boolean) {
+  public set disabled(value: boolean | undefined) {
     this._disabled = value;
     if (value) {
       this.form.disable();
@@ -84,7 +84,7 @@ export class PhysicalDimensionComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.parentForm) {
-      this.parentForm.addControl(this.label, this.form);
+      this.parentForm.addControl(this.label || '', this.form);
     }
     this.updateForm(this.dimension);
 
@@ -97,7 +97,7 @@ export class PhysicalDimensionComponent implements OnInit {
     });
   }
 
-  private updateForm(model: PhysicalDimension): void {
+  private updateForm(model?: PhysicalDimension): void {
     this._changeFrozen = true;
     if (!model) {
       this.form.reset();

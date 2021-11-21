@@ -1,38 +1,38 @@
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export class PasswordValidator {
-  static isValidPassword(control: AbstractControl): { [key: string]: boolean } {
+  static isValidPassword(control: AbstractControl): ValidationErrors | null {
     if (!control.value) {
       return null;
     }
 
     if (control.value.length < 8) {
       return {
-        passwordTooShort: true
+        passwordTooShort: true,
       };
     }
 
     if (!/.*[A-Z].*/.test(control.value)) {
       return {
-        noUpperInPassword: true
+        noUpperInPassword: true,
       };
     }
 
     if (!/.*[a-z].*/.test(control.value)) {
       return {
-        noLowerInPassword: true
+        noLowerInPassword: true,
       };
     }
 
     if (!/.*[A-Z].*/.test(control.value)) {
       return {
-        noUpperInPassword: true
+        noUpperInPassword: true,
       };
     }
 
     if (!/.*[-`~!@#$%^&*()_+=\[\]{};:'",.<>/?|\\].*/.test(control.value)) {
       return {
-        noSymbolInPassword: true
+        noSymbolInPassword: true,
       };
     }
 

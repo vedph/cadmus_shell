@@ -5,7 +5,7 @@ import { ColorService } from '../../services/color.service';
 @Component({
   selector: 'cadmus-facet-badge',
   templateUrl: './facet-badge.component.html',
-  styleUrls: ['./facet-badge.component.css']
+  styleUrls: ['./facet-badge.component.css'],
 })
 export class FacetBadgeComponent {
   private _facetColors: { [key: string]: string };
@@ -15,7 +15,7 @@ export class FacetBadgeComponent {
 
   public color: string;
   public contrastColor: string;
-  public tip: string;
+  public tip?: string;
 
   /**
    * The facet ID.
@@ -47,6 +47,8 @@ export class FacetBadgeComponent {
   }
 
   constructor(private _colorService: ColorService) {
+    this._facetId = '';
+    this._facetDefinitions = [];
     this._facetColors = {};
     this._facetTips = {};
     this.color = 'transparent';
@@ -61,7 +63,7 @@ export class FacetBadgeComponent {
       return 'transparent';
     }
 
-    const facet = this._facetDefinitions.find(f => {
+    const facet = this._facetDefinitions.find((f) => {
       return f.id === facetId;
     });
     if (facet?.colorKey) {
@@ -72,7 +74,7 @@ export class FacetBadgeComponent {
     return this._facetColors[facetId];
   }
 
-  private getFacetTip(facetId: string): string {
+  private getFacetTip(facetId: string): string | null {
     if (this._facetTips[facetId]) {
       return this._facetTips[facetId];
     }
@@ -81,7 +83,7 @@ export class FacetBadgeComponent {
       return null;
     }
 
-    const facet = this.facetDefinitions.find(f => {
+    const facet = this.facetDefinitions.find((f) => {
       return f.id === facetId;
     });
     if (!facet) {
@@ -105,6 +107,6 @@ export class FacetBadgeComponent {
   private updateBadge() {
     this.color = this.getFacetColor(this._facetId);
     this.contrastColor = this._colorService.getContrastColor(this.color);
-    this.tip = this.getFacetTip(this._facetId);
+    this.tip = this.getFacetTip(this._facetId) ?? undefined;
   }
 }

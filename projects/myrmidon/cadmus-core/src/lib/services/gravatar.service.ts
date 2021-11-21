@@ -16,7 +16,7 @@ export class GravatarService {
    */
   public buildGravatarUrl(email: string, size = 80): string {
     if (!email) {
-      return null;
+      return '';
     }
     return gravatar.url(email, { s: size.toString() });
     // const hash = this._hash.getMd5(email.trim().toLowerCase());

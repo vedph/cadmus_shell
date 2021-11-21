@@ -45,8 +45,8 @@ export class WitnessesFragmentComponent
   extends ModelEditorComponentBase<WitnessesFragment>
   implements OnInit
 {
-  public currentWitnessOpen: boolean;
-  public currentWitnessId: string;
+  public currentWitnessOpen?: boolean;
+  public currentWitnessId?: string;
   public editorOptions = {
     theme: 'vs-light',
     language: 'markdown',
@@ -116,9 +116,9 @@ export class WitnessesFragmentComponent
     this.witnesses.setValue(witnesses);
   }
 
-  public openCurrentWitness(witness: Witness): void {
+  public openCurrentWitness(witness?: Witness): void {
     if (!witness) {
-      this.currentWitnessId = null;
+      this.currentWitnessId = undefined;
       this.witness.reset();
     } else {
       this.currentWitnessId = witness.id;
@@ -134,7 +134,7 @@ export class WitnessesFragmentComponent
 
   public closeCurrentWitness(): void {
     this.currentWitnessOpen = false;
-    this.currentWitnessId = null;
+    this.currentWitnessId = undefined;
     this.witness.disable();
   }
 
@@ -164,12 +164,12 @@ export class WitnessesFragmentComponent
 
   private updateForm(model: WitnessesFragment): void {
     if (!model) {
-      this.form.reset();
+      this.form!.reset();
       return;
     }
     this.witnesses.setValue(model.witnesses || []);
     this.witness.reset();
-    this.form.markAsPristine();
+    this.form!.markAsPristine();
   }
 
   protected onModelSet(model: WitnessesFragment): void {

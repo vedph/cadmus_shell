@@ -10,14 +10,14 @@ import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 })
 export class BibAuthorsEditorComponent implements OnInit {
   @Input()
-  public parentForm: FormGroup;
+  public parentForm?: FormGroup;
   @Input()
   public controlName: string;
   // bibliography-author-roles
   @Input()
   public roleEntries: ThesaurusEntry[] | undefined;
 
-  public authors: FormArray;
+  public authors?: FormArray;
 
   constructor(private _formBuilder: FormBuilder) {
     // defaults
@@ -46,38 +46,38 @@ export class BibAuthorsEditorComponent implements OnInit {
   }
 
   public addAuthor(item?: BibAuthor): void {
-    this.authors.push(this.getAuthorGroup(item));
+    this.authors!.push(this.getAuthorGroup(item));
   }
 
   public addAuthorBelow(index: number): void {
-    this.authors.insert(index + 1, this.getAuthorGroup());
+    this.authors!.insert(index + 1, this.getAuthorGroup());
   }
 
   public removeAuthor(index: number): void {
-    this.authors.removeAt(index);
+    this.authors!.removeAt(index);
   }
 
   public moveAuthorUp(index: number): void {
     if (index < 1) {
       return;
     }
-    const item = this.authors.controls[index];
-    this.authors.removeAt(index);
-    this.authors.insert(index - 1, item);
+    const item = this.authors!.controls[index];
+    this.authors!.removeAt(index);
+    this.authors!.insert(index - 1, item);
   }
 
   public moveAuthorDown(index: number): void {
-    if (index + 1 >= this.authors.length) {
+    if (index + 1 >= this.authors!.length) {
       return;
     }
-    const item = this.authors.controls[index];
-    this.authors.removeAt(index);
-    this.authors.insert(index + 1, item);
+    const item = this.authors!.controls[index];
+    this.authors!.removeAt(index);
+    this.authors!.insert(index + 1, item);
   }
 
   public clearAuthors(): void {
-    for (let i = this.authors.length - 1; i > -1; i--) {
-      this.authors.removeAt(i);
+    for (let i = this.authors!.length - 1; i > -1; i--) {
+      this.authors!.removeAt(i);
     }
   }
 }

@@ -9,11 +9,11 @@ import { EditItemQuery } from '@myrmidon/cadmus-state';
   styleUrls: ['./current-item-bar.component.css'],
 })
 export class CurrentItemBarComponent implements OnInit {
-  public item$: Observable<Item>;
+  public item$: Observable<Item | undefined>;
 
-  constructor(private _query: EditItemQuery) {}
-
-  ngOnInit(): void {
+  constructor(private _query: EditItemQuery) {
     this.item$ = this._query.select((state) => state.item);
   }
+
+  ngOnInit(): void {}
 }

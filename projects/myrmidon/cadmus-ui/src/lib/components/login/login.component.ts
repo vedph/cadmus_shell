@@ -3,7 +3,7 @@ import {
   FormControl,
   FormGroup,
   FormBuilder,
-  Validators
+  Validators,
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -16,7 +16,7 @@ export interface Credentials {
 @Component({
   selector: 'cadmus-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
   private _returnUrl: string;
@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
   }
 
   @Input()
-  public errorMessage: string | null;
+  public errorMessage?: string;
 
   @Output()
   public submitted: EventEmitter<Credentials>;
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
     this.password = formBuilder.control(null, Validators.required);
     this.form = formBuilder.group({
       name: this.name,
-      password: this.password
+      password: this.password,
     });
 
     // get return URL if any
@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
     this.submitted.emit({
       name: this.name.value,
       password: this.password.value,
-      returnUrl: this._returnUrl
+      returnUrl: this._returnUrl,
     });
   }
 }

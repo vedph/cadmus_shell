@@ -3,24 +3,22 @@ import { QueryEntity } from '@datorama/akita';
 import {
   HierarchyItemBrowserState,
   HierarchyItemBrowserStore,
-  TreeNode
+  TreeNode,
 } from './hierarchy-item-browser.store';
 import { Observable } from 'rxjs';
 import { Thesaurus } from '@myrmidon/cadmus-core';
 
 @Injectable({ providedIn: 'root' })
-export class HierarchyItemBrowserQuery extends QueryEntity<
-  HierarchyItemBrowserState
-> {
+export class HierarchyItemBrowserQuery extends QueryEntity<HierarchyItemBrowserState> {
   constructor(protected store: HierarchyItemBrowserStore) {
     super(store);
   }
 
   public selectNodes(): Observable<TreeNode[]> {
-    return this.select(state => state.nodes);
+    return this.select((state) => state.nodes);
   }
 
-  public selectTags(): Observable<Thesaurus> {
-    return this.select(state => state.tags);
+  public selectTags(): Observable<Thesaurus | undefined> {
+    return this.select((state) => state.tags);
   }
 }

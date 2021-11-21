@@ -12,7 +12,7 @@ export class TokenPoint {
    * @param text The text to parse, in the forms Y.X or Y.X@AxR or
    * Y.X@A, where R=1.
    */
-  public static parse(text: string): TokenPoint {
+  public static parse(text: string): TokenPoint | null {
     const r = new RegExp('^(\\d+)\\.(\\d+)(?:@(\\d+)(?:x(\\d+))?)?$', 'g');
     const m = r.exec(text);
     if (!m) {
@@ -44,7 +44,7 @@ export class TokenPoint {
   public toString(): string {
     let s = `${this.y}.${this.x}`;
 
-    if (this.at > 0 && this.run > 0) {
+    if (this.at && this.run) {
       s += `@${this.at}`;
       if (this.run !== 1) {
         s += `x${this.run}`;
@@ -62,9 +62,9 @@ export class TokenPoint {
     }
 
     if (this.at !== other.at) {
-      return this.at - other.at;
+      return this.at! - other.at!;
     }
-    return this.run - other.run;
+    return this.run! - other.run!;
   }
 
   public integralCompareTo(other: TokenPoint): number {

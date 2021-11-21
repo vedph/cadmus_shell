@@ -28,6 +28,7 @@ export class SortPipe implements PipeTransform {
       } else if (a[propName] > b[propName]) {
         return 1;
       }
+      return 0;
     });
   }
 }

@@ -30,12 +30,12 @@ import { DataPage, ErrorWrapper } from '@myrmidon/ng-tools';
 })
 export class ItemSearchComponent implements OnInit {
   public pagination$: Observable<PaginationResponse<ItemInfo>>;
-  public query$: Observable<string>;
+  public query$: Observable<string | undefined>;
   public flagDefinitions$: Observable<FlagDefinition[]>;
   public facetDefinitions$: Observable<FacetDefinition[]>;
   public pageSize: FormControl;
-  public user: User;
-  public userLevel: number;
+  public user?: User;
+  public userLevel?: number;
   public error?: string;
   public lastQueries: string[];
 
@@ -53,49 +53,9 @@ export class ItemSearchComponent implements OnInit {
   ) {
     this.pageSize = formBuilder.control(20);
     this.lastQueries = [];
-  }
-
-  private getRequest(
-    query: string,
-    pageNumber: number,
-    pageSize: number
-  ): () => Observable<PaginationResponse<ItemInfo>> {
-    return () =>
-      this._itemService.searchItems(query, pageNumber, pageSize).pipe(
-        // adapt server results to the paginator plugin
-        map((w: ErrorWrapper<DataPage<ItemInfo>>) => {
-          if (w.error) {
-            this.error = w.error;
-            return {
-              currentPage: 1,
-              perPage: pageSize,
-              lastPage: 0,
-              data: [],
-              total: 0,
-            };
-          }
-          this.error = null;
-          const p = w.value;
-          return {
-            currentPage: p.pageNumber,
-            perPage: p.pageSize,
-            lastPage: p.pageCount,
-            data: p.items,
-            total: p.total,
-          };
-        })
-      );
-  }
-
-  ngOnInit(): void {
-    this._authService.currentUser$.subscribe((user: User) => {
-      this.user = user;
-      this.userLevel = this._authService.getCurrentUserLevel();
-    });
 
     this.flagDefinitions$ = this._appQuery.selectFlags();
     this.facetDefinitions$ = this._appQuery.selectFacets();
-
     const initialPageSize = 20;
     this.query$ = this._itemsSearchQuery.selectQuery();
     this.pageSize.setValue(initialPageSize);
@@ -125,10 +85,49 @@ export class ItemSearchComponent implements OnInit {
       // for each emitted value, combine into a filter and use it
       // to request the page from server
       switchMap(([pageNumber, pageSize, query]) => {
-        const request = this.getRequest(query, pageNumber, pageSize);
+        const request = this.getRequest(query || '', pageNumber, pageSize);
         return this.paginator.getPage(request);
       })
     );
+  }
+
+  private getRequest(
+    query: string,
+    pageNumber: number,
+    pageSize: number
+  ): () => Observable<PaginationResponse<ItemInfo>> {
+    return () =>
+      this._itemService.searchItems(query, pageNumber, pageSize).pipe(
+        // adapt server results to the paginator plugin
+        map((w: ErrorWrapper<DataPage<ItemInfo>>) => {
+          if (w.error) {
+            this.error = w.error;
+            return {
+              currentPage: 1,
+              perPage: pageSize,
+              lastPage: 0,
+              data: [],
+              total: 0,
+            };
+          }
+          this.error = undefined;
+          const p = w.value!;
+          return {
+            currentPage: p.pageNumber,
+            perPage: p.pageSize,
+            lastPage: p.pageCount,
+            data: p.items,
+            total: p.total,
+          };
+        })
+      );
+  }
+
+  ngOnInit(): void {
+    this._authService.currentUser$.subscribe((user: User | null) => {
+      this.user = user ?? undefined;
+      this.userLevel = this._authService.getCurrentUserLevel();
+    });
   }
 
   public pageChanged(event: PageEvent): void {
@@ -154,7 +153,7 @@ export class ItemSearchComponent implements OnInit {
   }
 
   public deleteItem(item: ItemInfo): void {
-    if (this.user.roles.every((r) => r !== 'admin' && r !== 'editor')) {
+    if (this.user?.roles.every((r) => r !== 'admin' && r !== 'editor')) {
       return;
     }
 

@@ -5,9 +5,13 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { ThesaurusEntry } from '@myrmidon/cadmus-core';
-import { PhysicalDimension, PhysicalSize } from '@myrmidon/cadmus-core';
 import { debounceTime } from 'rxjs/operators';
+
+import {
+  ThesaurusEntry,
+  PhysicalDimension,
+  PhysicalSize,
+} from '@myrmidon/cadmus-core';
 
 @Component({
   selector: 'cadmus-physical-size',
@@ -18,23 +22,23 @@ export class PhysicalSizeComponent implements OnInit {
   private _size: PhysicalSize | undefined;
 
   @Input()
-  public parentForm: FormGroup;
+  public parentForm?: FormGroup;
 
   @Input()
-  public get size(): PhysicalSize {
+  public get size(): PhysicalSize | undefined {
     return this._size;
   }
-  public set size(value: PhysicalSize) {
+  public set size(value: PhysicalSize | undefined) {
     this._size = value;
     this.updateForm(value);
   }
 
   @Input()
-  public unitEntries: ThesaurusEntry[];
+  public unitEntries?: ThesaurusEntry[];
   @Input()
-  public tagEntries: ThesaurusEntry[];
+  public tagEntries?: ThesaurusEntry[];
   @Input()
-  public dimTagEntries: ThesaurusEntry[];
+  public dimTagEntries?: ThesaurusEntry[];
 
   @Output()
   public sizeChange: EventEmitter<PhysicalSize>;
@@ -52,7 +56,7 @@ export class PhysicalSizeComponent implements OnInit {
   public dTag: FormControl;
   public note: FormControl;
 
-  public label: string;
+  public label?: string;
 
   constructor(formBuilder: FormBuilder) {
     // events
@@ -102,7 +106,7 @@ export class PhysicalSizeComponent implements OnInit {
     this.form.valueChanges.pipe(debounceTime(400)).subscribe((_) => {
       const model = this.getModel();
 
-      if (this.validateModel(model) && this.tag.valid && this.note.valid) {
+      if (this.isModelValid(model) && this.tag.valid && this.note.valid) {
         this.updateLabel();
         this.sizeChange.emit(model);
       }
@@ -146,7 +150,7 @@ export class PhysicalSizeComponent implements OnInit {
     return s;
   }
 
-  private validateModel(model: PhysicalSize): boolean {
+  private isModelValid(model: PhysicalSize): boolean {
     if (!model) {
       return false;
     }
@@ -155,10 +159,12 @@ export class PhysicalSizeComponent implements OnInit {
       ((model.w?.value && !!model.w.unit) ||
         (model.h?.value && !!model.h.unit) ||
         (model.d?.value && !!model.d.unit)) &&
-      // no dim without unit
-      !(model.w?.value && !model.w.unit) &&
-      !(model.h?.value && !model.h.unit) &&
-      !(model.d?.value && !model.d.unit)
+        // no dim without unit
+        !(model.w?.value && !model.w.unit) &&
+        !(model.h?.value && !model.h.unit) &&
+        !(model.d?.value && !model.d.unit)
+        ? true
+        : false
     );
   }
 
@@ -166,7 +172,7 @@ export class PhysicalSizeComponent implements OnInit {
     const sb: string[] = [];
 
     // determine the unique unit if any
-    let uniqueUnit: string = null;
+    let uniqueUnit: string | undefined = undefined;
     if (this.wValue.value) {
       uniqueUnit = this.wUnit.value;
     }
@@ -175,7 +181,7 @@ export class PhysicalSizeComponent implements OnInit {
       if (!uniqueUnit) {
         uniqueUnit = this.hUnit.value;
       } else if (uniqueUnit !== this.hUnit.value) {
-        uniqueUnit = null;
+        uniqueUnit = undefined;
       }
     }
 
@@ -183,7 +189,7 @@ export class PhysicalSizeComponent implements OnInit {
       if (!uniqueUnit) {
         uniqueUnit = this.dUnit.value;
       } else if (uniqueUnit !== this.dUnit.value) {
-        uniqueUnit = null;
+        uniqueUnit = undefined;
       }
     }
 
@@ -215,10 +221,10 @@ export class PhysicalSizeComponent implements OnInit {
     this.label = sb.join(' × ') + (uniqueUnit ? ' ' + uniqueUnit : '');
   }
 
-  private updateForm(model: PhysicalSize): void {
+  private updateForm(model?: PhysicalSize): void {
     if (!model) {
       this.form.reset();
-      this.label = null;
+      this.label = undefined;
     } else {
       this.tag.setValue(model.tag);
       this.note.setValue(model.note);
@@ -276,13 +282,13 @@ export class PhysicalSizeComponent implements OnInit {
       note: this.note.value?.trim(),
       w: this.wValue.value
         ? this.getDimension(this.wValue, this.wUnit, this.wTag)
-        : null,
+        : undefined,
       h: this.hValue.value
         ? this.getDimension(this.hValue, this.hUnit, this.hTag)
-        : null,
+        : undefined,
       d: this.dValue.value
         ? this.getDimension(this.dValue, this.dUnit, this.dTag)
-        : null,
+        : undefined,
     };
   }
 }

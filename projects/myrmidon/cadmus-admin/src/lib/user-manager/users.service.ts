@@ -10,7 +10,7 @@ export class UsersService {
     private _accountService: AccountService
   ) {}
 
-  public setActive(name: string): void {
+  public setActive(name: string | null): void {
     this._store.setActive(name);
   }
 

@@ -6,11 +6,11 @@ import {
   ActiveState,
 } from '@datorama/akita';
 
-import { User } from '@myrmidon/cadmus-core';
+import { UserInfo } from '@myrmidon/cadmus-core';
 
 // https://netbasal.gitbook.io/akita/entity-store/entity-store/active-state
 export interface UsersState
-  extends EntityState<User, string>,
+  extends EntityState<UserInfo, string>,
     ActiveState<string> {
   active: string | null;
 }

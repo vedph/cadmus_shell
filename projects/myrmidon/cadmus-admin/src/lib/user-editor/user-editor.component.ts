@@ -15,7 +15,7 @@ import { AuthService } from '@myrmidon/cadmus-api';
   styleUrls: ['./user-editor.component.css'],
 })
 export class UserEditorComponent implements OnInit {
-  private _user: User;
+  private _user?: User;
 
   public email: FormControl;
   public emailConfirmed: FormControl;
@@ -25,16 +25,16 @@ export class UserEditorComponent implements OnInit {
   public roles: FormControl;
   public form: FormGroup;
 
-  public unlocked: boolean;
+  public unlocked?: boolean;
 
-  @Input() public set user(value: User) {
+  @Input() public set user(value: User | undefined) {
     if (this._user === value) {
       return;
     }
     this._user = value;
     this.updateForm(value);
   }
-  public get user(): User {
+  public get user(): User | undefined {
     return this._user;
   }
 
@@ -78,7 +78,7 @@ export class UserEditorComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  private updateForm(user: User): void {
+  private updateForm(user?: User): void {
     if (!user) {
       this.form.reset();
     } else {
@@ -97,7 +97,7 @@ export class UserEditorComponent implements OnInit {
 
   private getUserFromForm(): User {
     return {
-      userName: this._user.userName,
+      userName: this._user?.userName || '',
       email: this.email.value,
       emailConfirmed: this.emailConfirmed.value,
       lockoutEnabled: this.lockoutEnabled.value,
@@ -111,7 +111,7 @@ export class UserEditorComponent implements OnInit {
     if (this.unlocked) {
       return;
     }
-    this._user.lockoutEnd = this._authService.getUTCDate();
+    this._user!.lockoutEnd = this._authService.getUTCDate();
     this.unlocked = true;
   }
 

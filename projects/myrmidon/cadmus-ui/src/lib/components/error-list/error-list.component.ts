@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ErrorListComponent implements OnInit {
   @Input()
-  public errors: string[];
+  public errors?: string[];
 
   constructor() { }
 

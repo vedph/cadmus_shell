@@ -32,7 +32,7 @@ export class KeywordsPartComponent
   public newValue: FormControl;
   public newForm: FormGroup;
   // thesaurus
-  public langEntries: ThesaurusEntry[];
+  public langEntries?: ThesaurusEntry[];
 
   constructor(authService: AuthService, formBuilder: FormBuilder) {
     super(authService);
@@ -62,7 +62,7 @@ export class KeywordsPartComponent
     if (this.thesauri && this.thesauri[key]) {
       this.langEntries = this.thesauri[key].entries;
     } else {
-      this.langEntries = null;
+      this.langEntries = undefined;
     }
   }
 
@@ -86,14 +86,14 @@ export class KeywordsPartComponent
 
   private updateForm(model: KeywordsPart): void {
     if (!model) {
-      this.form.reset();
+      this.form!.reset();
       return;
     }
 
     const ck = Object.assign([], model.keywords);
     ck.sort(this.compareKeywords);
     this.keywords.setValue(ck);
-    this.form.markAsPristine();
+    this.form!.markAsPristine();
   }
 
   protected onModelSet(model: KeywordsPart): void {
@@ -104,14 +104,14 @@ export class KeywordsPartComponent
     let part = this.model;
     if (!part) {
       part = {
-        itemId: this.itemId,
-        id: null,
+        itemId: this.itemId || '',
+        id: '',
         typeId: KEYWORDS_PART_TYPEID,
         roleId: this.roleId,
         timeCreated: new Date(),
-        creatorId: null,
+        creatorId: '',
         timeModified: new Date(),
-        userId: null,
+        userId: '',
         keywords: [],
       };
     }

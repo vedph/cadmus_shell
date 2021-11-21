@@ -7,7 +7,6 @@ import { WitnessesFragmentComponent } from './witnesses-fragment.component';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { CadmusUiModule } from '@myrmidon/cadmus-ui';
 import { MarkdownModule } from 'ngx-markdown';
-import { JsonSchemaService } from '@myrmidon/cadmus-core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('WitnessesFragmentComponent', () => {
@@ -25,12 +24,6 @@ describe('WitnessesFragmentComponent', () => {
         MarkdownModule.forRoot(),
         CadmusMaterialModule,
         CadmusUiModule,
-      ],
-      providers: [
-        {
-          provide: JsonSchemaService,
-          useValue: {},
-        },
       ],
       declarations: [WitnessesFragmentComponent],
     }).compileComponents();

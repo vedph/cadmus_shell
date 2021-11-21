@@ -40,7 +40,7 @@ interface PartDefViewModel {
   styleUrls: ['./item-query.component.css'],
 })
 export class ItemQueryComponent implements OnInit, AfterViewInit {
-  private _lastQueries: string[];
+  private _lastQueries?: string[];
 
   public form: FormGroup;
   public query: FormControl;
@@ -57,13 +57,13 @@ export class ItemQueryComponent implements OnInit, AfterViewInit {
   public querySubmit: EventEmitter<string>;
 
   @Input()
-  public lastQueries: string[];
+  public lastQueries?: string[];
 
-  @Input() public disabled: boolean;
+  @Input() public disabled?: boolean;
 
-  public partDefs: PartDefViewModel[];
-  public pinDefs: DataPinDefinition[];
-  public loadingPinDefs: boolean;
+  public partDefs?: PartDefViewModel[];
+  public pinDefs?: DataPinDefinition[];
+  public loadingPinDefs?: boolean;
 
   constructor(
     formBuilder: FormBuilder,
@@ -90,7 +90,7 @@ export class ItemQueryComponent implements OnInit, AfterViewInit {
 
   private updatePartDefs(facets: FacetDefinition[]): void {
     // reset any pin definitions
-    this.pinDefs = null;
+    this.pinDefs = undefined;
 
     // collect definitions VMs
     const partDefs: PartDefViewModel[] = [];
@@ -154,7 +154,7 @@ export class ItemQueryComponent implements OnInit, AfterViewInit {
   private focusQuery(): void {
     if (this.queryElement) {
       setTimeout(() => {
-        this.queryElement.nativeElement.focus();
+        this.queryElement?.nativeElement.focus();
       }, 500);
     }
   }

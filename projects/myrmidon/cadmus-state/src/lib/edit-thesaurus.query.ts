@@ -10,15 +10,15 @@ export class EditThesaurusQuery extends Query<EditThesaurusState> {
     super(store);
   }
 
-  public selectThesaurus(): Observable<Thesaurus> {
+  public selectThesaurus(): Observable<Thesaurus | undefined> {
     return this.select(state => state.thesaurus);
   }
 
-  public selectLoading(): Observable<boolean> {
-    return this.select(state => state.loading);
-  }
+  // public selectLoading(): Observable<boolean | undefined> {
+  //   return this.select(state => state.loading);
+  // }
 
-  public selectSaving(): Observable<boolean> {
+  public selectSaving(): Observable<boolean | undefined> {
     return this.select(state => state.saving);
   }
 }

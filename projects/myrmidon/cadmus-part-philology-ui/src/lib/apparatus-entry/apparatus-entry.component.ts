@@ -26,13 +26,13 @@ import {
   styleUrls: ['./apparatus-entry.component.css'],
 })
 export class ApparatusEntryComponent implements OnInit {
-  private _entry: ApparatusEntry;
+  private _entry?: ApparatusEntry;
 
   @Input()
-  public get entry(): ApparatusEntry {
+  public get entry(): ApparatusEntry | undefined {
     return this._entry;
   }
-  public set entry(value: ApparatusEntry) {
+  public set entry(value: ApparatusEntry | undefined) {
     if (this._entry === value) {
       return;
     }
@@ -44,29 +44,29 @@ export class ApparatusEntryComponent implements OnInit {
    * Tags for apparatus entries.
    */
   @Input()
-  public tagEntries: ThesaurusEntry[] | null;
+  public tagEntries?: ThesaurusEntry[];
   /**
    * Witnesses.
    */
   @Input()
-  public witEntries: ThesaurusEntry[] | null;
+  public witEntries?: ThesaurusEntry[];
   /**
    * Authors.
    */
   @Input()
-  public authEntries: ThesaurusEntry[] | null;
+  public authEntries?: ThesaurusEntry[];
   /**
    * Author's tags.
    */
   @Input()
-  public authTagEntries: ThesaurusEntry[] | null;
+  public authTagEntries?: ThesaurusEntry[];
   /**
    * Author/work tags. This can be alternative or additional
    * to authEntries, and allows picking the work from a tree
    * of authors and works.
    */
   @Input()
-  public workEntries: ThesaurusEntry[] | undefined;
+  public workEntries?: ThesaurusEntry[];
 
   @Output()
   public editorClose: EventEmitter<any>;
@@ -154,6 +154,9 @@ export class ApparatusEntryComponent implements OnInit {
   }
 
   private updateEntry(): void {
+    if (!this._entry) {
+      return;
+    }
     this._entry.type = this.type.value;
     this._entry.value = this.value.value?.trim();
     this._entry.normValue = this.normValue.value?.trim();

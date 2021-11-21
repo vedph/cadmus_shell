@@ -60,7 +60,7 @@ export class ThesaurusLookupComponent implements OnInit {
    * The lookup function used to lookup thesauri.
    */
   @Input()
-  public lookupFn: (filter?: ThesaurusFilter) => Observable<string[]>;
+  public lookupFn?: (filter?: ThesaurusFilter) => Observable<string[]>;
 
   @Output()
   public entryChange: EventEmitter<string | null>;

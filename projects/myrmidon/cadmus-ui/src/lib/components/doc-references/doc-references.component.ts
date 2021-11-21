@@ -35,19 +35,19 @@ import { debounceTime } from 'rxjs/operators';
   styleUrls: ['./doc-references.component.css'],
 })
 export class DocReferencesComponent implements AfterViewInit, OnDestroy {
-  private _references: DocReference[];
-  private _updatingForm: boolean;
-  private _authorSubscription: Subscription;
+  private _references?: DocReference[];
+  private _updatingForm?: boolean;
+  private _authorSubscription?: Subscription;
   private _refSubs: Subscription[];
 
-  @ViewChildren('author') authorQueryList: QueryList<any>;
+  @ViewChildren('author') authorQueryList?: QueryList<any>;
 
   /**
    * The references.
    */
   @Input()
   public get references(): DocReference[] {
-    return this._references;
+    return this._references || [];
   }
   public set references(value: DocReference[]) {
     this._references = value || [];
@@ -78,7 +78,7 @@ export class DocReferencesComponent implements AfterViewInit, OnDestroy {
 
   public ngAfterViewInit(): void {
     // focus on newly added author
-    this._authorSubscription = this.authorQueryList.changes
+    this._authorSubscription = this.authorQueryList?.changes
       .pipe(debounceTime(300))
       .subscribe((lst: QueryList<any>) => {
         if (!this._updatingForm && lst.length > 0) {
@@ -95,7 +95,7 @@ export class DocReferencesComponent implements AfterViewInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.unsubscribeIds();
-    this._authorSubscription.unsubscribe();
+    this._authorSubscription?.unsubscribe();
   }
 
   // #region Authors

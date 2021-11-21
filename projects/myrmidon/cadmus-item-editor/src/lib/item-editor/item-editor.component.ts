@@ -44,22 +44,22 @@ import { PartScopeSetRequest } from '../parts-scope-editor/parts-scope-editor.co
 export class ItemEditorComponent implements OnInit, ComponentCanDeactivate {
   public flagDefinitions: FlagDefinition[];
 
-  public id: string;
-  public item$: Observable<Item>;
-  public parts$: Observable<Part[]>;
-  public partGroups$: Observable<PartGroup[]>;
-  public layerPartInfos$: Observable<LayerPartInfo[]>;
-  public user: User;
+  public id?: string;
+  public item$: Observable<Item | undefined>;
+  public parts$: Observable<Part[] | undefined>;
+  public partGroups$: Observable<PartGroup[] | undefined>;
+  public layerPartInfos$: Observable<LayerPartInfo[] | undefined>;
+  public user?: User;
   public userLevel: number;
   // lookup data
-  public facet$: Observable<FacetDefinition>;
+  public facet$: Observable<FacetDefinition | undefined>;
   public newPartDefinitions: PartDefinition[];
-  public facets$: Observable<FacetDefinition[]>;
-  public loading$: Observable<boolean>;
-  public saving$: Observable<boolean>;
-  public deletingPart$: Observable<boolean>;
-  public error$: Observable<string>;
-  public typeThesaurus$: Observable<Thesaurus>;
+  public facets$: Observable<FacetDefinition[] | undefined>;
+  public loading$: Observable<boolean | undefined>;
+  public saving$: Observable<boolean | undefined>;
+  public deletingPart$: Observable<boolean | undefined>;
+  public error$: Observable<string | undefined>;
+  public typeThesaurus$: Observable<Thesaurus | undefined>;
 
   // new part form
   public newPartType: FormControl;
@@ -87,8 +87,10 @@ export class ItemEditorComponent implements OnInit, ComponentCanDeactivate {
     private _formBuilder: FormBuilder
   ) {
     this.id = this._route.snapshot.params.id;
+    this.flagDefinitions = [];
+    this.newPartDefinitions = [];
     if (this.id === 'new') {
-      this.id = null;
+      this.id = undefined;
     }
     // new part form
     this.newPartType = _formBuilder.control(null, Validators.required);
@@ -123,13 +125,6 @@ export class ItemEditorComponent implements OnInit, ComponentCanDeactivate {
       flagChecks: this.flagChecks,
     });
     this.userLevel = 0;
-  }
-
-  ngOnInit(): void {
-    this._authService.currentUser$.subscribe((user: User) => {
-      this.user = user;
-      this.userLevel = this._authService.getCurrentUserLevel();
-    });
 
     this.item$ = this._query.selectItem();
     this.parts$ = this._query.selectParts();
@@ -137,16 +132,24 @@ export class ItemEditorComponent implements OnInit, ComponentCanDeactivate {
     this.layerPartInfos$ = this._query.select((state) => state.layerPartInfos);
     this.facet$ = this._query.selectFacet();
     this.facets$ = this._appQuery.selectFacets();
-    // rebuild the flags controls array when flags definitions change
-    this._appQuery.selectFlags().subscribe((defs) => {
-      this.flagDefinitions = defs;
-      this.buildFlagsControls();
-    });
     this.typeThesaurus$ = this._appQuery.selectTypeThesaurus();
     this.loading$ = this._query.selectLoading();
     this.saving$ = this._query.selectSaving();
     this.deletingPart$ = this._query.selectDeletingPart();
     this.error$ = this._query.selectError();
+  }
+
+  ngOnInit(): void {
+    this._authService.currentUser$.subscribe((user: User | null) => {
+      this.user = user || undefined;
+      this.userLevel = this._authService.getCurrentUserLevel();
+    });
+
+    // rebuild the flags controls array when flags definitions change
+    this._appQuery.selectFlags().subscribe((defs) => {
+      this.flagDefinitions = defs;
+      this.buildFlagsControls();
+    });
 
     // when flags controls values change, update the flags value
     this.flagChecks.valueChanges.subscribe((_) => {
@@ -169,7 +172,7 @@ export class ItemEditorComponent implements OnInit, ComponentCanDeactivate {
 
   private getExistingPartTypeAndRoleIds(): {
     typeId: string;
-    roleId: string;
+    roleId?: string;
   }[] {
     const groups = this._query.getValue().partGroups;
     if (!groups) {
@@ -268,7 +271,7 @@ export class ItemEditorComponent implements OnInit, ComponentCanDeactivate {
     return flagsValue;
   }
 
-  private updateMetadataForm(item: Item): void {
+  private updateMetadataForm(item?: Item): void {
     if (!item) {
       this.metadata.reset();
       this.updateFlagControls();
@@ -295,7 +298,7 @@ export class ItemEditorComponent implements OnInit, ComponentCanDeactivate {
     if (i > -1) {
       typeId = typeId.substr(0, i);
     }
-    const entry = state.typeThesaurus.entries.find((e) => e.id === typeId);
+    const entry = state.typeThesaurus.entries?.find((e) => e.id === typeId);
     return entry ? entry.value : typeId;
   }
 
@@ -314,8 +317,10 @@ export class ItemEditorComponent implements OnInit, ComponentCanDeactivate {
     if (!this.metadata.valid) {
       return;
     }
-
     const item = { ...this._query.getValue().item };
+    if (!item) {
+      return;
+    }
     item.title = this.tryTrim(this.title.value);
     item.sortKey = this.sortKey.value;
     item.description = this.tryTrim(this.description.value);
@@ -323,7 +328,7 @@ export class ItemEditorComponent implements OnInit, ComponentCanDeactivate {
     item.groupId = this.tryTrim(this.group.value);
     item.flags = this.flags.value;
     // save and reload as edited if was new
-    this._editItemService.save(item).then((saved) => {
+    this._editItemService.save(item as Item).then((saved) => {
       this.metadata.markAsPristine();
       if (!item.id) {
         this.id = saved.id;
@@ -334,6 +339,9 @@ export class ItemEditorComponent implements OnInit, ComponentCanDeactivate {
 
   private partExists(typeId: string, roleId?: string): boolean {
     const groups = this._query.getValue().partGroups;
+    if (!groups) {
+      return false;
+    }
     return groups.some((g) => {
       return g.parts.some(
         (p) =>

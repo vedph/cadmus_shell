@@ -17,7 +17,12 @@ import {
   DataPinDefinition,
 } from '@myrmidon/cadmus-core';
 
-import { DataPage, EnvService, ErrorService, ErrorWrapper } from '@myrmidon/ng-tools';
+import {
+  DataPage,
+  EnvService,
+  ErrorService,
+  ErrorWrapper,
+} from '@myrmidon/ng-tools';
 
 export interface RolePartId {
   roleId: string;
@@ -75,7 +80,7 @@ export class ItemService {
 
     return this._http
       .get<DataPage<ItemInfo>>(
-        this._env.get('apiUrl') + this._env.get('databaseId') + '/items',
+        this._env.get('apiUrl')! + this._env.get('databaseId') + '/items',
         {
           params: httpParams,
         }
@@ -101,7 +106,7 @@ export class ItemService {
 
     return this._http
       .post<ErrorWrapper<DataPage<ItemInfo>>>(
-        this._env.get('apiUrl') + this._env.get('databaseId') + '/search',
+        this._env.get('apiUrl')! + this._env.get('databaseId') + '/search',
         {
           query,
           pageNumber,
@@ -132,7 +137,7 @@ export class ItemService {
 
     return this._http
       .post<ErrorWrapper<DataPage<DataPinInfo>>>(
-        this._env.get('apiUrl') + this._env.get('databaseId') + '/pin-search',
+        this._env.get('apiUrl')! + this._env.get('databaseId') + '/pin-search',
         {
           query,
           pageNumber,
@@ -153,7 +158,7 @@ export class ItemService {
    */
   public getItem(id: string, parts: boolean): Observable<Item> {
     let url =
-      this._env.get('apiUrl') + this._env.get('databaseId') + `/item/${id}`;
+      this._env.get('apiUrl')! + this._env.get('databaseId') + `/item/${id}`;
     if (parts) {
       url += '?parts=true';
     }
@@ -167,7 +172,7 @@ export class ItemService {
    */
   public deleteItem(id: string): Observable<any> {
     const url =
-      this._env.get('apiUrl') + this._env.get('databaseId') + `/item/${id}`;
+      this._env.get('apiUrl')! + this._env.get('databaseId') + `/item/${id}`;
     return this._http.delete(url).pipe(catchError(this._error.handleError));
   }
 
@@ -178,7 +183,7 @@ export class ItemService {
    */
   public addItem(item: Item): Observable<Item> {
     const url =
-      this._env.get('apiUrl') + this._env.get('databaseId') + '/items';
+      this._env.get('apiUrl')! + this._env.get('databaseId') + '/items';
     return this._http
       .post<Item>(url, item)
       .pipe(catchError(this._error.handleError));
@@ -190,12 +195,12 @@ export class ItemService {
    * @returns Observable with result. If the part ID is null,
    * a null part will be returned.
    */
-  public getPart(id: string): Observable<Part> {
+  public getPart(id: string): Observable<Part | null> {
     if (!id) {
       return of(null);
     }
     const url =
-      this._env.get('apiUrl') + this._env.get('databaseId') + `/part/${id}`;
+      this._env.get('apiUrl')! + this._env.get('databaseId') + `/part/${id}`;
     return this._http
       .get<Part>(url)
       .pipe(retry(3), catchError(this._error.handleError));
@@ -221,7 +226,7 @@ export class ItemService {
       role = 'default';
     }
     const url =
-      this._env.get('apiUrl') +
+      this._env.get('apiUrl')! +
       this._env.get('databaseId') +
       `/item/${itemId}/part/${type}/${role}`;
     return this._http
@@ -238,7 +243,7 @@ export class ItemService {
     itemId: string
   ): Observable<{ part: Part; text: string }> {
     const url =
-      this._env.get('apiUrl') +
+      this._env.get('apiUrl')! +
       this._env.get('databaseId') +
       `/item/${itemId}/base-text`;
     return this._http
@@ -273,7 +278,7 @@ export class ItemService {
     absent: boolean
   ): Observable<LayerPartInfo[]> {
     let url =
-      this._env.get('apiUrl') +
+      this._env.get('apiUrl')! +
       this._env.get('databaseId') +
       `/item/${itemId}/layers`;
     if (absent) {
@@ -291,7 +296,7 @@ export class ItemService {
    */
   public getPartPins(id: string): Observable<RolePartId[]> {
     const url =
-      this._env.get('apiUrl') +
+      this._env.get('apiUrl')! +
       this._env.get('databaseId') +
       `/part/${id}/pins`;
     return this._http
@@ -310,7 +315,7 @@ export class ItemService {
     typeId: string
   ): Observable<DataPinDefinition[]> {
     const url =
-      this._env.get('apiUrl') +
+      this._env.get('apiUrl')! +
       this._env.get('databaseId') +
       `/pin-defs/${typeId}`;
     return this._http
@@ -328,7 +333,7 @@ export class ItemService {
    */
   public getLayerPartBreakChance(id: string): Observable<{ chance: number }> {
     const url =
-      this._env.get('apiUrl') +
+      this._env.get('apiUrl')! +
       this._env.get('databaseId') +
       `/part/${id}/break-chance`;
     return this._http
@@ -343,7 +348,7 @@ export class ItemService {
    */
   public getLayerPartHints(id: string): Observable<LayerHint[]> {
     const url =
-      this._env.get('apiUrl') +
+      this._env.get('apiUrl')! +
       this._env.get('databaseId') +
       `/part/${id}/layer-hints`;
     return this._http
@@ -359,7 +364,7 @@ export class ItemService {
    */
   public applyLayerPatches(id: string, patches: string[]): Observable<Part> {
     const url =
-      this._env.get('apiUrl') +
+      this._env.get('apiUrl')! +
       this._env.get('databaseId') +
       `/part/${id}/layer-patches`;
     return this._http
@@ -374,7 +379,7 @@ export class ItemService {
    */
   public deletePart(id: string): Observable<any> {
     const url =
-      this._env.get('apiUrl') + this._env.get('databaseId') + `/part/${id}`;
+      this._env.get('apiUrl')! + this._env.get('databaseId') + `/part/${id}`;
     return this._http.delete(url).pipe(catchError(this._error.handleError));
   }
 
@@ -385,7 +390,7 @@ export class ItemService {
    */
   public addPart(part: Part): Observable<Part> {
     const url =
-      this._env.get('apiUrl') + this._env.get('databaseId') + '/parts';
+      this._env.get('apiUrl')! + this._env.get('databaseId') + '/parts';
     return this._http
       .post<Part>(url, { raw: JSON.stringify(part) })
       .pipe(catchError(this._error.handleError));
@@ -399,7 +404,7 @@ export class ItemService {
    */
   public setItemFlags(ids: string[], flags: number): Observable<any> {
     const url =
-      this._env.get('apiUrl') + this._env.get('databaseId') + '/items/flags';
+      this._env.get('apiUrl')! + this._env.get('databaseId') + '/items/flags';
     return this._http
       .post<any>(url, { ids, flags })
       .pipe(catchError(this._error.handleError));
@@ -413,7 +418,7 @@ export class ItemService {
    */
   public setItemGroupId(ids: string[], groupId: string): Observable<any> {
     const url =
-      this._env.get('apiUrl') + this._env.get('databaseId') + '/items/groupid';
+      this._env.get('apiUrl')! + this._env.get('databaseId') + '/items/groupid';
     return this._http
       .post<any>(url, { ids, groupId })
       .pipe(catchError(this._error.handleError));
@@ -427,7 +432,7 @@ export class ItemService {
    */
   public setPartThesaurusScope(ids: string[], scope: string): Observable<any> {
     const url =
-      this._env.get('apiUrl') +
+      this._env.get('apiUrl')! +
       this._env.get('databaseId') +
       '/parts/thesscope';
     return this._http

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+
 import { CadmusCoreModule } from '@myrmidon/cadmus-core';
 import { EnvServiceProvider, NgToolsModule } from '@myrmidon/ng-tools';
 
@@ -10,10 +11,8 @@ import { EnvServiceProvider, NgToolsModule } from '@myrmidon/ng-tools';
     HttpClientModule,
     // cadmus
     CadmusCoreModule,
-    NgToolsModule
+    NgToolsModule,
   ],
-  providers: [
-    EnvServiceProvider
-  ]
+  providers: [EnvServiceProvider],
 })
 export class CadmusApiModule {}

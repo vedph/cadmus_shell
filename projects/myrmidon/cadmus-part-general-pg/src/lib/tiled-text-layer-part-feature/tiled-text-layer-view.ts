@@ -92,8 +92,8 @@ export class TiledTextLayerView {
         const tile = row.tiles[j];
 
         row.tiles[j] = {
-          checked: hasChecked ? state.checked : tile.checked,
-          frIndex: hasFrIndex ? state.frIndex : tile.frIndex,
+          checked: (hasChecked ? state.checked : tile.checked) ? true : false,
+          frIndex: hasFrIndex ? state.frIndex || -1 : tile.frIndex,
           model: tile.model,
         };
       }
@@ -361,11 +361,11 @@ export class TiledTextLayerView {
           y1 = next.y;
           x1 = next.x;
         }
+        this.linearSetCheck(y1, x1, yx.y, yx.x, false);
       } else {
         y1 = 1;
         x1 = 1;
       }
-      this.linearSetCheck(y1, x1, yx.y, yx.x, false);
     }
   }
 
@@ -383,10 +383,10 @@ export class TiledTextLayerView {
     }
     const end = this.findFirstCheckedCoords(start.y, start.x, false);
     if (!end || (end.y === start.y && end.x === start.x)) {
-      return;
+      return null;
     }
     const last = this.getPrevTileCoords(end.y, end.x);
-    return last.y === start.y && last.x === start.x
+    return !last || (last.y === start.y && last.x === start.x)
       ? new TokenLocation(new TokenPoint(start.y, start.x))
       : new TokenLocation(
           new TokenPoint(start.y, start.x),

@@ -23,23 +23,23 @@ import { TextTile, TEXT_TILE_TEXT_DATA_NAME } from '../tiled-text-part';
   styleUrls: ['./text-tile.component.css'],
 })
 export class TextTileComponent implements OnInit {
-  private _tile: TextTile;
-  private _checkedChangeFrozen: boolean;
+  private _tile?: TextTile;
+  private _checkedChangeFrozen?: boolean;
 
   @ViewChild('textInput')
-  public textElement: ElementRef;
+  public textElement?: ElementRef;
 
   @Input()
-  public selected: boolean;
+  public selected?: boolean;
 
   @Input()
-  public checkable: boolean;
+  public checkable?: boolean;
 
   @Input()
-  public readonly: boolean;
+  public readonly?: boolean;
 
   @Input()
-  public color: string;
+  public color?: string;
 
   @Input()
   public get checked(): boolean {
@@ -55,10 +55,10 @@ export class TextTileComponent implements OnInit {
   }
 
   @Input()
-  public get tile(): TextTile {
+  public get tile(): TextTile | undefined {
     return this._tile;
   }
-  public set tile(value: TextTile) {
+  public set tile(value: TextTile | undefined) {
     if (this._tile === value) {
       return;
     }
@@ -74,8 +74,8 @@ export class TextTileComponent implements OnInit {
 
   public form: FormGroup;
   public editedText: FormControl;
-  public text: string;
-  public editing: boolean;
+  public text?: string;
+  public editing?: boolean;
   public checker: FormControl;
 
   constructor(formBuilder: FormBuilder) {
@@ -105,19 +105,23 @@ export class TextTileComponent implements OnInit {
       if (this._checkedChangeFrozen || !this.checkable) {
         return;
       }
-      this.checkedChange.emit({
-        checked: this.checker.value,
-        tile: this.tile,
-      });
+      if (this.tile) {
+        this.checkedChange.emit({
+          checked: this.checker.value,
+          tile: this.tile,
+        });
+      }
     });
   }
 
   private updateForm(): void {
     if (!this._tile) {
       this.form.reset();
-      this.text = null;
+      this.text = undefined;
     } else {
-      this.text = this._tile.data[TEXT_TILE_TEXT_DATA_NAME];
+      this.text = this._tile.data
+        ? this._tile.data[TEXT_TILE_TEXT_DATA_NAME]
+        : undefined;
       this.editedText.setValue(this.text);
       this.form.markAsPristine();
     }
@@ -141,8 +145,8 @@ export class TextTileComponent implements OnInit {
     }
     this.editing = true;
     setTimeout(() => {
-      this.textElement.nativeElement.focus();
-      this.textElement.nativeElement.select();
+      this.textElement?.nativeElement.focus();
+      this.textElement?.nativeElement.select();
     }, 500);
   }
 
@@ -158,12 +162,15 @@ export class TextTileComponent implements OnInit {
   }
 
   public save(): void {
-    if (this.form.invalid || this.readonly) {
+    if (this.form.invalid || this.readonly || !this._tile) {
       return;
     }
     this.text = this.editedText.value.trim();
-    this.tile.data[TEXT_TILE_TEXT_DATA_NAME] = this.text;
-    this.tileChange.emit(this.tile);
+    if (!this._tile.data) {
+      this._tile.data = {};
+    }
+    this._tile.data[TEXT_TILE_TEXT_DATA_NAME] = this.text;
+    this.tileChange.emit(this._tile);
     this.editing = false;
   }
 }

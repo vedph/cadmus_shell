@@ -7,9 +7,10 @@ import {
   Output,
 } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 /**
  * A multiple entries selector.
@@ -27,7 +28,7 @@ export class MultiEntrySelectorComponent implements OnInit, OnDestroy {
     entries: ThesaurusEntry[];
   }>;
   private _subs: Subscription[];
-  private _changeFrozen: boolean;
+  private _changeFrozen?: boolean;
 
   /**
    * The IDs of the selected entries.
@@ -39,8 +40,8 @@ export class MultiEntrySelectorComponent implements OnInit, OnDestroy {
   public set selectedIds(value: string[] | undefined) {
     this._ids = value;
     this._data$.next({
-      selectedIds: value,
-      entries: this._entries,
+      selectedIds: value || [],
+      entries: this._entries || [],
     });
   }
 
@@ -54,8 +55,8 @@ export class MultiEntrySelectorComponent implements OnInit, OnDestroy {
   public set entries(value: ThesaurusEntry[] | undefined) {
     this._entries = value;
     this._data$.next({
-      selectedIds: this._ids,
-      entries: value,
+      selectedIds: this._ids || [],
+      entries: value || [],
     });
   }
 
@@ -125,13 +126,16 @@ export class MultiEntrySelectorComponent implements OnInit, OnDestroy {
     if (this._entries?.length) {
       this._entries.forEach((entry) => {
         this.entriesArr.controls.push(
-          this.getEntryGroup(this._ids?.includes(entry.id))
+          this.getEntryGroup(this._ids?.includes(entry.id) ? true : false)
         );
       });
     }
   }
 
   private getSelectedIds(): string[] {
+    if (!this._entries) {
+      return [];
+    }
     const selectedIds: string[] = [];
     for (let i = 0; i < this.entriesArr.controls.length; i++) {
       const g = this.entriesArr.at(i) as FormGroup;

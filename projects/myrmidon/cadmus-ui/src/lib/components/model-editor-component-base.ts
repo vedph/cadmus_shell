@@ -1,7 +1,9 @@
-import { ThesauriSet, User } from '@myrmidon/cadmus-core';
 import { Input, Output, EventEmitter, Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+
 import { AuthService } from '@myrmidon/cadmus-api';
+import { ThesauriSet, User } from '@myrmidon/cadmus-core';
+
 import { extractPristineChanges } from '../utils';
 
 /**
@@ -22,29 +24,29 @@ import { extractPristineChanges } from '../utils';
   template: '',
 })
 export abstract class ModelEditorComponentBase<T> {
-  private _thesauri: ThesauriSet | null;
-  private _model: T | null;
+  private _thesauri?: ThesauriSet;
+  private _model?: T;
 
   /**
    * The part's item ID.
    */
   @Input()
-  public itemId: string;
+  public itemId?: string;
 
   /**
    * The part's role ID.
    */
   @Input()
-  public roleId: string | null;
+  public roleId?: string;
 
   /**
    * The model being edited.
    */
   @Input()
-  public get model(): T | null {
+  public get model(): T | undefined {
     return this._model;
   }
-  public set model(value: T | null) {
+  public set model(value: T | undefined) {
     this._model = value;
     this.onModelSet(value);
   }
@@ -59,10 +61,10 @@ export abstract class ModelEditorComponentBase<T> {
    * The optional thesauri to be used within this editor.
    */
   @Input()
-  public get thesauri(): ThesauriSet | null {
+  public get thesauri(): ThesauriSet | undefined {
     return this._thesauri;
   }
-  public set thesauri(value: ThesauriSet | null) {
+  public set thesauri(value: ThesauriSet | undefined) {
     this._thesauri = value;
     this.onThesauriSet();
   }
@@ -98,12 +100,12 @@ export abstract class ModelEditorComponentBase<T> {
    * The root form of the editor.
    * You MUST instantiate this form in the ctor.
    */
-  public form: FormGroup;
+  public form?: FormGroup;
 
   /**
    * The current user.
    */
-  public user: User;
+  public user?: User;
 
   /**
    * The user authorization level (0-4).
@@ -114,15 +116,21 @@ export abstract class ModelEditorComponentBase<T> {
     this.modelChange = new EventEmitter<T>();
     this.editorClose = new EventEmitter<any>();
     this.dirtyChange = new EventEmitter<boolean>();
+    this.userLevel = 0;
 
-    _authService.currentUser$.subscribe((user: User) => {
+    _authService.currentUser$.subscribe((user: User | null) => {
       this.updateUserProperties(user);
     });
   }
 
-  private updateUserProperties(user: User): void {
-    this.user = user;
-    this.userLevel = this._authService.getCurrentUserLevel();
+  private updateUserProperties(user: User | null): void {
+    if (!user) {
+      this.user = undefined;
+      this.userLevel = 0;
+    } else {
+      this.user = user;
+      this.userLevel = this._authService.getCurrentUserLevel();
+    }
   }
 
   /**
@@ -133,9 +141,11 @@ export abstract class ModelEditorComponentBase<T> {
     this.onThesauriSet();
     this.onModelSet(this.model);
 
-    extractPristineChanges(this.form).subscribe((p) => {
-      this.dirtyChange.emit(!p);
-    });
+    if (this.form) {
+      extractPristineChanges(this.form).subscribe((p) => {
+        this.dirtyChange.emit(!p);
+      });
+    }
   }
 
   /**
@@ -154,9 +164,9 @@ export abstract class ModelEditorComponentBase<T> {
    * property), unless setting it via updateModel. Implement to update the form
    * controls to reflect the new model data.
    *
-   * @param model The model set, or null.
+   * @param model The model set, or undefined.
    */
-  protected abstract onModelSet(model: T): void;
+  protected abstract onModelSet(model?: T): void;
 
   /**
    * Invoked whenever the thesauri property is set. Override to take
@@ -203,13 +213,13 @@ export abstract class ModelEditorComponentBase<T> {
    * updates the json property, and marks the root form as pristine.
    */
   public save(): void {
-    if (this.form.invalid) {
+    if (this.form?.invalid) {
       return;
     }
     const part = this.getModelFromForm();
     this.updateModel(part);
     // the form is no more dirty
-    this.form.markAsPristine();
+    this.form?.markAsPristine();
     this.dirtyChange.emit(false);
   }
 }

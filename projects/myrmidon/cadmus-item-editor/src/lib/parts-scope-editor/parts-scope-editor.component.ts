@@ -29,19 +29,19 @@ export interface PartScopeSetRequest {
   styleUrls: ['./parts-scope-editor.component.css'],
 })
 export class PartsScopeEditorComponent implements OnInit {
-  private _parts: Part[];
+  private _parts: Part[] | undefined;
 
   @Input()
-  public get parts(): Part[] {
+  public get parts(): Part[] | undefined {
     return this._parts;
   }
-  public set parts(value: Part[]) {
+  public set parts(value: Part[] | undefined) {
     this._parts = value;
     this.updateForm();
   }
 
   @Input()
-  public readonly: boolean;
+  public readonly?: boolean;
 
   @Output()
   public setScopeRequest: EventEmitter<PartScopeSetRequest>;
@@ -99,7 +99,7 @@ export class PartsScopeEditorComponent implements OnInit {
     if (i > -1) {
       typeId = typeId.substr(0, i);
     }
-    const entry = state.typeThesaurus.entries.find((e) => e.id === typeId);
+    const entry = state.typeThesaurus.entries?.find((e) => e.id === typeId);
     return entry ? entry.value : typeId;
   }
 
@@ -111,7 +111,7 @@ export class PartsScopeEditorComponent implements OnInit {
   }
 
   public submit(): void {
-    if (this.form.invalid) {
+    if (this.form.invalid || !this._parts) {
       return;
     }
     const ids: string[] = [];

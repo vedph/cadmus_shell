@@ -47,11 +47,11 @@ export class DocReferencesPartComponent
 
   private updateForm(model: DocReferencesPart): void {
     if (!model) {
-      this.form.reset();
+      this.form!.reset();
       return;
     }
     this.initialRefs = model.references || [];
-    this.form.markAsPristine();
+    this.form!.markAsPristine();
   }
 
   protected onModelSet(model: DocReferencesPart): void {
@@ -97,6 +97,6 @@ export class DocReferencesPartComponent
 
   public onReferencesChange(references: DocReference[]): void {
     this.references.setValue(references);
-    this.form.markAsDirty();
+    this.form!.markAsDirty();
   }
 }

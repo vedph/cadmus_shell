@@ -54,12 +54,12 @@ export class OrthographyFragmentComponent
   implements OnInit
 {
   private _currentOperationIndex: number;
-  private _differ: diff_match_patch;
-  private _adapter: DifferResultToMspAdapter;
+  private _differ?: diff_match_patch;
+  private _adapter?: DifferResultToMspAdapter;
 
   public standard: FormControl;
   public operations: FormArray;
-  public currentOperation: MspOperation;
+  public currentOperation?: MspOperation;
 
   constructor(
     authService: AuthService,
@@ -67,6 +67,7 @@ export class OrthographyFragmentComponent
     private _dialogService: DialogService
   ) {
     super(authService);
+    this._currentOperationIndex = -1;
 
     // form
     this.standard = _formBuilder.control(null, [
@@ -86,7 +87,7 @@ export class OrthographyFragmentComponent
 
   private updateForm(model: OrthographyFragment): void {
     if (!model) {
-      this.form.reset();
+      this.form!.reset();
     } else {
       this.standard.setValue(model.standard);
       if (model.operations) {
@@ -94,7 +95,7 @@ export class OrthographyFragmentComponent
           this.addOperation(op);
         }
       }
-      this.form.markAsPristine();
+      this.form!.markAsPristine();
     }
   }
 
@@ -102,7 +103,7 @@ export class OrthographyFragmentComponent
     this.updateForm(deepCopy(model));
   }
 
-  public addOperation(operation: string = null): void {
+  public addOperation(operation?: string): void {
     this.operations.markAsDirty();
     this.operations.push(
       this._formBuilder.group({
@@ -162,19 +163,23 @@ export class OrthographyFragmentComponent
   public editOperation(index: number): void {
     const form = this.operations.at(index) as FormGroup;
     this._currentOperationIndex = index;
-    this.currentOperation = MspOperation.parse(form.controls.text.value);
+    this.currentOperation =
+      MspOperation.parse(form.controls.text.value) || undefined;
   }
 
   public currentOperationSaved(operation: MspOperation): void {
+    if (this._currentOperationIndex === -1) {
+      return;
+    }
     const form = this.operations.at(this._currentOperationIndex) as FormGroup;
     form.controls.text.setValue(operation.toString());
-    this._currentOperationIndex = null;
-    this.currentOperation = null;
+    this._currentOperationIndex = -1;
+    this.currentOperation = undefined;
   }
 
   public currentOperationClosed(): void {
-    this._currentOperationIndex = null;
-    this.currentOperation = null;
+    this._currentOperationIndex = -1;
+    this.currentOperation = undefined;
   }
 
   private getOperations(): string[] {
@@ -201,7 +206,7 @@ export class OrthographyFragmentComponent
 
   public autoAddOperations(): void {
     // we must have both A and B text
-    if (!this.model.baseText || !this.standard.value) {
+    if (!this.model?.baseText || !this.standard.value) {
       return;
     }
 
@@ -216,7 +221,7 @@ export class OrthographyFragmentComponent
       this.model.baseText,
       this.standard.value
     );
-    const ops = this._adapter.adapt(result);
+    const ops = this._adapter!.adapt(result);
 
     this.operations.markAsDirty();
     this.operations.clear();

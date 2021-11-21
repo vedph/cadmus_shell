@@ -28,6 +28,7 @@ th {
 }
 :host ::ng-deep article.apparatus-summary .adpar-etag {
   background-color: #7887ab;
+  color: white;
   padding: 0 8px;
   border: 1px solid #7887ab;
   border-radius: 6px;

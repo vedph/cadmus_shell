@@ -15,9 +15,9 @@ export enum PartBadgeType {
   styleUrls: ['./part-badge.component.css'],
 })
 export class PartBadgeComponent {
-  private _typeThesaurus: Thesaurus;
-  private _facetDefinition: FacetDefinition;
-  private _partTypeIds: PartTypeIds;
+  private _typeThesaurus?: Thesaurus;
+  private _facetDefinition?: FacetDefinition;
+  private _partTypeIds?: PartTypeIds;
 
   public typeName: string | undefined;
   public roleName: string | undefined;
@@ -34,10 +34,10 @@ export class PartBadgeComponent {
    * The types thesaurus.
    */
   @Input()
-  public get typeThesaurus(): Thesaurus {
+  public get typeThesaurus(): Thesaurus | undefined {
     return this._typeThesaurus;
   }
-  public set typeThesaurus(value: Thesaurus) {
+  public set typeThesaurus(value: Thesaurus | undefined) {
     this._typeThesaurus = value;
     this.updateBadge();
   }
@@ -46,10 +46,10 @@ export class PartBadgeComponent {
    * The part's facet definition.
    */
   @Input()
-  public get facetDefinition(): FacetDefinition {
+  public get facetDefinition(): FacetDefinition | undefined {
     return this._facetDefinition;
   }
-  public set facetDefinition(value: FacetDefinition) {
+  public set facetDefinition(value: FacetDefinition | undefined) {
     this._facetDefinition = value;
     this.updateBadge();
   }
@@ -58,10 +58,10 @@ export class PartBadgeComponent {
    * The part type IDs.
    */
   @Input()
-  public get partTypeIds(): PartTypeIds {
+  public get partTypeIds(): PartTypeIds | undefined {
     return this._partTypeIds;
   }
-  public set partTypeIds(value: PartTypeIds) {
+  public set partTypeIds(value: PartTypeIds | undefined) {
     this._partTypeIds = value;
     this.updateBadge();
   }
@@ -75,7 +75,7 @@ export class PartBadgeComponent {
     this.contrastColor = 'black';
   }
 
-  private getPartColor(typeId: string, roleId: string): string {
+  private getPartColor(typeId: string, roleId?: string): string {
     if (!this._facetDefinition) {
       return 'transparent';
     }
@@ -95,11 +95,11 @@ export class PartBadgeComponent {
     if (i > -1) {
       typeId = typeId.substr(0, i);
     }
-    const entry = this._typeThesaurus.entries.find((e) => e.id === typeId);
+    const entry = this._typeThesaurus.entries?.find((e) => e.id === typeId);
     return entry ? entry.value : typeId;
   }
 
-  private getRoleIdName(roleId: string): string {
+  private getRoleIdName(roleId?: string): string | undefined {
     if (!roleId || !roleId.startsWith('fr.')) {
       return roleId;
     }

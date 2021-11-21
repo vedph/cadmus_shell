@@ -22,13 +22,13 @@ import { Keyword } from '../keywords-part';
   styleUrls: ['./bibliography-entry.component.css'],
 })
 export class BibliographyEntryComponent implements OnInit {
-  private _entry: BibEntry;
+  private _entry?: BibEntry;
 
   @Input()
-  public get entry(): BibEntry {
+  public get entry(): BibEntry | undefined {
     return this._entry;
   }
-  public set entry(value: BibEntry) {
+  public set entry(value: BibEntry | undefined) {
     if (this._entry === value) {
       return;
     }
@@ -195,19 +195,17 @@ export class BibliographyEntryComponent implements OnInit {
   }
 
   private setAuthors(authors: BibAuthor[], ctl: FormArray): void {
-    if (!this.authors) {
+    if (!authors) {
       this.authors.reset();
       return;
     }
-    if (authors) {
-      for (let i = 0; i < authors.length; i++) {
-        ctl.push(this.getAuthorGroup(authors[i]));
-      }
+    for (let i = 0; i < authors.length; i++) {
+      ctl.push(this.getAuthorGroup(authors[i]));
     }
     this.authors.markAsPristine();
   }
 
-  private updateForm(entry: BibEntry): void {
+  private updateForm(entry?: BibEntry): void {
     if (!entry) {
       this.form.reset();
       return;
@@ -217,10 +215,10 @@ export class BibliographyEntryComponent implements OnInit {
     this.type.setValue(entry.typeId);
     this.tag.setValue(entry.tag);
     this.language.setValue(entry.language);
-    this.setAuthors(entry.authors, this.authors);
+    this.setAuthors(entry.authors || [], this.authors);
     this.title.setValue(entry.title);
     this.note.setValue(entry.note);
-    this.setAuthors(entry.contributors, this.contributors);
+    this.setAuthors(entry.contributors || [], this.contributors);
     this.container.setValue(entry.container);
     this.edition.setValue(entry.edition);
     this.number.setValue(entry.number);
@@ -231,11 +229,7 @@ export class BibliographyEntryComponent implements OnInit {
     this.accessDate.setValue(entry.accessDate);
     this.firstPage.setValue(entry.firstPage);
     this.lastPage.setValue(entry.lastPage);
-
-    this.keywords = [];
-    for (let i = 0; i < entry.keywords?.length || 0; i++) {
-      this.keywords.push(entry.keywords[i]);
-    }
+    this.keywords = entry?.keywords || [];
 
     this.form.markAsPristine();
   }
@@ -251,7 +245,7 @@ export class BibliographyEntryComponent implements OnInit {
         roleId: g.controls['roleId'].value?.trim(),
       });
     }
-    return authors.length ? authors : null;
+    return authors.length ? authors : [];
   }
 
   private getEntry(): BibEntry {
@@ -274,7 +268,7 @@ export class BibliographyEntryComponent implements OnInit {
       accessDate: this.accessDate.value,
       firstPage: this.firstPage.value,
       lastPage: this.lastPage.value,
-      keywords: this.keywords.length ? this.keywords : null,
+      keywords: this.keywords.length ? this.keywords : undefined,
     };
   }
 

@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { StoreConfig, Store } from '@datorama/akita';
 
 export interface EditFragmentState {
-  fragment: Fragment | null;
-  thesauri: ThesauriSet | null;
+  fragment?: Fragment;
+  thesauri?: ThesauriSet;
   dirty?: boolean;
   saving?: boolean;
   // this is implemented in Akita stores, but you must add the keys
@@ -14,12 +14,9 @@ export interface EditFragmentState {
 }
 
 export const editFragmentInitialState: EditFragmentState = {
-  fragment: null,
-  thesauri: null,
   dirty: false,
   saving: false,
   loading: false,
-  error: null,
 };
 
 /**

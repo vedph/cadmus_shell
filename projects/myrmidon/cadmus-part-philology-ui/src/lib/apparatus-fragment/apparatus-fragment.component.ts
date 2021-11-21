@@ -28,26 +28,27 @@ import { ApparatusFragment } from '../apparatus-fragment';
 })
 export class ApparatusFragmentComponent
   extends ModelEditorComponentBase<ApparatusFragment>
-  implements OnInit {
-  private _newEditedEntry: boolean;
+  implements OnInit
+{
+  private _newEditedEntry?: boolean;
 
-  public editedEntry: ApparatusEntry;
+  public editedEntry?: ApparatusEntry;
   public currentTabIndex: number;
 
   public tag: FormControl;
   public entryCount: FormControl;
   public form: FormGroup;
 
-  public tagEntries: ThesaurusEntry[] | undefined;
-  public witEntries: ThesaurusEntry[] | undefined;
-  public authEntries: ThesaurusEntry[] | undefined;
-  public authTagEntries: ThesaurusEntry[] | undefined;
+  public tagEntries?: ThesaurusEntry[];
+  public witEntries?: ThesaurusEntry[];
+  public authEntries?: ThesaurusEntry[];
+  public authTagEntries?: ThesaurusEntry[];
   /**
    * Author/work tags. This can be alternative or additional
    * to authEntries, and allows picking the work from a tree
    * of authors and works.
    */
-  public workEntries: ThesaurusEntry[] | undefined;
+  public workEntries?: ThesaurusEntry[];
 
   public entries: ApparatusEntry[];
   public summary?: string;
@@ -179,23 +180,29 @@ export class ApparatusFragmentComponent
   }
 
   public onEntrySave(entry: ApparatusEntry): void {
+    if (!this.editedEntry) {
+      return;
+    }
     this._newEditedEntry = false;
     const i = this.entries.indexOf(this.editedEntry);
     this.entries.splice(i, 1, entry);
     this.currentTabIndex = 0;
-    this.editedEntry = null;
+    this.editedEntry = undefined;
     this.summary = this._summaryService.build(this.getModelFromForm());
     this.form.markAsDirty();
   }
 
   public onEntryClose(): void {
+    if (!this.editedEntry) {
+      return;
+    }
     if (this._newEditedEntry) {
       const index = this.entries.indexOf(this.editedEntry);
       this.entries.splice(index, 1);
       this.entryCount.setValue(this.entries.length);
     }
     this.currentTabIndex = 0;
-    this.editedEntry = null;
+    this.editedEntry = undefined;
   }
 
   public removeEntry(index: number): void {

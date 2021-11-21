@@ -2,7 +2,7 @@ import {
   Datation,
   DatationFormatOptions,
   DATATION_FORMAT_OPTIONS,
-  DatationModel
+  DatationModel,
 } from './datation';
 
 const APPROX_DELTA = 10;
@@ -13,7 +13,7 @@ const APPROX_DELTA = 10;
 export enum HistoricalDateType {
   undefined = 0,
   point,
-  range
+  range,
 }
 
 /**
@@ -29,9 +29,9 @@ export interface HistoricalDateModel {
  */
 export class HistoricalDate implements HistoricalDateModel {
   public a: Datation;
-  public b: Datation;
+  public b?: Datation;
 
-  constructor(date: HistoricalDateModel = null) {
+  constructor(date?: HistoricalDateModel) {
     if (!date) {
       this.a = new Datation();
       // B=undefined for a single point
@@ -47,12 +47,12 @@ export class HistoricalDate implements HistoricalDateModel {
    * Parse the specified text representing a historical datation.
    * @param text The text to be parsed.
    * @param options The datation formatter options.
-   * @return The datation, or null if invalid.
+   * @return The datation, or undefined if invalid.
    */
   public static parse(
     text: string,
     options: DatationFormatOptions = DATATION_FORMAT_OPTIONS
-  ): HistoricalDate {
+  ): HistoricalDate | null {
     if (!text) {
       return null;
     }
@@ -81,7 +81,7 @@ export class HistoricalDate implements HistoricalDateModel {
         const m1 = tailRegexp.exec(s1);
 
         // if 1st has no era try integration from 2nd
-        if (m1 && m1[1]) {
+        if (m1 && m1[1] && s2) {
           // get era from 2nd (if 2nd hasn't it too, give up and AD will be assumed)
           const m2 = tailRegexp.exec(s2);
           if (m2 && m2[1]) {
@@ -101,8 +101,10 @@ export class HistoricalDate implements HistoricalDateModel {
           }
         }
       }
-      date.setStartPoint(Datation.parse(s1, options));
-      date.setEndPoint(Datation.parse(s2, options));
+      date.setStartPoint(Datation.parse(s1, options)!);
+      if (s2) {
+        date.setEndPoint(Datation.parse(s2, options)!);
+      }
     } else {
       // here we have a s2, even if empty. When empty, it represents
       // an unknown point in a terminus ante/post, and as such we
@@ -116,7 +118,7 @@ export class HistoricalDate implements HistoricalDateModel {
     return date;
   }
 
-  public getStartPoint(): Datation {
+  public getStartPoint(): Datation | undefined {
     return this.getDateType() === HistoricalDateType.range ? this.a : undefined;
   }
 
@@ -128,7 +130,7 @@ export class HistoricalDate implements HistoricalDateModel {
     }
   }
 
-  public getEndPoint(): Datation {
+  public getEndPoint(): Datation | undefined {
     return this.getDateType() === HistoricalDateType.range ? this.b : undefined;
   }
 
@@ -136,7 +138,7 @@ export class HistoricalDate implements HistoricalDateModel {
     this.b = new Datation(value);
   }
 
-  public getSinglePoint(): Datation {
+  public getSinglePoint(): Datation | undefined {
     return this.getDateType() === HistoricalDateType.point ? this.a : undefined;
   }
 
@@ -169,14 +171,14 @@ export class HistoricalDate implements HistoricalDateModel {
    * Validate this date.
    * @returns Error message if invalid, or null if valid.
    */
-  public validate(): string {
+  public validate(): string | null {
     if (!this.a) {
       return 'Missing point A';
     }
 
     if (this.getDateType() === HistoricalDateType.range) {
       const av = this.a.getSortValue();
-      const bv = this.b.getSortValue();
+      const bv = this.b?.getSortValue() || 0;
       if (av && bv && av >= bv) {
         return 'Point A is past point B';
       }
@@ -195,9 +197,9 @@ export class HistoricalDate implements HistoricalDateModel {
 
       case HistoricalDateType.range:
         if (this.a.isUndefined()) {
-          return this.b.getSortValue() - APPROX_DELTA;
+          return this.b!.getSortValue() - APPROX_DELTA;
         }
-        if (this.b.isUndefined()) {
+        if (!this.b || this.b.isUndefined()) {
           return this.a.getSortValue() + APPROX_DELTA;
         }
         return (this.a.getSortValue() + this.b.getSortValue()) / 2;
@@ -282,7 +284,7 @@ export class HistoricalDate implements HistoricalDateModel {
 
       case HistoricalDateType.range:
         // min is missing: terminus ante
-        if (this.a.isUndefined()) {
+        if (this.a.isUndefined() && this.b) {
           year = Math.trunc(
             (this.b.isCentury
               ? this.centuryToYear(this.b.value)
@@ -320,7 +322,7 @@ export class HistoricalDate implements HistoricalDateModel {
    * True if any value (either in point or in range) has an about flag.
    */
   public isAbout(): boolean {
-    let about = false;
+    let about: boolean | undefined = false;
 
     switch (this.getDateType()) {
       case HistoricalDateType.point:
@@ -331,20 +333,20 @@ export class HistoricalDate implements HistoricalDateModel {
           about = this.a.isApproximate;
           break;
         }
-        if (!this.b.isUndefined()) {
+        if (this.b && !this.b.isUndefined()) {
           about = this.b.isApproximate;
         }
         break;
     }
 
-    return about;
+    return about ? true : false;
   }
 
   /**
    * True if any value (either in point or in range) has an about flag.
    */
   public isDubious(): boolean {
-    let dubious = false;
+    let dubious: boolean | undefined = false;
 
     switch (this.getDateType()) {
       case HistoricalDateType.point:
@@ -355,12 +357,12 @@ export class HistoricalDate implements HistoricalDateModel {
           dubious = this.a.isDubious;
           break;
         }
-        if (!this.b.isUndefined()) {
+        if (this.b && !this.b.isUndefined()) {
           dubious = this.b.isDubious;
         }
         break;
     }
 
-    return dubious;
+    return dubious? true : false;
   }
 }

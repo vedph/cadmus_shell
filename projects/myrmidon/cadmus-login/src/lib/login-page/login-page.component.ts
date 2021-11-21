@@ -11,18 +11,18 @@ import { AuthQuery } from '../state/auth.query';
   styleUrls: ['./login-page.component.css'],
 })
 export class LoginPageComponent implements OnInit {
-  public validating$: Observable<boolean>;
-  public error$: Observable<string>;
+  public validating$: Observable<boolean | undefined>;
+  public error$: Observable<string | undefined>;
 
   constructor(
     private _authQuery: AuthQuery,
     private _loginService: LoginService
-  ) {}
-
-  ngOnInit(): void {
+  ) {
     this.validating$ = this._authQuery.validating$;
     this.error$ = this._authQuery.error$;
   }
+
+  ngOnInit(): void {}
 
   public onSubmit(credentials: Credentials): void {
     this._loginService.login(

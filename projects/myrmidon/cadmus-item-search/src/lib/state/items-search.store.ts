@@ -3,13 +3,12 @@ import { ItemInfo } from '@myrmidon/cadmus-core';
 import { Injectable } from '@angular/core';
 
 export interface ItemsSearchState extends EntityState<ItemInfo, string> {
-  query: string;
+  query?: string;
   lastQueries: string[];
 }
 
 const initialState = {
-  query: null,
-  lastQueries: []
+  lastQueries: [],
 };
 
 @Injectable({ providedIn: 'root' })

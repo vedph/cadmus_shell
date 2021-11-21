@@ -22,7 +22,7 @@ export class ThesaurusService {
    */
   public getThesaurusIds(filter?: ThesaurusFilter): Observable<string[]> {
     const url =
-      this._env.get('apiUrl') + this._env.get('databaseId') + '/thesauri-ids';
+      this._env.get('apiUrl')! + this._env.get('databaseId') + '/thesauri-ids';
 
     if (!filter) {
       return this._http
@@ -47,7 +47,9 @@ export class ThesaurusService {
   public thesaurusExists(id: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       const url =
-        this._env.get('apiUrl') + this._env.get('databaseId') + '/thesauri-ids';
+        this._env.get('apiUrl')! +
+        this._env.get('databaseId') +
+        '/thesauri-ids';
 
       let httpParams = new HttpParams();
       httpParams = httpParams.set('pageNumber', '1');
@@ -85,7 +87,7 @@ export class ThesaurusService {
       httpParams = httpParams.set('emptyIfNotFound', true.toString());
     }
     const url =
-      this._env.get('apiUrl') +
+      this._env.get('apiUrl')! +
       this._env.get('databaseId') +
       `/thesauri/${encodeURIComponent(id)}`;
     return this._http
@@ -106,7 +108,7 @@ export class ThesaurusService {
     httpParams = httpParams.set('purgeIds', 'true');
     httpParams = httpParams.set('ids', ids.join(','));
     const url =
-      this._env.get('apiUrl') + this._env.get('databaseId') + '/thesauri-set';
+      this._env.get('apiUrl')! + this._env.get('databaseId') + '/thesauri-set';
     return this._http
       .get<ThesauriSet>(url, {
         params: httpParams,
@@ -142,7 +144,7 @@ export class ThesaurusService {
     let httpParams = this.GetFilterParams(filter);
 
     const url =
-      this._env.get('apiUrl') + this._env.get('databaseId') + `/thesauri`;
+      this._env.get('apiUrl')! + this._env.get('databaseId') + `/thesauri`;
     return this._http
       .get<DataPage<Thesaurus>>(url, {
         params: httpParams,
@@ -157,7 +159,7 @@ export class ThesaurusService {
    */
   public addThesaurus(thesaurus: Thesaurus): Observable<any> {
     const url =
-      this._env.get('apiUrl') + this._env.get('databaseId') + '/thesauri';
+      this._env.get('apiUrl')! + this._env.get('databaseId') + '/thesauri';
     return this._http
       .post(url, thesaurus)
       .pipe(retry(3), catchError(this._error.handleError));
@@ -170,7 +172,9 @@ export class ThesaurusService {
    */
   public deleteThesaurus(id: string): Observable<any> {
     const url =
-      this._env.get('apiUrl') + this._env.get('databaseId') + `/thesauri/${id}`;
+      this._env.get('apiUrl')! +
+      this._env.get('databaseId') +
+      `/thesauri/${id}`;
     return this._http
       .delete<Thesaurus>(url)
       .pipe(retry(3), catchError(this._error.handleError));
@@ -186,10 +190,10 @@ export class ThesaurusService {
    * without the leading mark.
    *
    * @param id The thesaurus ID.
-   * @param scopeId The scope ID, or null when you just want to strip off
+   * @param scopeId The scope ID, or undefined when you just want to strip off
    * the leading exclamation mark if any.
    */
-  public getScopedId(id: string, scopeId: string): string {
+  public getScopedId(id: string, scopeId?: string): string {
     // an ID starting with ! should not be scoped
     if (id.startsWith('!')) {
       return id.substr(1);

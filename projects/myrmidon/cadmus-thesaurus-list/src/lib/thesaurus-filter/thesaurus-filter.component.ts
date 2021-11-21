@@ -16,7 +16,7 @@ import { ThesaurusFilter } from '@myrmidon/cadmus-core';
 })
 export class ThesaurusFilterComponent implements OnInit {
   @Input()
-  public filter$: BehaviorSubject<ThesaurusFilter>;
+  public filter$?: BehaviorSubject<ThesaurusFilter>;
 
   public id: FormControl;
   public alias: FormControl;
@@ -39,7 +39,7 @@ export class ThesaurusFilterComponent implements OnInit {
 
   ngOnInit(): void {
     // update form when filter changes
-    this.filter$.subscribe((f) => {
+    this.filter$?.subscribe((f) => {
       this.updateForm(f);
     });
   }
@@ -71,6 +71,6 @@ export class ThesaurusFilterComponent implements OnInit {
       return;
     }
     const filter = this.getFilter();
-    this.filter$.next(filter);
+    this.filter$?.next(filter);
   }
 }

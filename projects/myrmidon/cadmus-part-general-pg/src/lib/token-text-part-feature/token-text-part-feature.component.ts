@@ -41,6 +41,6 @@ export class TokenTextPartFeatureComponent
   }
 
   ngOnInit(): void {
-    this.initEditor(null);
+    this.initEditor();
   }
 }

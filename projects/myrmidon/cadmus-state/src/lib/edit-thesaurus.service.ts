@@ -11,7 +11,7 @@ export class EditThesaurusService {
     private _thesaurusService: ThesaurusService
   ) {}
 
-  public load(id: string | null): void {
+  public load(id?: string): void {
     this._store.setLoading(true);
 
     if (id) {
@@ -31,7 +31,7 @@ export class EditThesaurusService {
     } else {
       this._store.update({
         thesaurus: {
-          id: null,
+          id: '',
           language: 'en',
           entries: [],
         },
@@ -50,7 +50,7 @@ export class EditThesaurusService {
       this._thesaurusService.addThesaurus(thesaurus).subscribe(
         (saved) => {
           this._store.setSaving(false);
-          this.load(this._store.getValue().thesaurus.id);
+          this.load(this._store.getValue().thesaurus!.id);
           resolve(saved);
         },
         (error) => {

@@ -13,19 +13,19 @@ export abstract class EditPartQueryBase extends Query<EditPartState> {
     super(store);
   }
 
-  public selectDirty(): Observable<boolean> {
+  public selectDirty(): Observable<boolean | undefined> {
     return this.select((state) => state.dirty);
   }
 
-  public selectSaving(): Observable<boolean> {
+  public selectSaving(): Observable<boolean | undefined> {
     return this.select((state) => state.saving);
   }
 
-  public selectPart(): Observable<Part> {
-    return this.select((state) => state.part);
+  public selectPart(): Observable<Part | undefined> {
+    return this.select((state) => state.part || undefined);
   }
 
-  public selectThesauri(): Observable<ThesauriSet> {
-    return this.select((state) => state.thesauri);
+  public selectThesauri(): Observable<ThesauriSet | undefined> {
+    return this.select((state) => state.thesauri || undefined);
   }
 }

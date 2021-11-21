@@ -61,9 +61,6 @@ export interface HierarchyItemBrowserState
 
 const initialState: HierarchyItemBrowserState = {
   nodes: [],
-  tags: null,
-  loading: false,
-  error: null
 };
 
 /**
@@ -75,9 +72,7 @@ const initialState: HierarchyItemBrowserState = {
  */
 @Injectable({ providedIn: 'root' })
 @StoreConfig({ name: HIERARCHY_ITEM_BROWSER_TYPEID })
-export class HierarchyItemBrowserStore extends EntityStore<
-  HierarchyItemBrowserState
-> {
+export class HierarchyItemBrowserStore extends EntityStore<HierarchyItemBrowserState> {
   constructor() {
     super(initialState);
   }
@@ -97,7 +92,7 @@ export class HierarchyItemBrowserStore extends EntityStore<
    *
    * @param value The thesaurus.
    */
-  public setTags(value: Thesaurus | null): void {
+  public setTags(value?: Thesaurus): void {
     this.update({ tags: value });
   }
 }

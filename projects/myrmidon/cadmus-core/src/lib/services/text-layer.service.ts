@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+
+import * as rangy from 'rangy';
+
 import { TokenPoint } from '../token-point';
 import { TokenLocation } from '../token-location';
 import { TokenTextLayerLine, TextCoords } from '../models';
-import * as rangy from 'rangy';
 
 // requires rangy:
 // npm install --save rangy
@@ -127,13 +129,13 @@ export class TextLayerService {
    * @param sb The target array.
    */
   private renderTokenAtEnd(pt: TokenPoint, token: string, sb: string[]): void {
-    if (pt.at > 0) {
+    if (pt.at) {
       // ...to]
       sb.push(token.substr(pt.at - 1, pt.run));
       sb.push('</span>');
       // ...ken
-      if (pt.at - 1 + pt.run < token.length) {
-        sb.push(token.substr(pt.at - 1 + pt.run));
+      if (pt.at - 1 + (pt.run || 0) < token.length) {
+        sb.push(token.substr(pt.at - 1 + (pt.run || 0)));
       }
     } else {
       // ...token]
@@ -157,7 +159,7 @@ export class TextLayerService {
     isSelected: boolean
   ): void {
     // 1.token's left-part
-    if (loc.primary.at > 0) {
+    if (loc.primary.at) {
       // to...
       sb.push(token.substr(0, loc.primary.at - 1));
     }
@@ -186,7 +188,7 @@ export class TextLayerService {
     isSelected: boolean
   ): void {
     // 1.token's left-part (=before at)
-    if (loc.primary.at > 0) {
+    if (loc.primary.at) {
       // to...
       sb.push(token.substr(0, loc.primary.at - 1));
     }
@@ -195,7 +197,7 @@ export class TextLayerService {
     this.renderOpeningSpan(loc, 0, sb, isSelected);
 
     // 3.token's right-part (...ken or ...token)
-    if (loc.primary.at > 0) {
+    if (loc.primary.at) {
       // ...ken
       sb.push(token.substr(loc.primary.at - 1));
     } else {
@@ -232,8 +234,8 @@ export class TextLayerService {
    */
   public render(
     text: string,
-    locations: TokenLocation[],
-    selectedLoc: TokenLocation = null
+    locations?: TokenLocation[],
+    selectedLoc?: TokenLocation
   ): string {
     if (!text) {
       return '<div></div>';
@@ -242,7 +244,7 @@ export class TextLayerService {
     // get lines from text
     const sb: string[] = [];
     const lines = this.getLines(text);
-    let loc: TokenLocation = null;
+    let loc: TokenLocation | undefined = undefined;
     let tokenSelected = false;
 
     if (!locations) {
@@ -273,7 +275,7 @@ export class TextLayerService {
         if (loc && loc.secondary) {
           if (loc.secondary.y === y + 1 && loc.secondary.x === x + 1) {
             this.renderTokenAtEnd(loc.secondary, token, sb);
-            loc = null;
+            loc = undefined;
           } else {
             sb.push(token);
           }
@@ -285,7 +287,7 @@ export class TextLayerService {
           if (loc) {
             tokenSelected = selectedLoc ? loc.overlaps(selectedLoc) : false;
             if (!this.renderTokenAtStart(loc, token, sb, tokenSelected)) {
-              loc = null;
+              loc = undefined;
             }
           } else {
             sb.push(token);
@@ -317,25 +319,25 @@ export class TextLayerService {
    * Get the Y bounds from the specified selection.
    * @param range The selection range.
    * @param forNew True if getting bounds for a new fragment.
-   * @returns Range, inclusive.
+   * @returns Range, inclusive, or undefined.
    */
   private getYBoundsFromRange(
     range: SelectedRange,
     forNew: boolean
-  ): TextRange {
-    let p: Element = null;
+  ): TextRange | null {
+    let p: Element | null = null;
 
     switch (range.commonAncestorContainer.nodeType) {
       case Node.TEXT_NODE:
         // single-p selection, parent=p
         p = range.commonAncestorContainer.parentElement;
-        if (forNew && (p.nodeName !== 'P' || !p.hasAttribute('id'))) {
+        if (forNew && (p?.nodeName !== 'P' || !p.hasAttribute('id'))) {
           return null;
         }
-        if (p.nodeName === 'SPAN') {
+        if (p?.nodeName === 'SPAN') {
           p = p.parentElement;
         }
-        const y = parseInt(p.getAttribute('id').substr(1), 10);
+        const y = parseInt(p!.getAttribute('id')!.substr(1), 10);
         // return [y, y];
         return { start: y, end: y };
 
@@ -364,7 +366,7 @@ export class TextLayerService {
           // collect y if inside
           if (inside) {
             const iy = parseInt(
-              (child as Element).getAttribute('id').substr(1),
+              (child as Element)!.getAttribute('id')!.substr(1),
               10
             );
             if (!yMin || iy < yMin) {
@@ -384,6 +386,7 @@ export class TextLayerService {
           end: yMax,
         };
     }
+    return null;
   }
 
   private locatePrevSpace(line: string, index: number): number {
@@ -409,7 +412,7 @@ export class TextLayerService {
    * and end=index of the character past the token's last character;
    * or null if index was not valid.
    */
-  private getTokenBounds(line: string, index: number): TextRange {
+  private getTokenBounds(line: string, index: number): TextRange | null {
     if (line.charAt(index) === ' ') {
       return null;
     }
@@ -467,7 +470,7 @@ export class TextLayerService {
     const selBounds = this.getAdjustedSelectionBounds(selStart, selEnd, line);
 
     // get the bounds of the first selected token
-    const tokBounds = this.getTokenBounds(line, selBounds.start);
+    const tokBounds = this.getTokenBounds(line, selBounds.start)!;
 
     // calculate x by counting the tokens before the target token
     let x = 1;
@@ -510,7 +513,7 @@ export class TextLayerService {
     // get adjusted selection bounds
     const selBounds = this.getAdjustedSelectionBounds(selStart, selEnd, line);
     // get the bounds of the last selected token
-    const tokBounds = this.getTokenBounds(line, selBounds.end - 1);
+    const tokBounds = this.getTokenBounds(line, selBounds.end - 1)!;
 
     // calculate x by counting the tokens before the target token
     let x = 1;
@@ -542,7 +545,7 @@ export class TextLayerService {
     };
   }
 
-  private getSpanLocFromId(id: string): TokenLocation {
+  private getSpanLocFromId(id: string): TokenLocation | null {
     if (!id) {
       return null;
     }
@@ -566,7 +569,7 @@ export class TextLayerService {
     }
   }
 
-  private findFirstDescendantSpan(range: SelectedRange): Element {
+  private findFirstDescendantSpan(range: SelectedRange): Element | null {
     let inside = false;
     let span = null;
 
@@ -603,13 +606,14 @@ export class TextLayerService {
    */
   private getNodeBaseOffset(node: Node): number {
     let offset = 0;
-    node = node.previousSibling;
-    while (node) {
+    let n: Node | null = node;
+    n = node.previousSibling;
+    while (n) {
       offset +=
-        node.nodeType === Node.ELEMENT_NODE
-          ? (node as any).innerText?.length || 0
-          : node.textContent?.length || 0;
-      node = node.previousSibling;
+        n.nodeType === Node.ELEMENT_NODE
+          ? (n as any).innerText?.length || 0
+          : n.textContent?.length || 0;
+      n = n.previousSibling;
     }
     return offset;
   }
@@ -621,12 +625,14 @@ export class TextLayerService {
    * current selection using getSelectedRange().
    * @returns The token location or null.
    */
-  public getSelectedLocationForEdit(range: SelectedRange): TokenLocation {
+  public getSelectedLocationForEdit(
+    range: SelectedRange
+  ): TokenLocation | null {
     if (!range) {
       return null;
     }
     // just find the first descendant span in selection
-    let span: Element = null;
+    let span: Element | null = null;
     switch (range.commonAncestorContainer.nodeType) {
       case Node.ELEMENT_NODE:
         span = range.commonAncestorContainer as Element;
@@ -645,7 +651,7 @@ export class TextLayerService {
         break;
     }
 
-    return span ? this.getSpanLocFromId(span.getAttribute('id')) : null;
+    return span ? this.getSpanLocFromId(span.getAttribute('id')!) : null;
   }
 
   private textLineToString(line: TokenTextLayerLine): string {
@@ -668,7 +674,7 @@ export class TextLayerService {
       // single token: check for at,run
       if (start.at) {
         sb.push(`@${start.at}`);
-        if (start.run > 1) {
+        if (start.run && start.run > 1) {
           sb.push(`x${start.run}`);
         }
       }
@@ -724,8 +730,8 @@ export class TextLayerService {
     let inside = false;
     if (
       // the selected text node must not be child of a span
-      range.startContainer.parentElement.tagName === 'SPAN' ||
-      range.startContainer.parentElement.tagName === 'SPAN' ||
+      range.startContainer.parentElement?.tagName === 'SPAN' ||
+      range.startContainer.parentElement?.tagName === 'SPAN' ||
       // the nodes tree from the common ancestor, from the start node
       // up to the end node, must not include any span
       this.findNode(range.commonAncestorContainer, (node: Node) => {
@@ -761,12 +767,12 @@ export class TextLayerService {
    * @param range The selected range. You can get it from the
    * current selection using getSelectedRange().
    * @param text The full base text.
-   * @returns TokenLocation The token location or null.
+   * @returns TokenLocation The token location or undefined.
    */
   public getSelectedLocationForNew(
     range: SelectedRange,
     text: string
-  ): TokenLocation {
+  ): TokenLocation | null {
     if (!range || this.selHasAnySpan(range)) {
       return null;
     }
@@ -802,7 +808,11 @@ export class TextLayerService {
     // get the end (including the base offset)
     const end =
       yBounds.start !== yBounds.end
-        ? this.getEndCoordsFromRange(0, range.endOffset + endBaseOffset, endLine)
+        ? this.getEndCoordsFromRange(
+            0,
+            range.endOffset + endBaseOffset,
+            endLine
+          )
         : this.getEndCoordsFromRange(
             range.startOffset + endBaseOffset,
             range.endOffset + endBaseOffset,
@@ -820,7 +830,7 @@ export class TextLayerService {
    * Get the currently selected range in the browser's document.
    * This uses the rangy library.
    */
-  public getSelectedRange(): Range {
+  public getSelectedRange(): Range | null {
     const sel = rangy.getSelection();
     if (sel.isCollapsed) {
       return null;

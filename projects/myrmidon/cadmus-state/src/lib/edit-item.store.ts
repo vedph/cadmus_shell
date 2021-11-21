@@ -4,7 +4,7 @@ import {
   PartGroup,
   FacetDefinition,
   LayerPartInfo,
-  Part
+  Part,
 } from '@myrmidon/cadmus-core';
 import { Injectable } from '@angular/core';
 
@@ -22,24 +22,24 @@ export interface EditItemState {
   /**
    * The item being edited.
    */
-  item: Item | null;
+  item?: Item;
   /**
    * The raw list of item's parts.
    */
-  parts: Part[] | null;
+  parts?: Part[];
   /**
    * The item's parts, grouped.
    */
-  partGroups: PartGroup[] | null;
+  partGroups?: PartGroup[];
   /**
    * The set of all the possible layer parts for this item, either
    * present or absent.
    */
-  layerPartInfos: LayerPartInfo[] | null;
+  layerPartInfos?: LayerPartInfo[];
   /**
    * The facet definition assigned to the item.
    */
-  facet: FacetDefinition | null;
+  facet?: FacetDefinition;
 
   dirty?: boolean;
   saving?: boolean;
@@ -49,16 +49,9 @@ export interface EditItemState {
 }
 
 const initialState: EditItemState = {
-  item: null,
   parts: [],
   partGroups: [],
   layerPartInfos: [],
-  facet: null,
-  dirty: false,
-  saving: false,
-  deletingPart: false,
-  loading: false,
-  error: null
 };
 
 @Injectable({ providedIn: 'root' })
@@ -70,19 +63,19 @@ export class EditItemStore extends Store<EditItemState> {
 
   public setDirty(value = true): void {
     this.update({
-      dirty: value
+      dirty: value,
     });
   }
 
   public setSaving(value = true): void {
     this.update({
-      saving: value
+      saving: value,
     });
   }
 
   public setDeletingPart(value = true): void {
     this.update({
-      deletingPart: value
+      deletingPart: value,
     });
   }
 }

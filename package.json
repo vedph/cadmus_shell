@@ -13,7 +13,7 @@
     "build-phi": "ng build @myrmidon/cadmus-part-philology-ui --configuration=production && ng build @myrmidon/cadmus-part-philology-pg --configuration=production",
     "build-pag": "ng build @myrmidon/cadmus-admin --configuration=production && ng build @myrmidon/cadmus-browser-hierarchy --configuration=production && ng build @myrmidon/cadmus-item-editor --configuration=production && ng build @myrmidon/cadmus-item-list --configuration=production && ng build @myrmidon/cadmus-item-search --configuration=production && ng build @myrmidon/cadmus-layer-demo --configuration=production && ng build @myrmidon/cadmus-login --configuration=production && ng build @myrmidon/cadmus-reset-password --configuration=production && ng build @myrmidon/cadmus-thesaurus-editor --configuration=production && ng build @myrmidon/cadmus-thesaurus-list --configuration=production && ng build @myrmidon/cadmus-user --configuration=production",
     "build-gr": "ng build @myrmidon/cadmus-graph-ui --configuration=production",
-    "build-all": "npm run-script build-core && npm run-script build-gen && npm run-script build-phi && npm run-script build-pag"
+    "build-all": "npm run-script build-core && npm run-script build-gen && npm run-script build-phi && npm run-script build-pag && npm run build-gr"
   },
   "private": true,
   "dependencies": {
@@ -51,9 +51,10 @@
     "@angular-devkit/build-angular": "~13.0.3",
     "@angular/cli": "~13.0.3",
     "@angular/compiler-cli": "~13.0.2",
-    "@types/node": "^12.11.1",
+    "@types/gravatar": "^1.8.3",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.3",
+    "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",

@@ -19,7 +19,7 @@ describe('Class: HistoricalDate', () => {
     expect(d).toBeNull();
   });
   it('parse "23 AD" should get A=year', () => {
-    const d = HistoricalDate.parse('23 AD');
+    const d = HistoricalDate.parse('23 AD')!;
     expect(d).toBeTruthy();
     expect(d.getDateType()).toBe(HistoricalDateType.point);
     const a = d.a;
@@ -33,7 +33,7 @@ describe('Class: HistoricalDate', () => {
     expect(a.hint).toBeFalsy();
   });
   it('parse "c.23 AD" should get A=approx. year', () => {
-    const d = HistoricalDate.parse('c.23 AD');
+    const d = HistoricalDate.parse('c.23 AD')!;
     expect(d).toBeTruthy();
     expect(d.getDateType()).toBe(HistoricalDateType.point);
     const a = d.a;
@@ -47,7 +47,7 @@ describe('Class: HistoricalDate', () => {
     expect(a.hint).toBeFalsy();
   });
   it('parse "c.23 AD?" should get A=approx. and dub. year', () => {
-    const d = HistoricalDate.parse('c.23 AD?');
+    const d = HistoricalDate.parse('c.23 AD?')!;
     expect(d).toBeTruthy();
     expect(d.getDateType()).toBe(HistoricalDateType.point);
     const a = d.a;
@@ -61,7 +61,7 @@ describe('Class: HistoricalDate', () => {
     expect(a.hint).toBeFalsy();
   });
   it('parse "c.12 may 23 AD" should get A=approx. DMY', () => {
-    const d = HistoricalDate.parse('c.12 may 23 AD');
+    const d = HistoricalDate.parse('c.12 may 23 AD')!;
     expect(d).toBeTruthy();
     expect(d.getDateType()).toBe(HistoricalDateType.point);
     const a = d.a;
@@ -75,7 +75,7 @@ describe('Class: HistoricalDate', () => {
     expect(a.hint).toBeFalsy();
   });
   it('parse "c.12 may 23 BC?" should get A=approx. and dub. negative year', () => {
-    const d = HistoricalDate.parse('c.12 may 23 BC?');
+    const d = HistoricalDate.parse('c.12 may 23 BC?')!;
     expect(d).toBeTruthy();
     expect(d.getDateType()).toBe(HistoricalDateType.point);
     const a = d.a;
@@ -89,7 +89,7 @@ describe('Class: HistoricalDate', () => {
     expect(a.hint).toBeFalsy();
   });
   it('parse "c.12 may 23/2 BC?" should get A=approx. and dub. negative span year', () => {
-    const d = HistoricalDate.parse('c.12 may 23/2 BC?');
+    const d = HistoricalDate.parse('c.12 may 23/2 BC?')!;
     expect(d).toBeTruthy();
     expect(d.getDateType()).toBe(HistoricalDateType.point);
     const a = d.a;
@@ -103,7 +103,7 @@ describe('Class: HistoricalDate', () => {
     expect(a.hint).toBeFalsy();
   });
   it('parse "25 BC {marriage of Julia and Marcellus}" should get A=year with hint', () => {
-    const d = HistoricalDate.parse('25 BC {marriage of Julia and Marcellus}');
+    const d = HistoricalDate.parse('25 BC {marriage of Julia and Marcellus}')!;
     expect(d).toBeTruthy();
     expect(d.getDateType()).toBe(HistoricalDateType.point);
     const a = d.a;
@@ -118,7 +118,7 @@ describe('Class: HistoricalDate', () => {
   });
 
   it('parse "123 AD -- 135 AD" should get A=123 and B=135', () => {
-    const d = HistoricalDate.parse('123 AD -- 135 AD');
+    const d = HistoricalDate.parse('123 AD -- 135 AD')!;
     expect(d).toBeTruthy();
     expect(d.getDateType()).toBe(HistoricalDateType.range);
     const a = d.a;
@@ -130,7 +130,7 @@ describe('Class: HistoricalDate', () => {
     expect(a.day).toBeFalsy();
     expect(a.month).toBeFalsy();
     expect(a.hint).toBeFalsy();
-    const b = d.b;
+    const b = d.b!;
     expect(b.value).toBe(135);
     expect(b.isCentury).toBeFalsy();
     expect(b.isSpan).toBeFalsy();

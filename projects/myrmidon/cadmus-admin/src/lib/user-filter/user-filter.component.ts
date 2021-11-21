@@ -11,7 +11,7 @@ import { UserFilter } from '@myrmidon/cadmus-core';
 })
 export class UserFilterComponent implements OnInit {
   @Input()
-  public filter$: BehaviorSubject<UserFilter>;
+  public filter$?: BehaviorSubject<UserFilter>;
 
   public name: FormControl;
   public form: FormGroup;
@@ -25,7 +25,7 @@ export class UserFilterComponent implements OnInit {
 
   ngOnInit(): void {
     // update form when filter changes
-    this.filter$.subscribe((f) => {
+    this.filter$?.subscribe((f) => {
       this.updateForm(f);
     });
   }
@@ -53,6 +53,6 @@ export class UserFilterComponent implements OnInit {
       return;
     }
     const filter = this.getFilter();
-    this.filter$.next(filter);
+    this.filter$?.next(filter);
   }
 }

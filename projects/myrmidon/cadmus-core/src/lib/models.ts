@@ -89,7 +89,7 @@ export interface DataPinDefinition {
  */
 export interface PartTypeIds {
   typeId: string;
-  roleId: string | null;
+  roleId?: string;
 }
 
 /**

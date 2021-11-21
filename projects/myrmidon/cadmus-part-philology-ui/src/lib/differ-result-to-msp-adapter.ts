@@ -6,8 +6,8 @@ import { Diff, DIFF_DELETE, DIFF_INSERT, DIFF_EQUAL } from 'diff-match-patch';
 import { TextRange } from '@myrmidon/cadmus-core';
 
 class DiffAndMsp {
-  diff: Diff;
-  msp: MspOperation;
+  diff?: Diff;
+  msp?: MspOperation;
 }
 const DIFF_OP = 0;
 const DIFF_TXT = 1;
@@ -16,7 +16,7 @@ const DIFF_TXT = 1;
  * Misspelling adapter for Google diff-match-patch library.
  */
 export class DifferResultToMspAdapter {
-  public isMovDisabled: boolean;
+  public isMovDisabled?: boolean;
 
   private mapDiffsWithReplacements(diffs: Diff[], output: DiffAndMsp[]): void {
     let start = 1;
@@ -42,7 +42,7 @@ export class DifferResultToMspAdapter {
       } else {
         output.push({
           diff: diffs[i],
-          msp: null,
+          msp: undefined,
         });
         if (
           diffs[i][DIFF_OP] === DIFF_DELETE ||
@@ -58,16 +58,16 @@ export class DifferResultToMspAdapter {
     // first look for INS..DEL
     for (let i = 0; i < mspDiffs.length; i++) {
       // for each INS:
-      if (mspDiffs[i].msp && mspDiffs[i].msp.operator === MspOperator.insert) {
+      if (mspDiffs[i].msp && mspDiffs[i].msp?.operator === MspOperator.insert) {
         const ins = mspDiffs[i].msp;
 
         // find a DEL with the same value
-        let nextDel: DiffAndMsp = null;
+        let nextDel: DiffAndMsp | undefined = undefined;
         for (let j = i + 1; j < mspDiffs.length; j++) {
           if (
             mspDiffs[j].msp &&
-            mspDiffs[j].msp.operator === MspOperator.delete &&
-            mspDiffs[j].msp.valueA === ins.valueB
+            mspDiffs[j].msp!.operator === MspOperator.delete &&
+            mspDiffs[j].msp!.valueA === ins?.valueB
           ) {
             nextDel = mspDiffs[j];
             break;
@@ -81,9 +81,9 @@ export class DifferResultToMspAdapter {
 
           const mov = new MspOperation();
           mov.operator = MspOperator.move;
-          mov.rangeA = del.rangeA;
-          mov.rangeB = ins.rangeA;
-          mov.valueA = del.valueA;
+          mov.rangeA = del?.rangeA;
+          mov.rangeB = ins?.rangeA;
+          mov.valueA = del?.valueA;
 
           mspDiffs[nextDelIndex] = {
             diff: mspDiffs[nextDelIndex].diff,
@@ -98,15 +98,15 @@ export class DifferResultToMspAdapter {
     // then look for DEL..INS
     for (let i = 0; i < mspDiffs.length; i++) {
       // for each DEL:
-      if (mspDiffs[i].msp && mspDiffs[i].msp.operator === MspOperator.delete) {
+      if (mspDiffs[i].msp && mspDiffs[i].msp!.operator === MspOperator.delete) {
         // find an INS with the same value
         const del = mspDiffs[i].msp;
-        let nextIns: DiffAndMsp = null;
+        let nextIns: DiffAndMsp | undefined = undefined;
         for (let j = i + 1; j < mspDiffs.length; j++) {
           if (
             mspDiffs[j].msp &&
-            mspDiffs[j].msp.operator === MspOperator.insert &&
-            mspDiffs[j].msp.valueB === del.valueA
+            mspDiffs[j].msp!.operator === MspOperator.insert &&
+            mspDiffs[j].msp!.valueB === del?.valueA
           ) {
             nextIns = mspDiffs[j];
             break;
@@ -120,9 +120,9 @@ export class DifferResultToMspAdapter {
 
           const mov = new MspOperation();
           mov.operator = MspOperator.move;
-          mov.rangeA = del.rangeA;
-          mov.rangeB = ins.rangeA;
-          mov.valueA = del.valueA;
+          mov.rangeA = del?.rangeA;
+          mov.rangeB = ins?.rangeA;
+          mov.valueA = del?.valueA;
 
           mspDiffs[i] = {
             diff: mspDiffs[i].diff,
@@ -152,33 +152,34 @@ export class DifferResultToMspAdapter {
     let index = 0;
     for (let i = 0; i < mspDiffs.length; i++) {
       if (mspDiffs[i].msp) {
-        index += mspDiffs[i].msp.rangeA.length;
+        index += mspDiffs[i].msp!.rangeA!.length;
         continue;
       }
 
       const md = mspDiffs[i];
-      switch (md.diff[DIFF_OP]) {
+      const diffOp = md?.diff ? md.diff[DIFF_OP] : null;
+      switch (diffOp) {
         case DIFF_EQUAL:
-          index += md.diff[DIFF_TXT].length;
+          index += md.diff![DIFF_TXT].length;
           break;
 
         case DIFF_DELETE:
           const del = new MspOperation();
           del.operator = MspOperator.delete;
-          del.rangeA = new TextRange(index + 1, md.diff[DIFF_TXT].length);
-          del.valueA = md.diff[DIFF_TXT];
+          del.rangeA = new TextRange(index + 1, md.diff![DIFF_TXT].length);
+          del.valueA = md.diff![DIFF_TXT];
           mspDiffs[i] = {
             diff: md.diff,
             msp: del,
           };
-          index += md.diff[DIFF_TXT].length;
+          index += md.diff![DIFF_TXT].length;
           break;
 
         case DIFF_INSERT:
           const ins = new MspOperation();
           ins.operator = MspOperator.insert;
           ins.rangeA = new TextRange(index + 1, 0);
-          ins.valueB = md.diff[DIFF_TXT];
+          ins.valueB = md.diff![DIFF_TXT];
           mspDiffs[i] = {
             diff: md.diff,
             msp: ins,
@@ -191,6 +192,6 @@ export class DifferResultToMspAdapter {
       this.detectMoves(mspDiffs);
     }
 
-    return mspDiffs.filter((md) => md.msp).map((md) => md.msp);
+    return mspDiffs.filter((md) => md.msp).map((md) => md.msp!);
   }
 }

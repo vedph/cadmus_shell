@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ItemService } from '@myrmidon/cadmus-api';
 import { forkJoin } from 'rxjs';
+
+import { ItemService } from '@myrmidon/cadmus-api';
 import { Item, FacetDefinition, Part } from '@myrmidon/cadmus-core';
+
 import { EditItemStore } from './edit-item.store';
 import { AppQuery } from './app.query';
 
@@ -16,9 +18,11 @@ export class EditItemService {
     private _itemService: ItemService
   ) {}
 
-  private pickDefaultFacet(facets: FacetDefinition[]): FacetDefinition | null {
+  private pickDefaultFacet(
+    facets: FacetDefinition[]
+  ): FacetDefinition | undefined {
     if (!facets.length) {
-      return null;
+      return undefined;
     }
     // if there is a facet with id="default", pick it
     const defaultFacet = facets.find((f) => f.id === 'default');
@@ -33,13 +37,14 @@ export class EditItemService {
    * Load the item with the specified ID (if any; the ID can be null for
    * a new item), and all the required lookup data into the item store.
    */
-  public load(itemId: string | null): void {
+  public load(itemId?: string): void {
     this._store.setLoading(true);
 
-    const layers$ = this._itemService.getItemLayerInfo(itemId, true);
     const appState = this._appQuery.getValue();
 
     // if not a new item, include it in load
+    const layers$ = this._itemService.getItemLayerInfo(itemId || '', true);
+
     if (itemId) {
       forkJoin({
         item: this._itemService.getItem(itemId, true),
@@ -58,7 +63,7 @@ export class EditItemService {
             item: result.item,
             parts: result.item.parts,
             partGroups: this._itemService.groupParts(
-              result.item.parts,
+              result.item.parts || [],
               facetParts
             ),
             layerPartInfos: result.layers,
@@ -82,17 +87,17 @@ export class EditItemService {
 
           this._store.update({
             item: {
-              id: null,
-              title: null,
-              description: null,
-              facetId: null,
-              groupId: null,
-              sortKey: null,
+              id: '',
+              title: '',
+              description: '',
+              facetId: '',
+              groupId: '',
+              sortKey: '',
               flags: 0,
               timeCreated: new Date(),
-              creatorId: null,
+              creatorId: '',
               timeModified: new Date(),
-              userId: null,
+              userId: '',
             },
             parts: [],
             partGroups: [],
@@ -154,7 +159,7 @@ export class EditItemService {
         (_) => {
           this._store.setDeletingPart(false);
           // reload the store
-          this.load(this._store.getValue().item.id);
+          this.load(this._store.getValue().item?.id);
           resolve(id);
         },
         (error) => {
@@ -167,14 +172,14 @@ export class EditItemService {
     });
   }
 
-  public addNewLayerPart(itemId: string, typeId: string, roleId: string): void {
+  public addNewLayerPart(itemId: string, typeId: string, roleId?: string): void {
     const part: Part = {
       itemId,
       typeId,
       roleId,
-      id: null,
-      creatorId: null,
-      userId: null,
+      id: '',
+      creatorId: '',
+      userId: '',
       timeCreated: new Date(),
       timeModified: new Date(),
     };
@@ -183,7 +188,7 @@ export class EditItemService {
       (_) => {
         this._store.setSaving(false);
         // reload the store
-        this.load(this._store.getValue().item.id);
+        this.load(this._store.getValue().item?.id);
       },
       (error) => {
         console.log(error);
@@ -199,7 +204,7 @@ export class EditItemService {
       (_) => {
         this._store.setSaving(false);
         // reload the store
-        this.load(this._store.getValue().item.id);
+        this.load(this._store.getValue().item?.id);
       },
       (error) => {
         console.log(error);

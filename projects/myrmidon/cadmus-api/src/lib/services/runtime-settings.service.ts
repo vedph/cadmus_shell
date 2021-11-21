@@ -1,9 +1,6 @@
+/*
 import { Injectable } from '@angular/core';
 
-/**
- * Runtime settings service. This can be used as a volatile cache for settings.
- * Currently this is not used.
- */
 @Injectable({
   providedIn: 'root',
 })
@@ -22,7 +19,8 @@ export class RuntimeSettingsService {
     this._data[key] = value;
   }
 
-  public get<T>(key: string, defaultValue: T = null): T {
+  public get<T>(key: string, defaultValue: T | null = null): T {
     return this._data[key] || defaultValue;
   }
 }
+*/

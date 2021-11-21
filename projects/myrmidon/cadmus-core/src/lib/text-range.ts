@@ -19,7 +19,7 @@ export class TextRange {
    *
    * @param text The text.
    */
-  public static parse(text: string): TextRange {
+  public static parse(text: string): TextRange | null {
     if (!text) {
       return null;
     }

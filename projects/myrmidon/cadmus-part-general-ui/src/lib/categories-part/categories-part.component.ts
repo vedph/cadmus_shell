@@ -28,7 +28,7 @@ export class CategoriesPartComponent
 
   constructor(authService: AuthService, formBuilder: FormBuilder) {
     super(authService);
-    this.entries$ = new BehaviorSubject([]);
+    this.entries$ = new BehaviorSubject<ThesaurusEntry[]>([]);
     // form
     this.categories = formBuilder.control([], Validators.required);
     this.form = formBuilder.group({
@@ -40,7 +40,7 @@ export class CategoriesPartComponent
     this.initEditor();
   }
 
-  private updateForm(model: CategoriesPart): void {
+  private updateForm(model?: CategoriesPart): void {
     if (!model?.categories) {
       this.categories.reset();
       return;
@@ -65,10 +65,10 @@ export class CategoriesPartComponent
 
     // assign them to the control
     this.categories.setValue(entries || []);
-    this.form.markAsPristine();
+    this.form!.markAsPristine();
   }
 
-  protected onModelSet(model: CategoriesPart): void {
+  protected onModelSet(model?: CategoriesPart): void {
     this.updateForm(deepCopy(model));
   }
 
@@ -76,14 +76,14 @@ export class CategoriesPartComponent
     let part = this.model;
     if (!part) {
       part = {
-        itemId: this.itemId,
-        id: null,
+        itemId: this.itemId || '',
+        id: '',
         typeId: CATEGORIES_PART_TYPEID,
         roleId: this.roleId,
         timeCreated: new Date(),
-        creatorId: null,
+        creatorId: '',
         timeModified: new Date(),
-        userId: null,
+        userId: '',
         categories: [],
       };
     }

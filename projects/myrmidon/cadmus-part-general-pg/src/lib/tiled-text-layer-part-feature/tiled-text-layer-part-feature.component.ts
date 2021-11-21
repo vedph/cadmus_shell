@@ -41,25 +41,25 @@ import { TiledTextLayerView, TextTileLayerView } from './tiled-text-layer-view';
 export class TiledTextLayerPartFeatureComponent
   implements OnInit, ComponentCanDeactivate
 {
-  public view: TiledTextLayerView;
-  public selectedTile: TextTileLayerView;
+  public view?: TiledTextLayerView;
+  public selectedTile?: TextTileLayerView;
 
   public itemId: string;
-  public partId: string;
-  public roleId: string;
+  public partId?: string;
+  public roleId?: string;
 
-  public loading$: Observable<boolean>;
-  public error$: Observable<string>;
-  public baseText$: Observable<string>;
+  public loading$: Observable<boolean | undefined>;
+  public error$: Observable<string | undefined>;
+  public baseText$: Observable<string | undefined>;
   public locations$: Observable<TokenLocation[]>;
   public rows$: Observable<TextTileRow[]>;
-  public refreshingBreakChance$: Observable<boolean>;
-  public breakChance$: Observable<number>;
+  public refreshingBreakChance$: Observable<boolean | undefined>;
+  public breakChance$: Observable<number | undefined>;
   public layerHints$: Observable<LayerHint[]>;
-  public patchingLayer$: Observable<boolean>;
-  public deletingFragment$: Observable<boolean>;
+  public patchingLayer$: Observable<boolean | undefined>;
+  public deletingFragment$: Observable<boolean | undefined>;
 
-  public pickedLocation: string;
+  public pickedLocation?: string;
   public userLevel: number;
 
   constructor(
@@ -76,13 +76,29 @@ export class TiledTextLayerPartFeatureComponent
     this.itemId = route.snapshot.params['iid'];
     this.partId = route.snapshot.params['pid'];
     if (this.partId === 'new') {
-      this.partId = null;
+      this.partId = undefined;
     }
     this.roleId = route.snapshot.queryParams['rid'];
     if (this.roleId === 'default') {
-      this.roleId = null;
+      this.roleId = undefined;
     }
     this.userLevel = authService.getCurrentUserLevel();
+
+    // layers part
+    this.loading$ = this._editQuery.selectLoading();
+    this.error$ = this._editQuery.selectError();
+    this.baseText$ = this._editQuery.select((state) => state.baseText);
+    this.locations$ = this._editQuery.select((state) => state.locations);
+    this.refreshingBreakChance$ = this._editQuery.selectRefreshingBreakChance();
+    this.breakChance$ = this._editQuery.selectBreakChance();
+    this.layerHints$ = this._editQuery.selectLayerHints();
+    this.patchingLayer$ = this._editQuery.selectPatchingLayers();
+    this.deletingFragment$ = this._editQuery.selectDeletingFragment();
+
+    // base text: connect rows to the base text part
+    this.rows$ = this._editQuery.select(
+      (state) => (state.baseTextPart as TiledTextPart)?.rows
+    );
   }
 
   public canDeactivate(): boolean {
@@ -96,26 +112,10 @@ export class TiledTextLayerPartFeatureComponent
   }
 
   ngOnInit(): void {
-    // base text: connect rows to the base text part
-    this.rows$ = this._editQuery.select(
-      (state) => (state.baseTextPart as TiledTextPart)?.rows
-    );
-
-    // layers part
-    this.loading$ = this._editQuery.selectLoading();
-    this.error$ = this._editQuery.selectError();
-    this.baseText$ = this._editQuery.select((state) => state.baseText);
-    this.locations$ = this._editQuery.select((state) => state.locations);
-    this.refreshingBreakChance$ = this._editQuery.selectRefreshingBreakChance();
-    this.breakChance$ = this._editQuery.selectBreakChance();
-    this.layerHints$ = this._editQuery.selectLayerHints();
-    this.patchingLayer$ = this._editQuery.selectPatchingLayers();
-    this.deletingFragment$ = this._editQuery.selectDeletingFragment();
-
     // when the base text changes, load all the fragments locations
     // and setup their UI state
     this.rows$.subscribe((rows) => {
-      this.view = rows ? new TiledTextLayerView(rows) : null;
+      this.view = rows ? new TiledTextLayerView(rows) : undefined;
       this.view?.setFragmentLocations(this._editQuery.getValue().locations);
     });
 
@@ -123,7 +123,9 @@ export class TiledTextLayerPartFeatureComponent
     this.ensureItemLoaded(this.itemId);
 
     // load the layer part
-    this._editService.load(this.itemId, this.partId);
+    if (this.partId) {
+      this._editService.load(this.itemId, this.partId);
+    }
   }
 
   public refreshBreakChance(): void {
@@ -131,7 +133,9 @@ export class TiledTextLayerPartFeatureComponent
   }
 
   public onTileChecked(y: number, x: number, checked: boolean): void {
-    this.view.toggleLinearTileCheck(y, x, checked);
+    if (this.view) {
+      this.view.toggleLinearTileCheck(y, x, checked);
+    }
   }
 
   private getSelectedTileCoords(): { y: number; x: number } | null {
@@ -148,6 +152,9 @@ export class TiledTextLayerPartFeatureComponent
   }
 
   public selectPrevTile(): void {
+    if (!this.view) {
+      return;
+    }
     let yx = this.getSelectedTileCoords();
     if (yx) {
       yx = this.view.getPrevTileCoords(yx.y, yx.x);
@@ -158,6 +165,9 @@ export class TiledTextLayerPartFeatureComponent
   }
 
   public selectNextTile(): void {
+    if (!this.view) {
+      return;
+    }
     let yx = this.getSelectedTileCoords();
     if (yx) {
       yx = this.view.getNextTileCoords(yx.y, yx.x);
@@ -168,6 +178,9 @@ export class TiledTextLayerPartFeatureComponent
   }
 
   public deleteFragment(): void {
+    if (!this.view) {
+      return;
+    }
     const lf = this.view.getCheckedLocationAndFragment();
     if (!lf || lf.fragment === -1) {
       return;
@@ -180,9 +193,11 @@ export class TiledTextLayerPartFeatureComponent
       .subscribe((ok: boolean) => {
         if (ok) {
           // find the fragment and remove it from the part
-          const i = this._editQuery.getValue().part.fragments.findIndex((p) => {
-            return TokenLocation.parse(p.location).overlaps(loc);
-          });
+          const i = this._editQuery
+            .getValue()
+            .part?.fragments.findIndex((p) => {
+              return TokenLocation.parse(p.location)?.overlaps(loc);
+            });
           if (i === -1) {
             return;
           }
@@ -193,14 +208,19 @@ export class TiledTextLayerPartFeatureComponent
 
   public deleteFragmentFromHint(hint: LayerHint): void {
     const loc = TokenLocation.parse(hint.location);
-    this._editService.deleteFragment(loc);
+    if (loc) {
+      this._editService.deleteFragment(loc);
+    }
   }
 
   private navigateToFragmentEditor(loc: string): void {
     const part = this._editQuery.getValue().part;
+    if (!part) {
+      return;
+    }
 
     const { route, rid } = this._libraryRouteService.buildFragmentEditorRoute(
-      this._editItemQuery.getValue().facet.partDefinitions,
+      this._editItemQuery.getValue().facet!.partDefinitions,
       part.itemId,
       part.id,
       part.typeId,
@@ -222,6 +242,9 @@ export class TiledTextLayerPartFeatureComponent
   }
 
   public editFragment(): void {
+    if (!this.view) {
+      return;
+    }
     const lf = this.view.getCheckedLocationAndFragment();
     if (!lf || lf.fragment === -1) {
       return;
@@ -235,7 +258,11 @@ export class TiledTextLayerPartFeatureComponent
   }
 
   public moveFragmentFromHint(hint: LayerHint): void {
-    if (!this.pickedLocation || this.pickedLocation === hint.location) {
+    if (
+      !this.pickedLocation ||
+      this.pickedLocation === hint.location ||
+      !this.partId
+    ) {
       return;
     }
     this._editService.applyLayerPatches(this.partId, [
@@ -244,6 +271,9 @@ export class TiledTextLayerPartFeatureComponent
   }
 
   public addFragment(): void {
+    if (!this.view) {
+      return;
+    }
     const lf = this.view.getCheckedLocationAndFragment();
     if (!lf || lf.fragment > -1) {
       return;
@@ -252,6 +282,9 @@ export class TiledTextLayerPartFeatureComponent
   }
 
   public pickLocation(): void {
+    if (!this.view) {
+      return;
+    }
     const lf = this.view.getCheckedLocationAndFragment();
     if (!lf) {
       return;
@@ -263,12 +296,17 @@ export class TiledTextLayerPartFeatureComponent
   }
 
   public clearTileChecks(): void {
+    if (!this.view) {
+      return;
+    }
     this.view.setAllTilesViewState({ checked: false });
-    this.pickedLocation = null;
+    this.pickedLocation = undefined;
   }
 
   public applyLayerPatches(patches: string[]): void {
-    this._editService.applyLayerPatches(this.partId, patches);
+    if (this.partId) {
+      this._editService.applyLayerPatches(this.partId, patches);
+    }
   }
 
   public close(): void {

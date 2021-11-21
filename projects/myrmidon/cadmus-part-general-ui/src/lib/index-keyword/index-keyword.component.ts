@@ -17,13 +17,13 @@ import { IndexKeyword } from '../index-keywords-part';
   styleUrls: ['./index-keyword.component.css'],
 })
 export class IndexKeywordComponent implements OnInit {
-  private _keyword: IndexKeyword;
+  private _keyword?: IndexKeyword;
 
   @Input()
-  public get keyword(): IndexKeyword {
+  public get keyword(): IndexKeyword | undefined {
     return this._keyword;
   }
-  public set keyword(value: IndexKeyword) {
+  public set keyword(value: IndexKeyword | undefined) {
     this._keyword = value;
     this.updateForm();
   }

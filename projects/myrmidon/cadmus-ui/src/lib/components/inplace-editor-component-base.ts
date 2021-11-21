@@ -30,8 +30,8 @@ import { debounceTime } from 'rxjs/operators';
   template: '',
 })
 export abstract class InplaceEditorComponentBase<T> implements OnDestroy {
-  protected modelSubscription: Subscription;
-  protected modelSubject: BehaviorSubject<T>;
+  protected modelSubscription?: Subscription;
+  protected modelSubject?: BehaviorSubject<T>;
 
   /**
    * The optional parent form this component should attach to.
@@ -39,17 +39,17 @@ export abstract class InplaceEditorComponentBase<T> implements OnDestroy {
    * to the state of a parent form in the consumer control.
    */
   @Input()
-  public parentForm: FormGroup;
+  public parentForm?: FormGroup;
 
   /**
    * The IDs edited by this component, wrapped in a subject
    * stream. This component updates when the stream updates.
    */
   @Input()
-  public get model$(): BehaviorSubject<T> {
+  public get model$(): BehaviorSubject<T> | undefined {
     return this.modelSubject;
   }
-  public set model$(value: BehaviorSubject<T>) {
+  public set model$(value: BehaviorSubject<T> | undefined) {
     this.modelSubject = value;
 
     // unsubscribe the previous observable if any
@@ -75,7 +75,7 @@ export abstract class InplaceEditorComponentBase<T> implements OnDestroy {
   /**
    * The form grouping the controls of this editor.
    */
-  public form: FormGroup;
+  public form?: FormGroup;
 
   constructor(protected formBuilder: FormBuilder) {
     // events
@@ -120,7 +120,7 @@ export abstract class InplaceEditorComponentBase<T> implements OnDestroy {
    * Set the model for this component, updating the form accordingly.
    * @param value The model.
    */
-  protected abstract setModel(value: T | null): void;
+  protected abstract setModel(value: T | undefined): void;
 
   /**
    * Get the model for this component, from the form controls.

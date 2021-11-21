@@ -7,32 +7,32 @@ describe('Class: Datation', () => {
     });
   });
 
-  it('default Datation should be undefined', () => {
+  it('default Datation should be 0', () => {
     const d = new Datation();
-    expect(d.value).toBeUndefined();
+    expect(d.value).toBe(0);
   });
 
   it('getCentury from 480 BC should be -5', () => {
-    const d = Datation.parse('480 BC');
+    const d = Datation.parse('480 BC')!;
     const c = d.getCentury();
     expect(c).toBe(-5);
   });
   it('getCentury from 31 AD should be 1', () => {
-    const d = Datation.parse('31 AD');
+    const d = Datation.parse('31 AD')!;
     const c = d.getCentury();
     expect(c).toBe(1);
   });
 
-  it('parse empty should be undefined', () => {
+  it('parse empty should be null', () => {
     const d = Datation.parse('');
-    expect(d).toBeUndefined();
+    expect(d).toBeNull();
   });
-  it('parse whitespaces should be undefined', () => {
+  it('parse whitespaces should be null', () => {
     const d = Datation.parse('  ');
-    expect(d).toBeUndefined();
+    expect(d).toBeNull();
   });
   it('parse "45" should get year', () => {
-    const d = Datation.parse('45');
+    const d = Datation.parse('45')!;
     expect(d.value).toBe(45);
     expect(d.isCentury).toBeFalsy();
     expect(d.isSpan).toBeFalsy();
@@ -43,7 +43,7 @@ describe('Class: Datation', () => {
     expect(d.hint).toBeFalsy();
   });
   it('parse "c.45" should get approximate year', () => {
-    const d = Datation.parse('c.45');
+    const d = Datation.parse('c.45')!;
     expect(d.value).toBe(45);
     expect(d.isCentury).toBeFalsy();
     expect(d.isSpan).toBeFalsy();
@@ -54,7 +54,7 @@ describe('Class: Datation', () => {
     expect(d.hint).toBeFalsy();
   });
   it('parse "45?" should get dubious year', () => {
-    const d = Datation.parse('45?');
+    const d = Datation.parse('45?')!;
     expect(d.value).toBe(45);
     expect(d.isCentury).toBeFalsy();
     expect(d.isSpan).toBeFalsy();
@@ -65,7 +65,7 @@ describe('Class: Datation', () => {
     expect(d.hint).toBeFalsy();
   });
   it('parse "c.45?" should get approximate and dubious year', () => {
-    const d = Datation.parse('c.45?');
+    const d = Datation.parse('c.45?')!;
     expect(d.value).toBe(45);
     expect(d.isCentury).toBeFalsy();
     expect(d.isSpan).toBeFalsy();
@@ -76,7 +76,7 @@ describe('Class: Datation', () => {
     expect(d.hint).toBeFalsy();
   });
   it('parse "45 {a hint here}" should get year with hint', () => {
-    const d = Datation.parse('45 {a hint here}');
+    const d = Datation.parse('45 {a hint here}')!;
     expect(d.value).toBe(45);
     expect(d.isCentury).toBeFalsy();
     expect(d.isSpan).toBeFalsy();
@@ -87,7 +87,7 @@ describe('Class: Datation', () => {
     expect(d.hint).toBe('a hint here');
   });
   it('parse "45 BC" should get negative year', () => {
-    const d = Datation.parse('45 BC');
+    const d = Datation.parse('45 BC')!;
     expect(d.value).toBe(-45);
     expect(d.isCentury).toBeFalsy();
     expect(d.isSpan).toBeFalsy();
@@ -98,7 +98,7 @@ describe('Class: Datation', () => {
     expect(d.hint).toBeFalsy();
   });
   it('parse "45 AD" should get positive year', () => {
-    const d = Datation.parse('45 AD');
+    const d = Datation.parse('45 AD')!;
     expect(d.value).toBe(45);
     expect(d.isCentury).toBeFalsy();
     expect(d.isSpan).toBeFalsy();
@@ -109,46 +109,46 @@ describe('Class: Datation', () => {
     expect(d.hint).toBeFalsy();
   });
   it('parse "45/44 BC" should be years span', () => {
-    const d = Datation.parse('45/44 BC');
+    const d = Datation.parse('45/44 BC')!;
     expect(d).toBeTruthy();
     expect(d.value).toBe(-45);
     expect(d.isCentury).toBeFalsy();
     expect(d.isSpan).toBeTruthy();
   });
   it('parse "132/133 AD" should be years span', () => {
-    const d = Datation.parse('132/133 AD');
+    const d = Datation.parse('132/133 AD')!;
     expect(d).toBeTruthy();
     expect(d.value).toBe(132);
     expect(d.isCentury).toBeFalsy();
     expect(d.isSpan).toBeTruthy();
   });
   it('parse "III" should be century', () => {
-    const d = Datation.parse('III');
+    const d = Datation.parse('III')!;
     expect(d).toBeTruthy();
     expect(d.value).toBe(3);
     expect(d.isCentury).toBeTruthy();
   });
   it('parse "III AD" should be positive century', () => {
-    const d = Datation.parse('III AD');
+    const d = Datation.parse('III AD')!;
     expect(d).toBeTruthy();
     expect(d.value).toBe(3);
     expect(d.isCentury).toBeTruthy();
   });
   it('parse "III BC" should be negative century', () => {
-    const d = Datation.parse('III BC');
+    const d = Datation.parse('III BC')!;
     expect(d).toBeTruthy();
     expect(d.value).toBe(-3);
     expect(d.isCentury).toBeTruthy();
   });
   it('parse "may 45" should be month and year', () => {
-    const d = Datation.parse('may 45');
+    const d = Datation.parse('may 45')!;
     expect(d).toBeTruthy();
     expect(d.value).toBe(45);
     expect(d.isCentury).toBeFalsy();
     expect(d.month).toBe(5);
   });
   it('parse "3 may 45" should be day, month and year', () => {
-    const d = Datation.parse('3 may 45');
+    const d = Datation.parse('3 may 45')!;
     expect(d).toBeTruthy();
     expect(d.value).toBe(45);
     expect(d.isCentury).toBeFalsy();
@@ -156,7 +156,7 @@ describe('Class: Datation', () => {
     expect(d.day).toBe(3);
   });
   it('parse "30 may 45" should be day, month and year', () => {
-    const d = Datation.parse('30 may 45');
+    const d = Datation.parse('30 may 45')!;
     expect(d).toBeTruthy();
     expect(d.value).toBe(45);
     expect(d.isCentury).toBeFalsy();
@@ -164,7 +164,7 @@ describe('Class: Datation', () => {
     expect(d.day).toBe(30);
   });
   it('parse "c. 2 May 23/2 BC? {hint}" should be DMY with span, approx. and dub.', () => {
-    const d = Datation.parse('c. 2 May 23/2 BC? {hint}');
+    const d = Datation.parse('c. 2 May 23/2 BC? {hint}')!;
     expect(d).toBeTruthy();
     expect(d.value).toBe(-23);
     expect(d.isCentury).toBeFalsy();
@@ -175,14 +175,14 @@ describe('Class: Datation', () => {
     expect(d.hint).toBe('hint');
   });
   it('parse "may IX AD" should be month', () => {
-    const d = Datation.parse('may IX AD');
+    const d = Datation.parse('may IX AD')!;
     expect(d).toBeTruthy();
     expect(d.value).toBe(9);
     expect(d.isCentury).toBeTrue();
     expect(d.month).toBe(5);
   });
   it('parse "30 may IX AD" should be month', () => {
-    const d = Datation.parse('30 may IX AD');
+    const d = Datation.parse('30 may IX AD')!;
     expect(d).toBeTruthy();
     expect(d.value).toBe(9);
     expect(d.isCentury).toBeTrue();
@@ -190,7 +190,7 @@ describe('Class: Datation', () => {
     expect(d.day).toBe(30);
   });
   it('parse "c.30 may IX AD" should be day, month, century approx.', () => {
-    const d = Datation.parse('c.30 may IX AD');
+    const d = Datation.parse('c.30 may IX AD')!;
     expect(d).toBeTruthy();
     expect(d.isApproximate).toBeTrue();
     expect(d.value).toBe(9);
@@ -199,7 +199,7 @@ describe('Class: Datation', () => {
     expect(d.day).toBe(30);
   });
   it('parse "c.30 may IX AD ?" should be day, month, century approx. and dub.', () => {
-    const d = Datation.parse('c.30 may IX AD ?');
+    const d = Datation.parse('c.30 may IX AD ?')!;
     expect(d).toBeTruthy();
     expect(d.isApproximate).toBeTrue();
     expect(d.isDubious).toBeTrue();

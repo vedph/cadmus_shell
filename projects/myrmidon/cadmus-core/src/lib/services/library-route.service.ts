@@ -20,7 +20,7 @@ import { PartDefinition, PartEditorKeys } from '../models';
  * ":iid" is the item ID and ":pid" the part ID.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LibraryRouteService {
   constructor(
@@ -55,9 +55,10 @@ export class LibraryRouteService {
    * @returns An object where frTypeId=fragment type ID and frRoleId=fragment role
    * ID, or null.
    */
-  public getFragmentTypeAndRole(
-    roleId: string
-  ): { frTypeId: string; frRoleId: string | null } {
+  public getFragmentTypeAndRole(roleId?: string): {
+    frTypeId: string;
+    frRoleId?: string;
+  } | null {
     if (!roleId || !roleId.startsWith('fr.')) {
       return null;
     }
@@ -65,12 +66,12 @@ export class LibraryRouteService {
     if (i > -1) {
       return {
         frTypeId: roleId.substring(0, i),
-        frRoleId: roleId.substring(i + 1)
+        frRoleId: roleId.substring(i + 1),
       };
     } else {
       return {
         frTypeId: roleId,
-        frRoleId: null
+        frRoleId: undefined,
       };
     }
   }
@@ -82,29 +83,30 @@ export class LibraryRouteService {
    * @param partDefs The parts definitions.
    * @param typeId The type ID.
    * @param roleId The role ID or null.
-   * @returns Part definition or null if not found.
+   * @returns Part definition or undefined if not found.
    */
   private findPartDefinition(
     partDefs: PartDefinition[],
     typeId: string,
-    roleId: string = null
-  ): PartDefinition | null {
+    roleId: string | null = null
+  ): PartDefinition | undefined {
     if (!partDefs) {
-      return null;
+      return undefined;
     }
 
     // if role ID is specified, find both type and role
     if (roleId) {
-      const reqRoleId = this.stripFragmentRoleId(roleId);
-      return partDefs.find(d => {
+      const reqRoleId: string = this.stripFragmentRoleId(roleId);
+      return partDefs.find((d) => {
         return (
           d.typeId === typeId &&
+          d.roleId &&
           this.stripFragmentRoleId(d.roleId) === reqRoleId
         );
       });
     }
     // else just find type ID
-    return partDefs.find(d => {
+    return partDefs.find((d) => {
       return d.typeId === typeId;
     });
   }
@@ -118,13 +120,13 @@ export class LibraryRouteService {
    */
   public getEditorKeyFromPartType(
     typeId: string,
-    roleId: string = null
+    roleId?: string
   ): { partKey: string; frKey?: string } {
     // find the part type ID
     const partGroupKey = this._partEditorKeys[typeId];
     if (!partGroupKey) {
       return {
-        partKey: 'default'
+        partKey: 'default',
       };
     }
 
@@ -133,11 +135,11 @@ export class LibraryRouteService {
       const reqRoleId = this.stripFragmentRoleId(roleId);
       return {
         partKey: partGroupKey.part,
-        frKey: partGroupKey.fragments[reqRoleId]
+        frKey: partGroupKey.fragments![reqRoleId],
       };
     }
     return {
-      partKey: partGroupKey.part
+      partKey: partGroupKey.part,
     };
   }
 
@@ -152,12 +154,12 @@ export class LibraryRouteService {
     if (i > -1) {
       return {
         partKey: key.substr(0, i),
-        frKey: key.substr(i + 1)
+        frKey: key.substr(i + 1),
       };
     } else {
       return {
         partKey: key,
-        frKey: key
+        frKey: key,
       };
     }
   }
@@ -188,7 +190,7 @@ export class LibraryRouteService {
     partId: string,
     typeId: string,
     roleId?: string
-  ): { route: string; rid: string | null } {
+  ): { route: string; rid?: string } {
     let route: string;
     const editorKey = this.getEditorKeyFromPartType(typeId);
 
@@ -196,7 +198,7 @@ export class LibraryRouteService {
     route = `/items/${itemId}/${editorKey.partKey}/${typeId}/${partId}`;
     return {
       route: route,
-      rid: roleId
+      rid: roleId,
     };
   }
 
@@ -218,17 +220,17 @@ export class LibraryRouteService {
     itemId: string,
     partId: string,
     typeId: string,
-    roleId: string,
+    roleId: string | undefined,
     loc: string
-  ): { route: string; rid: string | null } {
+  ): { route: string; rid?: string } {
     let route: string;
     const editorKey = this.getEditorKeyFromPartType(typeId, roleId);
-    const { frTypeId, frRoleId } = this.getFragmentTypeAndRole(roleId);
+    const { frTypeId, frRoleId } = this.getFragmentTypeAndRole(roleId)!;
 
     route = `/items/${itemId}/${editorKey.frKey}/fragment/${partId}/${frTypeId}/${loc}`;
     return {
       route: route,
-      rid: frRoleId
+      rid: frRoleId,
     };
   }
 }

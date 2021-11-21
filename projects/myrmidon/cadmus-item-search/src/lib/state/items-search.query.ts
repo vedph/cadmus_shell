@@ -9,7 +9,7 @@ export class ItemsSearchQuery extends QueryEntity<ItemsSearchState> {
     super(store);
   }
 
-  public selectQuery(): Observable<string> {
+  public selectQuery(): Observable<string | undefined> {
     return this.select(state => state.query);
   }
 

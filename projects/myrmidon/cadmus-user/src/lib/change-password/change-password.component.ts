@@ -15,7 +15,7 @@ import { PasswordValidator } from '@myrmidon/cadmus-core';
   styleUrls: ['./change-password.component.css'],
 })
 export class ChangePasswordComponent {
-  public busy: boolean;
+  public busy?: boolean;
 
   public email: FormControl;
   public oldPassword: FormControl;
@@ -58,7 +58,7 @@ export class ChangePasswordComponent {
     });
   }
 
-  private areEqual(group: FormGroup): { [key: string]: boolean } {
+  private areEqual(group: FormGroup): { [key: string]: boolean } | null {
     if (this.oldPassword.value === this.confirmPassword.value) {
       return null;
     }
@@ -67,9 +67,9 @@ export class ChangePasswordComponent {
     };
   }
 
-  public getPasswordErrorLabel(): string {
+  public getPasswordErrorLabel(): string | undefined {
     if (!this.newPassword.dirty) {
-      return null;
+      return undefined;
     }
 
     if (this.newPassword.hasError('required')) {
@@ -92,7 +92,7 @@ export class ChangePasswordComponent {
       return 'at least 1 punctuation or symbol';
     }
 
-    return null;
+    return undefined;
   }
 
   public change(): void {

@@ -8,7 +8,7 @@ export enum MspOperator {
   replace,
   insert,
   move,
-  swap
+  swap,
 }
 
 /**
@@ -35,11 +35,11 @@ export class MspOperation {
       '(?:\\s*\\{([^}]+)})?'
   );
 
-  private _operator: MspOperator;
-  private _tag: string;
-  private _note: string;
-  private _valueA: string;
-  private _valueB: string;
+  private _operator?: MspOperator;
+  private _tag?: string;
+  private _note?: string;
+  private _valueA?: string;
+  private _valueB?: string;
 
   private static parseRangeNumber(text: string): number {
     if (!text || !text.trim()) {
@@ -48,7 +48,10 @@ export class MspOperation {
     return parseInt(text, 10);
   }
 
-  private static determineOperator(text: string, operation: MspOperation): void {
+  private static determineOperator(
+    text: string,
+    operation: MspOperation
+  ): void {
     switch (text) {
       case '=':
         if (!operation.valueB) {
@@ -56,7 +59,7 @@ export class MspOperation {
           break;
         }
         operation.operator =
-          operation.rangeA.length === 0
+          operation.rangeA?.length === 0
             ? MspOperator.insert
             : MspOperator.replace;
         break;
@@ -74,7 +77,7 @@ export class MspOperation {
    * @param text The text.
    * @returns The operation, or null if invalid text.
    */
-  public static parse(text: string): MspOperation {
+  public static parse(text?: string | null): MspOperation | null {
     if (!text || !text.trim()) {
       return null;
     }
@@ -90,32 +93,33 @@ export class MspOperation {
     const op = new MspOperation();
     op.rangeA = new TextRange(
       this.parseRangeNumber(m[2]),
-      this.parseRangeNumber(m[3]));
-    op.valueA = m[1] || null;
+      this.parseRangeNumber(m[3])
+    );
+    op.valueA = m[1] || undefined;
     if (m[6]) {
       op.rangeB = new TextRange(
         this.parseRangeNumber(m[6]),
-        this.parseRangeNumber(m[7]));
+        this.parseRangeNumber(m[7])
+      );
     }
-    op.valueB = m[5] || null;
-    op.tag = m[8] || null;
-    op.note = m[9] || null;
+    op.valueB = m[5] || undefined;
+    op.tag = m[8] || undefined;
+    op.note = m[9] || undefined;
 
     this.determineOperator(m[4], op);
 
     // range B is allowed only for move/swap
-    if (op.operator !== MspOperator.move
-        && op.operator !== MspOperator.swap)
-    {
-        op.rangeB = null;
+    if (op.operator !== MspOperator.move && op.operator !== MspOperator.swap) {
+      op.rangeB = undefined;
     }
 
     // value B is allowed only for insert/replace/swap
-    if (op.operator !== MspOperator.insert
-        && op.operator !== MspOperator.replace
-        && op.operator !== MspOperator.swap)
-    {
-        op.valueB = null;
+    if (
+      op.operator !== MspOperator.insert &&
+      op.operator !== MspOperator.replace &&
+      op.operator !== MspOperator.swap
+    ) {
+      op.valueB = undefined;
     }
 
     return op;
@@ -124,10 +128,10 @@ export class MspOperation {
   /**
    * The operator.
    */
-  public get operator(): MspOperator {
+  public get operator(): MspOperator | undefined {
     return this._operator;
   }
-  public set operator(value: MspOperator) {
+  public set operator(value: MspOperator | undefined) {
     if (this._operator === value) {
       return;
     }
@@ -136,21 +140,21 @@ export class MspOperation {
     switch (value) {
       case MspOperator.delete:
         // RAL>0, VB=null
-        this._valueB = null;
+        this._valueB = undefined;
         break;
       case MspOperator.insert:
         // RAL=0, VA=null, VB!=null
         if (this.rangeA && this.rangeA.length > 0) {
           this.rangeA = new TextRange(this.rangeA.start, 0);
         }
-        this._valueA = null;
+        this._valueA = undefined;
         break;
       case MspOperator.move:
         // RAL>0, RBL=0, VB=null
         if (this.rangeB && this.rangeB.length > 0) {
           this.rangeB = new TextRange(this.rangeB.start, 0);
         }
-        this._valueB = null;
+        this._valueB = undefined;
         break;
     }
   }
@@ -161,12 +165,14 @@ export class MspOperation {
    * "vowels.itacism". A tag can include only letters A-Z or a-z,
    * digits 0-9, underscore, dash, and dot.
    */
-  public get tag(): string {
+  public get tag(): string | undefined {
     return this._tag;
   }
-  public set tag(value: string) {
+  public set tag(value: string | undefined) {
     if (value && MspOperation._tagRegExp.test(value) === false) {
-      throw new Error(`Invalid msp tag: "${value}"\n` + MspOperation._tagRegExp.source);
+      throw new Error(
+        `Invalid msp tag: "${value}"\n` + MspOperation._tagRegExp.source
+      );
     }
     this._tag = value;
   }
@@ -176,10 +182,10 @@ export class MspOperation {
    * not include braces, which are automatically dropped when setting
    * this property; also, note's spaces are normalized.
    */
-  public get note(): string {
+  public get note(): string | undefined {
     return this._note;
   }
-  public set note(value: string) {
+  public set note(value: string | undefined) {
     this._note = this.sanitizeNote(value);
   }
 
@@ -191,10 +197,10 @@ export class MspOperation {
    * characters are removed if present as they are reserved to be used
    * as value delimiters. If empty, the value is coerced to null.
    */
-  public get valueA(): string {
+  public get valueA(): string | undefined {
     return this._valueA;
   }
-  public set valueA(value: string) {
+  public set valueA(value: string | undefined) {
     this._valueA = this.sanitizeValue(value);
   }
 
@@ -206,34 +212,34 @@ export class MspOperation {
    * characters are removed if present as they are reserved to be used
    * as value delimiters. If empty, the value is coerced to null.
    */
-  public get valueB(): string {
+  public get valueB(): string | undefined {
     return this._valueB;
   }
-  public set valueB(value: string) {
+  public set valueB(value: string | undefined) {
     this._valueB = this.sanitizeValue(value);
   }
 
   /**
    * The text range referred to the input text. This is required.
    */
-  public rangeA: TextRange;
+  public rangeA: TextRange | undefined;
 
   /**
    * The text range referred to the output text. This is required only
    * for move and swap.
    */
-  public rangeB: TextRange;
+  public rangeB: TextRange | undefined;
 
-  private sanitizeValue(value: string): string {
+  private sanitizeValue(value?: string): string | undefined {
     if (!value || !value.trim()) {
-      return null;
+      return undefined;
     }
     return value.replace('"', '');
   }
 
-  private sanitizeNote(note: string): string {
+  private sanitizeNote(note?: string): string | undefined {
     if (!note || !note.trim()) {
-      return null;
+      return undefined;
     }
     note = note.replace('{', '');
     note = note.replace('}', '');
@@ -244,7 +250,7 @@ export class MspOperation {
    * Validate this operation.
    * @returns Error message(s), or null if valid.
    */
-  public validate(): string[] {
+  public validate(): string[] | null {
     const errors = [];
 
     switch (this._operator) {

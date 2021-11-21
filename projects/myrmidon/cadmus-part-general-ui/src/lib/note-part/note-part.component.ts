@@ -25,7 +25,7 @@ export class NotePartComponent
   public tags: FormControl;
   public text: FormControl;
 
-  public tagEntries: ThesaurusEntry[];
+  public tagEntries?: ThesaurusEntry[];
 
   public editorOptions = {
     theme: 'vs-light',
@@ -52,15 +52,15 @@ export class NotePartComponent
     this.initEditor();
   }
 
-  private updateForm(model: NotePart): void {
+  private updateForm(model?: NotePart): void {
     if (!model) {
-      this.form.reset();
+      this.form!.reset();
       return;
     }
     this.tag.setValue(model.tag);
     this.tags.setValue(model.tag);
     this.text.setValue(model.text);
-    this.form.markAsPristine();
+    this.form!.markAsPristine();
   }
 
   protected onModelSet(model: NotePart): void {
@@ -72,7 +72,7 @@ export class NotePartComponent
     if (this.thesauri && this.thesauri[key]) {
       this.tagEntries = this.thesauri[key].entries;
     } else {
-      this.tagEntries = null;
+      this.tagEntries = undefined;
     }
   }
 
@@ -80,16 +80,16 @@ export class NotePartComponent
     let part = this.model;
     if (!part) {
       part = {
-        itemId: this.itemId,
-        id: null,
+        itemId: this.itemId || '',
+        id: '',
         typeId: NOTE_PART_TYPEID,
         roleId: this.roleId,
         timeCreated: new Date(),
-        creatorId: null,
+        creatorId: '',
         timeModified: new Date(),
-        userId: null,
-        tag: null,
-        text: null,
+        userId: '',
+        tag: '',
+        text: '',
       };
     }
     part.tag = this.tagEntries ? this.tags.value : this.tag.value;

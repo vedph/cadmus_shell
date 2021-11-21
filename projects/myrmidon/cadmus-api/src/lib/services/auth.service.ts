@@ -5,7 +5,12 @@ import { map } from 'rxjs/operators';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
 
-import { User, LoginResult, RegistrationModel } from '@myrmidon/cadmus-core';
+import {
+  User,
+  LoginResult,
+  RegistrationModel,
+  ExistResult,
+} from '@myrmidon/cadmus-core';
 import { EnvService, LocalStorageService } from '@myrmidon/ng-tools';
 
 // https://github.com/cornflourblue/angular-7-registration-login-example-cli/blob/master/src/app/_services/authentication.service.ts
@@ -20,17 +25,17 @@ export const STORAGE_AUTH_TOKEN_KEY = 'cadmus.auth.token';
   providedIn: 'root',
 })
 export class AuthService {
-  private _currentUserSubject: BehaviorSubject<User>;
+  private _currentUserSubject: BehaviorSubject<User | null>;
 
   /**
    * The current user observable.
    */
-  public currentUser$: Observable<User>;
+  public currentUser$: Observable<User | null>;
 
   /**
    * The current user latest value.
    */
-  public get currentUserValue(): User {
+  public get currentUserValue(): User | null {
     return this._currentUserSubject.value;
   }
 
@@ -39,7 +44,7 @@ export class AuthService {
     private _localStorage: LocalStorageService,
     private _env: EnvService
   ) {
-    this._currentUserSubject = new BehaviorSubject<User>(
+    this._currentUserSubject = new BehaviorSubject<User | null>(
       _localStorage.retrieve<User>(STORAGE_AUTH_USER_KEY, true)
     );
     this.currentUser$ = this._currentUserSubject.asObservable();
@@ -126,7 +131,7 @@ export class AuthService {
     }
 
     // check token expiration
-    const result: LoginResult = this._localStorage.retrieve(
+    const result: LoginResult | null = this._localStorage.retrieve(
       STORAGE_AUTH_TOKEN_KEY,
       true
     );
@@ -143,7 +148,7 @@ export class AuthService {
     if (!verifiedOnly) {
       return true;
     }
-    return this.currentUserValue.emailConfirmed;
+    return this.currentUserValue?.emailConfirmed || false;
   }
 
   /**
@@ -195,13 +200,13 @@ export class AuthService {
    * @param email email address to test.
    * @returns result.
    */
-  public isEmailRegistered(email: string): Observable<object> {
+  public isEmailRegistered(email: string): Observable<ExistResult> {
     const options = {
       headers: this.createAuthHeaders({
         'Content-Type': 'application/json',
       }),
     };
-    return this._http.get(
+    return this._http.get<ExistResult>(
       this._env.get('apiUrl') +
         'accounts/emailexists/' +
         encodeURIComponent(email),
@@ -216,13 +221,13 @@ export class AuthService {
    * @param name name to test.
    * @returns result.
    */
-  public isNameRegistered(name: string): Observable<object> {
+  public isNameRegistered(name: string): Observable<ExistResult> {
     const options = {
       headers: this.createAuthHeaders({
         'Content-Type': 'application/json',
       }),
     };
-    return this._http.get(
+    return this._http.get<ExistResult>(
       this._env.get('apiUrl') +
         'accounts/nameexists/' +
         encodeURIComponent(name),
@@ -316,7 +321,7 @@ export class AuthService {
     }
 
     // append authentication
-    const loginResult: LoginResult = this._localStorage.retrieve(
+    const loginResult: LoginResult | null = this._localStorage.retrieve(
       STORAGE_AUTH_TOKEN_KEY,
       true
     );
@@ -331,7 +336,7 @@ export class AuthService {
    * @returns string The value for the Authorization header, or empty string if not authorized.
    */
   public getAuthHeader(): string {
-    const loginResult: LoginResult = this._localStorage.retrieve(
+    const loginResult: LoginResult | null = this._localStorage.retrieve(
       STORAGE_AUTH_TOKEN_KEY,
       true
     );

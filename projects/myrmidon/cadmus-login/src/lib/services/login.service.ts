@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-import { AuthService, RuntimeSettingsService } from '@myrmidon/cadmus-api';
+import { AuthService } from '@myrmidon/cadmus-api';
 
 import { AuthStore } from '../state/auth.store';
 
@@ -13,11 +13,10 @@ export class LoginService {
   constructor(
     private _authStore: AuthStore,
     private _authService: AuthService,
-    private _settingsService: RuntimeSettingsService,
     private _router: Router
   ) {}
 
-  public login(name: string, password: string, returnUrl: string = null): void {
+  public login(name: string, password: string, returnUrl?: string): void {
     this._authStore.update({ validating: true });
 
     this._authService
@@ -31,8 +30,6 @@ export class LoginService {
       )
       .subscribe((user) => {
         this._authStore.login(user);
-        // load runtime settings once logged in
-        this._settingsService.load();
         this._router.navigate([returnUrl || '/']);
       });
   }

@@ -11,7 +11,7 @@ export class TokenLocation {
    * TokenPoint.parse (e.g. Y.X or Y.X@AxR or Y.X@A, where R=1).
    * @param text The text to parse.
    */
-  public static parse(text: string): TokenLocation {
+  public static parse(text: string): TokenLocation | null {
     if (!text) {
       return null;
     }
@@ -21,12 +21,12 @@ export class TokenLocation {
     }
 
     return new TokenLocation(
-      TokenPoint.parse(pair[0]),
-      pair.length > 1 ? TokenPoint.parse(pair[1]) : null
+      TokenPoint.parse(pair[0])!,
+      pair.length > 1 ? TokenPoint.parse(pair[1]) || undefined : undefined
     );
   }
 
-  constructor(primary: TokenPoint, secondary: TokenPoint = null) {
+  constructor(primary: TokenPoint, secondary?: TokenPoint) {
     this.primary = primary;
     this.secondary = secondary;
   }

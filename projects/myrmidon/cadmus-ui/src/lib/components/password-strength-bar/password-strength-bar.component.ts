@@ -4,25 +4,25 @@ import {
   EventEmitter,
   Input,
   Output,
-  SimpleChange
+  SimpleChange,
 } from '@angular/core';
 
 @Component({
   selector: 'cadmus-password-strength-bar',
   templateUrl: './password-strength-bar.component.html',
-  styleUrls: ['./password-strength-bar.component.css']
+  styleUrls: ['./password-strength-bar.component.css'],
 })
 export class PasswordStrengthBarComponent implements OnChanges {
   private _colors = ['#F00', '#F90', '#FF0', '#9F0', '#0F0'];
 
-  @Input() passwordToCheck: string;
+  @Input() passwordToCheck?: string;
   @Output() strengthChange = new EventEmitter<number>();
 
-  public bar0: string;
-  public bar1: string;
-  public bar2: string;
-  public bar3: string;
-  public bar4: string;
+  public bar0?: string;
+  public bar1?: string;
+  public bar2?: string;
+  public bar3?: string;
+  public bar4?: string;
 
   /**
    *
@@ -76,7 +76,7 @@ export class PasswordStrengthBarComponent implements OnChanges {
     }
     return {
       idx: idx + 1,
-      col: this._colors[idx]
+      col: this._colors[idx],
     };
   }
 
@@ -93,7 +93,7 @@ export class PasswordStrengthBarComponent implements OnChanges {
 
   private setBarColors(count: number, col: string) {
     for (let n = 0; n < count; n++) {
-      this['bar' + n] = col;
+      (this as any)['bar' + n] = col;
     }
   }
 }

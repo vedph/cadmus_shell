@@ -9,6 +9,7 @@ import {
 } from '@myrmidon/cadmus-core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { EditFragmentQueryBase } from './edit-fragment-query-base';
 import { EditFragmentServiceBase } from './edit-fragment-service-base';
 import { EditItemQuery } from './edit-item.query';
@@ -21,26 +22,27 @@ import { EditLayerPartService } from './edit-layer-part.service';
  * This is similar to the EditPartFeatureBase class.
  */
 export abstract class EditFragmentFeatureBase
-  implements ComponentCanDeactivate {
-  private _formDirty: boolean;
-  private _stateDirty: boolean;
+  implements ComponentCanDeactivate
+{
+  private _formDirty?: boolean;
+  private _stateDirty?: boolean;
 
   /**
    * The fragment being edited (from the local store).
    */
-  public fragment$: Observable<Fragment>;
+  public fragment$: Observable<Fragment | undefined>;
   /**
    * The thesauri requested for editing this part.
    */
-  public thesauri$: Observable<ThesauriSet>;
+  public thesauri$: Observable<ThesauriSet | undefined>;
   /**
    * The base text the fragment refers to.
    */
-  public baseText$: Observable<string>;
+  public baseText$: Observable<string | undefined>;
   /**
    * The location of the fragment being edited.
    */
-  public frLoc: TokenLocation;
+  public frLoc?: TokenLocation;
 
   /**
    * The item ID of the edited part, as got from the route.
@@ -75,6 +77,9 @@ export abstract class EditFragmentFeatureBase
     private _editLayersService: EditLayerPartService,
     private _libraryRouteService: LibraryRouteService
   ) {
+    this.fragment$ = this._editFrQuery.selectFragment();
+    this.thesauri$ = this._editFrQuery.selectThesauri();
+    this.baseText$ = this._editLayersQuery.select((state) => state.baseText);
     this.itemId = route.snapshot.params.iid;
     this.partId = route.snapshot.params.pid;
     this.frTypeId = route.snapshot.url[2]?.path;
@@ -82,9 +87,9 @@ export abstract class EditFragmentFeatureBase
     this.frRoleId = route.snapshot.queryParams.frrid;
 
     // connect _stateDirty to the value of the edit state
-    this._editFrQuery.selectDirty().subscribe((d: boolean) => {
+    this._editFrQuery.selectDirty().subscribe((d: boolean | undefined) => {
       console.log('fr dirty change (from state): ' + d);
-      this._stateDirty = d;
+      this._stateDirty = d ? true : false;
     });
   }
 
@@ -105,7 +110,7 @@ export abstract class EditFragmentFeatureBase
     }
   }
 
-  private ensureLayersLoaded(thesauriIds: string[]): void {
+  private ensureLayersLoaded(thesauriIds?: string[]): void {
     if (!this._editLayersQuery.getValue().part) {
       this._editLayersService.load(this.itemId, this.partId, thesauriIds);
     }
@@ -117,11 +122,11 @@ export abstract class EditFragmentFeatureBase
    * @param thesauriIds The optional ID(s) of the thesauri sets you want
    * to use in your editor.
    */
-  protected initEditor(thesauriIds: string[]): void {
+  protected initEditor(thesauriIds?: string[]): void {
     this.fragment$ = this._editFrQuery.selectFragment();
     this.thesauri$ = this._editFrQuery.selectThesauri();
     this.baseText$ = this._editLayersQuery.select((state) => state.baseText);
-    this.frLoc = TokenLocation.parse(this.loc);
+    this.frLoc = TokenLocation.parse(this.loc) ?? undefined;
 
     // load item if required
     this.ensureItemLoaded(this.itemId);
@@ -179,7 +184,7 @@ export abstract class EditFragmentFeatureBase
 
   public close(): void {
     // /items/<id>/<part-group>/<part-typeid>/<part-id>?rid=<role-id>
-    const part = this._editLayersQuery.getValue().part;
+    const part = this._editLayersQuery.getValue().part!;
 
     const editorKey = this._libraryRouteService.getEditorKeyFromPartType(
       part.typeId,

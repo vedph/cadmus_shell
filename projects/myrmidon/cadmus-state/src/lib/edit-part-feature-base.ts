@@ -1,11 +1,13 @@
 import { Observable } from 'rxjs';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import {
   ThesauriSet,
   ComponentCanDeactivate,
   Part,
 } from '@myrmidon/cadmus-core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { EditPartQueryBase } from './edit-part-query-base';
 import { EditPartServiceBase } from './edit-part-service-base';
 import { EditItemQuery } from './edit-item.query';
@@ -26,17 +28,17 @@ import { EditItemService } from './edit-item.service';
  * a save without success.
  */
 export abstract class EditPartFeatureBase implements ComponentCanDeactivate {
-  private _formDirty: boolean;
-  private _stateDirty: boolean;
+  private _formDirty?: boolean;
+  private _stateDirty?: boolean;
 
   /**
    * The part being edited (from the local store).
    */
-  public part$: Observable<Part>;
+  public part$?: Observable<Part | undefined>;
   /**
    * The thesauri requested for editing this part.
    */
-  public thesauri$: Observable<ThesauriSet>;
+  public thesauri$?: Observable<ThesauriSet | undefined>;
 
   /**
    * The item ID of the edited part, as got from the route.
@@ -45,17 +47,17 @@ export abstract class EditPartFeatureBase implements ComponentCanDeactivate {
   /**
    * The part type ID of the edited part, as got from the route.
    */
-  public typeId: string | null;
+  public typeId?: string;
   /**
    * The part ID of the edited part, as got from the route;
    * or null for a new part.
    */
-  public partId: string | null;
+  public partId?: string;
   /**
    * The role ID of the edited part, as got from the route,
    * or null.
    */
-  public roleId: string | null;
+  public roleId?: string;
 
   constructor(
     protected router: Router,
@@ -69,23 +71,23 @@ export abstract class EditPartFeatureBase implements ComponentCanDeactivate {
     // item ID
     this.itemId = route.snapshot.params.iid;
     // type ID (from "TYPEID/:pid")
-    this.typeId = route.snapshot.routeConfig.path.substr(
+    this.typeId = route.snapshot.routeConfig!.path!.substr(
       0,
-      route.snapshot.routeConfig.path.indexOf('/')
+      route.snapshot.routeConfig!.path!.indexOf('/')
     );
     // part ID or null (if "new")
     this.partId = route.snapshot.params.pid;
     if (this.partId === 'new') {
-      this.partId = null;
+      this.partId = undefined;
     }
     // role ID or null (if "default")
     this.roleId = route.snapshot.queryParams.rid;
     if (this.roleId === 'default') {
-      this.roleId = null;
+      this.roleId = undefined;
     }
 
     // connect _stateDirty to the value observed in the part state
-    this._editPartQuery.selectDirty().subscribe((d: boolean) => {
+    this._editPartQuery.selectDirty().subscribe((d: boolean | undefined) => {
       console.log('part dirty change (from state): ' + d);
       this._stateDirty = d;
     });
@@ -114,7 +116,7 @@ export abstract class EditPartFeatureBase implements ComponentCanDeactivate {
    * @param thesauriIds The optional ID(s) of the thesauri sets you want
    * to use in your editor.
    */
-  protected initEditor(thesauriIds: string[] | null): void {
+  protected initEditor(thesauriIds?: string[]): void {
     // connect part and thesauri to state via query
     this.part$ = this._editPartQuery.selectPart();
     this.thesauri$ = this._editPartQuery.selectThesauri();

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
-import { HistoricalDateModel, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import { HistoricalDate, HistoricalDateModel, ThesaurusEntry } from '@myrmidon/cadmus-core';
 import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { AuthService } from '@myrmidon/cadmus-api';
 import { DocReference } from '@myrmidon/cadmus-refs-doc-references';
@@ -24,7 +24,7 @@ export class HistoricalDatePartComponent
   public hasDate: FormControl;
   public references: FormControl;
 
-  public date: HistoricalDateModel | undefined;
+  public date: HistoricalDateModel;
   public initialRefs: DocReference[];
 
   public typeEntries: ThesaurusEntry[] | undefined;
@@ -40,6 +40,7 @@ export class HistoricalDatePartComponent
       hasDate: this.hasDate,
       references: this.references,
     });
+    this.date = new HistoricalDate();
   }
 
   ngOnInit(): void {
@@ -68,23 +69,23 @@ export class HistoricalDatePartComponent
     this.hasDate.setValue(model ? true : false);
     // TODO: remove hack
     setTimeout(() => {
-      this.form.markAsPristine();
-    }, 100);
+      this.form!.markAsPristine();
+    }, 150);
   }
 
   protected getModelFromForm(): HistoricalDatePart {
     let part = this.model;
     if (!part) {
       part = {
-        itemId: this.itemId,
-        id: null,
+        itemId: this.itemId || '',
+        id: '',
         typeId: HISTORICAL_DATE_PART_TYPEID,
         roleId: this.roleId,
         timeCreated: new Date(),
-        creatorId: null,
+        creatorId: '',
         timeModified: new Date(),
-        userId: null,
-        date: null,
+        userId: '',
+        date: new HistoricalDate(),
       };
     }
     part.date = this.date;
@@ -102,6 +103,6 @@ export class HistoricalDatePartComponent
 
   public onReferencesChange(references: DocReference[]): void {
     this.references.setValue(references);
-    this.form.markAsDirty();
+    this.form!.markAsDirty();
   }
 }

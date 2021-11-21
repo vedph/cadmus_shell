@@ -10,9 +10,9 @@ export interface AuthState {
 }
 
 export const initialState: AuthState = {
-  user: JSON.parse(localStorage.getItem(STORAGE_AUTH_USER_KEY)) || null,
-  validating: false,
-  error: null,
+  user: localStorage.getItem(STORAGE_AUTH_USER_KEY)
+    ? JSON.parse(localStorage.getItem(STORAGE_AUTH_USER_KEY)!)
+    : undefined,
 };
 
 @Injectable({ providedIn: 'root' })
@@ -26,13 +26,13 @@ export class AuthStore extends Store<AuthState> {
     this.update({
       user,
       validating: false,
-      error: null,
+      error: undefined,
     });
   }
 
   public error(error: string): void {
     this.update({
-      user: null,
+      user: undefined,
       validating: false,
       error,
     });

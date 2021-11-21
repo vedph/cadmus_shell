@@ -31,11 +31,11 @@ export class LayerHintsComponent implements OnInit {
   }
 
   @Input()
-  public targetLocation: string;
+  public targetLocation?: string;
   @Input()
-  public disabled: boolean;
+  public disabled?: boolean;
   @Input()
-  public readonly: boolean;
+  public readonly?: boolean;
 
   @Output()
   public requestEdit: EventEmitter<LayerHint>;
@@ -112,7 +112,7 @@ export class LayerHintsComponent implements OnInit {
           for (let i = 0; i < this.checks.controls.length; i++) {
             const n = this.checks.controls[i].value;
             if (n) {
-              patches.push(this._hints[n - 1].patchOperation);
+              patches.push(this._hints[n - 1].patchOperation!);
             }
           }
           this.requestPatch.emit(patches);

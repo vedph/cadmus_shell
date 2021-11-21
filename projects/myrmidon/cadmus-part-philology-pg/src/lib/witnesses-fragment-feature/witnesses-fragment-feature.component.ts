@@ -49,6 +49,6 @@ export class WitnessesFragmentFeatureComponent
   }
 
   ngOnInit() {
-    this.initEditor(null);
+    this.initEditor();
   }
 }

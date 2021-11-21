@@ -41,13 +41,13 @@ import { debounceTime } from 'rxjs/operators';
 export class ExternalIdsComponent implements AfterViewInit, OnDestroy {
   // https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url
   // private readonly _urlRegex = new RegExp('^(?:https?://)?www.', 'gi');
-  private _updatingForm: boolean;
+  private _updatingForm?: boolean;
   // private _lastFocusedElId: string | undefined;
   private _ids: string[];
   private _idSubscription: Subscription | undefined;
   private _idsSubs: Subscription[];
 
-  @ViewChildren('id') idQueryList: QueryList<any>;
+  @ViewChildren('id') idQueryList?: QueryList<any>;
 
   /**
    * The external IDs.
@@ -71,6 +71,7 @@ export class ExternalIdsComponent implements AfterViewInit, OnDestroy {
   public form: FormGroup;
 
   constructor(private _formBuilder: FormBuilder) {
+    this._ids = [];
     this._idsSubs = [];
     this.idsChange = new EventEmitter<string[]>();
     // form
@@ -82,13 +83,10 @@ export class ExternalIdsComponent implements AfterViewInit, OnDestroy {
 
   public ngAfterViewInit(): void {
     // focus on newly added ID
-    this._idSubscription = this.idQueryList.changes
+    this._idSubscription = this.idQueryList?.changes
       .pipe(debounceTime(300))
       .subscribe((lst: QueryList<any>) => {
-        if (
-          !this._updatingForm &&
-          lst.length > 0
-        ) {
+        if (!this._updatingForm && lst.length > 0) {
           lst.last.nativeElement.focus();
         }
       });
@@ -102,7 +100,7 @@ export class ExternalIdsComponent implements AfterViewInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.unsubscribeIds();
-    this._idSubscription.unsubscribe();
+    this._idSubscription?.unsubscribe();
   }
 
   // #region Ids

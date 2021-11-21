@@ -119,7 +119,10 @@ export class ApparatusEntrySummaryService {
 
     // entries
     if (fr.entries.some((e) => e.groupId)) {
-      const groups: any = this.groupBy(fr.entries, (entry) => entry.groupId);
+      const groups: any = this.groupBy(
+        fr.entries,
+        (entry) => entry.groupId || ''
+      );
       for (let groupId in groups) {
         if (groups.hasOwnProperty(groupId)) {
           this.appendTextSpan('adpar-group', '[' + groupId + ']', sb);

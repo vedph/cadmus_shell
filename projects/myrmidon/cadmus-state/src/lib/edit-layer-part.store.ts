@@ -16,7 +16,7 @@ export interface EditLayerPartState {
   /**
    * The layer part (=collection of fragments) being edited.
    */
-  part: TextLayerPart | null;
+  part?: TextLayerPart;
   /**
    * The base text rendered into a plain string, whatever its original model.
    * This is used for reference (e.g. show it to the user while editing),
@@ -24,11 +24,11 @@ export interface EditLayerPartState {
    * layer part editor itself (this is the case of the token-based text,
    * but not e.g. for the tiles-based text).
    */
-  baseText: string | null;
+  baseText?: string;
   /**
    * The base text part.
    */
-  baseTextPart: Part | null;
+  baseTextPart?: Part;
   /**
    * The fragments locations, collected from all the fragments.
    */
@@ -55,15 +55,11 @@ export interface EditLayerPartState {
 }
 
 const initialState: EditLayerPartState = {
-  part: null,
-  baseText: null,
-  baseTextPart: null,
   locations: [],
   breakChance: -1,
   layerHints: [],
   thesauri: {},
   loading: false,
-  error: null,
   deletingFragment: false,
   savingFragment: false,
   refreshingBreakChance: false,

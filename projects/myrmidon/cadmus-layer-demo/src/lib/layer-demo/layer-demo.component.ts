@@ -8,11 +8,11 @@ import { TextLayerService, TokenLocation } from '@myrmidon/cadmus-core';
   styleUrls: ['./layer-demo.component.css'],
 })
 export class LayerDemoComponent {
-  @ViewChild('resultElem') _resultElement: ElementRef;
+  @ViewChild('resultElem') _resultElement?: ElementRef;
 
   public locations: TokenLocation[];
   public result: string;
-  public userLocation: TokenLocation;
+  public userLocation?: TokenLocation;
   // form
   public rendition: FormGroup;
   public text: FormControl;
@@ -115,14 +115,14 @@ export class LayerDemoComponent {
 
   public getLocationForNew(): void {
     this.userLocation = this._textLayerService.getSelectedLocationForNew(
-      this._textLayerService.getSelectedRange(),
+      this._textLayerService.getSelectedRange()!,
       this.text.value
-    );
+    ) || undefined;
   }
 
   public getLocationForEdit(): void {
     this.userLocation = this._textLayerService.getSelectedLocationForEdit(
-      this._textLayerService.getSelectedRange()
-    );
+      this._textLayerService.getSelectedRange()!
+    ) || undefined;
   }
 }

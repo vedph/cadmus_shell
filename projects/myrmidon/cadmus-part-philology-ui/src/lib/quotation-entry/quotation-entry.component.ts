@@ -19,8 +19,8 @@ import { DialogService } from '@myrmidon/ng-mat-tools';
   styleUrls: ['./quotation-entry.component.css'],
 })
 export class QuotationEntryComponent implements OnInit {
-  private _entry: QuotationEntry;
-  private _workDct: Record<string, ThesaurusEntry[]>;
+  private _entry?: QuotationEntry;
+  private _workDct: Record<string, ThesaurusEntry[]> | undefined;
 
   // list of authors, collected from _workDct
   public authors$: BehaviorSubject<ThesaurusEntry[]>;
@@ -28,28 +28,30 @@ export class QuotationEntryComponent implements OnInit {
   public authorWorks$: BehaviorSubject<ThesaurusEntry[]>;
 
   @Input()
-  public get entry(): QuotationEntry {
+  public get entry(): QuotationEntry | undefined {
     return this._entry;
   }
-  public set entry(value: QuotationEntry) {
+  public set entry(value: QuotationEntry | undefined) {
     this._entry = value;
     this.updateForm(value);
   }
 
   @Input()
-  public get workDictionary(): Record<string, ThesaurusEntry[]> {
+  public get workDictionary(): Record<string, ThesaurusEntry[]> | undefined {
     return this._workDct;
   }
-  public set workDictionary(value: Record<string, ThesaurusEntry[]>) {
+  public set workDictionary(
+    value: Record<string, ThesaurusEntry[]> | undefined
+  ) {
     this._workDct = value;
-    this.authors$.next(this._worksService.collectAuthors(value));
+    this.authors$.next(this._worksService.collectAuthors(value) || []);
     setTimeout(() => {
       this.loadAuthorWorks(this.author.value);
     }, 700);
   }
 
   @Input()
-  public tagEntries: ThesaurusEntry[] | null;
+  public tagEntries?: ThesaurusEntry[];
 
   @Output()
   public editorClose: EventEmitter<any>;
@@ -114,6 +116,9 @@ export class QuotationEntryComponent implements OnInit {
   ngOnInit(): void {}
 
   private loadAuthorWorks(authorId: string): void {
+    if (!this._workDct) {
+      return;
+    }
     // const oldWorkId = this.work.value;
     const works: ThesaurusEntry[] = [];
     // in each dictionary the key is the author ID and the value is
@@ -128,7 +133,7 @@ export class QuotationEntryComponent implements OnInit {
     // this.work.setValue(oldWorkId);
   }
 
-  private updateForm(entry: QuotationEntry): void {
+  private updateForm(entry?: QuotationEntry): void {
     if (!entry) {
       this.form.reset();
       return;

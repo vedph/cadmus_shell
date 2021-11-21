@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ItemService } from '@myrmidon/cadmus-api';
+
 import { ItemsSearchStore } from '../state/items-search.store';
 
 @Injectable({ providedIn: 'root' })

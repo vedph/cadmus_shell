@@ -18,7 +18,7 @@ import { ItemsLookupState } from '../state/items-lookup.store';
 })
 export class ItemFilterComponent implements OnInit {
   @Input()
-  public filter$: BehaviorSubject<ItemFilter>;
+  public filter$?: BehaviorSubject<ItemFilter>;
 
   public title: FormControl;
   public description: FormControl;
@@ -56,14 +56,13 @@ export class ItemFilterComponent implements OnInit {
       maxModified: this.maxModified,
       user: this.user,
     });
+    // subscribe to lookup data
+    this.lookup$ = this._itemsLookupQuery.select();
   }
 
   ngOnInit() {
-    // subscribe to lookup data
-    this.lookup$ = this._itemsLookupQuery.select();
-
     // update form when filter changes
-    this.filter$.subscribe((f) => {
+    this.filter$?.subscribe((f) => {
       this.updateForm(f);
     });
 
@@ -107,6 +106,6 @@ export class ItemFilterComponent implements OnInit {
       return;
     }
     const filter = this.getFilter();
-    this.filter$.next(filter);
+    this.filter$?.next(filter);
   }
 }

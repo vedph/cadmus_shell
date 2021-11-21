@@ -33,7 +33,7 @@ export class EditorGuardService implements CanActivate {
       return false;
     }
     // if authenticated but not verified, redirect to login
-    if (!this._authService.currentUserValue.emailConfirmed) {
+    if (!this._authService.currentUserValue?.emailConfirmed) {
       this._router.navigate(['/login']);
       console.warn('User not verified');
       return false;

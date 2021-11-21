@@ -69,7 +69,8 @@ export class Datation implements DatationModel {
    * Create a new datation, optionally setting its data.
    * @param datation The optional data to be copied into the newly created datation.
    */
-  constructor(datation: DatationModel = null) {
+  constructor(datation?: DatationModel) {
+    this.value = 0;
     if (datation) {
       this.copyFrom(datation);
     }
@@ -87,7 +88,7 @@ export class Datation implements DatationModel {
    * @param hint The hint or null/undefined.
    * @returns The sanitized hint or undefined.
    */
-  public static sanitizeHint(hint: string): string {
+  public static sanitizeHint(hint: string): string | undefined {
     if (!hint || !hint.trim()) {
       return undefined;
     }
@@ -162,15 +163,15 @@ export class Datation implements DatationModel {
   public static parse(
     text: string,
     options: DatationFormatOptions = DATATION_FORMAT_OPTIONS
-  ): Datation | undefined {
+  ): Datation | null {
     if (!text) {
-      return undefined;
+      return null;
     }
     const datation = new Datation();
     const datationRegex = this.getParserRegex(options);
     const m = datationRegex.exec(text);
     if (!m) {
-      return undefined;
+      return null;
     }
 
     // about
@@ -299,10 +300,10 @@ export class Datation implements DatationModel {
     if (this.isSpan) {
       result += 0.5;
     }
-    if (this.month > 0 && this.month <= 12) {
+    if (this.month && this.month > 0 && this.month <= 12) {
       result += this.month / 12;
     }
-    if (this.day > 0 && this.day <= 31) {
+    if (this.day && this.day > 0 && this.day <= 31) {
       result += this.day / (12 * 31);
     }
     return result;
@@ -534,17 +535,17 @@ export class Datation implements DatationModel {
           break;
 
         case 'd':
-          if (this.day > 0) {
+          if (this.day) {
             sb.push(this.day.toString());
           }
           break;
         case 'dd':
-          if (this.day > 0) {
+          if (this.day) {
             sb.push(this.day.toString().padStart(2, '0'));
           }
           break;
         case 'ddd':
-          if (this.day > 0) {
+          if (this.month && this.day) {
             const date = new Date(this.value, this.month, this.day);
             const dow = date.getDay();
             sb.push(options.dayNames[dow]);
@@ -552,17 +553,17 @@ export class Datation implements DatationModel {
           break;
 
         case 'M':
-          if (this.month > 0) {
+          if (this.month) {
             sb.push(this.month.toString());
           }
           break;
         case 'MM':
-          if (this.month > 0) {
+          if (this.month) {
             sb.push(this.month.toString().padStart(2, '0'));
           }
           break;
         case 'MMM':
-          if (this.month > 0) {
+          if (this.month) {
             sb.push(options.monthNames[this.month - 1]);
           }
           break;

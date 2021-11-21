@@ -1,18 +1,20 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
+import { FlatTreeControl } from '@angular/cdk/tree';
+import { Observable } from 'rxjs';
+
+import { Thesaurus } from '@myrmidon/cadmus-core';
+import { ItemBrowserService } from '@myrmidon/cadmus-api';
+
+import { ItemTreeDataSource } from './item-tree-data-source';
+import { HierarchyItemBrowserService } from '../state/hierarchy-item-browser.service';
+import { HierarchyItemBrowserQuery } from '../state/hierarchy-item-browser.query';
 import {
   ItemTreeNode,
   TreeNode,
-  PagerTreeNode
+  PagerTreeNode,
 } from '../state/hierarchy-item-browser.store';
-import { HierarchyItemBrowserService } from '../state/hierarchy-item-browser.service';
-import { Observable } from 'rxjs';
-import { Thesaurus } from '@myrmidon/cadmus-core';
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
-import { ItemTreeDataSource } from './item-tree-data-source';
-import { ItemBrowserService } from '@myrmidon/cadmus-api';
-import { Router } from '@angular/router';
-import { HierarchyItemBrowserQuery } from '../state/hierarchy-item-browser.query';
 
 const TAGS_THESAURUS_ID = 'hierarchy-item-browser-tags';
 
@@ -23,11 +25,11 @@ const TAGS_THESAURUS_ID = 'hierarchy-item-browser-tags';
 @Component({
   selector: 'cadmus-hierarchy-item-browser',
   templateUrl: './hierarchy-item-browser.component.html',
-  styleUrls: ['./hierarchy-item-browser.component.css']
+  styleUrls: ['./hierarchy-item-browser.component.css'],
 })
 export class HierarchyItemBrowserComponent implements OnInit {
   public nodes$: Observable<TreeNode[]>;
-  public tags$: Observable<Thesaurus>;
+  public tags$: Observable<Thesaurus | undefined>;
   public loading: boolean;
   public treeControl: FlatTreeControl<TreeNode>;
   public treeDataSource: ItemTreeDataSource;
@@ -47,13 +49,13 @@ export class HierarchyItemBrowserComponent implements OnInit {
     // form
     this.tag = formBuider.control(null);
     this.filters = formBuider.group({
-      tag: this.tag
+      tag: this.tag,
     });
 
     // tree control with its children loader function
     this.treeControl = new FlatTreeControl<TreeNode>(
-      node => node?.level || 0,
-      node => node && !node.pager
+      (node) => node?.level || 0,
+      (node) => node && !node.pager
     );
 
     this.treeDataSource = new ItemTreeDataSource(
@@ -61,6 +63,7 @@ export class HierarchyItemBrowserComponent implements OnInit {
       this._itemBrowserService
     );
 
+    this.nodes$ = this._storeQuery.selectNodes();
     this.tags$ = this._storeQuery.selectTags();
   }
 
@@ -76,7 +79,7 @@ export class HierarchyItemBrowserComponent implements OnInit {
     }
 
     // when tag changes, change it in the data source
-    this.tag.valueChanges.subscribe(_ => {
+    this.tag.valueChanges.subscribe((_) => {
       this.treeDataSource.tag = this.tag.value ? this.tag.value : null;
     });
   }

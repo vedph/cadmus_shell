@@ -49,6 +49,6 @@ export class OrthographyFragmentFeatureComponent
   }
 
   ngOnInit(): void {
-    this.initEditor(null);
+    this.initEditor();
   }
 }

@@ -2,7 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ModelEditorComponentBase } from '@myrmidon/cadmus-ui';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 
-import { HistoricalDateModel, ThesaurusEntry } from '@myrmidon/cadmus-core';
+import {
+  HistoricalDate,
+  HistoricalDateModel,
+  ThesaurusEntry,
+} from '@myrmidon/cadmus-core';
 import { AuthService } from '@myrmidon/cadmus-api';
 import { deepCopy } from '@myrmidon/ng-tools';
 
@@ -21,7 +25,7 @@ export class ChronologyFragmentComponent
   extends ModelEditorComponentBase<ChronologyFragment>
   implements OnInit
 {
-  public tagEntries: ThesaurusEntry[];
+  public tagEntries?: ThesaurusEntry[];
 
   // the date being edited in its text form
   public initialDate: HistoricalDateModel | undefined;
@@ -58,13 +62,13 @@ export class ChronologyFragmentComponent
     if (this.thesauri && this.thesauri[key]) {
       this.tagEntries = this.thesauri[key].entries;
     } else {
-      this.tagEntries = null;
+      this.tagEntries = undefined;
     }
   }
 
   private updateForm(model: ChronologyFragment): void {
     if (!model || !model.date) {
-      this.form.reset();
+      this.form!.reset();
     } else {
       // date
       this.initialDate = model.date;
@@ -74,7 +78,7 @@ export class ChronologyFragmentComponent
       this.tag.setValue(model.tag);
       this.eventId.setValue(model.eventId);
       this.tags.setValue(model.tag);
-      this.form.markAsPristine();
+      this.form!.markAsPristine();
     }
   }
 
@@ -91,7 +95,7 @@ export class ChronologyFragmentComponent
     if (!fr) {
       fr = {
         location: this.model?.location ?? '',
-        date: null,
+        date: new HistoricalDate(),
       };
     }
     fr.date = this.date.value;

@@ -22,7 +22,7 @@ import {
   styleUrls: ['./admin-registration.component.css'],
 })
 export class AdminRegistrationComponent implements OnInit {
-  public busy: boolean;
+  public busy?: boolean;
   // form
   public registration: FormGroup;
   public email: FormControl;
@@ -42,13 +42,13 @@ export class AdminRegistrationComponent implements OnInit {
     this.email = formBuilder.control(
       '',
       [Validators.required, Validators.email],
-      this.createUniqueEmailValidator(this._authService).bind(this)
+      this.createUniqueEmailValidator(this._authService).bind(this) as any
     );
 
     this.name = formBuilder.control(
       '',
       Validators.required,
-      this.createUniqueNameValidator(this._authService).bind(this)
+      this.createUniqueNameValidator(this._authService).bind(this) as any
     );
 
     this.firstName = formBuilder.control('', [
@@ -86,7 +86,7 @@ export class AdminRegistrationComponent implements OnInit {
     });
   }
 
-  private areEqual(group: FormGroup): { [key: string]: boolean } {
+  private areEqual(group: FormGroup): { [key: string]: boolean } | null {
     if (this.password.value === this.confirmPassword.value) {
       return null;
     }
@@ -153,9 +153,9 @@ export class AdminRegistrationComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  public getEmailErrorLabel(): string {
+  public getEmailErrorLabel(): string | undefined {
     if (!this.email.dirty) {
-      return null;
+      return undefined;
     }
 
     if (this.email.hasError('required')) {
@@ -167,12 +167,12 @@ export class AdminRegistrationComponent implements OnInit {
     if (this.email.hasError('uniqueEmail') && !this.email.pending) {
       return 'email address already registered';
     }
-    return null;
+    return undefined;
   }
 
-  public getNameErrorLabel(): string {
+  public getNameErrorLabel(): string | undefined {
     if (!this.name.dirty) {
-      return null;
+      return undefined;
     }
 
     if (this.name.hasError('required')) {
@@ -187,12 +187,12 @@ export class AdminRegistrationComponent implements OnInit {
       return 'username already taken';
     }
 
-    return null;
+    return undefined;
   }
 
-  public getPasswordErrorLabel(): string {
+  public getPasswordErrorLabel(): string | undefined {
     if (!this.password.dirty) {
-      return null;
+      return undefined;
     }
 
     if (this.password.hasError('required')) {
@@ -215,7 +215,7 @@ export class AdminRegistrationComponent implements OnInit {
       return 'at least 1 punctuation or symbol';
     }
 
-    return null;
+    return undefined;
   }
 
   public onSubmit(): void {

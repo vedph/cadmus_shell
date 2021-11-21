@@ -90,7 +90,7 @@ export class CommentEditorComponent
 
   private updateForm(model: CommentPart | CommentFragment): void {
     if (!model) {
-      this.form.reset();
+      this.form!.reset();
       return;
     }
     this.tag.setValue(model.tag);
@@ -127,7 +127,7 @@ export class CommentEditorComponent
       this.categories.setValue([]);
     }
 
-    this.form.markAsPristine();
+    this.form!.markAsPristine();
   }
 
   protected onModelSet(model: CommentPart | CommentFragment): void {
@@ -215,14 +215,14 @@ export class CommentEditorComponent
       let part: CommentPart = this.model as CommentPart;
       if (!part) {
         part = {
-          itemId: this.itemId,
-          id: null,
+          itemId: this.itemId || '',
+          id: '',
           typeId: COMMENT_PART_TYPEID,
           roleId: this.roleId,
           timeCreated: new Date(),
-          creatorId: null,
+          creatorId: '',
           timeModified: new Date(),
-          userId: null,
+          userId: '',
           text: '',
         };
       }
@@ -233,12 +233,12 @@ export class CommentEditorComponent
 
   public onReferencesChange(references: DocReference[]): void {
     this.references.setValue(references || []);
-    this.form.markAsDirty();
+    this.form!.markAsDirty();
   }
 
   public onIdsChange(ids: string[]): void {
     this.ids.setValue(ids || []);
-    this.form.markAsDirty();
+    this.form!.markAsDirty();
   }
 
   //#region Categories

@@ -1,6 +1,8 @@
-import { Query } from '@datorama/akita';
 import { Observable } from 'rxjs';
+import { Query } from '@datorama/akita';
+
 import { ThesauriSet, Fragment } from '@myrmidon/cadmus-core';
+
 import { EditFragmentState } from './edit-fragment.store';
 
 export abstract class EditFragmentQueryBase extends Query<EditFragmentState> {
@@ -8,15 +10,15 @@ export abstract class EditFragmentQueryBase extends Query<EditFragmentState> {
     super(store);
   }
 
-  public selectDirty(): Observable<boolean> {
+  public selectDirty(): Observable<boolean | undefined> {
     return this.select((state) => state.dirty);
   }
 
-  public selectSaving(): Observable<boolean> {
+  public selectSaving(): Observable<boolean | undefined> {
     return this.select((state) => state.saving);
   }
 
-  public selectFragment(): Observable<Fragment> {
+  public selectFragment(): Observable<Fragment | undefined> {
     return this.select((state) => state.fragment);
   }
 
@@ -33,7 +35,7 @@ export abstract class EditFragmentQueryBase extends Query<EditFragmentState> {
   //   );
   // }
 
-  public selectThesauri(): Observable<ThesauriSet> {
+  public selectThesauri(): Observable<ThesauriSet | undefined> {
     return this.select((state) => state.thesauri);
   }
 }

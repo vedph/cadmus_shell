@@ -55,7 +55,7 @@ export class ItemBrowserService {
 
     return this._http
       .get<DataPage<ItemInfo>>(
-        this._env.get('apiUrl') +
+        this._env.get('apiUrl')! +
           this._env.get('databaseId') +
           `/items-browser/${browserId}`,
         {

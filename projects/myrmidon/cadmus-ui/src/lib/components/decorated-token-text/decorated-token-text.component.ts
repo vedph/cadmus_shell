@@ -8,13 +8,13 @@ import { TokenLocation, TextLayerService } from '@myrmidon/cadmus-core';
 @Component({
   selector: 'cadmus-decorated-token-text',
   templateUrl: './decorated-token-text.component.html',
-  styleUrls: ['./decorated-token-text.component.css']
+  styleUrls: ['./decorated-token-text.component.css'],
 })
 export class DecoratedTokenTextComponent implements OnInit {
-  @ViewChild('textElem') _textElement: ElementRef;
+  @ViewChild('textElem') _textElement?: ElementRef;
   private _baseText: string;
   private _locations: TokenLocation[];
-  private _selectedLoc: TokenLocation;
+  private _selectedLoc?: TokenLocation;
 
   /**
    * The base text.
@@ -44,17 +44,20 @@ export class DecoratedTokenTextComponent implements OnInit {
    * A selected token-based location.
    */
   @Input()
-  public get selectedLocation(): TokenLocation {
+  public get selectedLocation(): TokenLocation | undefined {
     return this._selectedLoc;
   }
-  public set selectedLocation(value: TokenLocation) {
+  public set selectedLocation(value: TokenLocation | undefined) {
     this._selectedLoc = value;
     this.decorate();
   }
 
-  public text: string; // rendered HTML text
+  public text?: string; // rendered HTML text
 
-  constructor(private _textLayerService: TextLayerService) {}
+  constructor(private _textLayerService: TextLayerService) {
+    this._baseText = '';
+    this._locations = [];
+  }
 
   public ngOnInit(): void {
     this.decorate();

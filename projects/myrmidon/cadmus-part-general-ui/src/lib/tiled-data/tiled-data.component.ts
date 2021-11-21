@@ -35,7 +35,7 @@ export class TiledDataComponent implements OnInit {
   public keys: DataKey[];
 
   @Input()
-  public title: string;
+  public title?: string;
 
   @Input()
   public get data(): Data {
@@ -74,6 +74,10 @@ export class TiledDataComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _dialogService: DialogService
   ) {
+    this._data = {};
+    this._hiddenData = {};
+    this._hiddenKeys = [];
+    this.keys = [];
     // filter form
     this.keyFilter = _formBuilder.control(null);
     this.filterForm = _formBuilder.group({

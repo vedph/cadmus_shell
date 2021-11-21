@@ -17,7 +17,7 @@ export class FlagService {
 
   public getFlags(): Observable<FlagDefinition[]> {
     const url =
-      this._env.get('apiUrl') + this._env.get('databaseId') + '/flags';
+      this._env.get('apiUrl')! + this._env.get('databaseId') + '/flags';
 
     return this._http
       .get<FlagDefinition[]>(url)

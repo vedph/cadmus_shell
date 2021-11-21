@@ -41,6 +41,6 @@ export class TiledTextPartFeatureComponent
   }
 
   ngOnInit(): void {
-    this.initEditor(null);
+    this.initEditor();
   }
 }

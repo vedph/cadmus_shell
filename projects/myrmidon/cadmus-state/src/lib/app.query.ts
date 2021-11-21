@@ -1,8 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Query } from '@datorama/akita';
-import { AppState, AppStore } from './app.store';
 import { Observable } from 'rxjs';
-import { FacetDefinition, FlagDefinition, Thesaurus } from '@myrmidon/cadmus-core';
+
+import { Query } from '@datorama/akita';
+
+import {
+  FacetDefinition,
+  FlagDefinition,
+  Thesaurus,
+} from '@myrmidon/cadmus-core';
+
+import { AppState, AppStore } from './app.store';
 
 @Injectable({ providedIn: 'root' })
 export class AppQuery extends Query<AppState> {
@@ -18,11 +25,11 @@ export class AppQuery extends Query<AppState> {
     return this.select((state) => state.flags);
   }
 
-  public selectTypeThesaurus(): Observable<Thesaurus> {
+  public selectTypeThesaurus(): Observable<Thesaurus | undefined> {
     return this.select((state) => state.typeThesaurus);
   }
 
-  public selectItemBrowserThesaurus(): Observable<Thesaurus> {
+  public selectItemBrowserThesaurus(): Observable<Thesaurus | undefined> {
     return this.select((state) => state.itemBrowserThesaurus);
   }
 }
