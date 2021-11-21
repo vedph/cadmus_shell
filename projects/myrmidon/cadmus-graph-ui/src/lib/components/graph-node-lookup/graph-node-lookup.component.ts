@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import {
@@ -18,7 +18,7 @@ import { GraphService, NodeResult } from '@myrmidon/cadmus-api';
   templateUrl: './graph-node-lookup.component.html',
   styleUrls: ['./graph-node-lookup.component.css'],
 })
-export class GraphNodeLookupComponent implements OnInit {
+export class GraphNodeLookupComponent {
   /**
    * The maximum number of nodes to lookup. Default is 10.
    */
@@ -36,25 +36,23 @@ export class GraphNodeLookupComponent implements OnInit {
    * Emitted whenever a node is picked up.
    */
   @Output()
-  public nodeChange: EventEmitter<NodeResult>;
+  public nodeChange: EventEmitter<NodeResult | null>;
 
   public form: FormGroup;
   public lookup: FormControl;
   public nodes$: Observable<NodeResult[]>;
-  public node: NodeResult;
+  public node?: NodeResult;
 
   constructor(formBuilder: FormBuilder, private _apiService: GraphService) {
     // events
-    this.nodeChange = new EventEmitter<NodeResult>();
+    this.nodeChange = new EventEmitter<NodeResult | null>();
     // form
     this.lookup = formBuilder.control(null);
     this.form = formBuilder.group({
       lookup: this.lookup,
     });
     this.limit = 10;
-  }
 
-  ngOnInit(): void {
     this.nodes$ = this.lookup.valueChanges.pipe(
       debounceTime(300),
       distinctUntilChanged(),
@@ -85,7 +83,7 @@ export class GraphNodeLookupComponent implements OnInit {
   }
 
   public clear(): void {
-    this.node = null;
+    this.node = undefined;
     this.lookup.setValue(null);
     this.nodeChange.emit(null);
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GraphService, NodeFilter, NodeResult } from '@myrmidon/cadmus-api';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 import { GraphNodesStore } from './graph-nodes.store';
@@ -38,7 +38,13 @@ export class GraphNodesService {
    *
    * @param id The node ID.
    */
-  public setLinkedNodeId(id: number): void {
+  public setLinkedNodeId(id?: number): void {
+    if (!id) {
+      this._store.update({
+        linkedNode: undefined,
+      });
+      return;
+    }
     this._graphService
       .getNode(id)
       .pipe(take(1))
@@ -58,7 +64,7 @@ export class GraphNodesService {
    *
    * @param node The node to add.
    */
-  public addClassNode(node?: NodeResult): void {
+  public addClassNode(node: NodeResult): void {
     const nodes = [...(this._store.getValue().classNodes || [])];
     if (nodes.some((n) => n.id === node.id)) {
       return;
@@ -82,7 +88,7 @@ export class GraphNodesService {
       return;
     }
 
-    const requests = [];
+    const requests: Observable<NodeResult>[] = [];
     ids.forEach((id) => {
       requests.push(this._graphService.getNode(id).pipe(take(1)));
     });
