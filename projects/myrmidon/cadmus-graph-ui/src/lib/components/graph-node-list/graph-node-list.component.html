@@ -1,1 +1,113 @@
-<p>graph-node-list works!</p>
+<div
+  gdAreas="spinner spinner | filters list | . pager | . info"
+  gdAreas.lt-md="spinner | list | pager | info | filters"
+  gdColumns="280px 1fr"
+  gdColumns.lt-md="1fr"
+  gdGap="8px"
+>
+  <!-- spinner -->
+  <div
+    *ngIf="paginator.isLoading$ | async"
+    gdArea="spinner"
+    gdAlignColumns="center"
+    gdAlignRows="center"
+  >
+    <mat-spinner [diameter]="48" [strokeWidth]="4"></mat-spinner>
+  </div>
+
+  <!-- filters -->
+  <div gdArea="filters" gdAlignRows.lt-md="center">
+    <mat-card>
+      <mat-card-content>
+        <cadmus-graph-node-filter
+          [disabled]="(paginator.isLoading$ | async) === true"
+        ></cadmus-graph-node-filter>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- list -->
+  <div gdArea="list" *ngIf="pagination$ | async as pagination">
+    <!-- bar-->
+    <div>
+      <button
+        color="primary"
+        type="button"
+        mat-button
+        (click)="refresh()"
+        color="primary"
+      >
+        <mat-icon>refresh</mat-icon>
+        refresh
+      </button>
+      <button color="primary" type="button" mat-button (click)="addNode()">
+        <mat-icon>add_circle</mat-icon>
+        add node
+      </button>
+    </div>
+    <!-- list -->
+    <div *ngIf="nodeCount$ | async">
+      <table>
+        <thead>
+          <th></th>
+          <th></th>
+          <th>id</th>
+          <th>cls</th>
+          <th>label</th>
+          <th>uri</th>
+          <th fxHide.lt-md>srct</th>
+          <th fxHide.lt-md>sid</th>
+          <th fxHide.lt-md>tag</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let d of pagination.data">
+            <td class="command">
+              <button
+                mat-icon-button
+                type="button"
+                color="primary"
+                matTooltip="Edit node"
+                (click)="editNode(d)"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+            <td class="command">
+              <button
+                mat-icon-button
+                type="button"
+                color="warn"
+                matTooltip="Delete node"
+                (click)="deleteNode(d)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+            <td>{{ d.id }}</td>
+            <td>{{ d.isClass ? "C" : "" }}</td>
+            <td>{{ d.label }}</td>
+            <td>{{ d.uri }}</td>
+            <td fxHide.lt-md>{{ "UIFGP"[d.sourceType] }}</td>
+            <td fxHide.lt-md>{{ d.sid }}</td>
+            <td fxHide.lt-md>{{ d.tag }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- pagination -->
+      <mat-paginator
+        gdArea="pager"
+        gdAlignColumns="center"
+        gdAlignRows="start"
+        [length]="pagination.total"
+        [pageSize]="pageSize?.value"
+        [pageSizeOptions]="[20, 50, 75, 100]"
+        [pageIndex]="pagination.currentPage - 1"
+        [showFirstLastButtons]="true"
+        (page)="pageChange($event)"
+      ></mat-paginator>
+    </div>
+    <!-- editor -->
+    TODO
+  </div>
+</div>

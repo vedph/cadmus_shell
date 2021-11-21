@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { GraphService, NodeResult } from '@myrmidon/cadmus-api';
 import { Observable, of } from 'rxjs';
 import {
   debounceTime,
@@ -8,6 +7,8 @@ import {
   map,
   switchMap,
 } from 'rxjs/operators';
+
+import { GraphService, NodeResult } from '@myrmidon/cadmus-api';
 
 /**
  * Graph node lookup.

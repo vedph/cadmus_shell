@@ -12,6 +12,7 @@
     "build-gen": "ng build @myrmidon/cadmus-part-general-ui --configuration=production && ng build @myrmidon/cadmus-part-general-pg --configuration=production",
     "build-phi": "ng build @myrmidon/cadmus-part-philology-ui --configuration=production && ng build @myrmidon/cadmus-part-philology-pg --configuration=production",
     "build-pag": "ng build @myrmidon/cadmus-admin --configuration=production && ng build @myrmidon/cadmus-browser-hierarchy --configuration=production && ng build @myrmidon/cadmus-item-editor --configuration=production && ng build @myrmidon/cadmus-item-list --configuration=production && ng build @myrmidon/cadmus-item-search --configuration=production && ng build @myrmidon/cadmus-layer-demo --configuration=production && ng build @myrmidon/cadmus-login --configuration=production && ng build @myrmidon/cadmus-reset-password --configuration=production && ng build @myrmidon/cadmus-thesaurus-editor --configuration=production && ng build @myrmidon/cadmus-thesaurus-list --configuration=production && ng build @myrmidon/cadmus-user --configuration=production",
+    "build-gr": "ng build @myrmidon/cadmus-graph-ui --configuration=production",
     "build-all": "npm run-script build-core && npm run-script build-gen && npm run-script build-phi && npm run-script build-pag"
   },
   "private": true,
