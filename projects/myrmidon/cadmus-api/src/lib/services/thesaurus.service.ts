@@ -21,8 +21,7 @@ export class ThesaurusService {
    * @returns Array of IDs.
    */
   public getThesaurusIds(filter?: ThesaurusFilter): Observable<string[]> {
-    const url =
-      this._env.get('apiUrl')! + this._env.get('databaseId') + '/thesauri-ids';
+    const url = `${this._env.get('apiUrl')}thesauri-ids`;
 
     if (!filter) {
       return this._http
@@ -46,18 +45,15 @@ export class ThesaurusService {
    */
   public thesaurusExists(id: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      const url =
-        this._env.get('apiUrl')! +
-        this._env.get('databaseId') +
-        '/thesauri-ids';
-
       let httpParams = new HttpParams();
       httpParams = httpParams.set('pageNumber', '1');
       httpParams = httpParams.set('pageSize', '1');
       httpParams = httpParams.set('id', id);
 
       this._http
-        .get<string[]>(url, { params: httpParams })
+        .get<string[]>(`${this._env.get('apiUrl')}thesauri-ids`, {
+          params: httpParams,
+        })
         .pipe(retry(3), take(1), catchError(this._error.handleError))
         .subscribe(
           (ids) => {
@@ -86,10 +82,7 @@ export class ThesaurusService {
     if (emptyIfNotFound) {
       httpParams = httpParams.set('emptyIfNotFound', true.toString());
     }
-    const url =
-      this._env.get('apiUrl')! +
-      this._env.get('databaseId') +
-      `/thesauri/${encodeURIComponent(id)}`;
+    const url = `${this._env.get('apiUrl')}thesauri/${encodeURIComponent(id)}`;
     return this._http
       .get<Thesaurus>(url, {
         params: httpParams,
@@ -107,10 +100,8 @@ export class ThesaurusService {
     let httpParams = new HttpParams();
     httpParams = httpParams.set('purgeIds', 'true');
     httpParams = httpParams.set('ids', ids.join(','));
-    const url =
-      this._env.get('apiUrl')! + this._env.get('databaseId') + '/thesauri-set';
     return this._http
-      .get<ThesauriSet>(url, {
+      .get<ThesauriSet>(`${this._env.get('apiUrl')}thesauri-set`, {
         params: httpParams,
       })
       .pipe(retry(3), catchError(this._error.handleError));
@@ -143,10 +134,8 @@ export class ThesaurusService {
   public getThesauri(filter: ThesaurusFilter): Observable<DataPage<Thesaurus>> {
     let httpParams = this.GetFilterParams(filter);
 
-    const url =
-      this._env.get('apiUrl')! + this._env.get('databaseId') + `/thesauri`;
     return this._http
-      .get<DataPage<Thesaurus>>(url, {
+      .get<DataPage<Thesaurus>>(`${this._env.get('apiUrl')}thesauri`, {
         params: httpParams,
       })
       .pipe(retry(3), catchError(this._error.handleError));
@@ -158,10 +147,8 @@ export class ThesaurusService {
    * @param thesaurus The thesaurus.
    */
   public addThesaurus(thesaurus: Thesaurus): Observable<any> {
-    const url =
-      this._env.get('apiUrl')! + this._env.get('databaseId') + '/thesauri';
     return this._http
-      .post(url, thesaurus)
+      .post(`${this._env.get('apiUrl')}thesauri`, thesaurus)
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
@@ -171,12 +158,8 @@ export class ThesaurusService {
    * @param id The thesaurus ID.
    */
   public deleteThesaurus(id: string): Observable<any> {
-    const url =
-      this._env.get('apiUrl')! +
-      this._env.get('databaseId') +
-      `/thesauri/${id}`;
     return this._http
-      .delete<Thesaurus>(url)
+      .delete<Thesaurus>(`${this._env.get('apiUrl')}thesauri/${id}`)
       .pipe(retry(3), catchError(this._error.handleError));
   }
 

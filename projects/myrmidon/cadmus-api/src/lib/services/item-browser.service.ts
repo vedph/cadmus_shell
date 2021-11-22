@@ -23,9 +23,8 @@ export class ItemBrowserService {
    * @returns Observable with strings array.
    */
   public getBrowserIds(): Observable<string[]> {
-    const url = this._env.get('apiUrl') + 'browser-ids';
     return this._http
-      .get<string[]>(url)
+      .get<string[]>(`${this._env.get('apiUrl')}item-browsers/ids`)
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
@@ -55,9 +54,7 @@ export class ItemBrowserService {
 
     return this._http
       .get<DataPage<ItemInfo>>(
-        this._env.get('apiUrl')! +
-          this._env.get('databaseId') +
-          `/items-browser/${browserId}`,
+        `${this._env.get('apiUrl')}item-browsers/${browserId}/items`,
         {
           params: httpParams,
         }

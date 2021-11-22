@@ -20,11 +20,8 @@ export class FacetService {
    * @returns Observable with facets array.
    */
   public getFacets(): Observable<FacetDefinition[]> {
-    const url =
-      this._env.get('apiUrl')! + this._env.get('databaseId') + '/facets';
-
     return this._http
-      .get<FacetDefinition[]>(url)
+      .get<FacetDefinition[]>(`${this._env.get('apiUrl')}facets`)
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
@@ -34,27 +31,19 @@ export class FacetService {
    * @param id The facet's ID.
    */
   public getFacet(id: string): Observable<FacetDefinition> {
-    const url =
-      this._env.get('apiUrl')! + this._env.get('databaseId') + `/facets/${id}`;
-
     return this._http
-      .get<FacetDefinition>(url)
+      .get<FacetDefinition>(`${this._env.get('apiUrl')}facets/${id}`)
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
   /**
    * Get the facet assigned to the item with the specified ID.
    *
-   * @param itemId The item's ID.
+   * @param id The item's ID.
    */
-  public getFacetFromItemId(itemId: string): Observable<FacetDefinition> {
-    const url =
-      this._env.get('apiUrl')! +
-      this._env.get('databaseId') +
-      `/facets/items/${itemId}`;
-
+  public getFacetFromItemId(id: string): Observable<FacetDefinition> {
     return this._http
-      .get<FacetDefinition>(url)
+      .get<FacetDefinition>(`${this._env.get('apiUrl')}facets/items/${id}`)
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
@@ -75,12 +64,8 @@ export class FacetService {
     noRoles = false
   ): Observable<PartDefinition[]> {
     let url = idIsItem
-      ? this._env.get('apiUrl')! +
-        this._env.get('databaseId') +
-        `/item-facets/${id}/parts`
-      : this._env.get('apiUrl')! +
-        this._env.get('databaseId') +
-        `/facets/${id}/parts`;
+      ? this._env.get('apiUrl')! + `item-facets/${id}/parts`
+      : this._env.get('apiUrl')! + `facets/${id}/parts`;
     if (noRoles) {
       url += '?noRoles=true';
     }
@@ -95,13 +80,8 @@ export class FacetService {
    * @returns Observable of an object with property typeId=result or null.
    */
   public getTextLayerPartTypeId(): Observable<{ typeId: string }> {
-    const url =
-      this._env.get('apiUrl')! +
-      this._env.get('databaseId') +
-      '/facets/layer-type-id';
-
     return this._http
-      .get<{ typeId: string }>(url)
+      .get<{ typeId: string }>(`${this._env.get('apiUrl')}facets/layer-type-id`)
       .pipe(retry(3), catchError(this._error.handleError));
   }
 

@@ -79,12 +79,9 @@ export class ItemService {
     }
 
     return this._http
-      .get<DataPage<ItemInfo>>(
-        this._env.get('apiUrl')! + this._env.get('databaseId') + '/items',
-        {
-          params: httpParams,
-        }
-      )
+      .get<DataPage<ItemInfo>>(`${this._env.get('apiUrl')}items`, {
+        params: httpParams,
+      })
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
@@ -106,7 +103,7 @@ export class ItemService {
 
     return this._http
       .post<ErrorWrapper<DataPage<ItemInfo>>>(
-        this._env.get('apiUrl')! + this._env.get('databaseId') + '/search',
+        `${this._env.get('apiUrl')}search/items`,
         {
           query,
           pageNumber,
@@ -137,7 +134,7 @@ export class ItemService {
 
     return this._http
       .post<ErrorWrapper<DataPage<DataPinInfo>>>(
-        this._env.get('apiUrl')! + this._env.get('databaseId') + '/pin-search',
+        `${this._env.get('apiUrl')}search/pins`,
         {
           query,
           pageNumber,
@@ -157,8 +154,7 @@ export class ItemService {
    * @returns Observable with paged result.
    */
   public getItem(id: string, parts: boolean): Observable<Item> {
-    let url =
-      this._env.get('apiUrl')! + this._env.get('databaseId') + `/item/${id}`;
+    let url = `${this._env.get('apiUrl')}items/${id}`;
     if (parts) {
       url += '?parts=true';
     }
@@ -171,9 +167,9 @@ export class ItemService {
    * @returns Observable with result.
    */
   public deleteItem(id: string): Observable<any> {
-    const url =
-      this._env.get('apiUrl')! + this._env.get('databaseId') + `/item/${id}`;
-    return this._http.delete(url).pipe(catchError(this._error.handleError));
+    return this._http
+      .delete(`${this._env.get('apiUrl')}items/${id}`)
+      .pipe(catchError(this._error.handleError));
   }
 
   /**
@@ -182,10 +178,8 @@ export class ItemService {
    * @returns Observable with result.
    */
   public addItem(item: Item): Observable<Item> {
-    const url =
-      this._env.get('apiUrl')! + this._env.get('databaseId') + '/items';
     return this._http
-      .post<Item>(url, item)
+      .post<Item>(`${this._env.get('apiUrl')}items`, item)
       .pipe(catchError(this._error.handleError));
   }
 
@@ -199,23 +193,21 @@ export class ItemService {
     if (!id) {
       return of(null);
     }
-    const url =
-      this._env.get('apiUrl')! + this._env.get('databaseId') + `/part/${id}`;
     return this._http
-      .get<Part>(url)
+      .get<Part>(`${this._env.get('apiUrl')}parts/${id}`)
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
   /**
    * From the item with the specified ID, get the first (and normally unique)
    * part matching the specified type and/or role.
-   * @param itemId The item ID.
+   * @param id The item ID.
    * @param type The part type or "any".
    * @param role The part role or "default".
    * @returns Observable with result.
    */
   public getPartFromTypeAndRole(
-    itemId: string,
+    id: string,
     type: string,
     role = 'default'
   ): Observable<Part> {
@@ -225,29 +217,21 @@ export class ItemService {
     if (!role) {
       role = 'default';
     }
-    const url =
-      this._env.get('apiUrl')! +
-      this._env.get('databaseId') +
-      `/item/${itemId}/part/${type}/${role}`;
     return this._http
-      .get<Part>(url)
+      .get<Part>(`${this._env.get('apiUrl')}items/${id}/parts/${type}/${role}`)
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
   /**
    * Get the base text (if any) of the item with the specified ID.
-   * @param itemId The item's ID.
+   * @param id The item's ID.
    * @returns An observable of an object with a "text" property.
    */
-  public getBaseTextPart(
-    itemId: string
-  ): Observable<{ part: Part; text: string }> {
-    const url =
-      this._env.get('apiUrl')! +
-      this._env.get('databaseId') +
-      `/item/${itemId}/base-text`;
+  public getBaseTextPart(id: string): Observable<{ part: Part; text: string }> {
     return this._http
-      .get<{ part: Part; text: string }>(url)
+      .get<{ part: Part; text: string }>(
+        `${this._env.get('apiUrl')}items/${id}/base-text`
+      )
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
@@ -270,17 +254,14 @@ export class ItemService {
    * Thus, the role IDs (=layer type) for layer parts may just be equal
    * to the fragment type ID (e.g. "fr.it.vedph.comment"), or include
    * this + colon + role ID proper (e.g."fr.it.vedph.comment:scholarly").
-   * @param itemId The item's ID.
+   * @param id The item's ID.
    * @returns Observable with array of RolePartId's.
    */
   public getItemLayerInfo(
-    itemId: string,
+    id: string,
     absent: boolean
   ): Observable<LayerPartInfo[]> {
-    let url =
-      this._env.get('apiUrl')! +
-      this._env.get('databaseId') +
-      `/item/${itemId}/layers`;
+    let url = `${this._env.get('apiUrl')}items/${id}/layers`;
     if (absent) {
       url += '?absent=true';
     }
@@ -295,12 +276,8 @@ export class ItemService {
    * @returns Observable with array of IDataPin's.
    */
   public getPartPins(id: string): Observable<RolePartId[]> {
-    const url =
-      this._env.get('apiUrl')! +
-      this._env.get('databaseId') +
-      `/part/${id}/pins`;
     return this._http
-      .get<RolePartId[]>(url)
+      .get<RolePartId[]>(`${this._env.get('apiUrl')}parts/${id}/pins`)
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
@@ -314,12 +291,8 @@ export class ItemService {
   public getDataPinDefinitions(
     typeId: string
   ): Observable<DataPinDefinition[]> {
-    const url =
-      this._env.get('apiUrl')! +
-      this._env.get('databaseId') +
-      `/pin-defs/${typeId}`;
     return this._http
-      .get<DataPinDefinition[]>(url)
+      .get<DataPinDefinition[]>(`${this._env.get('apiUrl')}pin-defs/${typeId}`)
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
@@ -332,12 +305,10 @@ export class ItemService {
    * broken, or 2=surely broken.
    */
   public getLayerPartBreakChance(id: string): Observable<{ chance: number }> {
-    const url =
-      this._env.get('apiUrl')! +
-      this._env.get('databaseId') +
-      `/part/${id}/break-chance`;
     return this._http
-      .get<{ chance: number }>(url)
+      .get<{ chance: number }>(
+        `${this._env.get('apiUrl')}parts/${id}/break-chance`
+      )
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
@@ -347,12 +318,8 @@ export class ItemService {
    * @returns A list of layer hints, one per fragment.
    */
   public getLayerPartHints(id: string): Observable<LayerHint[]> {
-    const url =
-      this._env.get('apiUrl')! +
-      this._env.get('databaseId') +
-      `/part/${id}/layer-hints`;
     return this._http
-      .get<LayerHint[]>(url)
+      .get<LayerHint[]>(`${this._env.get('apiUrl')}parts/${id}/layer-hints`)
       .pipe(retry(3), catchError(this._error.handleError));
   }
 
@@ -363,12 +330,10 @@ export class ItemService {
    * @param patches The array of patch instructions.
    */
   public applyLayerPatches(id: string, patches: string[]): Observable<Part> {
-    const url =
-      this._env.get('apiUrl')! +
-      this._env.get('databaseId') +
-      `/part/${id}/layer-patches`;
     return this._http
-      .post<Part>(url, { patches })
+      .post<Part>(`${this._env.get('apiUrl')}parts/${id}/layer-patches`, {
+        patches,
+      })
       .pipe(catchError(this._error.handleError));
   }
 
@@ -378,9 +343,9 @@ export class ItemService {
    * @returns Observable with result.
    */
   public deletePart(id: string): Observable<any> {
-    const url =
-      this._env.get('apiUrl')! + this._env.get('databaseId') + `/part/${id}`;
-    return this._http.delete(url).pipe(catchError(this._error.handleError));
+    return this._http
+      .delete(`${this._env.get('apiUrl')}items/${id}`)
+      .pipe(catchError(this._error.handleError));
   }
 
   /**
@@ -389,10 +354,10 @@ export class ItemService {
    * @returns Observable with result.
    */
   public addPart(part: Part): Observable<Part> {
-    const url =
-      this._env.get('apiUrl')! + this._env.get('databaseId') + '/parts';
     return this._http
-      .post<Part>(url, { raw: JSON.stringify(part) })
+      .post<Part>(`${this._env.get('apiUrl')}parts`, {
+        raw: JSON.stringify(part),
+      })
       .pipe(catchError(this._error.handleError));
   }
 
@@ -403,10 +368,8 @@ export class ItemService {
    * @param flags The flags value to be set.
    */
   public setItemFlags(ids: string[], flags: number): Observable<any> {
-    const url =
-      this._env.get('apiUrl')! + this._env.get('databaseId') + '/items/flags';
     return this._http
-      .post<any>(url, { ids, flags })
+      .post<any>(`${this._env.get('apiUrl')}items/flags`, { ids, flags })
       .pipe(catchError(this._error.handleError));
   }
 
@@ -417,10 +380,8 @@ export class ItemService {
    * @param groupId The group ID value to be set.
    */
   public setItemGroupId(ids: string[], groupId: string): Observable<any> {
-    const url =
-      this._env.get('apiUrl')! + this._env.get('databaseId') + '/items/groupid';
     return this._http
-      .post<any>(url, { ids, groupId })
+      .post<any>(`${this._env.get('apiUrl')}items/group-id`, { ids, groupId })
       .pipe(catchError(this._error.handleError));
   }
 
@@ -431,12 +392,8 @@ export class ItemService {
    * @param scope The scope to be set.
    */
   public setPartThesaurusScope(ids: string[], scope: string): Observable<any> {
-    const url =
-      this._env.get('apiUrl')! +
-      this._env.get('databaseId') +
-      '/parts/thesscope';
     return this._http
-      .post<any>(url, { ids, scope })
+      .post<any>(`${this._env.get('apiUrl')}parts/thes-scope`, { ids, scope })
       .pipe(catchError(this._error.handleError));
   }
 
@@ -512,19 +469,19 @@ export class ItemService {
    */
   private groupBy(array: any[], criteria: any): any[] {
     return array.reduce((obj, item) => {
-      // Check if the criteria is a function to run on the item or a property of it
+      // check if the criteria is a function to run on the item or a property of it
       const key =
         typeof criteria === 'function' ? criteria(item) : item[criteria];
 
-      // If the key doesn't exist yet, create it
+      // if the key doesn't exist yet, create it
       if (!obj.hasOwnProperty(key)) {
         obj[key] = [];
       }
 
-      // Push the value to the object
+      // push the value to the object
       obj[key].push(item);
 
-      // Return the object to the next item in the loop
+      // return the object to the next item in the loop
       return obj;
     }, {});
   }
