@@ -107,7 +107,15 @@
         (page)="pageChange($event)"
       ></mat-paginator>
     </div>
+
     <!-- editor -->
-    TODO
+    <mat-expansion-panel [expanded]="editedNode" [disabled]="!editedNode">
+      <mat-expansion-panel-header>Node</mat-expansion-panel-header>
+      <cadmus-graph-node-editor
+        [node]="editedNode"
+        (nodeChange)="onNodeChange($event)"
+        (editorClose)="onEditorClose()"
+      ></cadmus-graph-node-editor>
+    </mat-expansion-panel>
   </div>
 </div>

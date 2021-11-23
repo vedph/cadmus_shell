@@ -1,0 +1,66 @@
+<form [formGroup]="form" (submit)="save()">
+  <!-- uri (readonly if not new) -->
+  <div>
+    <mat-form-field *ngIf="isNew">
+      <input matInput [formControl]="uri" placeholder="uri" />
+      <mat-error *ngIf="uri.errors?.required && (uri.dirty || uri.touched)"
+        >uri required</mat-error
+      >
+      <mat-error *ngIf="uri.errors?.maxLength && (uri.dirty || uri.touched)"
+        >uri too long</mat-error
+      >
+    </mat-form-field>
+    <span style="color: silver" *ngIf="!isNew">{{ uri?.value }} </span>
+  </div>
+
+  <!-- label -->
+  <div>
+    <mat-form-field>
+      <input matInput [formControl]="label" placeholder="label" />
+      <mat-error
+        *ngIf="label.errors?.required && (label.dirty || label.touched)"
+        >label required</mat-error
+      >
+      <mat-error
+        *ngIf="label.errors?.maxLength && (label.dirty || label.touched)"
+        >label too long</mat-error
+      >
+    </mat-form-field>
+  </div>
+
+  <!-- class, tag -->
+  <div>
+    <mat-checkbox [formControl]="isClass">is class</mat-checkbox>
+    &nbsp;
+    <mat-form-field *ngIf="tagEntries?.length" style="width: 8em">
+      <mat-select [formControl]="tag" placeholder="tag">
+        <mat-option [value]="null">(no tag)</mat-option>
+        <mat-option *ngFor="let e of tagEntries" [value]="e.id">{{
+          e.value
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="!tagEntries?.length">
+      <input matInput [formControl]="tag" placeholder="tag" />
+      <mat-error *ngIf="tag.errors?.maxLength && (tag.dirty || tag.touched)"
+        >tag too long</mat-error
+      >
+    </mat-form-field>
+  </div>
+
+  <!-- buttons -->
+  <div>
+    <button color="warn" mat-icon-button type="button" (click)="cancel()">
+      <mat-icon>cancel</mat-icon>
+    </button>
+    &nbsp;
+    <button
+      color="primary"
+      mat-icon-button
+      type="submit"
+      [disabled]="form.invalid"
+    >
+      <mat-icon>check_circle</mat-icon> save
+    </button>
+  </div>
+</form>

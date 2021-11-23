@@ -7,13 +7,19 @@ import { map, startWith, switchMap, take, tap } from 'rxjs/operators';
 
 import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
 
-import { GraphService, NodeFilter, NodeResult } from '@myrmidon/cadmus-api';
+import {
+  GraphService,
+  NodeFilter,
+  NodeResult,
+  NodeSourceType,
+} from '@myrmidon/cadmus-api';
 import { DataPage, ErrorInfo } from '@myrmidon/ng-tools';
 import { DialogService } from '@myrmidon/ng-mat-tools';
 
 import { GRAPH_NODES_PAGINATOR } from '../../state/graph-nodes.paginator';
 import { GraphNodesQuery } from '../../state/graph-nodes.query';
 import { GraphNodesState } from '../../state/graph-nodes.store';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 /**
  * List of graph nodes. This includes a graph node filter, a list, and a graph
@@ -34,12 +40,15 @@ export class GraphNodeListComponent implements OnInit, OnDestroy {
   public nodeCount$: Observable<number>;
   public pageSize: FormControl;
 
+  public editedNode?: NodeResult;
+
   constructor(
     @Inject(GRAPH_NODES_PAGINATOR)
     public paginator: PaginatorPlugin<GraphNodesState>,
     private _scroller: ViewportScroller,
     private _graphService: GraphService,
     private _dialogService: DialogService,
+    private _snackbar: MatSnackBar,
     graphNodesQuery: GraphNodesQuery,
     formBuilder: FormBuilder
   ) {
@@ -126,7 +135,41 @@ export class GraphNodeListComponent implements OnInit, OnDestroy {
   }
 
   public addNode(): void {
-    // TODO
+    this.editedNode = {
+      uri: '',
+      id: 0,
+      sourceType: NodeSourceType.User,
+      label: '',
+    };
+  }
+
+  public editNode(node: NodeResult): void {
+    this.editedNode = node;
+  }
+
+  public onNodeChange(node: NodeResult): void {
+    this._graphService
+      .addNode(node)
+      .pipe(take(1))
+      .subscribe(
+        (n) => {
+          this._refresh$.next(this._refresh$.value + 1);
+          this.editedNode = undefined;
+          this._snackbar.open('Node saved', 'OK', {
+            duration: 1500,
+          });
+        },
+        (error) => {
+          if (error) {
+            console.error(JSON.stringify(error));
+          }
+          this._snackbar.open('Error deleting node', 'OK');
+        }
+      );
+  }
+
+  public onEditorClose(): void {
+    this.editedNode = undefined;
   }
 
   public deleteNode(node: NodeResult): void {
@@ -135,7 +178,20 @@ export class GraphNodeListComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe((yes) => {
         if (yes) {
-          // TODO
+          this._graphService
+            .deleteNode(node.id)
+            .pipe(take(1))
+            .subscribe(
+              (_) => {
+                this._refresh$.next(this._refresh$.value + 1);
+              },
+              (error) => {
+                if (error) {
+                  console.error(JSON.stringify(error));
+                }
+                this._snackbar.open('Error deleting node', 'OK');
+              }
+            );
         }
       });
   }
