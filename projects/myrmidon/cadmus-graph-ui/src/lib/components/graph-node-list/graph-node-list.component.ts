@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { ViewportScroller } from '@angular/common';
 import { PageEvent } from '@angular/material/paginator';
@@ -20,6 +20,7 @@ import { GRAPH_NODES_PAGINATOR } from '../../state/graph-nodes.paginator';
 import { GraphNodesQuery } from '../../state/graph-nodes.query';
 import { GraphNodesState } from '../../state/graph-nodes.store';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ThesaurusNode } from '@myrmidon/cadmus-thesaurus-ui';
 
 /**
  * List of graph nodes. This includes a graph node filter, a list, and a graph
@@ -41,6 +42,12 @@ export class GraphNodeListComponent implements OnInit, OnDestroy {
   public pageSize: FormControl;
 
   public editedNode?: NodeResult;
+
+  /**
+   * The optional set of thesaurus entries for node's tags.
+   */
+  @Input()
+  public tagEntries?: ThesaurusNode[];
 
   constructor(
     @Inject(GRAPH_NODES_PAGINATOR)

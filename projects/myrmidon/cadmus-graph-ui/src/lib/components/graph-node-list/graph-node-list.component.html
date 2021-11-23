@@ -113,6 +113,7 @@
       <mat-expansion-panel-header>Node</mat-expansion-panel-header>
       <cadmus-graph-node-editor
         [node]="editedNode"
+        [tagEntries]="tagEntries"
         (nodeChange)="onNodeChange($event)"
         (editorClose)="onEditorClose()"
       ></cadmus-graph-node-editor>
