@@ -6,7 +6,6 @@ import { NodeFilter, NodeResult } from '@myrmidon/cadmus-api';
 
 import { GraphNodesQuery } from '../../state/graph-nodes.query';
 import { GraphNodesService } from '../../state/graph-nodes.service';
-import { MatChipEvent } from '@angular/material/chips';
 
 /**
  * Graph nodes filter used in graph nodes list.

@@ -53,6 +53,9 @@ export class GraphNodesService {
           this.setLinkedNode(node);
         },
         (error) => {
+          if (error) {
+            console.error(JSON.stringify(error));
+          }
           console.warn('Node ID not found: ' + id);
         }
       );
@@ -98,6 +101,10 @@ export class GraphNodesService {
         this._store.update({
           classNodes: results,
         });
+      }, error => {
+        if (error) {
+          console.error(JSON.stringify(error));
+        }
       });
   }
 

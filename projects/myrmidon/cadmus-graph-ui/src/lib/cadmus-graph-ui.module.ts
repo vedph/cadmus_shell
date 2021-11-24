@@ -12,6 +12,7 @@ import { GraphNodeFilterComponent } from './components/graph-node-filter/graph-n
 import { GraphNodeLookupComponent } from './components/graph-node-lookup/graph-node-lookup.component';
 import { GraphNodeListComponent } from './components/graph-node-list/graph-node-list.component';
 import { GraphNodeEditorComponent } from './components/graph-node-editor/graph-node-editor.component';
+import { GraphTripleFilterComponent } from './components/graph-triple-filter/graph-triple-filter.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { GraphNodeEditorComponent } from './components/graph-node-editor/graph-n
     GraphNodeLookupComponent,
     GraphNodeListComponent,
     GraphNodeEditorComponent,
+    GraphTripleFilterComponent,
   ],
   imports: [
     CommonModule,
@@ -34,7 +36,8 @@ import { GraphNodeEditorComponent } from './components/graph-node-editor/graph-n
     GraphNodeFilterComponent,
     GraphNodeLookupComponent,
     GraphNodeListComponent,
-    GraphNodeEditorComponent
+    GraphNodeEditorComponent,
+    GraphTripleFilterComponent,
   ],
 })
 export class CadmusGraphUiModule {}

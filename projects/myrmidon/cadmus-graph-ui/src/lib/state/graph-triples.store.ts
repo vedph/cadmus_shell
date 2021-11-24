@@ -1,9 +1,12 @@
 import { StoreConfig, EntityStore, EntityState } from '@datorama/akita';
 import { Injectable } from '@angular/core';
-import { TripleFilter, TripleResult } from '@myrmidon/cadmus-api';
+import { NodeResult, TripleFilter, TripleResult } from '@myrmidon/cadmus-api';
 
 export interface GraphTriplesState extends EntityState<TripleResult, number> {
   filter: TripleFilter;
+  subjectNode?: NodeResult;
+  predicateNode?: NodeResult;
+  objectNode?: NodeResult;
 }
 
 const initialState: GraphTriplesState = {

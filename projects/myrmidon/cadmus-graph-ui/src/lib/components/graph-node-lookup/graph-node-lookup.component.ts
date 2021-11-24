@@ -33,6 +33,14 @@ export class GraphNodeLookupComponent {
   public isClass?: boolean | null;
 
   /**
+   * An optional value for the tag filter. You can use this
+   * to lookup only those nodes having a specific tag, e.g.
+   * property nodes to be used as predicates.
+   */
+  @Input()
+  public tag?: string;
+
+  /**
    * Emitted whenever a node is picked up.
    */
   @Output()
@@ -69,6 +77,7 @@ export class GraphNodeLookupComponent {
                   : this.isClass
                   ? true
                   : false,
+              tag: this.tag,
             })
             .pipe(map((p) => p.items));
         } else {
