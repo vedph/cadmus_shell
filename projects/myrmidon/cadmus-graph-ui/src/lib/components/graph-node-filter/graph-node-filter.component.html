@@ -81,8 +81,8 @@
         <mat-chip
           *ngFor="let node of classNodes"
           [removable]="true"
-          (removed)="onClassRemove($event)"
-          matTooltip="{{ node.uid }}"
+          (removed)="onClassRemove(node.id)"
+          matTooltip="{{ node.uri }}"
           >{{ node.label }}
           <button type="button" matChipRemove>
             <mat-icon>cancel</mat-icon>

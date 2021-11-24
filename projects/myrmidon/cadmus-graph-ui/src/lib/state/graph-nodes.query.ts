@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { QueryEntity } from '@datorama/akita';
 import { Observable } from 'rxjs';
+
 import { NodeFilter, NodeResult } from '@myrmidon/cadmus-api';
 
 import { GraphNodesState, GraphNodesStore } from './graph-nodes.store';

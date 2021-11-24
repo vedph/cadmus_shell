@@ -46,6 +46,10 @@
         "dist/myrmidon/cadmus-layer-demo/myrmidon-cadmus-layer-demo",
         "dist/myrmidon/cadmus-layer-demo"
       ],
+      "@myrmidon/cadmus-graph-pg": [
+        "dist/myrmidon/cadmus-graph-pg/myrmidon-cadmus-graph-pg",
+        "dist/myrmidon/cadmus-graph-pg"
+      ],
       "@myrmidon/cadmus-graph-ui": [
         "dist/myrmidon/cadmus-graph-ui/myrmidon-cadmus-graph-ui",
         "dist/myrmidon/cadmus-graph-ui"

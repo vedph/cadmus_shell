@@ -7,10 +7,13 @@
     "declarationMap": true,
     "inlineSources": true,
     "types": [],
-    "strict": true
+    "strict": true,
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true
   },
   "exclude": [
     "src/test.ts",
     "**/*.spec.ts"
-  ]
+  ],
 }

@@ -109,7 +109,10 @@
     </div>
 
     <!-- editor -->
-    <mat-expansion-panel [expanded]="editedNode" [disabled]="!editedNode">
+    <mat-expansion-panel
+      [expanded]="editedNode ? true : false"
+      [disabled]="editedNode ? false : true"
+    >
       <mat-expansion-panel-header>Node</mat-expansion-panel-header>
       <cadmus-graph-node-editor
         [node]="editedNode"

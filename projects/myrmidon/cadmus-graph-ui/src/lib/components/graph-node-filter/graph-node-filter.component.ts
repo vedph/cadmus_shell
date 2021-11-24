@@ -6,6 +6,7 @@ import { NodeFilter, NodeResult } from '@myrmidon/cadmus-api';
 
 import { GraphNodesQuery } from '../../state/graph-nodes.query';
 import { GraphNodesService } from '../../state/graph-nodes.service';
+import { MatChipEvent } from '@angular/material/chips';
 
 /**
  * Graph nodes filter used in graph nodes list.
@@ -116,16 +117,19 @@ export class GraphNodeFilterComponent implements OnInit {
     this._nodesService.setLinkedNode(null);
   }
 
-  public onLinkedNodeSet(node: NodeResult): void {
+  public onLinkedNodeSet(node: NodeResult | null): void {
     this._nodesService.setLinkedNode(node);
   }
 
-  public onClassAdd(node: NodeResult): void {
+  public onClassAdd(node: NodeResult | null): void {
+    if (!node) {
+      return;
+    }
     this._nodesService.addClassNode(node);
   }
 
-  public onClassRemove(node: NodeResult): void {
-    this._nodesService.removeClassNode(node.id);
+  public onClassRemove(id: number): void {
+    this._nodesService.removeClassNode(id);
   }
 
   public reset(): void {
