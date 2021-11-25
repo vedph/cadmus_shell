@@ -15,6 +15,7 @@ import { GraphNodeEditorComponent } from './components/graph-node-editor/graph-n
 import { GraphTripleFilterComponent } from './components/graph-triple-filter/graph-triple-filter.component';
 import { GraphTripleListComponent } from './components/graph-triple-list/graph-triple-list.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
+import { GraphTripleEditorComponent } from './components/graph-triple-editor/graph-triple-editor.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     GraphNodeEditorComponent,
     GraphTripleFilterComponent,
     GraphTripleListComponent,
+    GraphTripleEditorComponent,
     TruncatePipe,
   ],
   imports: [
@@ -43,7 +45,8 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     GraphNodeEditorComponent,
     GraphTripleFilterComponent,
     GraphTripleListComponent,
-    TruncatePipe
+    GraphTripleEditorComponent,
+    TruncatePipe,
   ],
 })
 export class CadmusGraphUiModule {}
