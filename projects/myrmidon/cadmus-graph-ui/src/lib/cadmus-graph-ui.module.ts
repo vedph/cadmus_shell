@@ -13,6 +13,8 @@ import { GraphNodeLookupComponent } from './components/graph-node-lookup/graph-n
 import { GraphNodeListComponent } from './components/graph-node-list/graph-node-list.component';
 import { GraphNodeEditorComponent } from './components/graph-node-editor/graph-node-editor.component';
 import { GraphTripleFilterComponent } from './components/graph-triple-filter/graph-triple-filter.component';
+import { GraphTripleListComponent } from './components/graph-triple-list/graph-triple-list.component';
+import { TruncatePipe } from './pipes/truncate.pipe';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { GraphTripleFilterComponent } from './components/graph-triple-filter/gra
     GraphNodeListComponent,
     GraphNodeEditorComponent,
     GraphTripleFilterComponent,
+    GraphTripleListComponent,
+    TruncatePipe,
   ],
   imports: [
     CommonModule,
@@ -30,7 +34,7 @@ import { GraphTripleFilterComponent } from './components/graph-triple-filter/gra
     CadmusMaterialModule,
     CadmusApiModule,
     NgToolsModule,
-    NgMatToolsModule
+    NgMatToolsModule,
   ],
   exports: [
     GraphNodeFilterComponent,
@@ -38,6 +42,8 @@ import { GraphTripleFilterComponent } from './components/graph-triple-filter/gra
     GraphNodeListComponent,
     GraphNodeEditorComponent,
     GraphTripleFilterComponent,
+    GraphTripleListComponent,
+    TruncatePipe
   ],
 })
 export class CadmusGraphUiModule {}

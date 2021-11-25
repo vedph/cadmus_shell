@@ -7,56 +7,47 @@ import { map, startWith, switchMap, take, tap } from 'rxjs/operators';
 
 import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
 
-import {
-  GraphService,
-  NodeFilter,
-  NodeResult,
-  NodeSourceType,
-} from '@myrmidon/cadmus-api';
+import { GraphService, TripleFilter, TripleResult } from '@myrmidon/cadmus-api';
 import { DataPage, ErrorInfo } from '@myrmidon/ng-tools';
 import { DialogService } from '@myrmidon/ng-mat-tools';
-
-import { GRAPH_NODES_PAGINATOR } from '../../state/graph-nodes.paginator';
-import { GraphNodesQuery } from '../../state/graph-nodes.query';
-import { GraphNodesState } from '../../state/graph-nodes.store';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ThesaurusNode } from '@myrmidon/cadmus-thesaurus-ui';
 
-/**
- * List of graph nodes. This includes a graph node filter, a list, and a graph
- * editor.
- */
+import { GRAPH_TRIPLES_PAGINATOR } from '../../state/graph-triples.paginator';
+import { GraphTriplesState } from '../../state/graph-triples.store';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { GraphTriplesQuery } from '../../state/graph-triples.query';
+
 @Component({
-  selector: 'cadmus-graph-node-list',
-  templateUrl: './graph-node-list.component.html',
-  styleUrls: ['./graph-node-list.component.css'],
+  selector: 'cadmus-graph-triple-list',
+  templateUrl: './graph-triple-list.component.html',
+  styleUrls: ['./graph-triple-list.component.css'],
 })
-export class GraphNodeListComponent implements OnInit, OnDestroy {
+export class GraphTripleListComponent implements OnInit {
   private _refresh$: BehaviorSubject<number>;
-  private _filter$: Observable<NodeFilter>;
+  private _filter$: Observable<TripleFilter>;
 
   public loading$: Observable<boolean | undefined>;
   public error$: Observable<ErrorInfo>;
-  public pagination$: Observable<PaginationResponse<NodeResult>>;
-  public nodeCount$: Observable<number>;
+  public pagination$: Observable<PaginationResponse<TripleResult>>;
+  public tripleCount$: Observable<number>;
   public pageSize: FormControl;
 
-  public editedNode?: NodeResult;
+  public editedTriple?: TripleResult;
 
   /**
-   * The optional set of thesaurus entries for node's tags.
+   * The optional set of thesaurus entries for triple's tags.
    */
   @Input()
   public tagEntries?: ThesaurusNode[];
 
   constructor(
-    @Inject(GRAPH_NODES_PAGINATOR)
-    public paginator: PaginatorPlugin<GraphNodesState>,
+    @Inject(GRAPH_TRIPLES_PAGINATOR)
+    public paginator: PaginatorPlugin<GraphTriplesState>,
     private _scroller: ViewportScroller,
     private _graphService: GraphService,
     private _dialogService: DialogService,
     private _snackbar: MatSnackBar,
-    graphNodesQuery: GraphNodesQuery,
+    graphNodesQuery: GraphTriplesQuery,
     formBuilder: FormBuilder
   ) {
     this.pageSize = formBuilder.control(20);
@@ -64,7 +55,7 @@ export class GraphNodeListComponent implements OnInit, OnDestroy {
     this._filter$ = graphNodesQuery.selectFilter();
     this.loading$ = graphNodesQuery.selectLoading();
     this.error$ = graphNodesQuery.selectError();
-    this.nodeCount$ = graphNodesQuery.selectCount();
+    this.tripleCount$ = graphNodesQuery.selectCount();
 
     this.pagination$ = combineLatest([
       this.paginator.pageChanges,
@@ -112,12 +103,12 @@ export class GraphNodeListComponent implements OnInit, OnDestroy {
   }
 
   private getRequest(
-    filter: NodeFilter
-  ): () => Observable<PaginationResponse<NodeResult>> {
+    filter: TripleFilter
+  ): () => Observable<PaginationResponse<TripleResult>> {
     return () =>
-      this._graphService.getNodes(filter).pipe(
+      this._graphService.getTriples(filter).pipe(
         // adapt server results to the paginator plugin
-        map((p: DataPage<NodeResult>) => {
+        map((p: DataPage<TripleResult>) => {
           return {
             currentPage: p.pageNumber,
             perPage: p.pageSize,
@@ -141,28 +132,30 @@ export class GraphNodeListComponent implements OnInit, OnDestroy {
     this._refresh$.next(this._refresh$.value + 1);
   }
 
-  public addNode(): void {
-    this.editedNode = {
-      uri: '',
+  public addTriple(): void {
+    this.editedTriple = {
       id: 0,
-      sourceType: NodeSourceType.User,
-      label: '',
+      subjectId: 0,
+      predicateId: 0,
+      objectId: 0,
+      subjectUri: '',
+      predicateUri: ''
     };
   }
 
-  public editNode(node: NodeResult): void {
-    this.editedNode = node;
+  public editTriple(triple: TripleResult): void {
+    this.editedTriple = triple;
   }
 
-  public onNodeChange(node: NodeResult): void {
+  public onTripleChange(triple: TripleResult): void {
     this._graphService
-      .addNode(node)
+      .addTriple(triple)
       .pipe(take(1))
       .subscribe(
         (n) => {
           this._refresh$.next(this._refresh$.value + 1);
-          this.editedNode = undefined;
-          this._snackbar.open('Node saved', 'OK', {
+          this.editedTriple = undefined;
+          this._snackbar.open('Triple saved', 'OK', {
             duration: 1500,
           });
         },
@@ -170,23 +163,23 @@ export class GraphNodeListComponent implements OnInit, OnDestroy {
           if (error) {
             console.error(JSON.stringify(error));
           }
-          this._snackbar.open('Error saving node', 'OK');
+          this._snackbar.open('Error saving triple', 'OK');
         }
       );
   }
 
   public onEditorClose(): void {
-    this.editedNode = undefined;
+    this.editedTriple = undefined;
   }
 
-  public deleteNode(node: NodeResult): void {
+  public deleteTriple(triple: TripleResult): void {
     this._dialogService
-      .confirm('Delete Node', 'Delete node ' + node.label + '?')
+      .confirm('Delete Triple', 'Delete triple?')
       .pipe(take(1))
       .subscribe((yes) => {
         if (yes) {
           this._graphService
-            .deleteNode(node.id)
+            .deleteTriple(triple.id)
             .pipe(take(1))
             .subscribe(
               (_) => {
@@ -196,7 +189,7 @@ export class GraphNodeListComponent implements OnInit, OnDestroy {
                 if (error) {
                   console.error(JSON.stringify(error));
                 }
-                this._snackbar.open('Error deleting node', 'OK');
+                this._snackbar.open('Error deleting triple', 'OK');
               }
             );
         }

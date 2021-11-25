@@ -95,6 +95,18 @@ export class GraphTripleFilterComponent implements OnInit {
     };
   }
 
+  public onSubjectNodeChange(node?: NodeResult | null): void {
+    this._triplesService.setTerm(node, 'S');
+  }
+
+  public onPredicateNodeChange(node?: NodeResult | null): void {
+    this._triplesService.setTerm(node, 'P');
+  }
+
+  public onObjectNodeChange(node?: NodeResult | null): void {
+    this._triplesService.setTerm(node, 'O');
+  }
+
   public reset(): void {
     this.form.reset();
     this.apply();

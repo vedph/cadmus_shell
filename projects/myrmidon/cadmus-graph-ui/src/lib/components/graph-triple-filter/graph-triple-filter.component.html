@@ -1,6 +1,18 @@
 <form [formGroup]="form" (submit)="apply()" ng-disabled="disabled">
   <!-- subject -->
+  <div>
+    subject
+    <cadmus-graph-node-lookup
+      (nodeChange)="onSubjectNodeChange($event)"
+    ></cadmus-graph-node-lookup>
+  </div>
   <!-- predicate -->
+  <div>
+    predicate
+    <cadmus-graph-node-lookup
+      (nodeChange)="onPredicateNodeChange($event)"
+    ></cadmus-graph-node-lookup>
+  </div>
   <!-- object, objectLit -->
   <div>
     <mat-form-field>
@@ -9,18 +21,28 @@
   </div>
   <div *ngIf="literal?.value">
     <mat-form-field>
-      <input matInput [formControl]="objectLit" placeholder="literal" />
-      <mat-error
-        *ngIf="
-          objectLit.errors?.maxLength && (objectLit.dirty || objectLit.touched)
-        "
-        >literal too long</mat-error
-      >
+      <input
+        matInput
+        [formControl]="objectLit"
+        placeholder="literal"
+        maxlength="500"
+      />
     </mat-form-field>
   </div>
-  <div *ngIf="!literal?.value">TODO</div>
+  <div *ngIf="!literal?.value">
+    object
+    <cadmus-graph-node-lookup
+      (nodeChange)="onObjectNodeChange($event)"
+    ></cadmus-graph-node-lookup>
+  </div>
   <!-- sid, sidPrefix -->
-  <div></div>
+  <div>
+    <mat-form-field>
+      <input matInput [formControl]="sid" placeholder="sid" maxlength="500" />
+    </mat-form-field>
+    &nbsp;
+    <mat-checkbox [formControl]="sidPrefix">prefix</mat-checkbox>
+  </div>
   <!-- tag -->
   <br />
   <div

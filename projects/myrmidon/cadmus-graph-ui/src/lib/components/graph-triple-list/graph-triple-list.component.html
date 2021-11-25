@@ -1,0 +1,123 @@
+<div
+  gdAreas="spinner spinner | filters list | . pager | . info"
+  gdAreas.lt-md="spinner | list | pager | info | filters"
+  gdColumns="280px 1fr"
+  gdColumns.lt-md="1fr"
+  gdGap="8px"
+>
+  <!-- spinner -->
+  <div
+    *ngIf="paginator.isLoading$ | async"
+    gdArea="spinner"
+    gdAlignColumns="center"
+    gdAlignRows="center"
+  >
+    <mat-spinner [diameter]="48" [strokeWidth]="4"></mat-spinner>
+  </div>
+
+  <!-- filters -->
+  <div gdArea="filters" gdAlignRows.lt-md="center">
+    <mat-card>
+      <mat-card-content>
+        <cadmus-graph-triple-filter
+          [disabled]="(paginator.isLoading$ | async) === true"
+        ></cadmus-graph-triple-filter>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- list -->
+  <div gdArea="list" *ngIf="pagination$ | async as pagination">
+    <!-- bar-->
+    <div>
+      <button
+        color="primary"
+        type="button"
+        mat-button
+        (click)="refresh()"
+        color="primary"
+      >
+        <mat-icon>refresh</mat-icon>
+        refresh
+      </button>
+      <button color="primary" type="button" mat-button (click)="addTriple()">
+        <mat-icon>add_circle</mat-icon>
+        add triple
+      </button>
+    </div>
+    <!-- list -->
+    <div *ngIf="tripleCount$ | async">
+      <table>
+        <thead>
+          <th></th>
+          <th>id</th>
+          <th>S</th>
+          <th>P</th>
+          <th>O</th>
+          <th>uri</th>
+          <th fxHide.lt-md>sid</th>
+          <th fxHide.lt-md>tag</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let d of pagination.data">
+            <td class="command">
+              <button
+                mat-icon-button
+                type="button"
+                color="primary"
+                matTooltip="Edit triple"
+                (click)="editTriple(d)"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+            <td class="command">
+              <button
+                mat-icon-button
+                type="button"
+                color="warn"
+                matTooltip="Delete triple"
+                (click)="deleteTriple(d)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+            <td>{{ d.id }}</td>
+            <td>{{ d.subjectUri}}</td>
+            <td>{{ d.predicateUri }}</td>
+            <td>{{ d.objectUri ?? d.objectLiteral | truncate }}</td>
+            <td fxHide.lt-md>{{ d.sid }}</td>
+            <td fxHide.lt-md>{{ d.tag }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- pagination -->
+      <mat-paginator
+        gdArea="pager"
+        gdAlignColumns="center"
+        gdAlignRows="start"
+        [length]="pagination.total"
+        [pageSize]="pageSize?.value"
+        [pageSizeOptions]="[20, 50, 75, 100]"
+        [pageIndex]="pagination.currentPage - 1"
+        [showFirstLastButtons]="true"
+        (page)="pageChange($event)"
+      ></mat-paginator>
+    </div>
+
+    <!-- editor -->
+    <mat-expansion-panel
+      [expanded]="editedTriple ? true : false"
+      [disabled]="editedTriple ? false : true"
+    >
+      <mat-expansion-panel-header>Triple</mat-expansion-panel-header>
+      <!-- <cadmus-graph-triple-editor
+        [triple]="editedTriple"
+        [tagEntries]="tagEntries"
+        (tripleChange)="onTripleChange($event)"
+        (editorClose)="onEditorClose()"
+      ></cadmus-graph-triple-editor> -->
+    </mat-expansion-panel>
+  </div>
+</div>

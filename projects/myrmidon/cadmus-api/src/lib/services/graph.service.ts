@@ -47,6 +47,7 @@ export interface Triple {
   subjectId: number;
   predicateId: number;
   objectId?: number;
+  objectLiteral?: string;
   sid?: string;
   tag?: string;
 }
