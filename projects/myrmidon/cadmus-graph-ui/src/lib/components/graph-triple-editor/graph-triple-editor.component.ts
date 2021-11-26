@@ -8,6 +8,7 @@ import {
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GraphService, NodeResult, TripleResult } from '@myrmidon/cadmus-api';
 import { ThesaurusNode } from '@myrmidon/cadmus-thesaurus-ui';
+import { NgToolsValidators } from '@myrmidon/ng-tools';
 import { take } from 'rxjs/operators';
 
 @Component({
@@ -67,8 +68,22 @@ export class GraphTripleEditorComponent implements OnInit {
     this.subjectNode = formBuilder.control(null, Validators.required);
     this.predicateNode = formBuilder.control(null, Validators.required);
     this.literal = formBuilder.control(false);
-    this.objectNode = formBuilder.control(null);
-    this.objectLit = formBuilder.control(null, Validators.maxLength(15000));
+    this.objectNode = formBuilder.control(
+      null,
+      NgToolsValidators.conditionalValidator(
+        // when literal is not true, object is required
+        () => !this.form.get('literal')?.value,
+        Validators.required
+      )
+    );
+    this.objectLit = formBuilder.control(null, [
+      Validators.maxLength(15000),
+      // when literal is true, object literal is required
+      NgToolsValidators.conditionalValidator(
+        () => this.form.get('literal')?.value,
+        Validators.required
+      ),
+    ]);
     this.tag = formBuilder.control(null, Validators.maxLength(50));
     this.form = formBuilder.group({
       subjectNode: this.subjectNode,
@@ -82,16 +97,16 @@ export class GraphTripleEditorComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  public onSubjectChange(node: NodeResult | undefined): void {
-    this.subjectNode.setValue(node);
+  public onSubjectChange(node?: NodeResult | null): void {
+    this.subjectNode.setValue(node ?? undefined);
   }
 
-  public onPredicateChange(node: NodeResult | undefined): void {
-    this.predicateNode.setValue(node);
+  public onPredicateChange(node?: NodeResult | null): void {
+    this.predicateNode.setValue(node ?? undefined);
   }
 
-  public onObjectChange(node: NodeResult | undefined): void {
-    this.objectNode.setValue(node);
+  public onObjectChange(node?: NodeResult | null): void {
+    this.objectNode.setValue(node ?? undefined);
   }
 
   private getNode(id: number): Promise<NodeResult | undefined> {

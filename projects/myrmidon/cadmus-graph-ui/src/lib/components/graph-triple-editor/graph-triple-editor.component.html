@@ -1,1 +1,47 @@
-<p>graph-triple-editor works!</p>
+<form [formGroup]="form" (submit)="save()">
+  <div style="display: flex; flex-wrap: wrap; gap: 16px">
+    <!-- subject -->
+    <fieldset style="flex: 1 1 auto">
+      <legend>subject</legend>
+      <cadmus-graph-node-lookup
+        (nodeChange)="onSubjectChange($event)"
+      ></cadmus-graph-node-lookup>
+    </fieldset>
+    <!-- predicate -->
+    <fieldset style="flex: 1 1 auto">
+      <legend>predicate</legend>
+      <cadmus-graph-node-lookup
+        tag="property"
+        (nodeChange)="onPredicateChange($event)"
+      ></cadmus-graph-node-lookup>
+    </fieldset>
+    <!-- object -->
+    <fieldset style="flex: 1 1 auto">
+      <legend>object</legend>
+      <mat-checkbox [formControl]="literal">literal</mat-checkbox>
+      <cadmus-graph-node-lookup
+        *ngIf="!literal?.value"
+        (nodeChange)="onObjectChange($event)"
+      ></cadmus-graph-node-lookup>
+      <mat-form-field *ngIf="literal?.value" style="width: 100%">
+        <textarea matInput [formControl]="objectLit"></textarea>
+      </mat-form-field>
+    </fieldset>
+  </div>
+
+  <!-- buttons -->
+  <div>
+    <button color="warn" mat-icon-button type="button" (click)="cancel()">
+      <mat-icon>cancel</mat-icon>
+    </button>
+    &nbsp;
+    <button
+      color="primary"
+      mat-icon-button
+      type="submit"
+      [disabled]="form.invalid"
+    >
+      <mat-icon>check_circle</mat-icon> save
+    </button>
+  </div>
+</form>
