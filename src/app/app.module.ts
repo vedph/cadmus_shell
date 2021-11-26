@@ -150,6 +150,16 @@ import { HomeComponent } from './home/home.component';
             ),
           canActivate: [AuthGuardService],
         },
+        // graph
+        {
+          path: 'graph',
+          loadChildren: () =>
+            import('@myrmidon/cadmus-graph-pg').then(
+              (module) => module.CadmusGraphPgModule
+            ),
+          canActivate: [AuthGuardService],
+        },
+        // fallback
         { path: '**', component: HomeComponent },
       ],
       {

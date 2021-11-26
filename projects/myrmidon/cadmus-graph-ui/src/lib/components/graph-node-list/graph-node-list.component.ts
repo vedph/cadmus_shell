@@ -21,6 +21,7 @@ import { GraphNodesQuery } from '../../state/graph-nodes.query';
 import { GraphNodesState } from '../../state/graph-nodes.store';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ThesaurusNode } from '@myrmidon/cadmus-thesaurus-ui';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 /**
  * List of graph nodes. This includes a graph node filter, a list, and a graph
@@ -47,7 +48,7 @@ export class GraphNodeListComponent implements OnInit, OnDestroy {
    * The optional set of thesaurus entries for node's tags.
    */
   @Input()
-  public tagEntries?: ThesaurusNode[];
+  public tagEntries?: ThesaurusEntry[];
 
   constructor(
     @Inject(GRAPH_NODES_PAGINATOR)

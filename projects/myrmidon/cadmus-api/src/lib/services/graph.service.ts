@@ -90,7 +90,7 @@ export class GraphService {
    * @returns A page of nodes.
    */
   public getNodes(filter: NodeFilter): Observable<DataPage<NodeResult>> {
-    const url = this._env.get('apiUrl') + '/graph/nodes';
+    const url = this._env.get('apiUrl') + 'graph/nodes';
 
     let httpParams = new HttpParams();
     httpParams = httpParams.set('pageNumber', filter.pageNumber.toString());
@@ -146,7 +146,7 @@ export class GraphService {
    * @returns The node.
    */
   public getNode(id: number): Observable<NodeResult> {
-    const url = this._env.get('apiUrl') + '/graph/nodes/' + id.toString();
+    const url = this._env.get('apiUrl') + 'graph/nodes/' + id.toString();
     return this._http
       .get<NodeResult>(url)
       .pipe(retry(3), catchError(this._error.handleError));
@@ -160,7 +160,7 @@ export class GraphService {
    * @returns The added node.
    */
   public addNode(node: NodeResult): Observable<NodeResult> {
-    const url = this._env.get('apiUrl') + '/graph/nodes/';
+    const url = this._env.get('apiUrl') + 'graph/nodes/';
     return this._http
       .post<NodeResult>(url, node)
       .pipe(catchError(this._error.handleError));
@@ -172,7 +172,7 @@ export class GraphService {
    * @param id The node's ID.
    */
   public deleteNode(id: number): Observable<any> {
-    const url = this._env.get('apiUrl') + '/graph/nodes/' + id.toString();
+    const url = this._env.get('apiUrl') + 'graph/nodes/' + id.toString();
     return this._http.delete(url).pipe(catchError(this._error.handleError));
   }
 
@@ -183,7 +183,7 @@ export class GraphService {
    * @returns The page.
    */
   public getTriples(filter: TripleFilter): Observable<DataPage<TripleResult>> {
-    const url = this._env.get('apiUrl') + '/graph/triples';
+    const url = this._env.get('apiUrl') + 'graph/triples';
 
     let httpParams = new HttpParams();
     httpParams = httpParams.set('pageNumber', filter.pageNumber.toString());
@@ -228,7 +228,7 @@ export class GraphService {
    * @returns The triple.
    */
   public getTriple(id: number): Observable<TripleResult> {
-    const url = this._env.get('apiUrl') + '/graph/triples/' + id.toString();
+    const url = this._env.get('apiUrl') + 'graph/triples/' + id.toString();
     return this._http
       .get<TripleResult>(url)
       .pipe(retry(3), catchError(this._error.handleError));
@@ -241,7 +241,7 @@ export class GraphService {
    * @returns The added triple.
    */
   public addTriple(triple: Triple): Observable<Triple> {
-    const url = this._env.get('apiUrl') + '/graph/triples/';
+    const url = this._env.get('apiUrl') + 'graph/triples/';
     return this._http
       .post<Triple>(url, triple)
       .pipe(catchError(this._error.handleError));

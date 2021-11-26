@@ -1,0 +1,19 @@
+<mat-card>
+  <mat-card-header>
+    <h2>Semantic Graph</h2>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-tab-group>
+      <mat-tab label="Nodes">
+        <cadmus-graph-node-list
+          [tagEntries]="nodeTagEntries"
+        ></cadmus-graph-node-list>
+      </mat-tab>
+      <mat-tab label="Triples">
+        <cadmus-graph-triple-list
+          [tagEntries]="tripleTagEntries"
+        ></cadmus-graph-triple-list>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>

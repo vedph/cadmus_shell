@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { NodeResult, NodeSourceType } from '@myrmidon/cadmus-api';
-import { ThesaurusNode } from '@myrmidon/cadmus-thesaurus-ui';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 /**
  * Graph node editor.
@@ -35,7 +35,7 @@ export class GraphNodeEditorComponent implements OnInit {
    * The optional set of thesaurus entries for node's tags.
    */
   @Input()
-  public tagEntries?: ThesaurusNode[];
+  public tagEntries?: ThesaurusEntry[];
 
   /**
    * Emitted when the node has changed.

@@ -9,12 +9,24 @@ import { CadmusMaterialModule } from '@myrmidon/cadmus-material';
 import { NgMatToolsModule } from '@myrmidon/ng-mat-tools';
 import { NgToolsModule } from '@myrmidon/ng-tools';
 
+import { GraphEditorFeatureComponent } from './graph-editor-feature/graph-editor-feature.component';
+
+// https://github.com/ng-packagr/ng-packagr/issues/778
+export const RouterModuleForChild = RouterModule.forChild([
+  {
+    path: '',
+    pathMatch: 'full',
+    component: GraphEditorFeatureComponent,
+  },
+]);
+
 @NgModule({
-  declarations: [],
+  declarations: [GraphEditorFeatureComponent],
   imports: [
     CommonModule,
     FormsModule,
     RouterModule,
+    RouterModuleForChild,
     ReactiveFormsModule,
     CadmusMaterialModule,
     CadmusApiModule,
@@ -22,6 +34,6 @@ import { NgToolsModule } from '@myrmidon/ng-tools';
     NgToolsModule,
     NgMatToolsModule,
   ],
-  exports: [],
+  exports: [GraphEditorFeatureComponent],
 })
 export class CadmusGraphPgModule {}

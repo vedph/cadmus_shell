@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { ViewportScroller } from '@angular/common';
 import { PageEvent } from '@angular/material/paginator';
@@ -10,12 +10,12 @@ import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
 import { GraphService, TripleFilter, TripleResult } from '@myrmidon/cadmus-api';
 import { DataPage, ErrorInfo } from '@myrmidon/ng-tools';
 import { DialogService } from '@myrmidon/ng-mat-tools';
-import { ThesaurusNode } from '@myrmidon/cadmus-thesaurus-ui';
 
 import { GRAPH_TRIPLES_PAGINATOR } from '../../state/graph-triples.paginator';
 import { GraphTriplesState } from '../../state/graph-triples.store';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GraphTriplesQuery } from '../../state/graph-triples.query';
+import { ThesaurusEntry } from '@myrmidon/cadmus-core';
 
 @Component({
   selector: 'cadmus-graph-triple-list',
@@ -38,7 +38,7 @@ export class GraphTripleListComponent implements OnInit {
    * The optional set of thesaurus entries for triple's tags.
    */
   @Input()
-  public tagEntries?: ThesaurusNode[];
+  public tagEntries?: ThesaurusEntry[];
 
   constructor(
     @Inject(GRAPH_TRIPLES_PAGINATOR)
