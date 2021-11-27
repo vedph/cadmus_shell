@@ -76,7 +76,7 @@ export class GraphNodeFilterComponent implements OnInit {
     if (filter.isClass !== undefined && filter.isClass !== null) {
       this.isClass.setValue(filter.isClass ? 1 : 2);
     } else {
-      this.isClass.setValue(null);
+      this.isClass.setValue(0);
     }
     this.uid.setValue(filter.uid);
     this.tag.setValue(filter.tag);

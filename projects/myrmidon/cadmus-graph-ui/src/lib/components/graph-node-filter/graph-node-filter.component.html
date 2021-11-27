@@ -13,6 +13,17 @@
     </mat-form-field>
   </div>
 
+  <!-- isClass -->
+  <div>
+    <mat-form-field>
+      <mat-select [formControl]="isClass" placeholder="class">
+        <mat-option [value]="0">(any)</mat-option>
+        <mat-option [value]="1">not-class</mat-option>
+        <mat-option [value]="2">class</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
   <!-- tag -->
   <div>
     <mat-form-field>
