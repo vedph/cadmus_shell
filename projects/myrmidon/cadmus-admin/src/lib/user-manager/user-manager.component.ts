@@ -142,10 +142,10 @@ export class UserManagerComponent implements OnInit {
         }
         this._usersService.deleteUser(user.userName).then(
           (_) => {
-            this._refresh$.next(new Date().getUTCMilliseconds());
+            this._refresh$.next(this._refresh$.value + 1);
           },
           (_) => {
-            this._refresh$.next(new Date().getUTCMilliseconds());
+            this._refresh$.next(this._refresh$.value + 1);
           }
         );
       });
@@ -161,6 +161,6 @@ export class UserManagerComponent implements OnInit {
 
   public saveActiveUser(user: User): void {
     this._usersService.updateActive(user);
-    this._refresh$.next(new Date().getUTCMilliseconds());
+    this._refresh$.next(this._refresh$.value + 1);
   }
 }
